@@ -1,0 +1,37 @@
+search_it_stats_title = Statistics
+search_it_stats_plugin_title = Statistics
+search_it_stats_plugin_info = Statistics about search
+search_it_stats_truncate = Attention! Deleting the statistics is irreversible.
+search_it_stats_truncate_button = Delete statistics
+search_it_stats_truncate_done = Statistics deleted
+search_it_stats_truncate_confirm = Do you really want to truncate all data?
+
+search_it_stats_generalstats_title = General data
+search_it_stats_generalstats_005_datasetcount = Number of indexed datasets:
+search_it_stats_generalstats_010_uniquedatasetcount = Number of unique datasets (e. g. articles are grouped):
+search_it_stats_generalstats_020_averageresultcount = Average number of displayed resultsets:
+search_it_stats_generalstats_030_searchescount = Number of searches:
+search_it_stats_generalstats_040_successfullsearchescount = Number of successful searches:
+search_it_stats_generalstats_050_failedsearchescount = Number of failed searches:
+search_it_stats_generalstats_060_uniquesearchterms = Number of unique search terms:
+search_it_stats_generalstats_070_keywordcount = Number of different keywords stored in the search index:
+search_it_stats_generalstats_075_cachedsearchcount = Number of cached searches:
+search_it_stats_generalstats_080_searchindexdatalength = Size of index of the index-table (searchit_index):
+search_it_stats_generalstats_090_searchindexindexlength = Size of data of the index-table (searchit_index):
+search_it_stats_generalstats_100_datalength = Size of the indexes of all search_it-tables:
+search_it_stats_generalstats_110_indexlength = Size of the data of all search_it-tables:
+
+search_it_stats_topsearchterms_title = The {0} top search terms ({1} different search terms total)
+search_it_stats_topsearchterms_none = No search terms yet.
+
+search_it_stats_general_title = General graphics
+search_it_stats_rate_success_failure = Successful/failed Searches{0}({1} searches executed)
+search_it_stats_rate_success_failure_lblsuccess = successful
+search_it_stats_rate_success_failure_lblmiss = failed
+search_it_stats_general_timestats = Search count for the {0} past months
+search_it_stats_general_timestats_count = search count
+search_it_stats_general_timestats_countcumu = cumulated count
+
+search_it_stats_searchterm_timestats_title = Overview for {0} for the {1} past months
+search_it_stats_searchterm_timestats_title0_single = "{0}"
+search_it_stats_searchterm_timestats_title0_all = all search terms

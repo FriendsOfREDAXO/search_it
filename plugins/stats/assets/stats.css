@@ -1,0 +1,67 @@
+#topsearchterms ol {
+    padding: 0;
+    overflow: auto;
+    margin: 0;
+}
+
+#topsearchterms li {
+    float: left;
+    padding: 0.2em 0.5em;
+    font-weight: 900;
+    margin: 0 0.5em 1em 0.5em;
+    list-style-position: inside;
+}
+
+.search_it-stats-all {
+    color: #2C8EC0;
+    border: 1px dotted #2C8EC0;
+}
+
+.search_it-stats-success {
+    color: #0a0;
+    border: 1px dotted #0a0;
+}
+
+.search_it-stats-fail {
+    color: #b00;
+    border: 1px dotted #b00;
+}
+
+span.search_it-stats-all, span.search_it-stats-success, span.search_it-stats-fail {
+    padding: 0.1em 0.3em;
+}
+
+span.search_it-stats-all:hover, span.search_it-stats-success:hover, span.search_it-stats-fail:hover {
+    background: #fff;
+}
+
+#topsearchterms li strong, #topsearchterms li em {
+    color: #000;
+}
+
+#topsearchterms li em {
+    font-weight: normal;
+}
+
+#generalstats-list {
+    overflow: auto;
+}
+
+#generalstats-list dt, #generalstats-list dd {
+    padding: 0.3em 10px;
+}
+
+#generalstats-list dt {
+    float: left;
+    clear: left;
+    width: 500px;
+    text-align: right;
+}
+
+#generalstats-list dd {
+    font-weight: 900;
+}
+
+#generalstats-list .odd {
+    background: #fff;
+}

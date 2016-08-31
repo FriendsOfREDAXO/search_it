@@ -1,0 +1,12 @@
+package: search_it/reindex
+version: '5.7.8'
+author: Friends Of REDAXO/Robert Rupf
+supportpage: github.com/FriendsOfREDAXO/search_it
+title: 'translate:search_it_reindex_plugin_title'
+nav_icon: fa-minus
+description: 'translate:search_it_reindex_plugin'
+
+page:
+    title: 'translate:search_it_reindex_plugin_title'
+    hidden: true
+

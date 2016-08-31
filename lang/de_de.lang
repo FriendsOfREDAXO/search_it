@@ -1,0 +1,107 @@
+search_it_title = Search it
+search_it_settings = Einstellungen
+search_it_generate = Wartung
+search_it_readme = Changelog
+
+search_it_info = Such Addon
+search_it_infotext = Such Addon
+
+search_it_settings_mode = Suchmodus
+search_it_settings_result = Suchergebnis
+search_it_settings_origin = Quelle
+
+search_it_settings_logicalmode = Logischer Suchmodus
+search_it_settings_logicalmode_and = Konjunktive Suche (AND)
+search_it_settings_logicalmode_or = Disjunktive Suche (OR)
+
+search_it_settings_modi_header = Suchmodi
+
+search_it_settings_textmode = Textmodus
+search_it_settings_textmode_plain = Durchsuche Text ohne HTML-Tags (Plain)
+search_it_settings_textmode_html = Durchsuche Text mit HTML-Tags (HTML)
+search_it_settings_textmode_both = Durchsuche beides (HTML und Plain)
+
+search_it_settings_title_indexmode = Indexierung
+search_it_settings_indexmode_label = Art und Weise
+search_it_settings_indexmode_viahttp = Indexierung der Artikel über eine HTTP-GET-Anfrage
+search_it_settings_indexmode_viacache = Indexierung der Artikel über den Redaxo-Cache (ohne Template, nur der Artikel)
+search_it_settings_indexmode_viacachetpl = Indexierung der Artikel über den Redaxo-Cache (mit Template, liefert das gleiche Ergebnis wie per HTTP-GET-Anfrage)
+search_it_settings_indexoffline = Offline-Artikel indexieren
+search_it_settings_automaticindex_label = Artikel (ADD, EDIT, DELETE) automatisch (de)indexieren
+search_it_settings_ep_outputfilter_label = Extension Point "OUTPUT_FILTER" aufrufen
+
+search_it_settings_searchmode = MySQL-Suchmodus
+search_it_settings_searchmode_like = LIKE (findet auch Teilwörter, aber langsamer)
+search_it_settings_searchmode_match = MATCH AGAINST (findet nur ganze Wörter, schneller)
+
+search_it_settings_highlight_header = Erscheinungsbild des Highlight-Texts
+search_it_settings_surroundtags_start = Start-Tag
+search_it_settings_surroundtags_end = End-Tag
+
+search_it_settings_limit = Maximale Trefferanzahl
+search_it_settings_maxteaserchars = Maximale Zeichenanzahl für Teaser
+search_it_settings_maxhighlightchars = Maximale Zeichenanzahl um hervorgehobene Suchbegriffe herum
+
+search_it_settings_highlight_label = Highlighttyp
+search_it_settings_highlight_sentence = Ab Anfang des Satzes, in dem mindestens einer der Suchbegriffe auftaucht
+search_it_settings_highlight_paragraph = Ab Anfang des Absatzes, in dem mindestens einer der Suchbegriffe auftaucht
+search_it_settings_highlight_surroundtext = Alle gefundenen Suchbegriffe werden mit den sie umgebenden Wörtern dargestellt
+search_it_settings_highlight_surroundtextsingle = Für jeden gefundenen Suchbegriff wird genau eine Textstelle wiedergegeben
+search_it_settings_highlight_teaser = Als Teaser, in dem eventuell vorkommende Suchbegriffe hervorgehoben sind
+search_it_settings_highlight_array = Als Array mit allen Suchbegriffen und Textstellen
+search_it_settings_highlight_sample = Beispieltext mit Sucheingabe
+
+search_it_settings_similarwords_label = Ähnlichkeitssuche
+search_it_settings_similarwords_none = Deaktivieren
+search_it_settings_similarwords_soundex = Soundex
+search_it_settings_similarwords_metaphone = Metaphone
+search_it_settings_similarwords_cologne = Kölner Phonetik
+search_it_settings_similarwords_all = Alle
+search_it_settings_similarwords_permanent = Die Ähnlichkeitssuche auch dann durchführen, wenn Ergebnisse vorhanden sind.
+
+search_it_settings_exclude = Wörter, Kategorien und Artikel von der Suche ausschließen
+search_it_settings_exclude_blacklist = Wörter (kommasepariert)
+search_it_settings_exclude_categories = Kategorien
+search_it_settings_exclude_articles = Artikel
+
+search_it_settings_include = Datenbankspalten in die Suche einschließen
+
+search_it_settings_submitbutton = Einstellungen speichern
+search_it_settings_saved = Einstellungen wurden gespeichert
+search_it_settings_saved_warning = Der Suchindex muss erneuert werden.
+
+search_it_generate_actions_title = Aktionen
+search_it_generate_full = Index vollständig erstellen
+search_it_generate_full_text = Die Index-Tabelle wird gelöscht und neu aufgebaut.
+search_it_generate_incremental = Index schrittweise erstellen
+search_it_generate_incremental_text = Bei Problemen mit der maximalen Skriptlaufzeit (max_execution_time) kann der Index schrittweise erstellt werden.
+search_it_generate_incremental_confirm = Die schrittweise Indexierung starten?
+search_it_generate_delete_cache = Suchcache löschen
+search_it_generate_delete_cache_text = Wenn eine Neuindexierung nicht erforderlich ist, kann auch ausschließlich der Cache gelöscht werden.
+search_it_generate_cache_deleted = Suchcache wurde gelöscht
+search_it_generate_delete_keywords = Keyword-Index leeren
+search_it_generate_delete_keywords_text = Löscht alle Keywords, die bei der Indexierung oder über Suchanfragen gesammelt wurden. Diese Keywords werden unter anderem für die Ähnlichkeitssuche gebraucht und sollten nicht gelöscht werden.
+search_it_generate_delete_keywords_confirm = Wirklich alle Keywords löschen?
+search_it_generate_keywords_deleted = Alle Keywords wurden gelöscht
+search_it_generate_inprogress = Index wird erstellt. Es erscheint eine Nachricht, wenn der Index erstellt wurde.
+search_it_generate_done = Index wurde erstellt
+search_it_generate_cancel = Erstellung des Index abgebrochen
+search_it_generate_duration = Dauer: 
+search_it_generate_timeleft = Verbleibend: 
+
+search_it_settings_fileext_header = Dateisuche
+search_it_settings_fileext_label = Dateiendungen <br />(frei lassen für beliebige Dateien)
+search_it_settings_file_mediapool = Medienpool indexieren
+search_it_settings_file_dirdepth_label = Verzeichnistiefe
+search_it_settings_folders_label = Folgende Ordner in die Suche einschließen
+search_it_settings_folders_dirselect_label = Unterordner der Tiefe %DEPTH% auswählen
+
+search_it_settings_show_all = Alle aufklappen
+search_it_settings_show_none = Alle zuklappen
+
+search_it_ellipsis = …
+
+search_it_cat_deleted = Alle Artikel der Kategorie sind noch im Suchindex enthalten. Sie müssen den <a href="index.php?page=search_it&subpage=generate">Suchindex erneuern</a>.
+
+search_it_help_wiki = Die Dokumentation des Addons finden Sie unter <a href="http://www.redaxo.org/de/wiki/index.php?n=R4.Rexsearch">http://www.redaxo.org/de/wiki/index.php?n=R4.Rexsearch</a>.
+search_it_help_forum = Sollten Sie Fragen oder Probleme haben, können Sie diese im Redaxo-Forum stellen: <a href="http://www.redaxo.org/de/forum/addons-f30/addon-search_it-fulltext-search-addon-t12965.html">http://www.redaxo.org/de/forum/addons-f30/addon-search_it-fulltext-search-addon-t12965.html</a>.

@@ -1,0 +1,11 @@
+package: search_it/stats
+version: '5.7.8'
+author: Friends Of REDAXO/Robert Rupf/Norbert Micheel
+supportpage: github.com/FriendsOfREDAXO/search_it
+title: 'translate:search_it_stats_plugin_title'
+nav_icon: fa-minus
+description: 'translate:search_it_stats_plugin'
+
+page:
+    title: 'translate:search_it_stats_plugin_title'
+

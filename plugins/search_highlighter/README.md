@@ -1,10 +1,10 @@
-REDAXO 5 Plugin - "stats" für "search_it"
-=========================================
+REDAXO 5 Plugin - "search highlighter" für "search_it"
+======================================================
 
 Port von Version für R4 auf R5
 
-Dieses Addon erzeugt einfache Statistiken mit Grafiken.
-
+Dieses Plugin ermöglicht es in der Seite die auf Klick in den Suchergebnissen angezeigt wird, die Suchbegriffe hervorzuheben.
+ 
 
 Die Dokumentation des Plugins finden Sie unter http://wiki.redaxo.de/index.php?n=R4.RexSearch.
 

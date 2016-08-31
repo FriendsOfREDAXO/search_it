@@ -1,8 +1,4 @@
 <?php
-function search_it_stats_saveSettings($_settings){
-    //return @rex_file::put(rex_plugin::get('search_it','stats')->getPath().'settings.conf', serialize($_settings));
-}
-
 
 function search_it_stats_storekeywords($_ep){
     $_params = $_ep->getSubject();

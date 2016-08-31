@@ -2,8 +2,6 @@
 
 if (rex_post('sendit', 'boolean')) {
 
-    //search_it_search_highlighter_saveSettings(rex_post('search_it_search_highlighter'));
-
     $posted_config = rex_post('search_it_search_highlighter', [
 
         ['tag', 'string'],

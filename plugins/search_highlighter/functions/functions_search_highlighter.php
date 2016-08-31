@@ -30,13 +30,6 @@ function search_it_search_highlighter_output($_ep){
 }
 
 
-
-function search_it_search_highlighter_saveSettings($_settings){
-    //return @rex_file::put(rex_plugin::get('search_it','search_highlighter')->getPath().'settings.conf', serialize($_settings));
-}
-
-
-
 /*
 function rex_search_search_highlighter_getHighlightedText($subject, $begriffe, $tags){
 

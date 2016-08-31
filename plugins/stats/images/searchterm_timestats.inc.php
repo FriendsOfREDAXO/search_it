@@ -1,7 +1,7 @@
 <?php
 $this->setConfig('searchtermselect', rex_get('term', 'string', ''));
 $this->setConfig('searchtermselectmonthcount', rex_get('monthcount', 'int', 12));
-//search_it_stats_saveSettings($this->getConfig());
+
 
 if ($this->getConfig('searchtermselect') == 'all') {
     $term = '';

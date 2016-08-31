@@ -1,8 +1,4 @@
 <?php
-function search_it_plaintext_saveSettings($_settings){
-    //return @rex_file::put(rex_plugin::get('search_it','plaintext')->getPath().'settings.conf', serialize($_settings));
-}
-
 
 function search_it_doPlaintext($_ep){
     $_params = $_ep->getParams();

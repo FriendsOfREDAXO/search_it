@@ -2,8 +2,6 @@
 
 if (rex_post('sendit', 'boolean')) {
 
-    //search_it_plaintext_saveSettings(rex_post('search_it_plaintext'));
-
     $posted_config = rex_post('search_it_plaintext', [
 
         ['order', 'string','selectors,regex,textile,striptags'],

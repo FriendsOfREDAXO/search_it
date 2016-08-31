@@ -1,8 +1,6 @@
 <?php
 if( rex_post('sendit', 'boolean') ){
 
-    //search_it_stats_saveSettings(rex_post('search_it_stats'));
-
     $posted_config = rex_post('search_it_stats', [
 
         ['maxtopSearchitems','int'],

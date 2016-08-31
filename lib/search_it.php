@@ -117,7 +117,7 @@ class search_it {
         // german stopwords
         if($_useStopwords){
             include rex_path::addon('search_it','/lang/stopwords.inc.php');
-            //$this->stopwords = $german_stopwords;
+            $this->stopwords = $german_stopwords;
         }
     }
 

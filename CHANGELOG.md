@@ -9,7 +9,8 @@
   haben dann aber geholfen.
   + Beim indizieren per HTTP musste ich "rex_url::init(new rex_path_default_provider('/', 'redaxo', true))" verwenden
   + PDF2TXT funzt nicht
-  + in "function indexArticle" musste die neue clang-Objektstruktur beachtet werden 
+  + in "function indexArticle" musste die neue clang-Objektstruktur beachtet werden
+  + den re-index-Link im Backend beim Artikelmenu kann man so nicht mehr setzen, weil der EXTENSIONPOINT so nicht mehr existiert
 
 ###Version 0.7.9 (2011)
   + Speicherung von indexierten Spalten bei der Indexierung von Artikeln

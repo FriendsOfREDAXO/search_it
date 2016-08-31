@@ -1,7 +1,7 @@
-Redaxo 5 Addon - Rex Search
+REDAXO 5 Addon - "search it"
 ================================
 
-Port von Version für R4 auf R5
+Port von RexSearch für R4 auf REDAXO 5
 
 Original von XONG
 

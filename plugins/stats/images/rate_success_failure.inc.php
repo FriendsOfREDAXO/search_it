@@ -1,4 +1,6 @@
 <?php
+$curDir = __DIR__;
+require_once $curDir . '/phplot/phplot.php';
 
 // fetch data
 $stats = new search_it_stats();

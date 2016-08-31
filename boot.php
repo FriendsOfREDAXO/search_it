@@ -23,7 +23,6 @@
 
     $curDir = __DIR__;
     require_once $curDir . '/functions/functions_search_it.php';
-    require_once $curDir . '/plugins/stats/images/phplot/phplot.php';
 
 
 	if (rex::isBackend()) {

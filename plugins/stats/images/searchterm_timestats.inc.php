@@ -12,6 +12,9 @@ if ($this->getConfig('searchtermselect') == 'all') {
 
 $stats = new search_it_stats();
 
+$curDir = __DIR__;
+require_once $curDir . '/phplot/phplot.php';
+
 // fetch data
 $bardata = array();
 $cumulateddata = array();

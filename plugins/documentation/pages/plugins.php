@@ -1,6 +1,5 @@
 <?php
-
-$file = rex_file::get(rex_path::addon('search_it','README.md'));
+$file = rex_file::get(rex_path::plugin('search_it','documentation').'/pages/plugins.md');
 $Parsedown = new Parsedown();
 $content =  ''.$Parsedown->text($file);
 

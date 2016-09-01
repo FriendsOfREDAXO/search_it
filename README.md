@@ -6,5 +6,4 @@ Port von RexSearch für R4 auf REDAXO 5
 Original von XONG
 
 
-[Erste Hilfe](http://www.redaxo.org/de/wiki/index.php?n=R4.Rexsearch)
 

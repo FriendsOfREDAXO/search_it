@@ -1,5 +1,5 @@
 package: search_it
-version: '5.7.8'
+version: '5.8.0'
 author: Robert Rupf/Norbert Micheel
 supportpage: http://www.redaxo.org/de/wiki/index.php?n=R4.Rexsearch
 
@@ -10,17 +10,20 @@ page:
     pjax: false
     icon: rex-icon fa-search
     subpages:
-        generate: { title: 'translate:generate', perm: search_it[generate] }
+        generate: { title: 'translate:generate', perm: search_it[generate], icon: rex-icon fa-tasks }
         settings:
             title: 'translate:settings'
             perm: search_it[settings]
+            icon: rex-icon fa-wrench
             subpages:
                          mode: { title: 'translate:settings_mode' }
                          result: { title: 'translate:settings_result' }
                          origin: { title: 'translate:settings_origin' }
+
 
 plugins:
     - plaintext
     - reindex
     - search_highlighter
     - stats
+    - documentation

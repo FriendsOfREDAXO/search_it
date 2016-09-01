@@ -1,0 +1,9 @@
+
+search_it_documentation_title = Documentation
+
+search_it_documentation_general_title = General
+search_it_documentation_plugins_title = Plugins
+search_it_documentation_modules_title = Search modules
+
+search_it_help_wiki = The documentation of this addon can be found at <a href="http://www.redaxo.org/de/wiki/index.php?n=R4.Rexsearch">http://www.redaxo.org/de/wiki/index.php?n=R4.Rexsearch</a>.
+search_it_help_forum = Any questions or suggestions can be asked/made at <a href="http://www.redaxo.org/de/forum/addons-f30/addon-search_it-fulltext-search-addon-t12965.html">http://www.redaxo.org/de/forum/addons-f30/addon-search_it-fulltext-search-addon-t12965.html</a>.

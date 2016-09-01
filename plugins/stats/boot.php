@@ -14,7 +14,7 @@
 
         if (!$this->hasConfig()) {
             $this->setConfig(array(
-                'maxtopSearchitems' => 10,
+                'maxtopsearchitems' => 10,
                 'searchtermselect' => '',
                 'searchtermselectmonthcount' => 12
             ));

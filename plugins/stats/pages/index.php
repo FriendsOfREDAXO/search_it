@@ -3,7 +3,7 @@ if( rex_post('sendit', 'boolean') ){
 
     $posted_config = rex_post('search_it_stats', [
 
-        ['maxtopSearchitems','int'],
+        ['maxtopsearchitems','int'],
         ['searchtermselect','string'],
         ['searchtermselectmonthcount','int']
 
@@ -37,6 +37,7 @@ if (!empty($func)) {
 }
 
 $content = array();
+$content[] =  '<div id="stats_elements">';
 
 $stats = new search_it_stats();
 #$stats->createTestData();
@@ -88,12 +89,23 @@ foreach ($generalstats as $key => $value) {
 }
 $table_general .= '</dl>';
 
-$content['general'] = search_it_getStatSection('generalstats', $this->i18n('search_it_stats_generalstats_title'), $table_general);
+
+$content[] = search_it_getSettingsFormSection(
+    'generalstats',
+    $this->i18n('search_it_stats_generalstats_title'),
+    array(
+        array(
+            'type' => 'directoutput',
+            'output' => $table_general
+        )
+    )
+);
+
 
 // top search terms
 $topsearchtermlist = '';
-$topsearchtermselect = '<option value="all">' . htmlspecialchars($this->i18n('search_it_stats_searchterm_timestats_title0_all')) . '</option>';
-$topsearchterms = $stats->getTopSearchterms($this->getConfig('maxtopSearchitems'));
+$topsearchtermselect = '<option value="all" '. ($this->getConfig('searchtermselect') == 'all' ? ' selected="selected"' : '') .'>' . htmlspecialchars($this->i18n('search_it_stats_searchterm_timestats_title0_all')) . '</option>';
+$topsearchterms = $stats->getTopSearchterms($this->getConfig('maxtopsearchitems'));
 foreach ($topsearchterms as $term) {
     $topsearchtermlist .= '<li class="' . ($term['success'] == '1' ? 'search_it-stats-success' : 'search_it-stats-fail') . '"><strong>' . htmlspecialchars($term['term']) . '</strong> <em>(' . $term['count'] . ')</em></li>';
     $topsearchtermselect .= '<option value="_' . htmlspecialchars($term['term']) . '"' . (($this->getConfig('searchtermselect') == '_' . $term['term']) ? ' selected="selected"' : '') . '>' . $this->i18n('search_it_stats_searchterm_timestats_title0_single', htmlspecialchars($term['term'])) . '</option>';
@@ -104,20 +116,45 @@ if (!empty($topsearchterms)) {
 } else {
     $topsearchtermlist = $this->i18n('search_it_stats_topsearchterms_none');
 }
-$selectMaxTopSearchitems = '<select name="search_it_stats[maxtopSearchitems]" id="search_it_stats_maxTopSearchitems">';
+$selectMaxTopSearchitems = '<select name="search_it_stats[maxtopsearchitems]" id="search_it_stats_maxTopSearchitems">';
 foreach (array(10, 20, 50, 100, 200, 500, 1000) as $option) {
-    $selectMaxTopSearchitems .= '<option value="' . $option . '"' . ((intval($this->getConfig('maxtopSearchitems')) == $option) ? ' selected="selected"' : '') . '>' . $option . '</option>';
+    $selectMaxTopSearchitems .= '<option value="' . $option . '"' . (max(intval($this->getConfig('maxtopsearchitems')),10) == $option ? ' selected="selected"' : '') . '>' . $option . '</option>';
 }
 $selectMaxTopSearchitems .= '</select>';
 $pre = $this->i18n('search_it_stats_topsearchterms_title', $selectMaxTopSearchitems, $stats->getSearchtermCount()).
     '<span class="search_it-stats-all">alle</span> <span class="search_it-stats-success">erfolgreich</span> <span class="search_it-stats-fail">fehlgeschlagen</span>';
-$content['topsearchterms'] = search_it_getStatSection('topsearchterms', $pre, $topsearchtermlist);
 
-// hit-miss-rate
-$content['hit-miss-rate'] = search_it_getStatSection('general', $this->i18n('search_it_stats_general_title'), '
-  <img src="index.php?page=search_it/stats&amp;func=image&amp;image=rate_success_failure" alt="' . htmlspecialchars($this->i18n('search_it_stats_rate_success_failure', ' ')) . '" title="' . htmlspecialchars($this->i18n('search_it_stats_rate_success_failure', ' ', $stats->getMissCount() + $stats->getSuccessCount())) . '" />
-  <img src="index.php?page=search_it/stats&amp;func=image&amp;image=general_timestats" alt="' . htmlspecialchars($this->i18n('search_it_stats_general_timestats', 6)) . '" title="' . htmlspecialchars($this->i18n('search_it_stats_general_timestats', 6)) . '" />
-');
+
+$content[] = search_it_getSettingsFormSection(
+    'topsearchterms',
+    $this->i18n('search_it_stats_topsearchterms_titletitle'),
+    array(
+        array(
+            'type' => 'directoutput',
+            'output' => $pre
+        ),
+        array(
+            'type' => 'directoutput',
+            'output' => $topsearchtermlist
+        )
+    )
+);
+
+
+$content[] = search_it_getSettingsFormSection(
+    'general',
+    $this->i18n('search_it_stats_general_title'),
+    array(
+        array(
+            'type' => 'directoutput',
+            'output' => '
+                          <img src="index.php?page=search_it/stats&amp;func=image&amp;image=rate_success_failure" alt="' . htmlspecialchars($this->i18n('search_it_stats_rate_success_failure', ' ')) . '" title="' . htmlspecialchars($this->i18n('search_it_stats_rate_success_failure', ' ', $stats->getMissCount() + $stats->getSuccessCount())) . '" />
+                          <img src="index.php?page=search_it/stats&amp;func=image&amp;image=general_timestats" alt="' . htmlspecialchars($this->i18n('search_it_stats_general_timestats', 6)) . '" title="' . htmlspecialchars($this->i18n('search_it_stats_general_timestats', 6)) . '" />
+                        '
+        )
+    )
+);
+
 
 // stats for searchterms over time
 if (!empty($topsearchtermselect)){
@@ -131,196 +168,213 @@ foreach (array(6, 9, 12, 15, 18, 21, 24) as $option) {
 }
 $searchtermselectmonthcount .= '</select>';
 
-$content['searchterm_timestats'] = search_it_getStatSection('searchterm_timestats', $this->i18n('search_it_stats_searchterm_timestats_title', $topsearchtermselect, $searchtermselectmonthcount), '
-  <img src="index.php?page=search_it/stats&amp;func=image&amp;image=searchterm_timestats&amp;term=' . htmlspecialchars(urlencode($this->getConfig('searchtermselect') == 'all' ? 'all' : $this->getConfig('searchtermselect'))) . '&amp;monthcount=' . intval($this->getConfig('searchtermselectmonthcount')) . '" 
-  alt="' .$this->i18n('search_it_stats_searchterm_timestats_title', $this->getConfig('searchtermselect') == 'all' ? $this->i18n('search_it_stats_searchterm_timestats_title0_all') : $this->i18n('search_it_stats_searchterm_timestats_title0_single', substr($this->getConfig('searchtermselect'), 1)), intval($this->getConfig('searchtermselectmonthcount'))) . '"
-   title="' . htmlspecialchars($this->i18n('search_it_stats_searchterm_timestats_title', $this->getConfig('searchtermselect') == 'all' ? $this->i18n('search_it_stats_searchterm_timestats_title0_all') : $this->i18n('search_it_stats_searchterm_timestats_title0_single', substr($this->getConfig('searchtermselect'), 1)), intval($this->getConfig('searchtermselectmonthcount')))) . '" />
-');
+$pre = $this->i18n('search_it_stats_searchterm_timestats_title', $topsearchtermselect, $searchtermselectmonthcount);
+$rest = '<img src="index.php?page=search_it/stats&amp;func=image&amp;image=searchterm_timestats&amp;term='
+    . htmlspecialchars(urlencode($this->getConfig('searchtermselect') == 'all' ? 'all' : $this->getConfig('searchtermselect')))
+    . '&amp;monthcount=' . intval($this->getConfig('searchtermselectmonthcount')) . '"  alt="'
+    . $this->i18n('search_it_stats_searchterm_timestats_title', $this->getConfig('searchtermselect') == 'all' ? $this->i18n('search_it_stats_searchterm_timestats_title0_all') : $this->i18n('search_it_stats_searchterm_timestats_title0_single', substr($this->getConfig('searchtermselect'), 1)), intval($this->getConfig('searchtermselectmonthcount'))) . '"'
+    .' title="' . htmlspecialchars($this->i18n('search_it_stats_searchterm_timestats_title', $this->getConfig('searchtermselect') == 'all' ? $this->i18n('search_it_stats_searchterm_timestats_title0_all') : $this->i18n('search_it_stats_searchterm_timestats_title0_single', substr($this->getConfig('searchtermselect'), 1)), intval($this->getConfig('searchtermselectmonthcount')))) . '" />';
 
-
+$content[] = search_it_getSettingsFormSection(
+    'searchterm_timestats',
+    $this->i18n('search_it_stats_searchterm_timestats_titletitle'),
+    array(
+        array(
+            'type' => 'directoutput',
+            'output' => $pre
+        ),
+        array(
+            'type' => 'directoutput',
+            'output' => $rest
+        )
+    )
+);
+$content[] =  '</div>';
 ?>
 <script type="text/javascript">
 // <![CDATA[
+(function($) {
+    $(document).ready(function () {
 
-var mainWidth = jQuery('#search_it-form').attr('offsetWidth');
-var getonly = 0;
 
-// display links for showing and hiding all sections
-jQuery('#search_it-form h2')
-    .css('position', 'relative')
-    .append(
-        jQuery('<div>')
-            .css('position', 'absolute')
-            .css('top', '0')
-            .css('right', '0')
-            .css('padding', '5px 1em')
-            .css('font-size', '0.75em')
-            .css('font-weight', '900')
-            .append(
-                jQuery('<a><?php echo $this->i18n('search_it_settings_show_all'); ?><' + '/a>')
-                    .css('cursor', 'pointer')
-                    .css('padding', '0 1em')
-                    .click(function () {
-                        jQuery.each(jQuery('#search_it-form fieldset'), function (i, elem) {
-                            jQuery('.rex-form-wrapper', elem).show();
+    var mainWidth = jQuery('#search_it_stats_form').attr('offsetWidth');
+    var getonly = 0;
+
+    // display links for showing and hiding all sections
+    jQuery('#search_it_stats_form section .panel-body').first()
+        .css('position', 'relative')
+        .prepend(
+            jQuery('<div>')
+                .css('font-weight', '900')
+                .css('margin-bottom','1em')
+                .append(
+                    jQuery('<a><?php echo $this->i18n('search_it_settings_show_all'); ?><' + '/a>')
+                        .css('cursor', 'pointer')
+                        .css('padding', '0 1em')
+                        .click(function () {
+                            jQuery.each(jQuery('#stats_elements section'), function (i, elem) {
+                                jQuery('.panel-body', elem).show();
+                            })
                         })
-                    })
-            )
-            .append(
-                jQuery('<a><?php echo $this->i18n('search_it_settings_show_none'); ?><' + '/a>')
-                    .css('cursor', 'pointer')
-                    .click(function () {
-                        jQuery.each(jQuery('#search_it-form fieldset'), function (i, elem) {
-                            jQuery('.rex-form-wrapper', elem).hide();
+                )
+                .append(
+                    jQuery('<a><?php echo $this->i18n('search_it_settings_show_none'); ?><' + '/a>')
+                        .css('cursor', 'pointer')
+                        .click(function () {
+                            jQuery.each(jQuery('#stats_elements section'), function (i, elem) {
+                                jQuery('.panel-body', elem).hide();
+                            })
                         })
-                    })
-            )
-    );
+                )
+        );
 
 
-function setLoading(show) {
-    if (show) {
-        jQuery('#topsearchterms legend')
-            .append(
-                jQuery('<span class="search_it_loading" >')
-            );
-
-        jQuery('#search_it-form legend').each(function (i, elem) {
-            var legend = jQuery(elem);
-            legend.css('padding-right', (mainWidth - legend.attr('offsetWidth') + parseInt(legend.css('padding-right').replace(/[^0-9]+/, ''))) + 'px');
-        });
-    } else {
-        jQuery('.search_it_loading').remove();
-
-        jQuery('#search_it-form legend').each(function (i, elem) {
-            var legend = jQuery(elem);
-            legend.css('padding-right', (mainWidth - legend.attr('offsetWidth') + parseInt(legend.css('padding-right').replace(/[^0-9]+/, ''))) + 'px');
-        });
-    }
-}
-
-// top search terms
-jQuery('#search_it_stats_maxTopSearchitems').change(function () {
-    setLoading(true);
-    jQuery.getJSON(
-        'index.php?page=search_it/stats&func=topsearchterms&count=' + jQuery('#search_it_stats_maxTopSearchitems').attr('value') + '&only=' + getonly,
-        function (data) {
-            var selected = jQuery('#search_it_stats_searchtermselect').attr('value');
-            var loaddefault = true;
-
-            jQuery('#topsearchterms ol').empty();
-            jQuery('#search_it_stats_searchtermselect').empty();
-
-            jQuery('#search_it_stats_searchtermselect').append(
-                jQuery('<option value="all">').text('<?php echo htmlspecialchars($this->i18n('search_it_stats_searchterm_timestats_title0_all')); ?>')
-            );
-
-            var select = '';
-            var cssclass;
-            jQuery.each(data, function (i, item) {
-                if (item.success == '1')
-                    cssclass = 'search_it-stats-success';
-                else
-                    cssclass = 'search_it-stats-fail';
-
-                // list
-                jQuery('#topsearchterms ol').append(
-                    jQuery('<li class="' + cssclass + '">').html('<strong>' + item.term + '<' + '/strong> <em>(' + item.count + ')<' + '/em><' + '/li>')
+ /*   function setLoading(show) {
+        if (show) {
+            jQuery('#topsearchterms').parent().parent()
+                .append(
+                    jQuery('<span class="search_it_loading" >')
                 );
 
-                // select
-                if (('_' + item.term) == selected) {
-                    select = ' selected="selected"';
-                    loaddefault = false;
-                }
-                else
-                    select = '';
-                jQuery('#search_it_stats_searchtermselect').append(
-                    jQuery('<option value="_' + item.term + '"' + select + '>').text('"' + item.term + '"')
-                );
+            jQuery('#stats_elements .panel-title').each(function (i, elem) {
+                var legend = jQuery(elem);
+                legend.css('padding-right', (mainWidth - legend.attr('offsetWidth') + parseInt(legend.css('padding-right').replace(/[^0-9]+/, ''))) + 'px');
             });
+        } else {
+            jQuery('.search_it_loading').remove();
 
-            if (loaddefault) {
-                date = new Date();
-                jQuery('#searchterm_timestats img').attr(
-                    'src',
-                    'index.php?page=search_it/stats&func=image&image=searchterm_timestats&term=all&monthcount=<?php echo $this->getConfig('searchtermselectmonthcount'); ?>&time=' + Date.parse(date)
-                );
-            }
-
-            setLoading(false);
+            jQuery('#stats_elements .panel-title').each(function (i, elem) {
+                var legend = jQuery(elem);
+                legend.css('padding-right', (mainWidth - legend.attr('offsetWidth') + parseInt(legend.css('padding-right').replace(/[^0-9]+/, ''))) + 'px');
+            });
         }
-    );
-});
+    }*/
 
-jQuery('span.search_it-stats-all').click(function () {
-    getonly = 0;
-    jQuery('#search_it_stats_maxTopSearchitems').change();
-});
+    // top search terms
+    jQuery('#search_it_stats_maxTopSearchitems').change(function(){
+        //setLoading(true);
 
-jQuery('span.search_it-stats-success').click(function () {
-    getonly = 1;
-    jQuery('#search_it_stats_maxTopSearchitems').change();
-});
+        jQuery.getJSON(
+            'index.php?page=search_it/stats&func=topsearchterms&count=' + jQuery('#search_it_stats_maxTopSearchitems').val() + '&only=' + getonly,
+            function (data) {
 
-jQuery('span.search_it-stats-fail').click(function () {
-    getonly = 2;
-    jQuery('#search_it_stats_maxTopSearchitems').change();
-});
+                var selected = jQuery('#search_it_stats_searchtermselect').val();
+                var loaddefault = true;
 
-// search term time stats
-function setOverview(term, count) {
-    date = new Date();
+                jQuery('#topsearchterms ol').empty();
+                jQuery('#search_it_stats_searchtermselect').empty();
 
-    jQuery('#searchterm_timestats img').attr(
-        'src',
-        'index.php?page=search_it/stats&func=image&image=searchterm_timestats&term=' + term + '&monthcount=' + count + '&time=' + Date.parse(date)
-    );
-}
+                jQuery('#search_it_stats_searchtermselect').append(
+                    jQuery('<option value="all">').text('<?php echo htmlspecialchars($this->i18n('search_it_stats_searchterm_timestats_title0_all')); ?>')
+                );
 
-jQuery('#search_it_stats_searchtermselect').change(function () {
-    setOverview(jQuery('#search_it_stats_searchtermselect').attr('value'), jQuery('#search_it_stats_searchtermselectmonthcount').attr('value'));
-});
+                var select = '';
+                var cssclass;
+                jQuery.each(data, function (i, item) {
+                    if (item.success == '1')
+                        cssclass = 'search_it-stats-success';
+                    else
+                        cssclass = 'search_it-stats-fail';
 
-jQuery('#search_it_stats_searchtermselectmonthcount').change(function () {
-    setOverview(jQuery('#search_it_stats_searchtermselect').attr('value'), jQuery('#search_it_stats_searchtermselectmonthcount').attr('value'));
-});
+                    // list
+                    jQuery('#topsearchterms ol').append(
+                        jQuery('<li class="' + cssclass + '">').html('<strong>' + item.term + '<' + '/strong> <em>(' + item.count + ')<' + '/em><' + '/li>')
+                    );
 
-jQuery.each(jQuery('#search_it-form fieldset'), function (i, elem) {
-    var legend = jQuery('legend', elem);
-    var wrapper = jQuery('.rex-form-wrapper', elem);
-    var speed = wrapper.attr('offsetHeight');
+                    // select
+                    if (('_' + item.term) == selected) {
+                        select = ' selected="selected"';
+                        loaddefault = false;
+                    }
+                    else
+                        select = '';
+                    jQuery('#search_it_stats_searchtermselect').append(
+                        jQuery('<option value="_' + item.term + '"' + select + '>').text('"' + item.term + '"')
+                    );
+                });
 
-    wrapper.hide();
+                if (loaddefault) {
+                    date = new Date();
+                    jQuery('#searchterm_timestats img').attr(
+                        'src',
+                        'index.php?page=search_it/stats&func=image&image=searchterm_timestats&term=all&monthcount=<?php echo $this->getConfig('searchtermselectmonthcount'); ?>&time=' + Date.parse(date)
+                    );
+                }
 
-    jQuery(elem)
-        .css('border-bottom', '1px solid #fff');
+                setLoading(false);
+            }
+        );
+    });
 
-    legend
-        .css('cursor', 'pointer')
-        .css('padding-right', (mainWidth - legend.attr('offsetWidth') + parseInt(legend.css('padding-right').replace(/[^0-9]+/, ''))) + 'px')
-        .css('border-bottom', '1px solid #cbcbcb')
-        .mouseover(function () {
-            if (wrapper.css('display') == 'none')
-                jQuery('legend', elem).css('color', '#aaa');
-        })
-        .mouseout(function () {
-            legend.css('color', '#32353A');
-        })
-        .click(function () {
-            wrapper.slideToggle(speed);
-        });
-});
+    jQuery('span.search_it-stats-all').click(function () {
+        getonly = 0;
+        jQuery('#search_it_stats_maxTopSearchitems').change();
+    });
 
-// stop event-bubbling for clicks on select-lists
-jQuery('#search_it-form legend select,#search_it-form legend span').click(function (event) {
-    event.stopPropagation();
-});
+    jQuery('span.search_it-stats-success').click(function () {
+        getonly = 1;console.log('ccc'+getonly);
+        jQuery('#search_it_stats_maxTopSearchitems').change();
+    });
 
+    jQuery('span.search_it-stats-fail').click(function () {
+        getonly = 2;
+        jQuery('#search_it_stats_maxTopSearchitems').change();
+    });
+
+    // search term time stats
+    function setOverview(term, count) {
+        date = new Date();
+
+        jQuery('#searchterm_timestats img').attr(
+            'src',
+            'index.php?page=search_it/stats&func=image&image=searchterm_timestats&term=' + term + '&monthcount=' + count + '&time=' + Date.parse(date)
+        );
+    }
+
+    jQuery('#search_it_stats_searchtermselect, #search_it_stats_searchtermselectmonthcount').change(function () {
+        setOverview(jQuery('#search_it_stats_searchtermselect').val(), jQuery('#search_it_stats_searchtermselectmonthcount').val());
+    });
+
+/*    jQuery('#search_it_stats_searchtermselectmonthcount').change(function () {
+        setOverview(jQuery('#search_it_stats_searchtermselect').attr('value'), jQuery('#search_it_stats_searchtermselectmonthcount').attr('value'));
+    });*/
+
+
+
+    jQuery.each(jQuery('#stats_elements section'), function (i, elem) {
+        var legend = jQuery('.panel-title', elem);
+        var wrapper = jQuery('.panel-body', elem);
+        var speed = wrapper.attr('offsetHeight');
+
+        wrapper.hide();
+
+        legend
+            .css('cursor', 'pointer')
+            //.css('padding-right', (mainWidth - legend.attr('offsetWidth') + parseInt(legend.css('padding-right').replace(/[^0-9]+/, ''))) + 'px')
+            //.css('border-bottom', '1px solid #cbcbcb')
+            .mouseover(function () {
+                if (wrapper.css('display') == 'none') {
+                    //jQuery('panel-heading', elem).css('color', '#aaa');
+                }
+            })
+            .mouseout(function () {
+                //legend.css('color', '#32353A');
+            })
+            .click(function () {
+                wrapper.slideToggle(speed);
+            });
+    });
+
+    // stop event-bubbling for clicks on select-lists
+    jQuery('#stats_elements section, #stats_elements .panel-title').click(function (event) {
+        event.stopPropagation();
+    });
+
+    });
+}(jQuery));
 // ]]>
 </script>
 <?php
-
 $content = implode( "\n", $content);
 
 $formElements = [];

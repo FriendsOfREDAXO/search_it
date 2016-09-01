@@ -7,7 +7,7 @@
 
         rex_extension::register('SEARCH_IT_PLAINTEXT', 'search_it_doPlaintext');
 
-        rex_view::addJsFile($this->getAssetsUrl('jquery.ui.custom.js'));
+        //rex_view::addJsFile($this->getAssetsUrl('jquery.ui.custom.js'));
 
         if (!$this->hasConfig()) {
             $this->setConfig(array(

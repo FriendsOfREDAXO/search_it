@@ -8,30 +8,30 @@ function search_it_stats_storekeywords($_ep){
 }
 
 function search_it_stats_addtruncate($_ep){
-    $_params = $_ep->getParams();
+    $subject = $_ep->getSubject();
     $st = rex_plugin::get('search_it','stats');
 
     if (rex_request('func') == 'truncate') {
         $stats = new search_it_stats();
         $stats->truncate();
 
-        search_it_stats_saveSettings(array(
-            'maxtopSearchitems' => '10',
+        $st->setConfig(array(
+            'maxtopsearchitems' => 10,
             'searchtermselect' => '',
-            'searchtermselectmonthcount' => '12'
+            'searchtermselectmonthcount' => 12
         ));
 
-        $_params['subject'] = rex_view::success($st->i18n('search_it_stats_truncate_done')) . $_params['subject'];
+        $subject = rex_view::success($st->i18n('search_it_stats_truncate_done')).$subject;
     }
 
-    $_params['subject'] .= '<p class="rex-tx1">' . $st->i18n('search_it_stats_truncate') . '</p>
+    $subject .= '<p class="rex-tx1">' . $st->i18n('search_it_stats_truncate') . '</p>
     <p><a class="btn btn-primary" onclick="return confirm(\'' . $st->i18n('search_it_stats_truncate_confirm') . '\');" href="index.php?page=search_it/generate&amp;func=truncate" ><span>' . $st->i18n('search_it_stats_truncate_button') . '</span></a></p>';
 
-    return $_params['subject'];
+    return $subject;
 }
 
 function search_it_getStatSection($_id, $_title, $_content){
-    return '<fieldset id="' . $_id . '" class="rex-form-col-1"><legend>' . $_title . '</legend>
+    return '<section id="' . $_id . '" class="rex-form-col-1"><legend>' . $_title . '</legend>
 <div class="rex-form-wrapper">
   <div class="rex-form-row">
   <div class="rex-area-content"><p>

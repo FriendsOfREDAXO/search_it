@@ -184,7 +184,8 @@ color:#0a0;
 #subdirs_29 { background-image:url(29.png); }
 #subdirs_30 { background-image:url(30.png); }
 
-.movesymbol { font-size: 32px; }
+#search_it_plaintext_description { height: 21px; }
+.movesymbol { font-size: 21px; }
 #sortable-elements {
     float: none;
     display: block;

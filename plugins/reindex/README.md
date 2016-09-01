@@ -1,5 +1,5 @@
-REDAXO 5 Plugin - "reindex" für "search_it"
-=========================================
+#REDAXO 5 Plugin - "reindex" für "search_it"
+
 
 Port von Version für R4 auf R5
 
@@ -10,7 +10,7 @@ aber der Extensionpoint existiert nicht mehr....
 Das Addon ist im Backend nicht zu sehen.
 
 
-Die Dokumentation des Plugins finden Sie unter http://wiki.redaxo.de/index.php?n=R4.RexSearch.
+Die Dokumentation des Plugins findest du [im alten Wiki](http://wiki.redaxo.de/index.php?n=R4.RexSearch).
 
-Sollten Sie Fragen oder Probleme haben, können Sie diese im Redaxo-Forum stellen: http://forum.redaxo.de/ftopic12965.
+Solltest du Fragen oder Probleme haben, kannst du diese im [Redaxo-Forum](http://forum.redaxo.de/ftopic12965) stellen.
 

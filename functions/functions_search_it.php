@@ -422,6 +422,7 @@ function search_it_getSettingsFormSection($id = '', $title = '&nbsp;', $elements
 
     if ($ownsection) {
         $fragment = new rex_fragment();
+        $fragment->setVar('id', 'edit');
         $fragment->setVar('class', 'edit');
         $fragment->setVar('title', $title);
         $fragment->setVar('body', $return, false);

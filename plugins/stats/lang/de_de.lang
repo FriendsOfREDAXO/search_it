@@ -21,8 +21,8 @@ search_it_stats_generalstats_090_searchindexindexlength = Größe der Daten der 
 search_it_stats_generalstats_100_datalength = Größe der Indexe aller Search_it-Tabellen:
 search_it_stats_generalstats_110_indexlength = Größe der Daten aller Search_it-Tabellen:
 
+search_it_stats_topsearchterms_titletitle = Häufigste Suchbegriffe
 search_it_stats_topsearchterms_title = Die {0} häufigsten Suchbegriffe (insgesamt {1} unterschiedliche Suchbegriffe)
-
 search_it_stats_topsearchterms_none = Noch keine Suchbegriffe vorhanden.
 
 search_it_stats_general_title = Allgemeine grafische Übersicht
@@ -33,6 +33,7 @@ search_it_stats_general_timestats = Anzahl der Suchen der letzten {0} Monate
 search_it_stats_general_timestats_count = Anzahl Suchen
 search_it_stats_general_timestats_countcumu = kumulierte Anzahl
 
+search_it_stats_searchterm_timestats_titletitle = Suchverlauf
 search_it_stats_searchterm_timestats_title = Übersicht für {0} über die letzten {1} Monate
 search_it_stats_searchterm_timestats_title0_all = alle Suchbegriffe
 search_it_stats_searchterm_timestats_title0_single = {0}

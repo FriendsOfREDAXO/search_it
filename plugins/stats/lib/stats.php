@@ -3,8 +3,7 @@
 class search_it_stats{
     var $sql;
 
-    function search_it_stats(){
-
+    function __construct(){
         $this->sql = rex_sql::factory();
         $this->flushSQL();
     }

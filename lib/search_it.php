@@ -69,7 +69,7 @@ class search_it {
     var $where = '';
 
 
-    function search_it($_clang = false, $_loadSettings = true, $_useStopwords = true){
+    function __construct($_clang = false, $_loadSettings = true, $_useStopwords = true){
 
         if($_loadSettings) {
             $this->setLogicalMode(rex_addon::get('search_it')->getConfig('logicalmode'));
@@ -325,8 +325,8 @@ class search_it {
     * The original state is saved in $this->redaxo.
     */
     function beginFrontendMode(){
-        $this->redaxo = rex::isBackend();
-        rex::setProperty('redaxo',false);
+        /*$this->redaxo = rex::isBackend();
+        rex::setProperty('redaxo',false);*/
 
     }
 
@@ -335,7 +335,7 @@ class search_it {
     * Ends the frontend-mode by setting $REX['REDAXO'] to the original state.
     */
     function endFrontendMode(){
-        rex::setProperty('redaxo',$this->redaxo);
+       /* rex::setProperty('redaxo',$this->redaxo);*/
 
     }
 
@@ -465,11 +465,12 @@ class search_it {
                 $this->beginFrontendMode();
     
                 if(ini_get('allow_url_fopen') AND $this->indexViaHTTP){
-                    rex_url::init(new rex_path_default_provider('', 'redaxo', false));
-                    //echo rex::getServer().rex_getUrl($_id, $langID, array(), '&');
-                    $articleText = file_get_contents(rex::getServer().rex_getUrl($_id, $langID, array(), '&'));
+                    //rex_url::init(new rex_path_default_provider('', 'redaxo', false));
+                    //echo rex::getServer().substr(rex_getUrl($_id,$langID),3);
+                    $articleText = file_get_contents(rex::getServer().substr(rex_getUrl($_id,$langID),3));
+
                     //$articleText = file_get_contents(rex::getServer().'index.php?article_id='.$_id.'&clang='.$langID);
-                    rex_url::init(new rex_path_default_provider('../', 'redaxo', true));
+                    //rex_url::init(new rex_path_default_provider('../', 'redaxo', true));
                 } elseif ($_id != 0 AND $this->dontIndexRedirects){
                     $rex_article = new rex_article_content(intval($_id), $langID);
                     $article_content_file = rex_path::addonCache('structure', $_id . '.' . $langID . '.content');
@@ -1078,7 +1079,7 @@ class search_it {
     *
     * @param array $_columns
     */
-    function setIncludeColumns($_columns){
+    function setIncludeColumns($_columns = array()){
         $this->includeColumns = $_columns;
     }
     

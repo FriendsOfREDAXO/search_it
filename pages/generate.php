@@ -228,7 +228,7 @@ if ( !empty(rex_get('do')) AND rex_get('do') == 'incremental') {
     $content .= '<p>'.$this->i18n('search_it_generate_delete_keywords_text').'</p>';
     $content .= '<p><a onclick="return confirm(\''.$this->i18n('search_it_generate_delete_keywords_confirm').'\');" class="btn btn-primary" href="index.php?page=search_it/generate&amp;do=deletekeywords" class="rex-button">' . $this->i18n('search_it_generate_delete_keywords') . '</a><br /><br /></p>';
 
-    $content .= rex_extension::registerPoint(new rex_extension_point('SEARCH_IT_PAGE_MAINTENANCE','', [ 'content' => $content ]));
+    $content = rex_extension::registerPoint(new rex_extension_point('SEARCH_IT_PAGE_MAINTENANCE',$content));
 
 
     $fragment = new rex_fragment();

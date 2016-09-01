@@ -42,7 +42,7 @@ $content[] = search_it_getSettingsFormSection(
             'name' => 'search_it_plaintext[order]',
             'value' => !empty($this->getConfig('order')) ? htmlspecialchars($this->getConfig('order')) : ''
         )
-    )
+    ),false
 );
 
 
@@ -141,7 +141,7 @@ $content[] = search_it_getSettingsFormSection(
 // <![CDATA[
 (function($) {
     $(document).ready(function () {
-        var mainWidth = jQuery('#search_it-form').width();
+        var mainWidth = jQuery('#search_it_plaintext_form').width();
         var ondrag = false;
 
         jQuery('#sortable-elements').sortable({
@@ -152,10 +152,8 @@ $content[] = search_it_getSettingsFormSection(
             forceHelperSize: true,
             start: function (event, ui) {
                 ondrag = true;
-                //jQuery('div', ui.item).css('color', '#fff');
             },
             stop: function (event, ui) {
-                //jQuery('div', ui.item).css('color', '#2C8EC0');
 
                 var order = new Array();
                 jQuery('#search_it_plaintext_selectors,#search_it_plaintext_regex,#search_it_plaintext_textile,#search_it_plaintext_striptags').each(function () {
@@ -178,12 +176,12 @@ $content[] = search_it_getSettingsFormSection(
         });
 
         // display links for showing and hiding all sections
-        jQuery('#search_it_plaintext_description')
+        jQuery('#search_it_plaintext_form section .panel-body').first()
             .css('position', 'relative')
-            .append(
-                jQuery('<dl class="rex-form-group form-group">')
-                    .append(jQuery('<dd>')
-                        .css('font-weight', '900')
+            .prepend(
+                jQuery('<div>')
+                    .css('font-weight', '900')
+                    .css('margin-bottom','1em')
                         .append(
                             jQuery('<a><?php echo $this->i18n('search_it_settings_show_all'); ?><' + '/a>')
                                 .css('cursor', 'pointer')
@@ -203,7 +201,7 @@ $content[] = search_it_getSettingsFormSection(
                                     })
                                 })
                         )
-                    )
+
             );
 
         // accordion
@@ -253,7 +251,6 @@ $fragment->setVar('class', 'info', false);
 $fragment->setVar('body', $content, false);
 $fragment->setVar('buttons', $buttons, false);
 
-echo '<div class="rex-addon-output" id="search_it-form"><div class="rex-form">';
-echo '<form method="post" action="'. rex_url::currentBackendPage() .'" id="search_it_stats_form">';
+echo '<form method="post" action="'. rex_url::currentBackendPage() .'" id="search_it_plaintext_form">';
 echo $fragment->parse('core/page/section.php');
-echo '</form></div></div>';
+echo '</form>';

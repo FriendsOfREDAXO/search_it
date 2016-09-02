@@ -193,8 +193,8 @@ $content[] =  '</div>';
 ?>
 <script type="text/javascript">
 // <![CDATA[
-(function($) {
-    $(document).ready(function () {
+(function(jQuery) {
+    jQuery(document).ready(function () {
 
 
     var mainWidth = jQuery('#search_it_stats_form').attr('offsetWidth');

@@ -2087,8 +2087,9 @@ class search_it {
             $return['hits'][$i] = array();
             $return['hits'][$i]['id'] = $hit['id'];
             $return['hits'][$i]['fid'] = $hit['fid'];
-            if(!is_numeric($hit['fid']) AND !is_null($json_decode_fid = json_decode($hit['fid'], true)))
+            if(!is_numeric($hit['fid']) AND !is_null($json_decode_fid = json_decode($hit['fid'], true))) {
                 $return['hits'][$i]['fid'] = $json_decode_fid;
+            }
             $return['hits'][$i]['table'] = $hit['ftable'];
             $return['hits'][$i]['column'] = $hit['fcolumn'];
             $return['hits'][$i]['type'] = $hit['texttype'];

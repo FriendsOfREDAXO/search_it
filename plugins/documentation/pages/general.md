@@ -10,7 +10,7 @@ Dabei werden Artikel und auswählbare Datenbankspalten in einer DB-Tabelle des A
 
 Suchanfragen können außerdem in einer Cache-Tabelle gespeichert werden. Das spart Serverrechenleistung und führt zur schnelleren Anzeige von Suchergebnissen.
 
-Das Addon setzt PHP >= 4, "MySQL >= 4.1" und Redaxo >= 4.2 voraus.
+Das Addon setzt PHP >= 5.5, "MySQL >= 5.1" und Redaxo >= 5.2 voraus.
 
 #Funktionen/Merkmale
 

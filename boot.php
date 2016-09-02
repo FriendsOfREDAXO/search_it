@@ -25,7 +25,7 @@
     require_once $curDir . '/functions/functions_search_it.php';
 
 
-	if (rex::isBackend()) {
+    if ( rex::isBackend() && rex::getUser() ) {
         // automatic indexing
         if ( rex_addon::get('search_it')->getConfig('automaticindex') == true ){
             $extensionPoints = array(
@@ -44,8 +44,13 @@
             );
             search_it_register_extensions($extensionPoints);
         }
+
+        //set default Values on installation
+        if (!$this->hasConfig()) {
+            $this->setConfig('limit',array(0,10));
+        }
+
+        rex_view::addCssFile( $this->getAssetsUrl('search_it.css') );
 	}
 
-    if ( rex::isBackend() && rex::getUser() ) {
-        rex_view::addCssFile( $this->getAssetsUrl('search_it.css') );
-    }
+

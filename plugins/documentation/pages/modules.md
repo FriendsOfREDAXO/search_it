@@ -6,12 +6,13 @@ Es werden ein paar Beispielmodule gezeigt und erklärt. Alle Module erwarten den
 
 Dieses Suchformular muss im gleichen Artikel wie das Modul, das die Suchergebnisse ausgibt, eingebunden werden. Wenn dies nicht der Fall sein soll und das Formular z. B. im Template eingebunden wird, muss die Artikel-ID manuell so angepasst werden, dass sie auf den Artikel verweist, der die Suchergebnisse präsentiert.
 
-        <form id="search_it_form" action="index.php" method="get">
-        <fieldset><legend>Suche</legend>
-          <input type="hidden" name="article_id" value="REX_ARTICLE_ID" />
-          <input type="hidden" name="clang" value="REX_CLANG_ID" />
-          <input type="text" name="search_it" value="<?php if(!empty($_GET['search_it'])) echo htmlspecialchars($_GET['search_it']); ?>" />
-        </fieldset>
+        <form id="search_it_form" action="<?php echo rex_getUrl(rex_article::getCurrentId(), rex_clang::getCurrentId()); ?>" method="post">
+            <fieldset><legend>Suche</legend>
+                <input type="hidden" name="article_id" value="<?php echo rex_article::getCurrentId(); ?>" />
+                <input type="hidden" name="clang" value="<?php echo rex_clang::getCurrentId(); ?>" />
+                <input type="text" name="searchit" value="<?php if(!empty(rex_post('searchit','string'))) { echo htmlspecialchars(rex_post('searchit','string')); } ?>" />
+                <input class="button" type="submit" value="###suchen###" />
+            </fieldset>
         </form>
 
 ##Einfaches Beispielmodul
@@ -19,25 +20,25 @@ Dieses Suchformular muss im gleichen Artikel wie das Modul, das die Suchergebnis
 Dieses Suchmodul nimmt einen Suchbegriff entgegen und gibt gefundene Artikel aus. Dabei wird von den Standardeinstellungen des Addons ausgegangen.
 
         <?php
-        if(!empty(rex_request('search_it', 'string'))){
-            $search_it = new search_it();
-            $result = $search_it->search(rex_request('search_it', 'string'));
-            
-            if($result['count'] > 0){
-                echo '<ul class="searchresults">';
-                foreach($result['hits'] as $hit){
-                    if($hit['type'] == 'article'){
-                        $article = OOArticle::getArticleById($hit['fid']);
-                        echo '<li>
-                        <h4><a href="'.($url = htmlspecialchars($article->getUrl())).'">'.$article->getName().'</a></h4>
-                        <p class="highlightedtext">'.$hit['highlightedtext'].'</p>
-                        <p class="url">'.$REX['SERVER'].rex_getUrl($hit['fid'], $hit['clang']).'</p></li>';
-                    }
-                }
-                echo '</ul>';
-            }
-        }
-        ?>
+              if(!empty(rex_request('searchit', 'string'))){
+                  $search_it = new search_it();
+                  $result = $search_it->search(rex_request('searchit', 'string'));
+          
+                  if($result['count'] > 0){
+                      echo '<ul class="searchresults">';
+                      foreach($result['hits'] as $hit){
+                          if($hit['type'] == 'article'){
+                              $article = rex_article::get($hit['fid']);
+                              echo '<li>
+                              <h4><a href="'.htmlspecialchars($article->getUrl()).'">'.$article->getName().'</a></h4>
+                              <p class="highlightedtext">'.$hit['highlightedtext'].'</p>
+                              <p class="url">'.rex_getUrl($hit['fid'], $hit['clang']).'</p></li>';
+                          }
+                      }
+                      echo '</ul>';
+                  }
+              }
+              ?>
 
 ##Erweitertes Beispielmodul
 

@@ -16,8 +16,8 @@ search_it_stats_generalstats_050_failedsearchescount = Number of failed searches
 search_it_stats_generalstats_060_uniquesearchterms = Number of unique search terms:
 search_it_stats_generalstats_070_keywordcount = Number of different keywords stored in the search index:
 search_it_stats_generalstats_075_cachedsearchcount = Number of cached searches:
-search_it_stats_generalstats_080_searchindexdatalength = Size of index of the index-table (searchit_index):
-search_it_stats_generalstats_090_searchindexindexlength = Size of data of the index-table (searchit_index):
+search_it_stats_generalstats_080_searchindexdatalength = Size of index of the index-table (search_it_index):
+search_it_stats_generalstats_090_searchindexindexlength = Size of data of the index-table (search_it_index):
 search_it_stats_generalstats_100_datalength = Size of the indexes of all search_it-tables:
 search_it_stats_generalstats_110_indexlength = Size of the data of all search_it-tables:
 

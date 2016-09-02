@@ -398,7 +398,7 @@ $formElements = [];
 $options = array();
 $sql_tables = rex_sql::factory();
 foreach ($sql_tables->showTables() as $table) {
-    if (false === strpos($table, 'search_it') AND false === strpos($table, 'searchit_keywords')) {
+    if (false === strpos($table, 'search_it') AND false === strpos($table, 'search_it_keywords')) {
         $sql_columns = rex_sql::factory();
         foreach ($sql_tables->showColumns($table) as $column) {
             $options[] = array(

@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS `%TABLE_PREFIX%searchit_index` (
+CREATE TABLE IF NOT EXISTS `%TABLE_PREFIX%search_it_index` (
   `id` int(11) NOT NULL auto_increment,
   `fid` varchar(255) NULL,
   `catid` int(11) NULL,
@@ -19,29 +19,29 @@ CREATE TABLE IF NOT EXISTS `%TABLE_PREFIX%searchit_index` (
   FULLTEXT (`plaintext`,`unchangedtext`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-ALTER TABLE `%TABLE_PREFIX%searchit_index` CHANGE COLUMN fid fid varchar(255) NULL;
-/* ALTER TABLE `%TABLE_PREFIX%searchit_index` ADD COLUMN `values` text NOT NULL default ''; */
+ALTER TABLE `%TABLE_PREFIX%search_it_index` CHANGE COLUMN fid fid varchar(255) NULL;
+/* ALTER TABLE `%TABLE_PREFIX%search_it_index` ADD COLUMN `values` text NOT NULL default ''; */
 
 /*DROP TRIGGER IF EXISTS minfid;
-CREATE TRIGGER minfid BEFORE INSERT ON `%TABLE_PREFIX%searchit_index`
+CREATE TRIGGER minfid BEFORE INSERT ON `%TABLE_PREFIX%search_it_index`
 FOR EACH ROW
-  SET NEW.fid = CASE WHEN NEW.fid IS NULL THEN (SELECT IF(IFNULL(MIN(fid), 0) > 0, 0, IFNULL(MIN(fid), 0)) FROM `%TABLE_PREFIX%searchit_index`) - 1 ELSE NEW.fid END;*/
+  SET NEW.fid = CASE WHEN NEW.fid IS NULL THEN (SELECT IF(IFNULL(MIN(fid), 0) > 0, 0, IFNULL(MIN(fid), 0)) FROM `%TABLE_PREFIX%search_it_index`) - 1 ELSE NEW.fid END;*/
 
-CREATE TABLE IF NOT EXISTS `%TABLE_PREFIX%searchit_cache` (
+CREATE TABLE IF NOT EXISTS `%TABLE_PREFIX%search_it_cache` (
   `id` int(11) NOT NULL auto_increment,
   `hash` char(32) NOT NULL,
   `returnarray` longtext NULL,
   PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-CREATE TABLE IF NOT EXISTS `%TABLE_PREFIX%searchit_cacheindex_ids` (
+CREATE TABLE IF NOT EXISTS `%TABLE_PREFIX%search_it_cacheindex_ids` (
   `id` int(11) NOT NULL auto_increment,
   `index_id` int(11) NULL,
   `cache_id` varchar(255) NULL,
   PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-CREATE TABLE IF NOT EXISTS `%TABLE_PREFIX%searchit_keywords` (
+CREATE TABLE IF NOT EXISTS `%TABLE_PREFIX%search_it_keywords` (
   `id` int(11) NOT NULL auto_increment,
   `keyword` varchar(255) NOT NULL,
   `soundex` varchar(255) NOT NULL,

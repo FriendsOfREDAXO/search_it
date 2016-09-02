@@ -366,13 +366,13 @@ class search_it {
     function generateIndex(){
         // delete old index
         $delete = rex_sql::factory();
-        $delete->setTable($this->tablePrefix.'searchit_index');
+        $delete->setTable($this->tablePrefix.'search_it_index');
         $delete->delete();
         $delete2 = rex_sql::factory();
-        $delete2->setTable($this->tablePrefix.'searchit_cacheindex_ids');
+        $delete2->setTable($this->tablePrefix.'search_it_cacheindex_ids');
         $delete2->delete();
         $delete3 = rex_sql::factory();
-        $delete3->setTable($this->tablePrefix.'searchit_cache');
+        $delete3->setTable($this->tablePrefix.'search_it_cache');
         $delete3->delete();
 
         // index articles
@@ -444,7 +444,7 @@ class search_it {
 
             // delete from cache
             $select = rex_sql::factory();
-            $select->setTable($this->tablePrefix.'searchit_index');
+            $select->setTable($this->tablePrefix.'search_it_index');
             $select->setWhere($where);
             $select->select('id');
 
@@ -455,7 +455,7 @@ class search_it {
             $this->deleteCache($indexIds);
 
             // delete old
-            $delete->setTable($this->tablePrefix.'searchit_index');
+            $delete->setTable($this->tablePrefix.'search_it_index');
             $delete->setWhere($where);
             $delete->delete();
 
@@ -537,7 +537,7 @@ class search_it {
 
                 $articleData['teaser'] = $this->getTeaserText($plaintext);
 
-                $insert->setTable($this->tablePrefix.'searchit_index');
+                $insert->setTable($this->tablePrefix.'search_it_index');
                 $insert->setValues($articleData);
                 $insert->insert();
 
@@ -575,7 +575,7 @@ class search_it {
 
         // delete from cache
         $select = rex_sql::factory();
-        $select->setTable($this->tablePrefix.'searchit_index');
+        $select->setTable($this->tablePrefix.'search_it_index');
         $select->setWhere($where);
         $indexIds = array();
         if($select->select('id')){
@@ -587,7 +587,7 @@ class search_it {
 
         // delete old data
         if($_start === 0){
-            $delete->setTable($this->tablePrefix.'searchit_index');
+            $delete->setTable($this->tablePrefix.'search_it_index');
             $delete->setWhere($where);
             $delete->delete();
         }
@@ -700,7 +700,7 @@ class search_it {
                         $indexData['teaser'] = $teaser ? $this->getTeaserText($this->getPlaintext($rex_article->getArticle())) : '';
                     }
 
-                    $insert->setTable($this->tablePrefix.'searchit_index');
+                    $insert->setTable($this->tablePrefix.'search_it_index');
                     $insert->setValues($indexData);
                     $insert->insert();
 
@@ -759,7 +759,7 @@ class search_it {
 
         // delete from cache
         $select = rex_sql::factory();
-        $select->setTable($this->tablePrefix . 'searchit_index');
+        $select->setTable($this->tablePrefix . 'search_it_index');
         $select->setWhere($where);
         $indexIds = array();
         if ($select->select('id')) {
@@ -770,7 +770,7 @@ class search_it {
         }
 
         // delete old data
-        $delete->setTable($this->tablePrefix . 'searchit_index');
+        $delete->setTable($this->tablePrefix . 'search_it_index');
         $delete->setWhere($where);
         $delete->delete();
 
@@ -904,7 +904,7 @@ class search_it {
 
         $fileData['teaser'] = $this->getTeaserText($plaintext);
 
-        $insert->setTable($this->tablePrefix.'searchit_index');
+        $insert->setTable($this->tablePrefix.'search_it_index');
         $insert->setValues($fileData);
         $insert->insert();
 
@@ -913,7 +913,7 @@ class search_it {
 
     function getMinFID(){
         $minfid_sql = rex_sql::factory();
-        $minfid_result = $minfid_sql->getArray('SELECT MIN(CONVERT(fid, SIGNED)) as minfid FROM `'.$this->tablePrefix.'searchit_index`');
+        $minfid_result = $minfid_sql->getArray('SELECT MIN(CONVERT(fid, SIGNED)) as minfid FROM `'.$this->tablePrefix.'search_it_index`');
         $minfid = intval($minfid_result[0]['minfid']);
 
         return ($minfid < 0) ? --$minfid : -1;
@@ -929,7 +929,7 @@ class search_it {
     function excludeArticle($_id,$_clang = false){
         // exclude article
         $art_sql = rex_sql::factory();
-        $art_sql->setTable($this->tablePrefix.'searchit_index');
+        $art_sql->setTable($this->tablePrefix.'search_it_index');
 
         $where = "fid = ".intval($_id)." AND texttype='article'";
         if($_clang !== false) {
@@ -941,7 +941,7 @@ class search_it {
 
         // delete from cache
         $select = rex_sql::factory();
-        $select->setTable($this->tablePrefix.'searchit_index');
+        $select->setTable($this->tablePrefix.'search_it_index');
         $select->setWhere($where);
         $select->select('id');
 
@@ -959,7 +959,7 @@ class search_it {
      */
     function deleteIndex(){
         $delete = rex_sql::factory();
-        $delete->setTable($this->tablePrefix.'searchit_index');
+        $delete->setTable($this->tablePrefix.'search_it_index');
         $delete->delete();
 
         $this->deleteCache();
@@ -1608,7 +1608,7 @@ class search_it {
      */
     function isCached($_search){
         $sql = rex_sql::factory();
-        $sql->setTable($this->tablePrefix.'searchit_cache');
+        $sql->setTable($this->tablePrefix.'search_it_cache');
         $sql->setWhere(sprintf("hash = '%s'",$this->cacheHash($_search)));
 
         if($sql->select('returnarray')){
@@ -1643,7 +1643,7 @@ class search_it {
      */
     function cacheSearch($_result, $_indexIds){
         $sql = rex_sql::factory();
-        $sql->setTable($this->tablePrefix.'searchit_cache');
+        $sql->setTable($this->tablePrefix.'search_it_cache');
         $sql->setValues(array(
                 'hash' => $this->cacheHash($this->searchString),
                 'returnarray' => $_result
@@ -1665,7 +1665,7 @@ class search_it {
                     sprintf(
                         'INSERT INTO `%s` (index_id,cache_id) VALUES
             %s;',
-                        $this->tablePrefix . 'searchit_cacheindex_ids',
+                        $this->tablePrefix . 'search_it_cacheindex_ids',
                         implode(',', $Ainsert)
                     )
                 );
@@ -1692,10 +1692,10 @@ class search_it {
         if($_indexIds === false){
             // delete entire search-chache
             $delete = rex_sql::factory();
-            $delete->setTable($this->tablePrefix.'searchit_cacheindex_ids');
+            $delete->setTable($this->tablePrefix.'search_it_cacheindex_ids');
             $delete->delete();
             $delete2 = rex_sql::factory();
-            $delete2->setTable($this->tablePrefix.'searchit_cache');
+            $delete2->setTable($this->tablePrefix.'search_it_cache');
             $delete2->delete();
         } elseif(is_array($_indexIds) AND !empty($_indexIds)){
             $sql = rex_sql::factory();
@@ -1704,7 +1704,7 @@ class search_it {
             SELECT cache_id
             FROM %s
             WHERE index_id IN (%s)',
-                $this->tablePrefix.'searchit_cacheindex_ids',
+                $this->tablePrefix.'search_it_cacheindex_ids',
                 implode(',',$_indexIds)
             );
 
@@ -1715,20 +1715,20 @@ class search_it {
 
             // delete from search-cache where indexed IDs exist
             $delete = rex_sql::factory();
-            $delete->setTable($this->tablePrefix.'searchit_cache');
+            $delete->setTable($this->tablePrefix.'search_it_cache');
             $delete->setWhere('id IN ('.implode(',',$deleteIds).')');
             $delete->delete();
 
             // delete the cache-ID and index-ID
             $delete2 = rex_sql::factory();
-            $delete2->setTable($this->tablePrefix.'searchit_cacheindex_ids');
+            $delete2->setTable($this->tablePrefix.'search_it_cacheindex_ids');
             $delete2->setWhere('cache_id IN ('.implode(',',$deleteIds).')');
             $delete2->delete();
 
             // delete all cached searches which had no result (because now they maybe will have)
             $delete3 = rex_sql::factory();
-            $delete3->setTable($this->tablePrefix.'searchit_cache');
-            $delete3->setWhere(sprintf('id NOT IN (SELECT cache_id FROM `%s`)',$this->tablePrefix.'searchit_cacheindex_ids'));
+            $delete3->setTable($this->tablePrefix.'search_it_cache');
+            $delete3->setWhere(sprintf('id NOT IN (SELECT cache_id FROM `%s`)',$this->tablePrefix.'search_it_cacheindex_ids'));
             $delete3->delete();
         }
     }
@@ -1760,7 +1760,7 @@ class search_it {
               VALUES
               %s
               ON DUPLICATE KEY UPDATE count = count + %d",
-                    $this->tablePrefix.'searchit_keywords',
+                    $this->tablePrefix.'search_it_keywords',
                     implode(',', $simWords),
                     $_doCount ? 1 : 0
                 )
@@ -1771,7 +1771,7 @@ class search_it {
 
     function deleteKeywords(){
         $kw_sql = rex_sql::factory();
-        return $kw_sql->setQuery(sprintf('TRUNCATE TABLE `%s`', $this->tablePrefix.'searchit_keywords'));
+        return $kw_sql->setQuery(sprintf('TRUNCATE TABLE `%s`', $this->tablePrefix.'search_it_keywords'));
     }
 
 
@@ -1846,7 +1846,7 @@ class search_it {
                     %s
                     AND (%s)",
                     $simWordsSQL->escape($keyword['search']),
-                    $this->tablePrefix.'searchit_keywords',
+                    $this->tablePrefix.'search_it_keywords',
                     ($this->clang !== false) ? 'AND (clang = '.intval($this->clang).' OR clang IS NULL)' : '',
                     implode(' OR ', $sounds)
                 );
@@ -2004,8 +2004,8 @@ class search_it {
 
         $selectFields = array();
         if($this->groupBy){
-            $selectFields[] = sprintf('(SELECT SUM%s FROM `%s` summe WHERE summe.fid = r1.fid AND summe.ftable = r1.ftable) AS RELEVANCE587', $match, $this->tablePrefix.'searchit_index');
-            $selectFields[] = sprintf('(SELECT COUNT(*) FROM `%s` summe WHERE summe.fid = r1.fid AND (summe.ftable IS NULL OR summe.ftable = r1.ftable) AND (summe.fcolumn IS NULL OR summe.fcolumn = r1.fcolumn) AND summe.texttype = r1.texttype) AS COUNT587', $this->tablePrefix.'searchit_index');
+            $selectFields[] = sprintf('(SELECT SUM%s FROM `%s` summe WHERE summe.fid = r1.fid AND summe.ftable = r1.ftable) AS RELEVANCE587', $match, $this->tablePrefix.'search_it_index');
+            $selectFields[] = sprintf('(SELECT COUNT(*) FROM `%s` summe WHERE summe.fid = r1.fid AND (summe.ftable IS NULL OR summe.ftable = r1.ftable) AND (summe.fcolumn IS NULL OR summe.fcolumn = r1.fcolumn) AND summe.texttype = r1.texttype) AS COUNT587', $this->tablePrefix.'search_it_index');
         } else {
             $selectFields[] = $match.' AS RELEVANCE587';
         }
@@ -2039,11 +2039,11 @@ class search_it {
             ORDER BY %s
             LIMIT %d,%d',
                 implode(",\n",$selectFields),
-                $this->tablePrefix.'searchit_index',
+                $this->tablePrefix.'search_it_index',
                 $where,
                 $match,
                 $match,
-                $this->tablePrefix.'searchit_index',
+                $this->tablePrefix.'search_it_index',
                 ($this->clang !== false) ? 'AND (clang = '.intval($this->clang).' OR clang IS NULL)' : '',
                 implode(",\n",$Aorder),
                 $this->limit[0],$this->limit[1]
@@ -2056,7 +2056,7 @@ class search_it {
             ORDER BY %s
             LIMIT %d,%d',
                 implode(",\n",$selectFields),
-                $this->tablePrefix.'searchit_index',
+                $this->tablePrefix.'search_it_index',
                 $where,
                 implode(",\n",$Aorder),
                 $this->limit[0],$this->limit[1]
@@ -2117,7 +2117,7 @@ class search_it {
                 WHERE %s
                 LIMIT %d,%d',
 
-                    $this->tablePrefix.'searchit_index',
+                    $this->tablePrefix.'search_it_index',
                     $where,
                     $this->limit[0],$count
                 )

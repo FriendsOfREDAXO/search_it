@@ -1,4 +1,4 @@
-DROP TABLE IF EXISTS `%TABLE_PREFIX%searchit_index`;
-DROP TABLE IF EXISTS `%TABLE_PREFIX%searchit_cache`;
-DROP TABLE IF EXISTS `%TABLE_PREFIX%searchit_cacheindex_ids`;
-DROP TABLE IF EXISTS `%TABLE_PREFIX%searchit_keywords`;
+DROP TABLE IF EXISTS `%TABLE_PREFIX%search_it_index`;
+DROP TABLE IF EXISTS `%TABLE_PREFIX%search_it_cache`;
+DROP TABLE IF EXISTS `%TABLE_PREFIX%search_it_cacheindex_ids`;
+DROP TABLE IF EXISTS `%TABLE_PREFIX%search_it_keywords`;

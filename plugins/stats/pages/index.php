@@ -47,31 +47,31 @@ $stats = new search_it_stats();
 $sql = rex_sql::factory();
 
 $generalstats = $sql->getArray('SELECT
-  ((SELECT COUNT(DISTINCT ftable,fid) as count FROM `' . rex::getTablePrefix() . 'searchit_index` WHERE ftable IS NOT NULL) + (SELECT COUNT(DISTINCT fid) as count FROM `' . rex::getTablePrefix() . 'searchit_index` WHERE ftable IS NULL)) AS 010_uniquedatasetcount,
-  (SELECT AVG(resultcount) FROM `' . rex::getTablePrefix() . 'searchit_stats_searchterms`) AS 020_averageresultcount,
-  (SELECT COUNT(*) FROM `' . rex::getTablePrefix() . 'searchit_stats_searchterms` WHERE resultcount > 0) AS 040_successfullsearchescount,
-  (SELECT COUNT(*) FROM `' . rex::getTablePrefix() . 'searchit_stats_searchterms` WHERE resultcount = 0) AS 050_failedsearchescount,
-  (SELECT COUNT(DISTINCT term) FROM `' . rex::getTablePrefix() . 'searchit_stats_searchterms`) AS 060_uniquesearchterms'
+  ((SELECT COUNT(DISTINCT ftable,fid) as count FROM `' . rex::getTablePrefix() . 'search_it_index` WHERE ftable IS NOT NULL) + (SELECT COUNT(DISTINCT fid) as count FROM `' . rex::getTablePrefix() . 'search_it_index` WHERE ftable IS NULL)) AS 010_uniquedatasetcount,
+  (SELECT AVG(resultcount) FROM `' . rex::getTablePrefix() . 'search_it_stats_searchterms`) AS 020_averageresultcount,
+  (SELECT COUNT(*) FROM `' . rex::getTablePrefix() . 'search_it_stats_searchterms` WHERE resultcount > 0) AS 040_successfullsearchescount,
+  (SELECT COUNT(*) FROM `' . rex::getTablePrefix() . 'search_it_stats_searchterms` WHERE resultcount = 0) AS 050_failedsearchescount,
+  (SELECT COUNT(DISTINCT term) FROM `' . rex::getTablePrefix() . 'search_it_stats_searchterms`) AS 060_uniquesearchterms'
 );
 $generalstats = $generalstats[0];
 $generalstats['030_searchescount'] = $generalstats['040_successfullsearchescount'] + $generalstats['050_failedsearchescount'];
 
 $generalstats['100_datalength'] = 0;
 $generalstats['110_indexlength'] = 0;
-foreach ($sql->getArray("SHOW TABLE STATUS LIKE '" . rex::getTablePrefix() . "searchit_%'") as $table) {
+foreach ($sql->getArray("SHOW TABLE STATUS LIKE '" . rex::getTablePrefix() . "search_it_%'") as $table) {
     $generalstats['100_datalength'] += $table['Data_length'];
     $generalstats['110_indexlength'] += $table['Index_length'];
 
-    if ($table['Name'] == rex::getTablePrefix() . 'searchit_index') {
+    if ($table['Name'] == rex::getTablePrefix() . 'search_it_index') {
         $generalstats['080_searchindexdatalength'] = search_it_stats_bytesize($table['Data_length']);
         $generalstats['090_searchindexindexlength'] = search_it_stats_bytesize($table['Index_length']);
         $generalstats['005_datasetcount'] = $table['Rows'];
     }
 
-    if ($table['Name'] == rex::getTablePrefix() . 'searchit_keywords')
+    if ($table['Name'] == rex::getTablePrefix() . 'search_it_keywords')
         $generalstats['070_keywordcount'] = $table['Rows'];
 
-    if ($table['Name'] == rex::getTablePrefix() . 'searchit_cache')
+    if ($table['Name'] == rex::getTablePrefix() . 'search_it_cache')
         $generalstats['075_cachedsearchcount'] = $table['Rows'];
 }
 

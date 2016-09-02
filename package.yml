@@ -20,6 +20,8 @@ page:
                          result: { title: 'translate:settings_result' }
                          origin: { title: 'translate:settings_origin' }
 
+requires:
+    redaxo: '^5.2.0'
 
 plugins:
     - plaintext

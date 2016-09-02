@@ -9,3 +9,7 @@ description: 'translate:search_it_stats_plugin'
 page:
     title: 'translate:search_it_stats_plugin_title'
     icon: rex-icon fa-bar-chart
+
+requires:
+    php:
+        extensions: [gd]

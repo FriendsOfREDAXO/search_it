@@ -67,6 +67,7 @@ class search_it {
     var $textMode = 'plain';
     var $whitelist = array();
     var $where = '';
+    var $errormessages = '';
 
 
     function __construct($_clang = false, $_loadSettings = true, $_useStopwords = true){
@@ -1210,7 +1211,7 @@ class search_it {
      */
     function setOrder($_order){
         if(!is_array($_order)){
-            error('Wrong parameter. Expecting an array',E_USER_WARNING);
+            $this->errormessages = 'Wrong parameter. Expecting an array';
             return false;
         }
 
@@ -1220,10 +1221,10 @@ class search_it {
         foreach($_order as $col => $dir){
             $i++;
             if('RELEVANCE_587' == ($col2upper = strtoupper((string)$col))){
-                error(sprintf('Column %d must not be named "RELEVANCE_587". Column %d is ignored for the sort order',$i,$i));
+                $this->errormessages = sprintf('Column %d must not be named "RELEVANCE_587". Column %d is ignored for the sort order',$i,$i);
             } else {
                 if(!in_array($dir2upper = strtoupper((string)$dir), array('ASC','DESC'))){
-                    error(sprintf('Column %d has no correct sort order (ASC or DESC). Descending (DESC) sort order is assumed',$i));
+                    $this->errormessages = sprintf('Column %d has no correct sort order (ASC or DESC). Descending (DESC) sort order is assumed',$i);
                     $dir2upper = 'DESC';
                 }
 
@@ -2069,9 +2070,10 @@ class search_it {
             $info = 'Success';
         } catch (rex_sql_exception $e) {
             $error = $e->getMessage();
-            echo $error;
+            $return['errormessages'] .= $error;
         }
 
+        $return['errormessages'] .= $this->errormessages;
 
         $indexIds = array();
         $count = 0;

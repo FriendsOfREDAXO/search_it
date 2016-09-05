@@ -330,7 +330,7 @@ function search_it_handle_extensionpoint($_ep){
     $search_it->deleteCache();
 }
 
-function search_it_getSettingsFormSection($id = '', $title = '&nbsp;', $elements = array(), $ownsection = true ){
+function search_it_getSettingsFormSection($id = '', $title = '&nbsp;', $elements = array(), $ownsection = 'info', $collapse = false ){
 
     $return = '<fieldset id="'.$id.'">';
     $formElements = [];
@@ -376,7 +376,7 @@ function search_it_getSettingsFormSection($id = '', $title = '&nbsp;', $elements
                   $options .= '<option'.$id.' value="'.$option['value'].'"'.($option['selected'] ? ' selected="selected"' : '').'>'.$option['name'].'</option>';
                 }
                 $n['label']='<label for="'.$element['id'].'">'.$element['label'].'</label>';
-                $n['field'] = '<select id="'.$element['id'].'" name="'.$element['name'].'" multiple="multiple" size="'.$element['size'].'"'.(!empty($element['disabled'])?' disabled="disabled"':'').'>'.$options.'</select>';
+                $n['field'] = '<select id="'.$element['id'].'" class="form-control" name="'.$element['name'].'" multiple="multiple" size="'.$element['size'].'"'.(!empty($element['disabled'])?' disabled="disabled"':'').'>'.$options.'</select>';
             break;
 
             // MULTIPLE CHECKBOXES
@@ -385,10 +385,10 @@ function search_it_getSettingsFormSection($id = '', $title = '&nbsp;', $elements
                 foreach($element['options'] as $option){
                     $id = !empty($option['id'])?' id="'.$option['id'].'"':'';
                     $for = !empty($option['id'])?' for="'.$option['id'].'"':'';
-                  $checkboxes .= '<div class="checkbox"><input type="checkbox" id="'.$option['id'].'" name="'.$element['name'].'" value="'.$option['value'].'" '.($option['checked'] ? ' checked="checked"' : '').' /> <label for="'.$option['id'].'">'.$option['name'].'</label></div>';
+                  $checkboxes .= '<div class="checkbox col-xs-3"><input type="checkbox" id="'.$option['id'].'" name="'.$element['name'].'" value="'.$option['value'].'" '.($option['checked'] ? ' checked="checked"' : '').' /> <label for="'.$option['id'].'">'.$option['name'].'</label></div>';
                 }
                 $n['label'] = '<label for="'.$element['id'].'">'.$element['label'].'</label>';
-                $n['field'] = '<div class="rex-form-col-a rex-form-text"><div class="checkboxes">'.$checkboxes.'</div></div>';
+                $n['field'] = '<div class="rex-form-col-a rex-form-text"><div class="form-group">'.$checkboxes.'</div></div>';
             break;
 
 
@@ -411,6 +411,7 @@ function search_it_getSettingsFormSection($id = '', $title = '&nbsp;', $elements
 
             // DIRECT OUTPUT
             case 'directoutput':
+                if ($element['outputleft']!='') { $n['label'] = $element['outputleft']; }
                 $n['field'] = $element['output'];
             break;
         }
@@ -422,11 +423,13 @@ function search_it_getSettingsFormSection($id = '', $title = '&nbsp;', $elements
 
     if ($ownsection) {
         $fragment = new rex_fragment();
-        $fragment->setVar('id', 'edit');
-        $fragment->setVar('class', 'edit');
+        $fragment->setVar('class', $ownsection);
         $fragment->setVar('title', $title);
         $fragment->setVar('body', $return, false);
-
+        if($collapse) {
+            $fragment->setVar('collapse', true);
+            $fragment->setVar('collapsed', true);
+        }
         $return = $fragment->parse('core/page/section.php');
     }
     return $return;

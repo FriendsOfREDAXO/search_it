@@ -81,14 +81,12 @@ $generalstats['110_indexlength'] = search_it_stats_bytesize($generalstats['110_i
 
 ksort($generalstats);
 
-$odd = true;
-$table_general = '<dl id="generalstats-list">';
-foreach ($generalstats as $key => $value) {
-    $table_general .= '<dt class="' . ($odd ? 'odd' : 'even') . '">' . $this->i18n('search_it_stats_generalstats_' . $key) . '</dt><dd class="' . ($odd ? 'odd' : 'even') . '">' . $value . '</dd>';
-    $odd = !$odd;
-}
-$table_general .= '</dl>';
 
+$table_general = '<table id="generalstats-list" class="table">';
+foreach ($generalstats as $key => $value) {
+    $table_general .= '<tr><td>' . $this->i18n('search_it_stats_generalstats_' . $key) . '</td><td>' . $value . '</td></tr>';
+}
+$table_general .= '</table>';
 
 $content[] = search_it_getSettingsFormSection(
     'generalstats',
@@ -98,7 +96,7 @@ $content[] = search_it_getSettingsFormSection(
             'type' => 'directoutput',
             'output' => $table_general
         )
-    )
+    ), 'info', true
 );
 
 
@@ -107,7 +105,7 @@ $topsearchtermlist = '';
 $topsearchtermselect = '<option value="all" '. ($this->getConfig('searchtermselect') == 'all' ? ' selected="selected"' : '') .'>' . htmlspecialchars($this->i18n('search_it_stats_searchterm_timestats_title0_all')) . '</option>';
 $topsearchterms = $stats->getTopSearchterms($this->getConfig('maxtopsearchitems'));
 foreach ($topsearchterms as $term) {
-    $topsearchtermlist .= '<li class="' . ($term['success'] == '1' ? 'search_it-stats-success' : 'search_it-stats-fail') . '"><strong>' . htmlspecialchars($term['term']) . '</strong> <em>(' . $term['count'] . ')</em></li>';
+    $topsearchtermlist .= '<li class="' . ($term['success'] == '1' ? 'search_it-stats-success text-success' : 'search_it-stats-fail text-danger') . '"><strong>' . htmlspecialchars($term['term']) . '</strong> <em>(' . $term['count'] . ')</em></li>';
     $topsearchtermselect .= '<option value="_' . htmlspecialchars($term['term']) . '"' . (($this->getConfig('searchtermselect') == '_' . $term['term']) ? ' selected="selected"' : '') . '>' . $this->i18n('search_it_stats_searchterm_timestats_title0_single', htmlspecialchars($term['term'])) . '</option>';
 }
 
@@ -116,13 +114,13 @@ if (!empty($topsearchterms)) {
 } else {
     $topsearchtermlist = $this->i18n('search_it_stats_topsearchterms_none');
 }
-$selectMaxTopSearchitems = '<select name="search_it_stats[maxtopsearchitems]" id="search_it_stats_maxTopSearchitems">';
+$selectMaxTopSearchitems = '<select name="search_it_stats[maxtopsearchitems]" id="search_it_stats_maxTopSearchitems" class="form-control">';
 foreach (array(10, 20, 50, 100, 200, 500, 1000) as $option) {
     $selectMaxTopSearchitems .= '<option value="' . $option . '"' . (max(intval($this->getConfig('maxtopsearchitems')),10) == $option ? ' selected="selected"' : '') . '>' . $option . '</option>';
 }
 $selectMaxTopSearchitems .= '</select>';
-$pre = $this->i18n('search_it_stats_topsearchterms_title', $selectMaxTopSearchitems, $stats->getSearchtermCount()).
-    '<span class="search_it-stats-all">alle</span> <span class="search_it-stats-success">erfolgreich</span> <span class="search_it-stats-fail">fehlgeschlagen</span>';
+$pre = $this->i18n('search_it_stats_topsearchterms_title', $selectMaxTopSearchitems, $stats->getSearchtermCount());
+$pre2 = '<div class="btn-group" role="group"><span class="search_it-stats-all btn btn-default">alle</span> <span class="search_it-stats-success btn btn-success">erfolgreich</span> <span class="search_it-stats-fail btn btn-danger">fehlgeschlagen</span></div>';
 
 
 $content[] = search_it_getSettingsFormSection(
@@ -131,13 +129,17 @@ $content[] = search_it_getSettingsFormSection(
     array(
         array(
             'type' => 'directoutput',
-            'output' => $pre
+            'output' => $pre,
+        ),
+        array(
+            'type' => 'directoutput',
+            'output' => $pre2
         ),
         array(
             'type' => 'directoutput',
             'output' => $topsearchtermlist
         )
-    )
+    ), 'info', true
 );
 
 
@@ -152,17 +154,18 @@ $content[] = search_it_getSettingsFormSection(
                           <img src="index.php?page=search_it/stats&amp;func=image&amp;image=general_timestats" alt="' . htmlspecialchars($this->i18n('search_it_stats_general_timestats', 6)) . '" title="' . htmlspecialchars($this->i18n('search_it_stats_general_timestats', 6)) . '" />
                         '
         )
-    )
+    ), 'info', true
+
 );
 
 
 // stats for searchterms over time
 if (!empty($topsearchtermselect)){
-    $topsearchtermselect = '<select name="search_it_stats[searchtermselect]" id="search_it_stats_searchtermselect">' . $topsearchtermselect . '</select>';
+    $topsearchtermselect = '<select name="search_it_stats[searchtermselect]" id="search_it_stats_searchtermselect" class="form-control" >' . $topsearchtermselect . '</select>';
 } else {
     $topsearchtermselect = $this->i18n('search_it_stats_searchterm_timestats_title0');
 }
-$searchtermselectmonthcount = '<select name="search_it_stats[searchtermselectmonthcount]" id="search_it_stats_searchtermselectmonthcount">';
+$searchtermselectmonthcount = '<select name="search_it_stats[searchtermselectmonthcount]" id="search_it_stats_searchtermselectmonthcount" class="form-control" >';
 foreach (array(6, 9, 12, 15, 18, 21, 24) as $option) {
     $searchtermselectmonthcount .= '<option value="' . $option . '"' . ((intval($this->getConfig('searchtermselectmonthcount')) == $option) ? ' selected="selected"' : '') . '>' . $option . '</option>';
 }
@@ -187,7 +190,7 @@ $content[] = search_it_getSettingsFormSection(
             'type' => 'directoutput',
             'output' => $rest
         )
-    )
+    ), 'info', true
 );
 $content[] =  '</div>';
 ?>
@@ -195,10 +198,6 @@ $content[] =  '</div>';
 // <![CDATA[
 (function(jQuery) {
     jQuery(document).ready(function () {
-
-
-    var mainWidth = jQuery('#search_it_stats_form').attr('offsetWidth');
-    var getonly = 0;
 
     // display links for showing and hiding all sections
     jQuery('#search_it_stats_form section .panel-body').first()
@@ -212,47 +211,22 @@ $content[] =  '</div>';
                         .css('cursor', 'pointer')
                         .css('padding', '0 1em')
                         .click(function () {
-                            jQuery.each(jQuery('#stats_elements section'), function (i, elem) {
-                                jQuery('.panel-body', elem).show();
-                            })
+                            jQuery('#stats_elements .panel-collapse').collapse('show');
                         })
                 )
                 .append(
                     jQuery('<a><?php echo $this->i18n('search_it_settings_show_none'); ?><' + '/a>')
                         .css('cursor', 'pointer')
                         .click(function () {
-                            jQuery.each(jQuery('#stats_elements section'), function (i, elem) {
-                                jQuery('.panel-body', elem).hide();
-                            })
+                            jQuery('#stats_elements .panel-collapse').collapse('hide');
                         })
                 )
         );
 
 
- /*   function setLoading(show) {
-        if (show) {
-            jQuery('#topsearchterms').parent().parent()
-                .append(
-                    jQuery('<span class="search_it_loading" >')
-                );
-
-            jQuery('#stats_elements .panel-title').each(function (i, elem) {
-                var legend = jQuery(elem);
-                legend.css('padding-right', (mainWidth - legend.attr('offsetWidth') + parseInt(legend.css('padding-right').replace(/[^0-9]+/, ''))) + 'px');
-            });
-        } else {
-            jQuery('.search_it_loading').remove();
-
-            jQuery('#stats_elements .panel-title').each(function (i, elem) {
-                var legend = jQuery(elem);
-                legend.css('padding-right', (mainWidth - legend.attr('offsetWidth') + parseInt(legend.css('padding-right').replace(/[^0-9]+/, ''))) + 'px');
-            });
-        }
-    }*/
-
     // top search terms
+    var getonly = 0;
     jQuery('#search_it_stats_maxTopSearchitems').change(function(){
-        //setLoading(true);
 
         jQuery.getJSON(
             'index.php?page=search_it/stats&func=topsearchterms&count=' + jQuery('#search_it_stats_maxTopSearchitems').val() + '&only=' + getonly,
@@ -271,11 +245,11 @@ $content[] =  '</div>';
                 var select = '';
                 var cssclass;
                 jQuery.each(data, function (i, item) {
-                    if (item.success == '1')
-                        cssclass = 'search_it-stats-success';
-                    else
-                        cssclass = 'search_it-stats-fail';
-
+                    if (item.success == '1') {
+                        cssclass = 'search_it-stats-success text-success';
+                    } else {
+                        cssclass = 'search_it-stats-fail text-danger';
+                    }
                     // list
                     jQuery('#topsearchterms ol').append(
                         jQuery('<li class="' + cssclass + '">').html('<strong>' + item.term + '<' + '/strong> <em>(' + item.count + ')<' + '/em><' + '/li>')
@@ -285,9 +259,9 @@ $content[] =  '</div>';
                     if (('_' + item.term) == selected) {
                         select = ' selected="selected"';
                         loaddefault = false;
-                    }
-                    else
+                    } else {
                         select = '';
+                    }
                     jQuery('#search_it_stats_searchtermselect').append(
                         jQuery('<option value="_' + item.term + '"' + select + '>').text('"' + item.term + '"')
                     );
@@ -301,25 +275,22 @@ $content[] =  '</div>';
                     );
                 }
 
-                setLoading(false);
             }
         );
     });
-
     jQuery('span.search_it-stats-all').click(function () {
         getonly = 0;
         jQuery('#search_it_stats_maxTopSearchitems').change();
     });
-
     jQuery('span.search_it-stats-success').click(function () {
-        getonly = 1;console.log('ccc'+getonly);
+        getonly = 1;
         jQuery('#search_it_stats_maxTopSearchitems').change();
     });
-
     jQuery('span.search_it-stats-fail').click(function () {
         getonly = 2;
         jQuery('#search_it_stats_maxTopSearchitems').change();
     });
+
 
     // search term time stats
     function setOverview(term, count) {
@@ -330,45 +301,10 @@ $content[] =  '</div>';
             'index.php?page=search_it/stats&func=image&image=searchterm_timestats&term=' + term + '&monthcount=' + count + '&time=' + Date.parse(date)
         );
     }
-
     jQuery('#search_it_stats_searchtermselect, #search_it_stats_searchtermselectmonthcount').change(function () {
         setOverview(jQuery('#search_it_stats_searchtermselect').val(), jQuery('#search_it_stats_searchtermselectmonthcount').val());
     });
 
-/*    jQuery('#search_it_stats_searchtermselectmonthcount').change(function () {
-        setOverview(jQuery('#search_it_stats_searchtermselect').attr('value'), jQuery('#search_it_stats_searchtermselectmonthcount').attr('value'));
-    });*/
-
-
-
-    jQuery.each(jQuery('#stats_elements section'), function (i, elem) {
-        var legend = jQuery('.panel-title', elem);
-        var wrapper = jQuery('.panel-body', elem);
-        var speed = wrapper.attr('offsetHeight');
-
-        wrapper.hide();
-
-        legend
-            .css('cursor', 'pointer')
-            //.css('padding-right', (mainWidth - legend.attr('offsetWidth') + parseInt(legend.css('padding-right').replace(/[^0-9]+/, ''))) + 'px')
-            //.css('border-bottom', '1px solid #cbcbcb')
-            .mouseover(function () {
-                if (wrapper.css('display') == 'none') {
-                    //jQuery('panel-heading', elem).css('color', '#aaa');
-                }
-            })
-            .mouseout(function () {
-                //legend.css('color', '#32353A');
-            })
-            .click(function () {
-                wrapper.slideToggle(speed);
-            });
-    });
-
-    // stop event-bubbling for clicks on select-lists
-    jQuery('#stats_elements section, #stats_elements .panel-title').click(function (event) {
-        event.stopPropagation();
-    });
 
     });
 }(jQuery));

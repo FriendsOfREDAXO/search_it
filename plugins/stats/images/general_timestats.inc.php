@@ -25,7 +25,7 @@ foreach ($statCounts as $statCount) {
 $title = $this->i18n('search_it_stats_general_timestats', 6);
 $title = utf8_decode($title);
 
-ob_end_clean();
+ob_clean();
 $plot = new PHPlot(350, 240);
 $plot->SetImageBorderType('none');
 $plot->SetTransparentColor('white');

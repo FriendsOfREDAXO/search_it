@@ -99,16 +99,9 @@
 }
 
 #search_it_settings_form .checkbox {
-    float: left;
-    width: 23%;
-    padding: 0 0 0 30px;
     margin: 2px 0 5px;
-    display: none;
 }
 
-
-#search_it_include label { display:block; }
-#search_it_include dt { width: 0; padding: 0; margin: 0;}
 
 #search_it_settings_form .checkbox label { padding-left:5px; }
 #search_it_settings_form .checkbox input:checked + label {
@@ -196,9 +189,13 @@ color:#0a0;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
 }
-#sortable-elements .panel-edit {
+#sortable-elements .panel-edit,
+.include_checkboxes .panel {
     margin-bottom: 1px;
 }
+
+#search_it_settings_form .include_checkboxes dt { width: 0; padding: 0; margin: 0;}
+
 .placeholder {
     position: relative;
     padding: 19px;

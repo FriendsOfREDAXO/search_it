@@ -1,8 +1,8 @@
-#Zu dieser Dokumentation
+##Zu dieser Dokumentation
 
 Diese Wikiseite erklärt die Konfiguration des Addons, die Schnittstelle der search_it-Klasse und zeigt anhand von Beispielen, wie Suchmodule aufgebaut werden können.
 
-#Allgemein/Voraussetzungen
+##Allgemein/Voraussetzungen
 
 Das Addon search_it fügt Redaxo eine Volltextsuche hinzu.
 
@@ -12,8 +12,7 @@ Suchanfragen können außerdem in einer Cache-Tabelle gespeichert werden. Das sp
 
 Das Addon setzt PHP >= 5.5, "MySQL >= 5.1" und Redaxo >= 5.2 voraus.
 
-#Funktionen/Merkmale
-
+##Funktionen/Merkmale
 - Volltextsuche für Artikel und beliebige Datenbankspalten mehrsprachenfähig
 - Suche im Originaltext, im Plaintext oder in beiden möglich
 - Suchmodi: OR (mindestens ein Suchwort muss enthalten sein) und AND (alle Suchworte müssen enthalten sein)
@@ -35,7 +34,7 @@ Das Addon setzt PHP >= 5.5, "MySQL >= 5.1" und Redaxo >= 5.2 voraus.
 - einstellbar, wer das Addon konfigurieren darf 
 
 
-#Installation
+##Installation
 
 Zur Installation des Addons muss sich der Ordner search_it im Addon-Ordner von Redaxo befinden.
 

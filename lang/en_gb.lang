@@ -49,7 +49,7 @@ search_it_settings_highlight_surroundtext = Every found text is displayed with t
 search_it_settings_highlight_surroundtextsingle = For every found search term only one text is displayed with the surrounding words
 search_it_settings_highlight_teaser = Teaser with, if present, highlighted search terms
 search_it_settings_highlight_array = Array with every found text for every search term
-search_it_settings_highlight_sample = Sample text with search term
+search_it_settings_highlight_sample = Sample result with search term
 
 search_it_settings_similarwords_label = Fuzzy search
 search_it_settings_similarwords_none = Deactivate

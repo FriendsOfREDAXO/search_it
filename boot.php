@@ -49,7 +49,7 @@
         if (!$this->hasConfig()) {
             $this->setConfig('limit',array(0,10));
         }
-
+        rex_view::addJsFile( $this->getAssetsUrl('search_it.js') );
         rex_view::addCssFile( $this->getAssetsUrl('search_it.css') );
 	}
 

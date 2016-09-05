@@ -49,7 +49,7 @@ search_it_settings_highlight_surroundtext = Alle gefundenen Suchbegriffe werden 
 search_it_settings_highlight_surroundtextsingle = Für jeden gefundenen Suchbegriff wird genau eine Textstelle wiedergegeben
 search_it_settings_highlight_teaser = Als Teaser, in dem eventuell vorkommende Suchbegriffe hervorgehoben sind
 search_it_settings_highlight_array = Als Array mit allen Suchbegriffen und Textstellen
-search_it_settings_highlight_sample = Beispieltext mit Sucheingabe
+search_it_settings_highlight_sample = Beispielausgabe bei Sucheingabe
 
 search_it_settings_similarwords_label = Ähnlichkeitssuche
 search_it_settings_similarwords_none = Deaktivieren

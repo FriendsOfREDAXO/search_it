@@ -20,7 +20,7 @@ $data = array(
   array('', $successCount, $missCount, '', '')
 );
 
-ob_end_clean();
+ob_clean();
 // draw image
 $plot = new PHPlot(350, 240);
 $plot->SetImageBorderType('none');

@@ -62,7 +62,7 @@ foreach (explode(',', $this->getConfig('order')) as $elem) {
                         'label' => $this->i18n('search_it_plaintext_selectors_label'),
                         'value' => !empty($this->getConfig('selectors')) ? htmlspecialchars($this->getConfig('selectors')) : ''
                     )
-                )
+                ), 'edit', true
             );
             break;
 
@@ -78,7 +78,7 @@ foreach (explode(',', $this->getConfig('order')) as $elem) {
                         'label' => $this->i18n('search_it_plaintext_regex_label'),
                         'value' => !empty($this->getConfig('regex')) ? htmlspecialchars($this->getConfig('regex')) : ''
                     )
-                )
+                ), 'edit', true
             );
             break;
 
@@ -95,7 +95,7 @@ foreach (explode(',', $this->getConfig('order')) as $elem) {
                         'value' => '1',
                         'checked' => !empty($this->getConfig('textile'))
                     )
-                )
+                ), 'edit', true
             );
             break;
 
@@ -112,7 +112,7 @@ foreach (explode(',', $this->getConfig('order')) as $elem) {
                         'value' => '1',
                         'checked' => !empty($this->getConfig('striptags'))
                     )
-                )
+                ), 'edit', true
             );
             break;
     }
@@ -132,7 +132,7 @@ $content[] = search_it_getSettingsFormSection(
             'value' => '1',
             'checked' => !empty($this->getConfig('processparent'))
         )
-    )
+    ),'edit'
 );
 
 
@@ -187,47 +187,19 @@ $content[] = search_it_getSettingsFormSection(
                                 .css('cursor', 'pointer')
                                 .css('padding', '0 1em')
                                 .click(function () {
-                                    jQuery.each(jQuery('#sortable-elements section'), function (i, elem) {
-                                        jQuery('.panel-body', elem).show();
-                                    })
+                            jQuery('#sortable-elements .panel-collapse').collapse('show');
                                 })
                         )
                         .append(
                             jQuery('<a><?php echo $this->i18n('search_it_settings_show_none'); ?><' + '/a>')
                                 .css('cursor', 'pointer')
                                 .click(function () {
-                                    jQuery.each(jQuery('#sortable-elements section'), function (i, elem) {
-                                        jQuery('.panel-body', elem).hide();
-                                    })
+                            jQuery('#sortable-elements .panel-collapse').collapse('hide');
                                 })
                         )
 
             );
 
-        // accordion
-        jQuery.each(jQuery('#sortable-elements section'), function (i, elem) {
-            var legend = jQuery('.panel-title', elem);
-            var wrapper = jQuery('.panel-body', elem);
-            var speed = wrapper.attr('offsetHeight');
-
-            wrapper.hide();
-
-            legend
-                .css('cursor', 'pointer')
-                //.css('width', (mainWidth - parseInt(legend.css('padding-right').replace(/[^0-9]+/, '')) - parseInt(legend.css('padding-left').replace(/[^0-9]+/, ''))) + 'px')
-                .mouseover(function () {
-                    if (wrapper.css('display') == 'none') {
-                        //jQuery('panel-heading', elem).css('color', '#aaa');
-                    }
-                })
-                .mouseout(function () {
-                    //legend.css('color', '#32353A');
-                })
-                .click(function () {
-                    if (!ondrag)
-                        wrapper.slideToggle(speed);
-                });
-        });
     });
 }(jQuery));
 

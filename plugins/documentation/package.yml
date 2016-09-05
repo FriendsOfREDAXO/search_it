@@ -10,6 +10,7 @@ page:
     title: 'translate:search_it_documentation_title'
     pjax: false
     icon: rex-icon fa-book
+    #itemClass: pull-right
     subpages:
              general: { title: 'translate:documentation_general_title' }
              plugins: { title: 'translate:documentation_plugins_title' }

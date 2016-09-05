@@ -43,7 +43,7 @@ $title = $this->i18n(
 $title = utf8_decode($title);
 
 
-ob_end_clean();
+ob_clean();
 // draw bars
 $plot = new PHPlot(700, 240);
 $plot->SetImageBorderType('none');

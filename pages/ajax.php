@@ -100,7 +100,7 @@ EOT;
         $search_it->parseSearchString('"velit esse" accusam');
 
         if($search_it->highlightType == 'array'){
-            echo '<pre style="font-size:1.2em;display:inline;">';
+            echo '<pre>';
             print_r($search_it->getHighlightedText($sample));
             echo '</pre>';
         } else {

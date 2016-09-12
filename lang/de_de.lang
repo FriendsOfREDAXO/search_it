@@ -90,7 +90,7 @@ search_it_generate_duration = Dauer: 
 search_it_generate_timeleft = Verbleibend: 
 
 search_it_settings_fileext_header = Dateisuche
-search_it_settings_fileext_label = Dateiendungen <br />(frei lassen für beliebige Dateien)
+search_it_settings_fileext_label = Dateiendungen (z.B. 'txt,csv,pdf')<br />(frei lassen für beliebige Dateien)
 search_it_settings_file_mediapool = Medienpool indexieren
 search_it_settings_file_dirdepth_label = Verzeichnistiefe
 search_it_settings_folders_label = Folgende Ordner in die Suche einschließen

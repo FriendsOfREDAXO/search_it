@@ -404,11 +404,11 @@ class search_it {
         }
 
         // index files
-        /*foreach($this->includeDirectories as $dir){
+        foreach($this->includeDirectories as $dir){
             foreach(search_it_getFiles($dir, $this->fileExtensions) as $filename){
                 $this->indexFile($filename);
             }
-        }*/
+        }
     }
 
 

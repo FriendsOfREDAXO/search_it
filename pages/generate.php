@@ -104,8 +104,6 @@ if ( !empty(rex_get('do')) AND rex_get('do') == 'incremental') {
         }
     }
 ?>
-
-
     <script type="text/javascript">
     // <![CDATA[
         var globalcount = 0;

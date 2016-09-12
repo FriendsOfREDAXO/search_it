@@ -7,7 +7,7 @@ switch($ajax) {
         break;
 
     case 'generate':
-        // index column or article
+        // index column or article or file
         $search_it = new search_it();
         switch($_GET['type']){
             case 'art':
@@ -31,10 +31,11 @@ switch($ajax) {
                 break;
 
             case 'col':
-                if(false !== ($count = $search_it->indexColumn($_GET['t'], $_GET['c'], false, false, $_GET['s'], $_GET['w'])))
-                    echo '<p class="text-warning">Done: <em>`'.$_GET['t'].'`.`'.$_GET['c'].'` ('.$_GET['s'].' - '.($_GET['s'] + $_GET['w']).')</em> (<strong>'.$count.'</strong> row(s) indexed)</p>';
-                else
-                    echo '<p class="text-info">Error: <em>`'.$_GET['t'].'`.`'.$_GET['c'].'`</em> not found</p>';
+                if(false !== ($count = $search_it->indexColumn($_GET['t'], $_GET['c'], false, false, $_GET['s'], $_GET['w']))) {
+                    echo '<p class="text-warning">Done: <em>`' . $_GET['t'] . '`.`' . $_GET['c'] . '` (' . $_GET['s'] . ' - ' . ($_GET['s'] + $_GET['w']) . ')</em> (<strong>' . $count . '</strong> row(s) indexed)</p>';
+                } else {
+                    echo '<p class="text-info">Error: <em>`' . $_GET['t'] . '`.`' . $_GET['c'] . '`</em> not found</p>';
+                }
                 break;
 
             case 'file':

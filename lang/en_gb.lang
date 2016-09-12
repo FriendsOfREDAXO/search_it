@@ -90,7 +90,7 @@ search_it_generate_duration = Time: 
 search_it_generate_timeleft = Remaining: 
 
 search_it_settings_fileext_header = File search
-search_it_settings_fileext_label = Extensions <br />(keep empty for any files)
+search_it_settings_fileext_label = Extensions (i.e. 'txt,csv,pdf' <br />(keep empty for any files)
 search_it_settings_file_mediapool = Index mediapool
 search_it_settings_file_dirdepth_label = Directory depth
 search_it_settings_folders_label = Include following directories

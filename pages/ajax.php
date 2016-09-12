@@ -109,7 +109,7 @@ EOT;
         break;
 
     case 'getdirs':
-        echo '[';
+
         $str = stripslashes(rex_request('startdirs','string','[]'));
 
         $startdirs = explode('","', substr($str, 2, -2));
@@ -132,9 +132,6 @@ EOT;
                 $dirs[] = '"'.addcslashes($relative, '"/\\').'"';
             }
         }
-
-        echo implode(',', $dirs);
-
-        echo ']';
+        echo '[' . implode(',', $dirs). ']';
         break;
 }

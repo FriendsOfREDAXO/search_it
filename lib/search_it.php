@@ -450,9 +450,9 @@ class search_it {
             $select->select('id');
 
             $indexIds = array();
-            foreach($select->getArray() as $result)
+            foreach($select->getArray() as $result) {
                 $indexIds[] = $result['id'];
-
+            }
             $this->deleteCache($indexIds);
 
             // delete old
@@ -1674,7 +1674,7 @@ class search_it {
                 return true;
             } catch (rex_sql_exception $e) {
                 $error = $e->getMessage();
-                echo $error;
+                echo rex_warning($error);
                 return false;
             }
 

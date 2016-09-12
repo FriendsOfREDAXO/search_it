@@ -8,11 +8,10 @@ function search_it_reindex($_ep){
 
     if(!empty($_params['yform'])){
         $tablename = $_params['form']->params['main_table'];
-        //$wherecondition = $_params['sql']->wherevar;
         $wherecondition = $_params['form']->params['main_where'];
     } else {
-        $tablename = $_params['form']->tableName;
-        $wherecondition = $_params['form']->whereCondition;
+        $tablename = $_params['form']->getTableName();
+        $wherecondition = $_params['form']->getWhereCondition();
     }
 
     $last_id = intval($_params['sql']->getLastId());

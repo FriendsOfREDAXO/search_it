@@ -4,7 +4,7 @@
 
             // ajax request for sample-text
             jQuery('#search_it_highlight').change(function(){
-                jQuery.get('index.php?page=search_it&ajax=sample&type=' + jQuery('#search_it_highlight').val(), {}, function (data) {
+               jQuery.get('index.php?page=search_it&ajax=sample&type=' + jQuery('#search_it_highlight').val(), {}, function (data) {
                     jQuery('#search_it_sample').html(data);
                 });
             });
@@ -143,7 +143,7 @@
 
                     return false;
                 } else {
-                    jQuery.post('index.php?page=search_it&ajax=getdirs', {'startdirs': search_it_serialize(startdirs)}, function (options) {
+                    jQuery.get('index.php?page=search_it&ajax=getdirs', {'startdirs': search_it_serialize(startdirs)}, function (options) {
                         if (!document.getElementById('subdirs_' + depth) && options.length > 0) {
                             jQuery(parent)
                                 .after(
@@ -161,7 +161,7 @@
                                 .after(
                                     jQuery('<label>')
                                         //.text(('<?php echo $this->i18n('search_it_settings_folders_dirselect_label'); ?>').replace(/%DEPTH%/, depth))
-                                        .text(('select folders').replace(/%DEPTH%/, depth))
+                                        .text(('Unterordner der Tiefe %DEPTH% auswählen').replace(/%DEPTH%/, depth))
                                         .attr('for', 'subdirs_' + depth)
                                         .attr('class', 'subdirselectlabel')
                                         .attr('id', 'subdirselectlabel_' + depth)

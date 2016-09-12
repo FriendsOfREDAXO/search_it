@@ -104,7 +104,6 @@ function search_it_getDirs($_startDir = '', $_getSubdirs = false){
             $dirs[$_SERVER['DOCUMENT_ROOT'] . $_startDir . '/' . $dir] = utf8_encode($_startDir . '/' . $dir);
         }
     }
-  
     if(!$_getSubdirs) {
         return $dirs;
     }

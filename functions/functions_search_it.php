@@ -12,7 +12,7 @@ function search_it_getArticles($cats = false) {
   
     $return = array();
     $query = 'SELECT id,name,path FROM '.rex::getTable('article').' WHERE 1';
-    if(empty($si->getConfig('indexoffline'))) {
+    if( !$si->getConfig('indexoffline') ) {
       $query .= ' AND status = 1';
     }
     if(!empty($whereCats)) {
@@ -46,7 +46,7 @@ function search_it_getCategories($_ignoreoffline = true, $_onlyIDs = false, $_ca
 
         $return = array();
         $query = 'SELECT id,catname,path FROM '.rex::getTable('article').' WHERE startarticle = 1';
-        if(empty($si->getConfig('indexoffline')) AND $_ignoreoffline) {
+        if( !$si->getConfig('indexoffline') AND $_ignoreoffline ) {
             $query .= ' AND status = 1';
         }
         if(!empty($whereCats)) {
@@ -65,7 +65,7 @@ function search_it_getCategories($_ignoreoffline = true, $_onlyIDs = false, $_ca
 
     } else {
         $query = 'SELECT id,parent_id,catname,path FROM '.rex::getTable('article') .' WHERE startarticle = 1 AND parent_id=%d';
-        if(empty($si->getConfig('indexoffline')) AND $_ignoreoffline) {
+        if( !$si->getConfig('indexoffline') AND $_ignoreoffline) {
             $query .= ' AND status = 1';
         }
         $query .= ' GROUP BY id ORDER BY catpriority,id';
@@ -204,6 +204,7 @@ function search_it_handle_extensionpoint($_ep){
 
         // update meta-infos for article
         case 'ART_META_UPDATED':
+        case 'ART_ADDED':
             foreach($search_it->includeColumns as $table => $columnArray){
                 if($table == rex::getTable('article')){
                     foreach($columnArray as $column) {
@@ -215,7 +216,7 @@ function search_it_handle_extensionpoint($_ep){
 
         // exclude (if offline) or index (if online) article
         case 'ART_STATUS':
-            if($_params['status'] OR !empty($si->getConfig('indexoffline'))) {
+            if( $_params['status'] || $si->getConfig('indexoffline') ) {
                 $search_it->indexArticle($_params['id'], $_params['clang']);
             } else {
                 $search_it->excludeArticle($_params['id'], $_params['clang']);
@@ -230,15 +231,6 @@ function search_it_handle_extensionpoint($_ep){
             }
         break;
 
-        case 'ART_ADDED':
-            foreach($search_it->includeColumns as $table => $columnArray){
-                if($table == rex::getTable('article')){
-                    foreach($columnArray as $column) {
-                        $search_it->indexColumn($table, $column, 'id', $_params['id']);
-                    }
-                }
-            }
-        break;
 
         case 'ART_UPDATED':
             foreach($search_it->includeColumns as $table => $columnArray){
@@ -255,7 +247,7 @@ function search_it_handle_extensionpoint($_ep){
         break;
 
         case 'CAT_STATUS':
-            if($_params['status'] OR !empty($si->getConfig('indexoffline'))){
+            if( $_params['status'] || $si->getConfig('indexoffline') ){
                 foreach(search_it_getArticles(array($_params['id'])) as $art_id => $art_name) {
                     $search_it->indexArticle($art_id, $_params['clang']);
                 }
@@ -275,15 +267,6 @@ function search_it_handle_extensionpoint($_ep){
         break;
 
         case 'CAT_ADDED':
-            foreach($search_it->includeColumns as $table => $columnArray){
-                if($table == rex::getTable('article')){
-                    foreach($columnArray as $column) {
-                        $search_it->indexColumn($table, $column, 'id', $_params['id']);
-                    }
-                }
-            }
-        break;
-
         case 'CAT_UPDATED':
             foreach($search_it->includeColumns as $table => $columnArray){
                 if($table == rex::getTable('article')){
@@ -319,7 +302,8 @@ function search_it_handle_extensionpoint($_ep){
         break;
 
         case 'SLICE_SHOW':
-            if(strpos($_params['subject'],'<div class="rex-message"><div class="rex-info">') AND (!empty($_params['function']) OR (!empty($_REQUEST['slice_id']) AND $_REQUEST['slice_id'] == $_params['slice_id']))) {
+            // Das ist doch Müll? Nach der Message suchen?
+            if( strpos($_params['subject'],'<div class="alert alert-success">') !== false AND (!empty($_params['function']) OR rex_request('slice_id','int',0) == $_params['slice_id'])) {
                 $search_it->indexArticle($_params['article_id'], $_params['clang']);
             }
         break;

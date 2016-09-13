@@ -2,18 +2,16 @@
 function search_it_reindex_article($_ep){
 
   $_params = $_ep->getParams();
-  $get = $_GET;
+  $get = array();
 
-  if(!array_key_exists('article_id', $get)){
-      $get['article_id'] = rex_request('article_id', 'int', rex_article::getCurrentId());
-  }
-  if(!array_key_exists('clang', $get)){
-      $get['clang'] = rex_request('clang', 'int', rex_clang::getCurrentId());
-  }
-  if(!array_key_exists('ctype', $get) AND array_key_exists('ctype', $_REQUEST)){
+  $get['article_id'] = rex_get('article_id','int',0) == 0 ? rex_request('article_id', 'int', rex_article::getCurrentId()) : rex_get('article_id','int',0);
+
+  $get['clang'] = rex_get('clang','int',0) == 0 ? rex_request('clang', 'int', rex_clang::getCurrentId()) : rex_get('clang','int',0);
+
+  if( rex_get('ctype','string','') == '' AND rex_request('ctype','string','') != '' ){
       $get['ctype'] = rex_request('ctype');
   }
-  if(!array_key_exists('mode', $get) AND array_key_exists('mode', $_REQUEST)){
+  if( rex_get('mode','string','') == '' AND rex_request('mode','string','') != '' ){
       $get['mode'] = rex_request('mode');
   }
   

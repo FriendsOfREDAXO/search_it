@@ -9,9 +9,9 @@ switch($ajax) {
     case 'generate':
         // index column or article or file
         $search_it = new search_it();
-        switch($_GET['type']){
+        switch(rex_get('type')){
             case 'art':
-                foreach($search_it->indexArticle($_id = intval($_GET['id'])) as $langID => $article){
+                foreach($search_it->indexArticle($_id = intval(rex_get('id'))) as $langID => $article){
                     switch($article){
                         case SEARCH_IT_ART_EXCLUDED:
                             echo '<p class="text-primary">Article (ID=<strong>'.$_id.'</strong>,<strong>'.$langID.'</strong>) is excluded</p>';
@@ -31,54 +31,54 @@ switch($ajax) {
                 break;
 
             case 'col':
-                if(false !== ($count = $search_it->indexColumn($_GET['t'], $_GET['c'], false, false, $_GET['s'], $_GET['w']))) {
-                    echo '<p class="text-warning">Done: <em>`' . $_GET['t'] . '`.`' . $_GET['c'] . '` (' . $_GET['s'] . ' - ' . ($_GET['s'] + $_GET['w']) . ')</em> (<strong>' . $count . '</strong> row(s) indexed)</p>';
+                if(false !== ($count = $search_it->indexColumn(rex_get('t'), rex_get('c'), false, false, rex_get('s'), rex_get('w')))) {
+                    echo '<p class="text-warning">Done: <em>`' . rex_get('t') . '`.`' . rex_get('c') . '` (' . rex_get('s') . ' - ' . (rex_get('s') + rex_get('w')) . ')</em> (<strong>' . $count . '</strong> row(s) indexed)</p>';
                 } else {
-                    echo '<p class="text-info">Error: <em>`' . $_GET['t'] . '`.`' . $_GET['c'] . '`</em> not found</p>';
+                    echo '<p class="text-info">Error: <em>`' . rex_get('t') . '`.`' . rex_get('c') . '`</em> not found</p>';
                 }
                 break;
 
             case 'file':
             case 'mediapool':
                 $additionalOutput = '';
-                if($_GET['type'] == 'file'){
-                    $return = $search_it->indexFile($_GET['name']);
+                if(rex_get('type') == 'file'){
+                    $return = $search_it->indexFile(rex_get('name'));
                 } else {
-                    $return = $search_it->indexFile(rex_path::media($_GET['name']), false, false, $_GET['file_id'], $_GET['category_id']);
+                    $return = $search_it->indexFile(rex_path::media(rex_get('name')), false, false, rex_get('file_id'), rex_get('category_id'));
                     $additionalOutput = ' <em>(Mediapool)</em>';
                 }
 
                 switch($return){
                     case SEARCH_IT_FILE_FORBIDDEN_EXTENSION:
-                        echo '<p class="text-info">File'.$additionalOutput.' <strong>"'.htmlspecialchars($_GET['name']).'"</strong> has a forbidden filename extension.</p>';
+                        echo '<p class="text-info">File'.$additionalOutput.' <strong>"'.htmlspecialchars(rex_get('name')).'"</strong> has a forbidden filename extension.</p>';
                         break;
 
                     case SEARCH_IT_FILE_NOEXIST:
-                        echo '<p class="text-info">File'.$additionalOutput.' <strong>"'.htmlspecialchars($_GET['name']).'"</strong> does not exist.</p>';
+                        echo '<p class="text-info">File'.$additionalOutput.' <strong>"'.htmlspecialchars(rex_get('name')).'"</strong> does not exist.</p>';
                         break;
 
                     case SEARCH_IT_FILE_XPDFERR_OPENSRC:
-                        echo '<p class="text-info">XPDF-error: Error opening a PDF file. File'.$additionalOutput.': <strong>"'.htmlspecialchars($_GET['name']).'"</strong>.</p>';
+                        echo '<p class="text-info">XPDF-error: Error opening a PDF file. File'.$additionalOutput.': <strong>"'.htmlspecialchars(rex_get('name')).'"</strong>.</p>';
                         break;
 
                     case SEARCH_IT_FILE_XPDFERR_OPENDEST:
-                        echo '<p class="text-info">XPDF-error: Error opening an output file. File'.$additionalOutput.': <strong>"'.htmlspecialchars($_GET['name']).'"</strong>.</p>';
+                        echo '<p class="text-info">XPDF-error: Error opening an output file. File'.$additionalOutput.': <strong>"'.htmlspecialchars(rex_get('name')).'"</strong>.</p>';
                         break;
 
                     case SEARCH_IT_FILE_XPDFERR_PERM:
-                        echo '<p class="text-error">XPDF-error: Error related to PDF permissions. File'.$additionalOutput.': <strong>"'.htmlspecialchars($_GET['name']).'"</strong>.</p>';
+                        echo '<p class="text-error">XPDF-error: Error related to PDF permissions. File'.$additionalOutput.': <strong>"'.htmlspecialchars(rex_get('name')).'"</strong>.</p>';
                         break;
 
                     case SEARCH_IT_FILE_XPDFERR_OTHER:
-                        echo '<p class="text-error">XPDF-error: Other error. File'.$additionalOutput.': <strong>"'.htmlspecialchars($_GET['name']).'"</strong>.</p>';
+                        echo '<p class="text-error">XPDF-error: Other error. File'.$additionalOutput.': <strong>"'.htmlspecialchars(rex_get('name')).'"</strong>.</p>';
                         break;
 
                     case SEARCH_IT_FILE_EMPTY:
-                        echo '<p class="text-error">File'.$additionalOutput.' <strong>"'.htmlspecialchars($_GET['name']).'"</strong> is empty or could not be extracted.</p>';
+                        echo '<p class="text-error">File'.$additionalOutput.' <strong>"'.htmlspecialchars(rex_get('name')).'"</strong> is empty or could not be extracted.</p>';
                         break;
 
                     case SEARCH_IT_FILE_GENERATED:
-                        echo '<p class="text-info">Done: File'.$additionalOutput.' <strong>"'.htmlspecialchars($_GET['name']).'"</strong>';
+                        echo '<p class="text-info">Done: File'.$additionalOutput.' <strong>"'.htmlspecialchars(rex_get('name')).'"</strong>';
                         break;
                 }
                 break;
@@ -97,7 +97,7 @@ Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie co
 EOT;
         $search_it = new search_it();
         $search_it->searchString = '"velit esse" accusam';
-        $search_it->setHighlightType($_GET['type']);
+        $search_it->setHighlightType(rex_get('type'));
         $search_it->parseSearchString('"velit esse" accusam');
 
         if($search_it->highlightType == 'array'){

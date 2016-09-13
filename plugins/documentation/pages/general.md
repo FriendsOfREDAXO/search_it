@@ -159,14 +159,17 @@ Eine Automatisch De-(Indexierung) erfolgt im Moment mit folgenden Extension-Poin
  
      ART_DELETED: Wenn ein Artikel gelöscht wird, fliegt er aus dem Suchcache.
      ART_META_UPDATED: Wenn Metainfos geändert wurden, werden alle ausgewählten DB-Spalten aus der Tabelle rex_article neu indexiert.
+     ART_ADDED: dito
      ART_STATUS: Ein Artikel, der offline geschaltet wird, wird deindexiert, bei online indexiert.
      ART_UPDATED: wie ART_META_INFO
      CAT_DELETED: Ausgabe einer Meldung, das der Index erneuert werden muss
      CAT_STATUS: Eine Kategorie, die offline geschaltet wird, wird deindexiert, bei online indexiert.
+     CAT_ADDED: dito
      CAT_UPDATED: wie ART_META_INFO
      MEDIA_ADDED: Wenn ein Medium hinzugefügt wurde, werden alle ausgewählten DB-Spalten aus der Tabelle rex_file neu indexiert.
      MEDIA_UPDATED: wie MEDIA_ADDED
-     SLICE_SHOW: Wichtigster Extensionpoint: Wird ein Artikel verändert (z. B. Inhalt geändert, Slice verschoben, etc...), wird er neu indexiert. 
+     SLICE_SHOW: Wichtigster Extensionpoint: Wird ein Artikel verändert (z. B. Inhalt geändert, Slice verschoben, etc...), wird er neu indexiert.
+     SLICE_UPDATED:
  
 ##Ähnlichkeitssuche
  

@@ -122,7 +122,7 @@ $content[] = '<div class="rex-form-row">
                 </p>
 
                 <div style="overflow: auto;">'.
-    rex_string::highlight('<h4><a href="\'. ($url = htmlspecialchars($article->getUrl()) . \'&search_highlighter=\' . urlencode($_REQUEST[\'search_it\'])) .\'">\'.$article->getName().\'</a></h4>').'
+    rex_string::highlight('<h4><a href="\'. ($url = htmlspecialchars($article->getUrl()) . \'&search_highlighter=\' . urlencode(rex_request(\'search_it\'))) .\'">\'.$article->getName().\'</a></h4>').'
                 
                 </div>
             </div>';

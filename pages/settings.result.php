@@ -42,6 +42,7 @@ if (rex_post('config-submit', 'boolean')) {
             'indexmode',
             'indexoffline',
             'automaticindex',
+            'ep_outputfilter',
             'blacklist',
             'exclude_article_ids',
             'exclude_category_ids',
@@ -50,7 +51,6 @@ if (rex_post('config-submit', 'boolean')) {
             'indexmediapool',
             'dirdepth',
             'indexfolders',
-            'ep_outputfilter'
         ))) {
                 echo rex_view::warning($this->i18n('search_it_settings_saved_warning')); break;
             }
@@ -192,7 +192,7 @@ $content2[] = search_it_getSettingsFormSection(
     $this->i18n('search_it_settings_exclude'),
     array(
         array(
-            'type' => 'string',
+            'type' => 'text',
             'id' => 'search_it_settings_exclude_blacklist',
             'name' => 'search_config[blacklist]',
             'label' => $this->i18n('search_it_settings_exclude_blacklist'),

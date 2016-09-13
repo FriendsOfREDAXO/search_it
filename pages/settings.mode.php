@@ -35,6 +35,7 @@ if (rex_post('config-submit', 'boolean')) {
             'indexmode',
             'indexoffline',
             'automaticindex',
+            'ep_outputfilter',
             'blacklist',
             'exclude_article_ids',
             'exclude_category_ids',
@@ -43,7 +44,6 @@ if (rex_post('config-submit', 'boolean')) {
             'indexmediapool',
             'dirdepth',
             'indexfolders',
-            'ep_outputfilter'
         ))) {
                 echo rex_view::warning($this->i18n('search_it_settings_saved_warning')); break;
             }
@@ -197,7 +197,7 @@ $content[] = search_it_getSettingsFormSection(
             'name' => 'search_config[indexoffline]',
             'label' => $this->i18n('search_it_settings_indexoffline'),
             'value' => '1',
-            'checked' => !empty($this->getConfig('indexoffline'))
+            'checked' => $this->getConfig('indexoffline')
         ),
         array(
             'type' => 'checkbox',
@@ -205,7 +205,7 @@ $content[] = search_it_getSettingsFormSection(
             'name' => 'search_config[automaticindex]',
             'label' => $this->i18n('search_it_settings_automaticindex_label'),
             'value' => '1',
-            'checked' => !empty($this->getConfig('automaticindex'))
+            'checked' => $this->getConfig('automaticindex')
         ),
         array(
             'type' => 'checkbox',
@@ -213,7 +213,7 @@ $content[] = search_it_getSettingsFormSection(
             'name' => 'search_config[ep_outputfilter]',
             'label' => $this->i18n('search_it_settings_ep_outputfilter_label'),
             'value' => '1',
-            'checked' => !empty($this->getConfig('ep_outputfilter'))
+            'checked' => $this->getConfig('ep_outputfilter')
         )
     ),'edit'
 );

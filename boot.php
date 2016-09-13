@@ -40,7 +40,8 @@
                 'CAT_UPDATED',
                 'MEDIA_ADDED',
                 'MEDIA_UPDATED',
-                'SLICE_UPDATED'
+                'SLICE_UPDATED',
+                'SLICE_SHOW'
             );
             search_it_register_extensions($extensionPoints);
         }

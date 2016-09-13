@@ -94,14 +94,14 @@ class search_it {
             $this->setHighlightType(rex_addon::get('search_it')->getConfig('highlight'));
             $this->indexViaHTTP = intval(rex_addon::get('search_it')->getConfig('indexmode')) == 0;
             $this->indexWithTemplate = intval(rex_addon::get('search_it')->getConfig('indexmode')) == 2;
-            $this->indexOffline = rex_addon::get('search_it')->getConfig('indexoffline') == '1';
+            $this->indexOffline = rex_addon::get('search_it')->getConfig('indexoffline');
             $this->similarwordsMode = intval(rex_addon::get('search_it')->getConfig('similarwordsmode'));
-            $this->similarwords = !!intval(rex_addon::get('search_it')->getConfig('similarwordsmode'));
-            $this->similarwordsPermanent = !!intval(rex_addon::get('search_it')->getConfig('similarwords_permanent'));
+            $this->similarwords = !!$this->similarwordsMode;
+            $this->similarwordsPermanent = rex_addon::get('search_it')->getConfig('similarwords_permanent');
             $this->fileExtensions = rex_addon::get('search_it')->getConfig('fileextensions');
             $this->includeDirectories = rex_addon::get('search_it')->getConfig('indexfolders');
-            $this->indexMediapool = !!intval(rex_addon::get('search_it')->getConfig('indexmediapool'));
-            $this->ep_outputfilter = !!intval(rex_addon::get('search_it')->getConfig('ep_outputfilter'));
+            $this->indexMediapool = rex_addon::get('search_it')->getConfig('indexmediapool');
+            $this->ep_outputfilter = rex_addon::get('search_it')->getConfig('ep_outputfilter');
         }
 
         $this->setClang($_clang);
@@ -493,7 +493,7 @@ class search_it {
                     } else {
                         $articleText = $rex_article->getArticle();
                     }
-                    if($this->ep_outputfilter){
+                    if( $this->ep_outputfilter ){
                         $tmp = array(
                             'artid' => rex_article::getCurrentId(),
                             'clang' => rex_clang::getCurrentId()
@@ -2069,6 +2069,7 @@ class search_it {
             $sqlResult = $sql->getArray($query);
             $info = 'Success';
         } catch (rex_sql_exception $e) {
+            $sqlResult = array();
             $error = $e->getMessage();
             $return['errormessages'] .= $error;
         }

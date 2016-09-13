@@ -10,7 +10,7 @@ function search_it_getArticleIds($cats = false) {
 
     $return = array();
     $query = 'SELECT id FROM '.rex::getTable('article');
-    if(empty(rex_addon::get('search_it')->getConfig('indexoffline'))) {
+    if( !rex_addon::get('search_it')->getConfig('indexoffline') ) {
         $query .= ' WHERE status = 1';
     }
     if(!empty($whereCats)) {

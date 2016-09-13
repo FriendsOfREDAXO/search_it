@@ -51,30 +51,26 @@ Dieses Suchmodul bezieht weitere DB-Spalten in die Suche ein. Dafür müssen im 
 Außerdem sollte das maximale Trefferlimit auf 20 gestellt werden.
 
         <?php
-        if(!empty(rex_request('search_it', 'string')))
-        {
-        $search_it = new search_it();
-        $result = $search_it->search(rex_request('search_it', 'string'));
-        
-        if($result['count'] > 0)
-        {
-          echo '<ul class="searchresults">';
-          foreach($result['hits'] as $hit)
-          {
-            if($hit['type'] == 'db_column' AND $hit['table'] == $REX['TABLE_PREFIX'].'article')
-              $text = $hit['article_teaser'];
-            else
-              $text = $hit['highlightedtext'];
-        
-            $article = OOArticle::getArticleById($hit['fid']);
-        
-            echo '<li>
-        <h4><a href="'.($url = htmlspecialchars($article->getUrl())).'">'.$article->getName().'</a></h4>
-          <p class="highlightedtext">'.$text.'</p>
-          <p class="url">'.$REX['SERVER'].rex_getUrl($hit['fid'], $hit['clang']).'</p></li>';
-          }
-          echo '</ul>';
-        }
+        if(!empty(rex_request('search_it', 'string'))){
+            $search_it = new search_it();
+            $result = $search_it->search(rex_request('search_it', 'string'));
+            
+            if($result['count'] > 0){
+                echo '<ul class="searchresults">';
+                foreach($result['hits'] as $hit){
+                    if($hit['type'] == 'db_column' AND $hit['table'] == rex::getTablePrefix().'article'){
+                        $text = $hit['article_teaser'];
+                    } else {
+                        $text = $hit['highlightedtext'];
+                    }
+                    $article = rex_article::get($hit['fid']);
+
+                    echo '<li><h4><a href="'.($url = htmlspecialchars($article->getUrl())).'">'.$article->getName().'</a></h4>
+                    <p class="highlightedtext">'.$text.'</p>
+                    <p class="url">'.rex_getUrl($hit['fid'], $hit['clang']).'</p></li>';
+                }
+                echo '</ul>';
+            }
         }
         ?>
 
@@ -100,7 +96,7 @@ Dieses Suchmodul ist wie das erste, einfache Suchmodul aufgebaut. Einzig die Kat
               echo '<li>
         <h4><a href="'.($url = htmlspecialchars($article->getUrl())).'">'.$article->getName().'</a></h4>
           <p class="highlightedtext">'.$hit['highlightedtext'].'</p>
-          <p class="url">'.$REX['SERVER'].rex_getUrl($hit['fid'], $hit['clang']).'</p></li>';
+          <p class="url">'.rex::getServer().rex_getUrl($hit['fid'], $hit['clang']).'</p></li>';
             }
           }
           echo '</ul>';
@@ -125,8 +121,8 @@ Dafür werden im Backend folgende Spalten in die Indexierung eingeschlossen:
         
         {
         $search_it = new search_it();
-        $search_it->searchInDbColumn($REX['TABLE_PREFIX'].'file','title');
-        $search_it->searchInDbColumn($REX['TABLE_PREFIX'].'file','med_description');
+        $search_it->searchInDbColumn(rex::getTablePrefix().'media','title');
+        $search_it->searchInDbColumn(rex::getTablePrefix().'media','med_description');
         $result = $search_it->search(rex_request('search_it', 'string'));
         
         if($result['count'] > 0)
@@ -158,11 +154,11 @@ Diese Beispielmodul benötigt die DB-Spalten id, name, art_description und art_k
         
           if(!empty(rex_request('search_it', 'string'))){
             $search_it = new search_it();
-            $search_it->setLimit(array($start = isset($_GET['start'])?intval($_GET['start']):0, SHOWMAX));
+            $search_it->setLimit(array($start = isset(rex_get('start', 'int', 0))? intval(rex_get('start', 'int', 0)):0, SHOWMAX));
             $search_it->doSearchArticles(true);
-            $search_it->searchInDbColumn($REX['TABLE_PREFIX'].'article', 'name');
-            $search_it->searchInDbColumn($REX['TABLE_PREFIX'].'article', 'art_description');
-            $search_it->searchInDbColumn($REX['TABLE_PREFIX'].'article', 'art_keywords');
+            $search_it->searchInDbColumn(rex::getTablePrefix().'article', 'name');
+            $search_it->searchInDbColumn(rex::getTablePrefix().'article', 'art_description');
+            $search_it->searchInDbColumn(rex::getTablePrefix().'article', 'art_keywords');
         
             $result = $search_it->search(rex_request('search_it', 'string'));
             if(count($result['simwords']) > 0){
@@ -177,7 +173,7 @@ Diese Beispielmodul benötigt die DB-Spalten id, name, art_description und art_k
               foreach($result['hits'] as $hit){
                 if($hit['type'] == 'db_column'){
                   $text = $hit['article_teaser'];
-                  if($hit['table'] == $REX['TABLE_PREFIX'].'article')
+                  if($hit['table'] == rex::getTablePrefix().'article')
                     $hit['fid'] = $hit['values']['id'];
                 } else {
                   $text = $hit['highlightedtext'];
@@ -188,7 +184,7 @@ Diese Beispielmodul benötigt die DB-Spalten id, name, art_description und art_k
                 echo '<li>
             <h4><a href="'.($url = htmlspecialchars($article->getUrl())).'">'.$article->getName().'</a></h4>
               <p class="highlightedtext">'.$text.'</p>
-              <p class="url">'.$REX['SERVER'].rex_getUrl($hit['fid'], $hit['clang']).'</p></li>';
+              <p class="url">'.rex::getServer().rex_getUrl($hit['fid'], $hit['clang']).'</p></li>';
               }
               echo '</ul>';
         
@@ -220,7 +216,7 @@ Dieses Beispielmodul erweitert das Paginationsmodul um eine Suche nach ähnliche
         
           if(!empty(rex_request('search_it', 'string'))){
             $search_it = new search_it();
-            $search_it->setLimit(array($start = isset($_GET['start'])?intval($_GET['start']):0, SHOWMAX));
+            $search_it->setLimit(array($start = isset(rex_get('start', 'int', 0))?intval(rex_get('start', 'int', 0)):0, SHOWMAX));
         
             $result = $search_it->search(rex_request('search_it', 'string'));
             if(!$result['count'] AND count($result['simwords']) > 0){
@@ -236,7 +232,7 @@ Dieses Beispielmodul erweitert das Paginationsmodul um eine Suche nach ähnliche
               foreach($result['hits'] as $hit){
                 if($hit['type'] == 'db_column'){
                   $text = $hit['article_teaser'];
-                  if($hit['table'] == $REX['TABLE_PREFIX'].'article'){
+                  if($hit['table'] == rex::getTablePrefix().'article'){
                     $hit['fid'] = $hit['values']['id'];
                   }
                 } else {
@@ -248,7 +244,7 @@ Dieses Beispielmodul erweitert das Paginationsmodul um eine Suche nach ähnliche
                 echo '<li>
             <h4><a href="'.($url = htmlspecialchars($article->getUrl())).'">'.$article->getName().'</a></h4>
               <p class="highlightedtext">'.$text.'</p>
-              <p class="url">'.$REX['SERVER'].rex_getUrl($hit['fid'], $hit['clang']).'</p></li>';
+              <p class="url">'.rex::getServer().rex_getUrl($hit['fid'], $hit['clang']).'</p></li>';
               }
               echo '</ul>';
         
@@ -282,7 +278,7 @@ Dieses Beispielmodul erweitert das Paginationsmodul und die Ähnlichkeitssuche u
         
           if(!empty(rex_request('search_it', 'string'))){
             $search_it = new search_it();
-            $search_it->setLimit(array($start = isset($_GET['start'])?intval($_GET['start']):0, SHOWMAX));
+            $search_it->setLimit(array($start = isset(rex_get('start', 'int', 0))?intval(rex_get('start', 'int', 0)):0, SHOWMAX));
         
             $result = $search_it->search(rex_request('search_it', 'string'));
             if(!$result['count'] AND count($result['simwords']) > 0){
@@ -298,7 +294,7 @@ Dieses Beispielmodul erweitert das Paginationsmodul und die Ähnlichkeitssuche u
               foreach($result['hits'] as $hit){
                 if($hit['type'] == 'db_column'){
                   $text = $hit['article_teaser'];
-                  if($hit['table'] == $REX['TABLE_PREFIX'].'article')
+                  if($hit['table'] == rex::getTablePrefix().'article')
                     $hit['fid'] = $hit['values']['id'];
                 } else {
                   $text = $hit['highlightedtext'];
@@ -312,7 +308,7 @@ Dieses Beispielmodul erweitert das Paginationsmodul und die Ähnlichkeitssuche u
                   echo '    <li class="pdf">
               <h4><a href="'.htmlspecialchars($pdf->getFullPath()).'">'.$pdf->getOrgFileName().'</a></h4>
               <p class="highlightedtext">'.$text.'</p>
-              <p class="url">'.$REX['SERVER'].'files/'.$pdf->getOrgFileName().'</p>
+              <p class="url">'.rex::getServer().'files/'.$pdf->getOrgFileName().'</p>
             </li>';
                 } else {
                   // Artikel oder DB-Spalte aus der Artikel-Tabelle
@@ -321,7 +317,7 @@ Dieses Beispielmodul erweitert das Paginationsmodul und die Ähnlichkeitssuche u
                   echo '    <li>
               <h4><a href="'.htmlspecialchars($article->getUrl()).'">'.$article->getName().'</a></h4>
               <p class="highlightedtext">'.$text.'</p>
-              <p class="url">'.$REX['SERVER'].rex_getUrl($hit['fid'], $hit['clang']).'</p>
+              <p class="url">'.rex::getServer().rex_getUrl($hit['fid'], $hit['clang']).'</p>
             </li>';
                 }
               }
@@ -441,7 +437,7 @@ In dem Modul zur Präsentation der Suchergebnisse werden die entsprechenden Eins
                     echo '    <li class="pdf">
               <h4><a href="'.htmlspecialchars($pdf->getFullPath()).'">'.$pdf->getOrgFileName().'</a></h4>
               <p class="highlightedtext">'.$text.'</p>
-              <p class="url">'.$REX['SERVER'].'files/'.$pdf->getOrgFileName().'</p>
+              <p class="url">'.rex::getServer().'files/'.$pdf->getOrgFileName().'</p>
             </li>';
                   break;
         
@@ -449,7 +445,7 @@ In dem Modul zur Präsentation der Suchergebnisse werden die entsprechenden Eins
                   case 'article':
                     if($hit['type'] == 'db_column'){
                       $text = $hit['article_teaser'];
-                      if($hit['table'] == $REX['TABLE_PREFIX'].'article')
+                      if($hit['table'] == rex::getTablePrefix().'article')
                         $hit['fid'] = $hit['values']['id'];
                     } else {
                       $text = $hit['highlightedtext'];
@@ -461,7 +457,7 @@ In dem Modul zur Präsentation der Suchergebnisse werden die entsprechenden Eins
                     echo '    <li>
               <h4><a href="'.htmlspecialchars($article->getUrl()).'">'.$article->getName().'</a></h4>
               <p class="highlightedtext">'.$text.'</p>
-              <p class="url">'.$REX['SERVER'].rex_getUrl($hit['fid'], $hit['clang']).'</p>
+              <p class="url">'.rex::getServer().rex_getUrl($hit['fid'], $hit['clang']).'</p>
             </li>';
                   break;
         

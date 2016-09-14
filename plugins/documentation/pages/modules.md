@@ -38,7 +38,7 @@ Dieses Suchmodul nimmt einen Suchbegriff entgegen und gibt gefundene Artikel aus
                       echo '</ul>';
                   }
               }
-              ?>
+        ?>
 
 ##Erweitertes Beispielmodul
 
@@ -51,9 +51,9 @@ Dieses Suchmodul bezieht weitere DB-Spalten in die Suche ein. Dafür müssen im 
 Außerdem sollte das maximale Trefferlimit auf 20 gestellt werden.
 
         <?php
-        if(!empty(rex_request('search_it', 'string'))){
+        if(!empty(rex_request('searchit', 'string'))){
             $search_it = new search_it();
-            $result = $search_it->search(rex_request('search_it', 'string'));
+            $result = $search_it->search(rex_request('searchit', 'string'));
             
             if($result['count'] > 0){
                 echo '<ul class="searchresults">';
@@ -79,29 +79,25 @@ Außerdem sollte das maximale Trefferlimit auf 20 gestellt werden.
 Dieses Suchmodul ist wie das erste, einfache Suchmodul aufgebaut. Einzig die Kategorien, in denen ausschließlich gesucht werden soll, sind zusätzlich angegeben.
 
         <?php
-        if(!empty(rex_request('search_it', 'string')))
-        {
-        $search_it = new search_it();
-        $search_it->searchInCategories(array(5,6,13));
-        $result = $search_it->search(rex_request('search_it', 'string'));
-        
-        if($result['count'] > 0)
-        {
-          echo '<ul class="searchresults">';
-          foreach($result['hits'] as $hit)
-          {
-            if($hit['type'] == 'article')
-            {
-              $article = OOArticle::getArticleById($hit['fid']);
-              echo '<li>
-        <h4><a href="'.($url = htmlspecialchars($article->getUrl())).'">'.$article->getName().'</a></h4>
-          <p class="highlightedtext">'.$hit['highlightedtext'].'</p>
-          <p class="url">'.rex::getServer().rex_getUrl($hit['fid'], $hit['clang']).'</p></li>';
-            }
-          }
-          echo '</ul>';
-        }
-        }
+              if(!empty(rex_request('searchit', 'string'))){
+                  $search_it = new search_it();
+                  $search_it->searchInCategories(array(5,6,13));
+                  $result = $search_it->search(rex_request('searchit', 'string'));
+          
+                  if($result['count'] > 0){
+                      echo '<ul class="searchresults">';
+                      foreach($result['hits'] as $hit){
+                          if($hit['type'] == 'article'){
+                              $article = rex_article::get($hit['fid']);
+                              echo '<li>
+                              <h4><a href="'.htmlspecialchars($article->getUrl()).'">'.$article->getName().'</a></h4>
+                              <p class="highlightedtext">'.$hit['highlightedtext'].'</p>
+                              <p class="url">'.rex_getUrl($hit['fid'], $hit['clang']).'</p></li>';
+                          }
+                      }
+                      echo '</ul>';
+                  }
+              }
         ?>
 
 ##Bildersuche
@@ -117,26 +113,21 @@ Dafür werden im Backend folgende Spalten in die Indexierung eingeschlossen:
 
         <?php
         
-        if(!empty(rex_request('search_it', 'string'))) 
-        
-        {
-        $search_it = new search_it();
-        $search_it->searchInDbColumn(rex::getTablePrefix().'media','title');
-        $search_it->searchInDbColumn(rex::getTablePrefix().'media','med_description');
-        $result = $search_it->search(rex_request('search_it', 'string'));
-        
-        if($result['count'] > 0)
-        {
-          echo '<ul class="searchresults">';
-          foreach($result['hits'] as $hit)
-          {
-            $media = OOMedia::getMediaById($hit['fid']);
-            echo '<li>
-        <h4>'.$media->getTitle().'</h4>
-          <p class="image"><a href="'.($url = htmlspecialchars($media->getFullPath())).'"><img src="index.php?rex_resize=100a__'.$media->getFileName().'" alt="'.$media->getTitle().'" /></a></p></li>';
-          }
-          echo '</ul>';
-        }
+        if(!empty(rex_request('searchit', 'string'))){
+            $search_it = new search_it();
+            $search_it->searchInDbColumn(rex::getTablePrefix().'media','title');
+            $search_it->searchInDbColumn(rex::getTablePrefix().'media','med_description');
+            $result = $search_it->search(rex_request('searchit', 'string'));
+            
+            if($result['count'] > 0){
+                echo '<ul class="searchresults">';
+                foreach($result['hits'] as $hit){
+                    $media = rex_media::get($hit['filename']);
+                    echo '<li><h4>'.$media->getTitle().'</h4>
+                        <p class="image"><a href="'.$media->toLink().'">'.$media->toImage( array('alt'=> $media->getTitle()) ).'</a></p></li>';
+                }
+                echo '</ul>';
+            }
         }
         ?>
 
@@ -150,24 +141,24 @@ Diese Beispielmodul benötigt die DB-Spalten id, name, art_description und art_k
 
         <?php
         
-          define('SHOWMAX',10);
+        define('SHOWMAX',10);
         
-          if(!empty(rex_request('search_it', 'string'))){
+        if(!empty(rex_request('searchit', 'string'))){
             $search_it = new search_it();
             $search_it->setLimit(array($start = isset(rex_get('start', 'int', 0))? intval(rex_get('start', 'int', 0)):0, SHOWMAX));
             $search_it->doSearchArticles(true);
             $search_it->searchInDbColumn(rex::getTablePrefix().'article', 'name');
             $search_it->searchInDbColumn(rex::getTablePrefix().'article', 'art_description');
             $search_it->searchInDbColumn(rex::getTablePrefix().'article', 'art_keywords');
-        
-            $result = $search_it->search(rex_request('search_it', 'string'));
+            
+            $result = $search_it->search(rex_request('searchit', 'string'));
             if(count($result['simwords']) > 0){
               $newsearchString = $result['simwordsnewsearch'];
               $result = $search_it->search($newsearchString);
               if($result['count'] > 0)
                 echo '<p>Meinten Sie <strong>'.$newsearchString.'</strong>?</p>';
             }
-        
+            
             if($result['count'] > 0){
               echo '<ul class="searchresults">';
               foreach($result['hits'] as $hit){
@@ -178,16 +169,16 @@ Diese Beispielmodul benötigt die DB-Spalten id, name, art_description und art_k
                 } else {
                   $text = $hit['highlightedtext'];
                 }
-        
+            
                 $article = OOArticle::getArticleById($hit['fid']);
-        
+            
                 echo '<li>
             <h4><a href="'.($url = htmlspecialchars($article->getUrl())).'">'.$article->getName().'</a></h4>
               <p class="highlightedtext">'.$text.'</p>
               <p class="url">'.rex::getServer().rex_getUrl($hit['fid'], $hit['clang']).'</p></li>';
               }
               echo '</ul>';
-        
+            
               // Pagination
               if($result['count'] > SHOWMAX){
                 $self = OOArticle::getArticleById(REX_ARTICLE_ID);
@@ -196,13 +187,13 @@ Diese Beispielmodul benötigt die DB-Spalten id, name, art_description und art_k
                   if(($i*SHOWMAX) == $start){
                     echo '<li>'.($i+1).'</li>';
                   } else {
-                    echo '<li><a href="'.$self->getUrl(array('search_it' => rex_request('search_it', 'string'), 'start' => $i*SHOWMAX)).'">'.($i+1).'</a></li>';
+                    echo '<li><a href="'.$self->getUrl(array('search_it' => rex_request('searchit', 'string'), 'start' => $i*SHOWMAX)).'">'.($i+1).'</a></li>';
                   }
                 }
                 echo '</ul>';
               }
             }
-          }
+        }
         
         ?>
 
@@ -214,11 +205,11 @@ Dieses Beispielmodul erweitert das Paginationsmodul um eine Suche nach ähnliche
         
           define('SHOWMAX',10);
         
-          if(!empty(rex_request('search_it', 'string'))){
+          if(!empty(rex_request('searchit', 'string'))){
             $search_it = new search_it();
             $search_it->setLimit(array($start = isset(rex_get('start', 'int', 0))?intval(rex_get('start', 'int', 0)):0, SHOWMAX));
         
-            $result = $search_it->search(rex_request('search_it', 'string'));
+            $result = $search_it->search(rex_request('searchit', 'string'));
             if(!$result['count'] AND count($result['simwords']) > 0){
               $newsearchString = $result['simwordsnewsearch'];
               $result = $search_it->search($newsearchString);
@@ -256,7 +247,7 @@ Dieses Beispielmodul erweitert das Paginationsmodul um eine Suche nach ähnliche
                   if(($i*SHOWMAX) == $start){
                     echo '<li>'.($i+1).'</li>';
                   } else {
-                    echo '<li><a href="'.$self->getUrl(array('search_it' => rex_request('search_it', 'string'), 'start' => $i*SHOWMAX)).'">'.($i+1).'</a></li>';
+                    echo '<li><a href="'.$self->getUrl(array('search_it' => rex_request('searchit', 'string'), 'start' => $i*SHOWMAX)).'">'.($i+1).'</a></li>';
                   }
                 }
                 echo '</ul>';
@@ -276,11 +267,11 @@ Dieses Beispielmodul erweitert das Paginationsmodul und die Ähnlichkeitssuche u
         
           define('SHOWMAX',10);
         
-          if(!empty(rex_request('search_it', 'string'))){
+          if(!empty(rex_request('searchit', 'string'))){
             $search_it = new search_it();
             $search_it->setLimit(array($start = isset(rex_get('start', 'int', 0))?intval(rex_get('start', 'int', 0)):0, SHOWMAX));
         
-            $result = $search_it->search(rex_request('search_it', 'string'));
+            $result = $search_it->search(rex_request('searchit', 'string'));
             if(!$result['count'] AND count($result['simwords']) > 0){
               $newsearchString = $result['simwordsnewsearch'];
               $result = $search_it->search($newsearchString);
@@ -331,7 +322,7 @@ Dieses Beispielmodul erweitert das Paginationsmodul und die Ähnlichkeitssuche u
                   if(($i*SHOWMAX) == $start){
                     echo '<li>'.($i+1).'</li>';
                   } else {
-                    echo '<li><a href="'.$self->getUrl(array('search_it' => rex_request('search_it', 'string'), 'start' => $i*SHOWMAX)).'">'.($i+1).'</a></li>';
+                    echo '<li><a href="'.$self->getUrl(array('search_it' => rex_request('searchit', 'string'), 'start' => $i*SHOWMAX)).'">'.($i+1).'</a></li>';
                   }
                 }
                 echo '</ul>';
@@ -473,7 +464,7 @@ In dem Modul zur Präsentation der Suchergebnisse werden die entsprechenden Eins
                   if(($i*$showmax) == $start){
                     echo '<li>'.($i+1).'</li>';
                   } else {
-                    echo '<li><a href="'.$self->getUrl(array('search_it' => rex_request('search_it', 'string'), 'start' => $i*$showmax)).'">'.($i+1).'</a></li>';
+                    echo '<li><a href="'.$self->getUrl(array('search_it' => rex_request('searchit', 'string'), 'start' => $i*$showmax)).'">'.($i+1).'</a></li>';
                   }
                 }
                 echo '</ul>';

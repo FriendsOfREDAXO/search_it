@@ -17,12 +17,6 @@ if (rex_post('config-submit', 'boolean')) {
     ]);
 
 
-    // do it
-    $this->setConfig($posted_config);
-
-    //tell it
-    echo rex_view::success($this->i18n('search_it_settings_saved'));
-
 
     /*    echo '<pre>';
     var_dump(rex_post('search_config'));
@@ -48,6 +42,13 @@ if (rex_post('config-submit', 'boolean')) {
                 echo rex_view::warning($this->i18n('search_it_settings_saved_warning')); break;
             }
     }
+
+    // do it
+    $this->setConfig($posted_config);
+
+    //tell it
+    echo rex_view::success($this->i18n('search_it_settings_saved'));
+
 }
 
 

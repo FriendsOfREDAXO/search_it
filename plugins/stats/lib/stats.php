@@ -40,8 +40,8 @@ class search_it_stats{
 
         if (empty($_getonly)){
             $query = 'SELECT term, COUNT(*) as count, 1 as success FROM `' . rex::getTablePrefix().'search_it_stats_searchterms' . '` WHERE resultcount > 0 GROUP BY term
-      UNION
-      SELECT term, COUNT(*) as count, 0 as success FROM `' . rex::getTablePrefix().'search_it_stats_searchterms' . '` WHERE resultcount <= 0 GROUP BY term';
+                      UNION
+                      SELECT term, COUNT(*) as count, 0 as success FROM `' . rex::getTablePrefix().'search_it_stats_searchterms' . '` WHERE resultcount <= 0 GROUP BY term';
         } else {
             $query = 'SELECT term, COUNT(*) as count, ' . ($_getonly == 1 ? 1 : 0) . ' as success FROM `' . rex::getTablePrefix().'search_it_stats_searchterms' . '` WHERE resultcount ' . ($_getonly == 1 ? '>' : '<=') . ' 0 GROUP BY term';
             // getonly = 1: only successful searchterms

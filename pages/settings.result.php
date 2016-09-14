@@ -3,7 +3,6 @@
 if (rex_post('config-submit', 'boolean')) {
 
     $posted_config = rex_post('search_config', [
-
         ['surroundtags', 'array'],
         ['limit', 'array'],
         ['maxteaserchars', 'string'],
@@ -22,13 +21,6 @@ if (rex_post('config-submit', 'boolean')) {
     } else {
         $posted_config['blacklist'] = array();
     }
-
-
-    // do it
-    $this->setConfig($posted_config);
-
-    //tell it
-    echo rex_view::success($this->i18n('search_it_settings_saved'));
 
 
     /*    echo '<pre>';
@@ -55,6 +47,13 @@ if (rex_post('config-submit', 'boolean')) {
                 echo rex_view::warning($this->i18n('search_it_settings_saved_warning')); break;
             }
     }
+
+    // do it
+    $this->setConfig($posted_config);
+
+    //tell it
+    echo rex_view::success($this->i18n('search_it_settings_saved'));
+
 }
 
 

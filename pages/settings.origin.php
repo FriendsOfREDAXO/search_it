@@ -3,14 +3,12 @@
 if (rex_post('config-submit', 'boolean')) {
 
     $posted_config = rex_post('search_config', [
-
         ['include', 'array'],
 
         ['fileextensions','string'],
         ['indexmediapool', 'bool'],
         ['dirdepth', 'string'],
         ['indexfolders', 'array'],
-
 
     ]);
 
@@ -39,12 +37,11 @@ if (rex_post('config-submit', 'boolean')) {
         $posted_config['include'] = array();
     }
 
-    // do it
-    $this->setConfig($posted_config);
-
-    //tell it
-    echo rex_view::success($this->i18n('search_it_settings_saved'));
-
+    /*    echo '<pre>';
+    var_dump(rex_post('search_config'));
+    echo "\n";
+    var_dump( $this->getConfig());
+    echo '</pre>';*/
 
     foreach( array_keys(array_merge(array_diff_assoc($posted_config,$this->getConfig(), array_diff_assoc($this->getConfig(),$posted_config)))) as $changed) {
         if(in_array($changed, array(
@@ -64,6 +61,13 @@ if (rex_post('config-submit', 'boolean')) {
                 echo rex_view::warning($this->i18n('search_it_settings_saved_warning')); break;
             }
     }
+
+    // do it
+    $this->setConfig($posted_config);
+
+    //tell it
+    echo rex_view::success($this->i18n('search_it_settings_saved'));
+
 }
 
 

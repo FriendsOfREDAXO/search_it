@@ -1,4 +1,4 @@
-#REDAXO 5 Plugin - "reindex" für "search_it"
+#REDAXO 5 Plugin - "reindex" für "Search it"
 
 
 Port von Version für R4 auf R5

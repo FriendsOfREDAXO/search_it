@@ -4,7 +4,7 @@ Diese Wikiseite erklärt die Konfiguration des Addons, die Schnittstelle der sea
 
 ##Allgemein/Voraussetzungen
 
-Das Addon search_it fügt Redaxo eine Volltextsuche hinzu.
+Das Addon Search it fügt Redaxo eine Volltextsuche hinzu.
 
 Dabei werden Artikel und auswählbare Datenbankspalten in einer DB-Tabelle des Addons gespeichert.
 
@@ -173,9 +173,9 @@ Eine Automatisch De-(Indexierung) erfolgt im Moment mit folgenden Extension-Poin
  
 ##Ähnlichkeitssuche
  
-Die Ähnlichkeitssuche muss im Backend in der Konfigurationsansicht von search_it eingestellt werden.
-Ist die Ähnlichkeitssuche aktiviert, baut search_it bei jeder Suche, die einen Treffer ergab, einen Schlagwortindex aus. Dabei wird angenommen, dass Wörter, die zu Suchergebnissen führen, richtig geschrieben sind.
-Sollte eine Suche keine Ergebnisse liefern, füllt search_it das Result-Array mit eventuell gefundenen ähnlichen Wörtern und macht auch einen Vorschlag, wie der neue Suchbegriff aussehen könnte.
+Die Ähnlichkeitssuche muss im Backend in der Konfigurationsansicht von Search it eingestellt werden.
+Ist die Ähnlichkeitssuche aktiviert, baut Search it bei jeder Suche, die einen Treffer ergab, einen Schlagwortindex aus. Dabei wird angenommen, dass Wörter, die zu Suchergebnissen führen, richtig geschrieben sind.
+Sollte eine Suche keine Ergebnisse liefern, füllt Search it das Result-Array mit eventuell gefundenen ähnlichen Wörtern und macht auch einen Vorschlag, wie der neue Suchbegriff aussehen könnte.
 Um die Ähnlichkeitssuche effektiv einsetzen zu können, empfiehlt es sich, die Suche selbst mit richtigen Schlagwörtern zu füttern. Dadurch sind erste Suchwörter indexiert und die Ähnlichkeitssuche kann bei einer falschen Schreibweise dieser Wörter diese vorschlagen.
  
  
@@ -187,10 +187,10 @@ Dieses Problem ist nicht trivial und allumfassend lösbar.
 Da das Addon nicht wissen kann, wann eine Datenbankspalte neu indexiert werden muss, kann keine automatische Indexierung erfolgen.
 Die Klasse search_it bietet allerdings die Methode indexColumn an. Über diese Methode können Datenbankspalten neu oder wieder indexiert werden.
 Müssen die Datenbankspalten nur zu einem bestimmten Datensatz indexiert werden, kann außerdem die ID dieses Datensatzes angegeben werden.
-search_it wird dann auch nur den betroffenen Datensatz reindexieren.
+Search it wird dann auch nur den betroffenen Datensatz reindexieren.
 
 Beispiel:
-Ein Addon arbeitet mit einer eigenen Datenbanktabelle. search_it soll Inhalte dieses Addons auch automatisch reindexieren.
+Ein Addon arbeitet mit einer eigenen Datenbanktabelle. Search it soll Inhalte dieses Addons auch automatisch reindexieren.
 Da das Addon selbst weiß, wann die Beispieldatenbankspalte "beschreibung" reindexiert werden soll, kann die Methode indexColumn von diesem Addon aufgerufen werden:
  
      $search_it = new search_it;
@@ -219,7 +219,7 @@ In diesem Zusammenhang sollte auch ein Fehler im Quellcode von Redaxo behoben we
 ##Ich komme mit der Installation nicht zurecht. Gibt es eine Schritt-für-Schritt-Anleitung?
 Ja! ;-) 
 
-search_it herunterladen: http://www.redaxo.de/180-0-addon-details.html?addon_id=587
+Search it herunterladen: http://www.redaxo.de/180-0-addon-details.html?addon_id=587
 Ordner search_it in das Addon-Verzeichnis der Redaxo-Installation kopieren/entpacken
 das Addon im Backend installieren und aktivieren
 auf der Seite des Addons gewünschte Einstellungen vornehmen
@@ -232,7 +232,7 @@ Suche testen
  
 ##Wie kann ich sprachabhängig suchen?
 
-search_it sucht per Standard in allen Sprachen.
+Search it sucht per Standard in allen Sprachen.
 Um sprachabhängige Suchen zu erlauben, muss der Klasse die Sprach-ID der Sprache, in der gesucht werden soll, übergeben werden.
 Das geht in einem Suchmodul am einfachsten über die durch Redaxo definierte Konstante REX_CLANG_ID.
 Achtung: Die Sprach-ID sollte im Ergebnismodul $search_it = new search_it(REX_CLANG_ID); und im Suchformular <input type="hidden" name="clang" value="REX_CLANG_ID" /> gesetzt werden.

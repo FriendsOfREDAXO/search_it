@@ -18,8 +18,8 @@ search_it_stats_generalstats_070_keywordcount = Anzahl unterschiedlicher, im Suc
 search_it_stats_generalstats_075_cachedsearchcount = Anzahl im Cache vorgehaltener Suchen:
 search_it_stats_generalstats_080_searchindexdatalength = Größe des Index der Suchindex-Tabelle (search_it_index):
 search_it_stats_generalstats_090_searchindexindexlength = Größe der Daten der Suchindex-Tabelle (search_it_index):
-search_it_stats_generalstats_100_datalength = Größe der Indexe aller Search_it-Tabellen:
-search_it_stats_generalstats_110_indexlength = Größe der Daten aller Search_it-Tabellen:
+search_it_stats_generalstats_100_datalength = Größe der Indexe aller Search it-Tabellen:
+search_it_stats_generalstats_110_indexlength = Größe der Daten aller Search it-Tabellen:
 
 search_it_stats_topsearchterms_titletitle = Häufigste Suchbegriffe
 search_it_stats_topsearchterms_title = Die {0} häufigsten Suchbegriffe (insgesamt {1} unterschiedliche Suchbegriffe)

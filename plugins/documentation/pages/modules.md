@@ -102,7 +102,7 @@ Dieses Suchmodul ist wie das erste, einfache Suchmodul aufgebaut. Einzig die Kat
 
 ##Bildersuche
 
-Eine Bildersuche kann mit search_it einfach realisiert werden.
+Eine Bildersuche kann mit Search it einfach realisiert werden.
 
 Die Suche zu den Bildern soll in den Bildbeschreibungen und -titeln, die über den Medienpool eingetragen werden, stattfinden.
 
@@ -344,7 +344,7 @@ Ein erweitertes Suchformular bietet dem Nutzer an, folgende Punkte auszuwählen:
 - Suchen in (Kategorieauswahl)
 - Wieviele Ergebnisse pro Seite? 
 
-Wichtig: Dieses Modul ist nur für search_it ab Version 0.5.
+Wichtig: Dieses Modul ist nur für Search it ab Version 0.5.
 
         <form id="search-form" method="get" action="<?php echo rex_geturl(REX_ARTICLE_ID, REX_CLANG_ID, array(), '&'); ?>">
         
@@ -385,7 +385,7 @@ Wichtig: Dieses Modul ist nur für search_it ab Version 0.5.
         
         </form>
 
-In dem Modul zur Präsentation der Suchergebnisse werden die entsprechenden Einstellungen an search_it übergeben, die Suche ausgeführt und letztendlich die Suchergebnisse ausgegeben.
+In dem Modul zur Präsentation der Suchergebnisse werden die entsprechenden Einstellungen an Search it übergeben, die Suche ausgeführt und letztendlich die Suchergebnisse ausgegeben.
 
         <?php
         

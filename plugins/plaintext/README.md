@@ -1,4 +1,4 @@
-#REDAXO 5 Plugin - "plaintext" für "search_it"
+#REDAXO 5 Plugin - "plaintext" für "Search it"
 
 
 Port von Version für R4 auf R5

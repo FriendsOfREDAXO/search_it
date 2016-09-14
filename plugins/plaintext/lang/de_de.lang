@@ -11,4 +11,4 @@ search_it_plaintext_striptags_label = Wendet die Funktion strip_tags() auf den P
 search_it_plaintext_textile = Textile parsen
 search_it_plaintext_textile_label = Führt die Funktion rex_textile::parse() aus.
 search_it_plaintext_processparent = Standard-Plaintext-Konvertierung durchführen
-search_it_plaintext_processparent_label = Führt die Plaintext-Konvertierung von Search_it zusätzlich aus.
+search_it_plaintext_processparent_label = Führt die Plaintext-Konvertierung von Search it zusätzlich aus.

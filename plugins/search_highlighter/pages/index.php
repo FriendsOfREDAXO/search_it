@@ -12,6 +12,7 @@ if (rex_post('sendit', 'boolean')) {
         ['stil1', 'string'],
         ['stil2', 'string'],
         ['stilEigen', 'string']
+
     ]);
 
     // do it
@@ -19,11 +20,8 @@ if (rex_post('sendit', 'boolean')) {
 
     //tell it
     echo rex_view::success($this->i18n('search_it_settings_saved'));
-    $url = rex::getServer() . rex_url::currentBackendPage();
-    header('Location: ' . $url);
-}
 
-$func = rex_request('func', 'string');
+}
 
 
 $content = array();
@@ -51,28 +49,28 @@ $content[] = search_it_getSettingsFormSection('stil_settings', $this->i18n('sear
                         'type' => 'select',
                         'id' => 'search_it_search_highlighter_tag',
                         'name' => 'search_it_search_highlighter[tag]',
-                        'label' => 'Tag um die Suchbegriffe',
+                        'label' => $this->i18n('search_it_search_highlighter_tag'),
                         'options' => $options
                 ),
                 array(
                         'type' => 'string',
                         'id' => 'search_it_search_highlighter_class',
                         'name' => 'search_it_search_highlighter[class]',
-                        'label' => 'Class',
+                        'label' => $this->i18n('search_it_search_highlighter_class'),
                         'value' => !empty($this->getConfig('class')) ? $this->getConfig('class') : ''
                 ),
                 array(
                         'type' => 'string',
                         'id' => 'search_it_search_highlighter_inlineCSS',
                         'name' => 'search_it_search_highlighter[inlineCSS]',
-                        'label' => 'inline CSS',
+                        'label' => $this->i18n('search_it_search_highlighter_inlineCSS'),
                         'value' => !empty($this->getConfig('inlineCSS')) ? $this->getConfig('inlineCSS') : ''
                 ),
                 array(
                         'type' => 'checkbox',
                         'id' => 'search_it_search_highlighter_stilEinbinden',
                         'name' => 'search_it_search_highlighter[stilEinbinden]',
-                        'label' => 'Stil CSS einbinden<br /> (Klasse class_search_685)',
+                        'label' => $this->i18n('search_it_search_highlighter_stilEinbinden'),
                         'value' => '1',
                         'checked' => !empty($this->getConfig('stilEinbinden')) && $this->getConfig('stilEinbinden') == 1
                 ),
@@ -80,7 +78,7 @@ $content[] = search_it_getSettingsFormSection('stil_settings', $this->i18n('sear
                         'type' => 'select',
                         'id' => 'search_it_search_highlighter_stil',
                         'name' => 'search_it_search_highlighter[stil]',
-                        'label' => 'Stil (CSS)',
+                        'label' => $this->i18n('search_it_search_highlighter_stil'),
                         'options' => $optionsstil
                 ),
 
@@ -97,17 +95,11 @@ $content[] = search_it_getSettingsFormSection('stil_settings', $this->i18n('sear
                         'value' => !empty($this->getConfig('stil2')) ? $this->getConfig('stil2') : ''
                 ),
                 array(
-                    'type' => 'hidden',
-                    'id' => 'search_it_search_highlighter_stil2',
-                    'name' => 'search_it_search_highlighter[stil2]',
-                    'value' => !empty($this->getConfig('stil2')) ? $this->getConfig('stil2') : ''
-                ),
-                array(
-                    'type' => 'text',
-                    'id' => 'search_it_search_highlighter_stilEigen',
-                    'name' => 'search_it_search_highlighter[stilEigen]',
-                    'label' => 'Eigener Stil',
-                    'value' => $this->getConfig('stilEigen')
+                        'type' => 'text',
+                        'id' => 'search_it_search_highlighter_stilEigen',
+                        'name' => 'search_it_search_highlighter[stilEigen]',
+                        'label' => $this->i18n('search_it_search_highlighter_stilEigen'),
+                        'value' => $this->getConfig('stilEigen')
                 )
             ),
             false );
@@ -115,14 +107,14 @@ $content[] = search_it_getSettingsFormSection('stil_settings', $this->i18n('sear
 
 //$content = array();
 $content[] = '<div class="rex-form-row">
-                <p class="rex-form-col-a rex-form-text" style="margin: 5px;">
+                <p class="rex-form-col-a rex-form-text">
                     F&uuml;r die Ausgabe wird eine modifizierte <a href="http://wiki.redaxo.de/index.php?n=R4.Search_it#example_result2" target="_blank">Search_it Ausgabemaske</a> ben&ouml;tigt.
                     <br />
                     Der Suchterm muss an den aufgerufenen Artikel &uuml;bergeben werden. Dies geschieht mit dem Querystring &quot;&amp;search_highlighter=&quot;
                 </p>
 
                 <div style="overflow: auto;">'.
-    rex_string::highlight('<h4><a href="\'. ($url = htmlspecialchars($article->getUrl()) . \'&search_highlighter=\' . urlencode(rex_request(\'search_it\'))) .\'">\'.$article->getName().\'</a></h4>').'
+    rex_string::highlight('<h4><a href="\'. ($url = htmlspecialchars($article->getUrl()) . \'&search_highlighter=\' . urlencode(rex_request(\'searchit\'))) .\'">\'.$article->getName().\'</a></h4>').'
                 
                 </div>
             </div>';

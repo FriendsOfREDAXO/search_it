@@ -50,7 +50,7 @@ class search_it {
     var $maxHighlightedTextChars = 100;
     var $maxTeaserChars = 200;
     var $mediaFolder;
-    var $order = array('RELEVANCE587' => 'DESC');
+    var $order = array('RELEVANCE_SEARCH_IT' => 'DESC');
     var $redaxo = false;
     var $searchArray = array();
     var $searchEntities = false;
@@ -1220,8 +1220,8 @@ class search_it {
         $col2upper = '';
         foreach($_order as $col => $dir){
             $i++;
-            if('RELEVANCE_587' == ($col2upper = strtoupper((string)$col))){
-                $this->errormessages = sprintf('Column %d must not be named "RELEVANCE_587". Column %d is ignored for the sort order',$i,$i);
+            if('RELEVANCE_SEARCH_IT' == ($col2upper = strtoupper((string)$col))){
+                $this->errormessages = sprintf('Column %d must not be named "RELEVANCE_SEARCH_IT". Column %d is ignored for the sort order',$i,$i);
             } else {
                 if(!in_array($dir2upper = strtoupper((string)$dir), array('ASC','DESC'))){
                     $this->errormessages = sprintf('Column %d has no correct sort order (ASC or DESC). Descending (DESC) sort order is assumed',$i);
@@ -2005,10 +2005,10 @@ class search_it {
 
         $selectFields = array();
         if($this->groupBy){
-            $selectFields[] = sprintf('(SELECT SUM%s FROM `%s` summe WHERE summe.fid = r1.fid AND summe.ftable = r1.ftable) AS RELEVANCE587', $match, $this->tablePrefix.'search_it_index');
-            $selectFields[] = sprintf('(SELECT COUNT(*) FROM `%s` summe WHERE summe.fid = r1.fid AND (summe.ftable IS NULL OR summe.ftable = r1.ftable) AND (summe.fcolumn IS NULL OR summe.fcolumn = r1.fcolumn) AND summe.texttype = r1.texttype) AS COUNT587', $this->tablePrefix.'search_it_index');
+            $selectFields[] = sprintf('(SELECT SUM%s FROM `%s` summe WHERE summe.fid = r1.fid AND summe.ftable = r1.ftable) AS RELEVANCE_SEARCH_IT', $match, $this->tablePrefix.'search_it_index');
+            $selectFields[] = sprintf('(SELECT COUNT(*) FROM `%s` summe WHERE summe.fid = r1.fid AND (summe.ftable IS NULL OR summe.ftable = r1.ftable) AND (summe.fcolumn IS NULL OR summe.fcolumn = r1.fcolumn) AND summe.texttype = r1.texttype) AS COUNT_SEARCH_IT', $this->tablePrefix.'search_it_index');
         } else {
-            $selectFields[] = $match.' AS RELEVANCE587';
+            $selectFields[] = $match.' AS RELEVANCE_SEARCH_IT';
         }
 
         $selectFields[] = '`id`';
@@ -2108,7 +2108,7 @@ class search_it {
             $i++;
 
             if($this->groupBy) {
-                $count += $hit['COUNT587'];
+                $count += $hit['COUNT_SEARCH_IT'];
             }
         }
 

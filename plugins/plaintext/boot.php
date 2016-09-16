@@ -7,6 +7,7 @@
 
         rex_extension::register('SEARCH_IT_PLAINTEXT', 'search_it_doPlaintext');
 
+        //set default Values on installation
         if (!$this->hasConfig()) {
             $this->setConfig(array(
                 'order' => 'selectors,regex,textile,striptags',

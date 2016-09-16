@@ -1,4 +1,5 @@
 <?php
+
 if( rex_post('sendit', 'boolean') ){
 
     $posted_config = rex_post('search_it_stats', [

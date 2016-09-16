@@ -1,1 +1,7 @@
 search_it_search_highlighter_site_title = Search Highlighter
+search_it_search_highlighter_tag = HTML-Tag, der die Suchbegriffe umgibt
+search_it_search_highlighter_class = CSS Klasse, die die Suchbegriffe umgibt
+search_it_search_highlighter_inlineCSS = Inline CSS, das die Suchbegriffe umgibt
+search_it_search_highlighter_stilEinbinden = Stil CSS-Datei einbinden?
+search_it_search_highlighter_stil = Welchen Stil für die Klasse benutzen ("stil1","stil2" oder "stilEigen")?
+search_it_search_highlighter_stilEigen = Eigene CSS Regeln für "stilEigen"

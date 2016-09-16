@@ -5,5 +5,9 @@ search_it_documentation_general_title = Allgemein
 search_it_documentation_plugins_title = Plugins
 search_it_documentation_modules_title = Suchmodule
 
+search_it_docs_filenotfound = Datei wurde nicht gefunden. Inhalt existiert (noch) nicht. <br />Wir freuen uns über Mithilfe: <a href="https://github.com/yakamara/redaxo_yform_docs/tree/master/de_de" target="_blank">https://github.com/yakamara/redaxo_yform_docs/tree/master/de_de</a>
+search_it_docs_navigation = Navigation
+search_it_docs_content = Inhalt
+
 search_it_help_wiki = Die Dokumentation des Addons finden Sie unter <a href="http://www.redaxo.org/de/wiki/index.php?n=R4.Rexsearch">http://www.redaxo.org/de/wiki/index.php?n=R4.Rexsearch</a>.
 search_it_help_forum = Sollten Sie Fragen oder Probleme haben, können Sie diese im Redaxo-Forum stellen: <a href="http://www.redaxo.org/de/forum/addons-f30/addon-search_it-fulltext-search-addon-t12965.html">http://www.redaxo.org/de/forum/addons-f30/addon-search_it-fulltext-search-addon-t12965.html</a>.

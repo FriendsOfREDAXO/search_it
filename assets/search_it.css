@@ -108,19 +108,6 @@
     font-weight:bold;
 }
 
-/*#search_it_settings_form .checkbox label:before {
-content:'O';
-float:left;
-margin-right:5px;
-color:#a00;
-font-size:1.1em;
-}
-
-#search_it_settings_form .checkbox input:checked + label:before {
-content:'Q';
-color:#0a0;
-}*/
-
 #search_it_settings_folders {
     color:#14568A;
     background:#fff;

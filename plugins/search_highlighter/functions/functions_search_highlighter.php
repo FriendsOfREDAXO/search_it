@@ -11,7 +11,7 @@ function search_it_search_highlighter_output($_ep){
         $ausgabeEnde = '';
 
         if (!empty($sh->getConfig('stilEinbinden'))){
-            $subject = str_replace('</head>', '<link rel="stylesheet" type="text/css" href="' . rex_url::frontendController( array('stil'=>urlencode($sh->getConfig('stil')))) . '" media="screen" />'."\n".'</head>', $subject);
+            $subject = str_replace('</head>', '<link rel="stylesheet" type="text/css" href="' . rex_url::frontendController( array('highlighter_stil'=>urlencode($sh->getConfig('stil')))) . '" media="screen" />'."\n".'</head>', $subject);
         }
 
         $ausgabeAnfang = '<' . $sh->getConfig('tag');
@@ -31,9 +31,9 @@ function search_it_search_highlighter_output($_ep){
 
 
 /*
-function rex_search_search_highlighter_getHighlightedText($subject, $begriffe, $tags){
+function search_it_search_highlighter_getHighlightedText($subject, $begriffe, $tags){
 
-    $matches = preg_split(rex_search_search_highlighter_encodeRegex('~(\s)~'), $begriffe);
+    $matches = preg_split(utf8_encode('~(\s)~u'), $begriffe);
 
     //nur innerhalb des bodys suchen
     $vorkommenBody = stripos($subject, '<body');
@@ -78,9 +78,6 @@ function search_it_search_highlighter_getHighlightedText($_subject, $_searchStri
     return preg_replace('~(?<!\<)(' . implode('|', $searchterms) . ')(?![^<]*\>)~ims', $_tags[0] . '$1' . $_tags[1], $_subject);
 }
 
-function search_it_search_highlighter_encodeRegex($_regex){
-    return utf8_encode($_regex . 'u');
-}
 
 function search_it_search_highlighter_stil_css($_stil){
 

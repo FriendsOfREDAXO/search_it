@@ -15,8 +15,7 @@ if( rex_post('sendit', 'boolean') ){
 
     //tell it
     echo rex_view::success($this->i18n('search_it_settings_saved'));
-    $url = rex::getServer().rex_url::currentBackendPage();
-    header('Location: '. $url );
+
 }
 
 

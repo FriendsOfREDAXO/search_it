@@ -8,4 +8,5 @@ description: 'translate:search_it_search_highlighter_site_title'
 
 page:
     title: 'translate:search_it_search_highlighter_site_title'
+    icon: rex-icon fa-sun-o
 

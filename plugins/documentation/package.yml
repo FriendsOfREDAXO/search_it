@@ -11,7 +11,7 @@ page:
     pjax: false
     icon: rex-icon fa-book
     #itemClass: pull-right
-    subpages:
-             general: { title: 'translate:documentation_general_title' }
-             plugins: { title: 'translate:documentation_plugins_title' }
-             modules: { title: 'translate:documentation_modules_title' }
+#    subpages:
+#             general: { title: 'translate:documentation_general_title' }
+#             plugins: { title: 'translate:documentation_plugins_title' }
+#             modules: { title: 'translate:documentation_modules_title' }

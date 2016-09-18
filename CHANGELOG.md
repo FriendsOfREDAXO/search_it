@@ -1,5 +1,12 @@
 #Änderungen von search_it
 
+##Version 5.8.2 (2016-09-18)
+  - Viele Bugs beseitigt
+  - Verbesserte Doku (wie yform-docs)
+
+##Version 5.8.1 (2016-09-02)
+  - Dokumentation als plugin
+
 ##Version 5.8.0 (2016-09-01)
   - Frontend-Mode ausgebaut
 

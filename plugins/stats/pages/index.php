@@ -37,6 +37,18 @@ if (!empty($func)) {
 }
 
 $content = array();
+
+$content[] = search_it_getSettingsFormSection(
+    'search_it_stats_description',
+    $this->i18n('search_it_stats_description_title'),
+    array(
+        array(
+            'type' => 'directoutput',
+            'output' => ''
+        )
+    ),false
+);
+
 $content[] =  '<div id="stats_elements">';
 
 $stats = new search_it_stats();
@@ -200,10 +212,10 @@ $content[] =  '</div>';
     jQuery(document).ready(function () {
 
     // display links for showing and hiding all sections
-    jQuery('#search_it_stats_form section .panel-body').first()
+    jQuery('#search_it_stats_description dl').first()
         .css('position', 'relative')
-        .prepend(
-            jQuery('<div>')
+        .append(
+            jQuery('<dt>')
                 .css('font-weight', '900')
                 .css('margin-bottom','1em')
                 .append(

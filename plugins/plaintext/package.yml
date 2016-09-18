@@ -8,4 +8,4 @@ description: 'translate:search_it_plaintext_title'
 
 page:
     title: 'translate:search_it_plaintext_title'
-
+    icon: rex-icon fa-file-text-o

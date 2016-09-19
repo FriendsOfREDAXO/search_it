@@ -99,7 +99,7 @@ class search_it {
             $this->similarwords = !!$this->similarwordsMode;
             $this->similarwordsPermanent = rex_addon::get('search_it')->getConfig('similarwords_permanent');
             $this->fileExtensions = rex_addon::get('search_it')->getConfig('fileextensions');
-            $this->includeDirectories = rex_addon::get('search_it')->getConfig('indexfolders');
+            $this->includeDirectories = is_array(rex_addon::get('search_it')->getConfig('indexfolders')) ? rex_addon::get('search_it')->getConfig('indexfolders') : array();
             $this->indexMediapool = rex_addon::get('search_it')->getConfig('indexmediapool');
             $this->ep_outputfilter = rex_addon::get('search_it')->getConfig('ep_outputfilter');
         }

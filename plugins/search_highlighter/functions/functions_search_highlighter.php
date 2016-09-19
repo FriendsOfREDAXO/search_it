@@ -23,9 +23,13 @@ function search_it_search_highlighter_output($_ep){
 
         $tags = array($ausgabeAnfang, $ausgabeEnde);
 
-        $subject = search_it_search_highlighter_getHighlightedText($subject, $suchbegriffe, $tags);
+        $bodystart = strpos($subject,'<body>')+6;
+        $bodyend = strpos($subject,'</body>');
+        $body = substr($subject,$bodystart,$bodyend-$bodystart);
+        $body = search_it_search_highlighter_getHighlightedText($body, $suchbegriffe, $tags);
+        $subject = substr($subject,0,$bodystart). $body .substr($subject,$bodyend);
 
-        return $subject;
+    return $subject;
 
 }
 

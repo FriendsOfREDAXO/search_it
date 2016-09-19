@@ -71,7 +71,7 @@ foreach (explode(',', $this->getConfig('order')) as $elem) {
                         'type' => 'text',
                         'id' => 'search_it_plaintext_regex',
                         'name' => 'search_it_plaintext[regex]',
-                        'label' => $this->i18n('search_it_plaintext_regex_label'),
+                        'label' => rex_i18n::rawMsg('search_it_plaintext_regex_label'),
                         'value' => !empty($this->getConfig('regex')) ? htmlspecialchars($this->getConfig('regex')) : ''
                     )
                 ), 'edit', true

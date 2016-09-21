@@ -311,37 +311,6 @@ class search_it {
 
 
     /**
-     * If utf8-encoding is used, the parameter will be appended with an "u".
-     * Since there is only UTF-8 supported, it always appends the "u".
-     *
-     * @param string $_regex
-     * @return string
-     */
-    function encodeRegex($_regex){
-        return $_regex.'u';
-    }
-
-    /**
-     * Simulates the frontend by setting $REX['REDAXO'] to false.
-     * The original state is saved in $this->redaxo.
-     */
-    function beginFrontendMode(){
-        /*$this->redaxo = rex::isBackend();
-        rex::setProperty('redaxo',false);*/
-
-    }
-
-
-    /**
-     * Ends the frontend-mode by setting $REX['REDAXO'] to the original state.
-     */
-    function endFrontendMode(){
-        /* rex::setProperty('redaxo',$this->redaxo);*/
-
-    }
-
-
-    /**
      * Sets the maximum count of letters the teaser of a searched through text may have.
      *
      * @param int $_count
@@ -463,15 +432,11 @@ class search_it {
             // index article
             $article = rex_article::get(intval($_id), $langID);
             if(is_object($article) AND ($article->isOnline() OR $this->indexOffline)){
-                $this->beginFrontendMode();
 
                 if(ini_get('allow_url_fopen') AND $this->indexViaHTTP){
-                    //rex_url::init(new rex_path_default_provider('', 'redaxo', false));
-                    //echo rex::getServer().substr(rex_getUrl($_id,$langID),3);
+
                     $articleText = @file_get_contents(rex::getServer().substr(rex_getUrl($_id,$langID),3));
 
-                    //$articleText = file_get_contents(rex::getServer().'index.php?article_id='.$_id.'&clang='.$langID);
-                    //rex_url::init(new rex_path_default_provider('../', 'redaxo', true));
                 } elseif ($_id != 0 AND $this->dontIndexRedirects){
                     $rex_article = new rex_article_content(intval($_id), $langID);
                     $article_content_file = rex_path::addonCache('structure', $_id . '.' . $langID . '.content');
@@ -483,7 +448,7 @@ class search_it {
                         }
                     }
 
-                    if(file_exists($article_content_file) AND preg_match($this->encodeRegex('~(header\s*\(\s*["\']\s*Location\s*:)|(rex_redirect\s*\()~is'), rex_file::get($article_content_file))){
+                    if(file_exists($article_content_file) AND preg_match('~(header\s*\(\s*["\']\s*Location\s*:)|(rex_redirect\s*\()~isu', rex_file::get($article_content_file))){
                         $return[$v] = SEARCH_IT_ART_REDIRECT;
                         continue;
                     }
@@ -515,7 +480,8 @@ class search_it {
                 $articleData['fid'] = intval($_id);
                 $articleData['catid'] = $article->getCategoryId();
                 $articleData['unchangedtext'] = $articleText;
-                $articleData['plaintext'] = $plaintext = $this->getPlaintext($articleText);
+                $plaintext = $this->getPlaintext($articleText);
+                $articleData['plaintext'] = $plaintext;
 
                 if(array_key_exists($this->tablePrefix.'article', $this->includeColumns)){
                     $additionalValues = array();
@@ -530,7 +496,7 @@ class search_it {
                     $articleData['values'] = serialize($additionalValues);
                 }
 
-                foreach(preg_split($this->encodeRegex('~[[:punct:][:space:]]+~ism'), $plaintext) as $keyword){
+                foreach(preg_split('~[[:punct:][:space:]]+~ismu', $plaintext) as $keyword){
                     if($this->significantCharacterCount <= mb_strlen($keyword,'UTF-8')) {
                         $keywords[] = array('search' => $keyword, 'clang' => $langID);
                     }
@@ -542,7 +508,6 @@ class search_it {
                 $insert->setValues($articleData);
                 $insert->insert();
 
-                $this->endFrontendMode();
 
                 $return[$langID] = SEARCH_IT_ART_GENERATED;
             }
@@ -620,12 +585,12 @@ class search_it {
         $count = false;
         if($sql->select('*')){
 
-            $this->beginFrontendMode();
             $count = 0;
             $keywords = array();
 
-            foreach($sql->getArray() as $value){
-                if(!empty($value[$_column]) AND ($this->indexOffline OR $this->tablePrefix.'article' != $_table OR $value['status'] == '1') AND ($this->tablePrefix.'article' != $_table OR !in_array($value['id'],$this->excludeIDs))){
+            foreach($sql->getArray() as $row){
+                if( !empty($row[$_column]) AND ($this->indexOffline OR $this->tablePrefix.'article' != $_table OR $row['status'] == '1')
+                    AND ($this->tablePrefix.'article' != $_table OR !in_array($row['id'],$this->excludeIDs)) ){
                     $insert = rex_sql::factory();
                     $indexData = array();
 
@@ -633,22 +598,22 @@ class search_it {
                     $indexData['ftable'] = $_table;
                     $indexData['fcolumn'] = $_column;
 
-                    if(array_key_exists('clang',$value)) {
-                        $indexData['clang'] = $value['clang_id'];
+                    if(array_key_exists('clang',$row)) {
+                        $indexData['clang'] = $row['clang_id'];
                     } else {
                         $indexData['clang'] = NULL;
                     }
                     $indexData['fid'] = NULL;
-                    if(is_string($_idcol) AND array_key_exists($_idcol,$value)) {
-                        $indexData['fid'] = $value[$_idcol];
+                    if(is_string($_idcol) AND array_key_exists($_idcol,$row)) {
+                        $indexData['fid'] = $row[$_idcol];
                     } elseif($_table == $this->tablePrefix.'article'){
-                        $indexData['fid'] = $value['id'];
+                        $indexData['fid'] = $row['id'];
                     } elseif(count($primaryKeys) == 1) {
-                        $indexData['fid'] = $value[$primaryKeys[0]];
+                        $indexData['fid'] = $row[$primaryKeys[0]];
                     } elseif(count($primaryKeys)){
                         $fids = array();
                         foreach($primaryKeys as $pk){
-                            $fids[$pk] = $value[$pk];
+                            $fids[$pk] = $row[$pk];
                         }
                         $indexData['fid'] = json_encode($fids);
                     }
@@ -656,26 +621,27 @@ class search_it {
                     if(is_null($indexData['fid'])) {
                         $indexData['fid'] = $this->getMinFID();
                     }
-                    if(array_key_exists('parent_id',$value)){
-                        $indexData['catid'] = $value['parent_id'];
+                    if(array_key_exists('parent_id',$row)){
+                        $indexData['catid'] = $row['parent_id'];
                         if($_table == $this->tablePrefix.'article'){
-                            $indexData['catid'] = intval($value['startarticle']) ? $value['id'] : $value['parent_id'];
+                            $indexData['catid'] = intval($row['startarticle']) ? $row['id'] : $row['parent_id'];
                         }
-                    } elseif(array_key_exists('category_id',$value)) {
-                        $indexData['catid'] = $value['category_id'];
+                    } elseif(array_key_exists('category_id',$row)) {
+                        $indexData['catid'] = $row['category_id'];
                     } else {
                         $indexData['catid'] = NULL;
                     }
                     $additionalValues = array();
                     foreach($this->includeColumns[$_table] as $col){
-                        $additionalValues[$col] = $value[$col];
+                        $additionalValues[$col] = $row[$col];
                     }
                     $indexData['values'] = serialize($additionalValues);
 
-                    $indexData['unchangedtext'] = (string) $value[$_column];
-                    $indexData['plaintext'] = ($plaintext = $this->getPlaintext($value[$_column]));
+                    $indexData['unchangedtext'] = (string) $row[$_column];
+                    $plaintext = $this->getPlaintext($row[$_column]);
+                    $indexData['plaintext'] = $plaintext;
 
-                    foreach(preg_split($this->encodeRegex('~[[:punct:][:space:]]+~ism'), $plaintext) as $keyword){
+                    foreach(preg_split('~[[:punct:][:space:]]+~ismu', $plaintext) as $keyword){
                         if($this->significantCharacterCount <= mb_strlen($keyword,'UTF-8')) {
                             $keywords[] = array('search' => $keyword, 'clang' => is_null($indexData['clang']) ? false : $indexData['clang']);
                         }
@@ -683,18 +649,18 @@ class search_it {
 
                     $indexData['teaser'] = '';
                     if($this->tablePrefix.'article' == $_table){
-                        $rex_article = new rex_article_content(intval($value['id']), intval($value['clang_id']));
+                        $rex_article = new rex_article_content(intval($row['id']), intval($row['clang_id']));
                         $teaser = true;
-                        $article_content_file = rex_path::addonCache('structure', intval($value['id']) . '.' . intval($value['clang_id']) . '.content');
+                        $article_content_file = rex_path::addonCache('structure', intval($row['id']) . '.' . intval($row['clang_id']) . '.content');
                         if(!file_exists($article_content_file)){
-                            $generated = rex_content_service::generateArticleContent(intval($value['id']), intval($value['clang_id']));
+                            $generated = rex_content_service::generateArticleContent(intval($row['id']), intval($row['clang_id']));
                             if($generated !== true){
                                 $teaser = false;
                                 continue;
                             }
                         }
 
-                        if(file_exists($article_content_file) AND preg_match($this->encodeRegex('~(header\s*\(\s*["\']\s*Location\s*:)|(rex_redirect\s*\()~is'), rex_file::get($article_content_file))){
+                        if(file_exists($article_content_file) AND preg_match('~(header\s*\(\s*["\']\s*Location\s*:)|(rex_redirect\s*\()~isu', rex_file::get($article_content_file))){
                             $teaser = false;
                         }
 
@@ -896,7 +862,7 @@ class search_it {
         $fileData['plaintext'] = $plaintext;
 
         $keywords = array();
-        foreach(preg_split($this->encodeRegex('~[[:punct:][:space:]]+~ism'), $plaintext) as $keyword){
+        foreach(preg_split('~[[:punct:][:space:]]+~ismu', $plaintext) as $keyword){
             if($this->significantCharacterCount <= mb_strlen($keyword,'UTF-8')) {
                 $keywords[] = array('search' => $keyword, 'clang' => !isset($fileData['clang']) ? false : $fileData['clang']);
             }
@@ -1279,7 +1245,7 @@ class search_it {
         $this->searchArray = array();
 
         $matches = array();
-        preg_match_all($this->encodeRegex('~(?:(\+*)"([^"]*)")|(?:(\+*)(\S+))~is'), $_searchString, $matches, PREG_SET_ORDER);
+        preg_match_all('~(?:(\+*)"([^"]*)")|(?:(\+*)(\S+))~isu', $_searchString, $matches, PREG_SET_ORDER);
 
         $count = 0;
         $replaceValues = array();
@@ -1300,7 +1266,7 @@ class search_it {
             $notBlacklisted = true;
             // blacklisted words are excluded
             foreach($this->blacklist as $blacklistedWord){
-                if(preg_match($this->encodeRegex('~\b'.preg_quote($blacklistedWord,'~').'\b~is'), $word)){
+                if(preg_match('~\b'.preg_quote($blacklistedWord,'~').'\b~isu', $word)){
                     $this->blacklisted[] = array($blacklistedWord => $word);
                     $notBlacklisted = false;
                 }
@@ -1401,8 +1367,8 @@ class search_it {
         }
 
         if($process){
-            $tags2nl = $this->encodeRegex('~</?(address|blockquote|center|del|dir|div|dl|fieldset|form|h1|h2|h3|h4|h5|h6|hr|ins|isindex|menu|noframes|noscript|ol|p|pre|table|ul)[^>]+>~si');
-            $_text = trim(strip_tags(preg_replace(array($this->encodeRegex('~<(head|script).+?</(head|script)>~si'), $tags2nl, $this->encodeRegex('~<[^>]+>~si'), $this->encodeRegex('~[\n\r]+~si'), $this->encodeRegex('~[\t ]+~si')), array('',"\n",' ',"\n",' '), $_text)));
+            $tags2nl = '~</?(address|blockquote|center|del|dir|div|dl|fieldset|form|h1|h2|h3|h4|h5|h6|hr|ins|isindex|menu|noframes|noscript|ol|p|pre|table|ul)[^>]+>~siu';
+            $_text = trim(strip_tags(preg_replace(array('~<(head|script).+?</(head|script)>~siu', $tags2nl, '~<[^>]+>~siu', '~[\n\r]+~siu', '~[\t ]+~siu'), array('',"\n",' ',"\n",' '), $_text)));
         }
 
         return $_text;
@@ -1431,25 +1397,25 @@ class search_it {
             case 'paragraph':
                 // split text at punctuation marks
                 if($this->highlightType == 'sentence') {
-                    $regex = '~(\!|\.|\?|[\n]+)~si';
+                    $regex = '~(\!|\.|\?|[\n]+)~siu';
                 }
                 // split text at line breaks
                 if($this->highlightType == 'paragraph'){
-                    $regex = '~([\r\n])~si';
+                    $regex = '~([\r\n])~siu';
                 }
 
-                $Apieces = preg_split($this->encodeRegex($regex), $_text, -1, PREG_SPLIT_DELIM_CAPTURE);
+                $Apieces = preg_split($regex, $_text, -1, PREG_SPLIT_DELIM_CAPTURE);
 
                 $search = array();
                 $replace = array();
                 foreach($this->searchArray as $keyword){
                     $search[] = preg_quote($keyword['search'],'~');
-                    $replace[] = $this->encodeRegex('~'.preg_quote($keyword['search'],'~').'~is');
+                    $replace[] = '~'.preg_quote($keyword['search'],'~').'~isu';
                 }
 
                 $i = 0;
                 for($i = 0; $i < count($Apieces); $i++) {
-                    if (preg_match($this->encodeRegex('~(' . implode('|', $search) . ')~is'), $Apieces[$i])) {
+                    if (preg_match('~(' . implode('|', $search) . ')~isu', $Apieces[$i])) {
                         break;
                     }
                 }
@@ -1459,7 +1425,7 @@ class search_it {
                 }
 
                 $cutted = array();
-                preg_match($this->encodeRegex('~^.*?('.implode('|',$search).').{0,'.$this->maxHighlightedTextChars.'}~ims'), $return, $cutted);
+                preg_match('~^.*?('.implode('|',$search).').{0,'.$this->maxHighlightedTextChars.'}~imsu', $return, $cutted);
 
                 $needEllipses = false;
                 if(strlen($cutted[1]) != strlen($return)) {
@@ -1484,7 +1450,7 @@ class search_it {
                 $_text = preg_replace('~\s+~', ' ', $_text);
                 $replace = array();
                 foreach($this->searchArray as $keyword) {
-                    $replace[] = $this->encodeRegex('~' . preg_quote($keyword['search'], '~') . '~is');
+                    $replace[] = '~' . preg_quote($keyword['search'], '~') . '~isu';
                 }
 
                 $strlen = mb_strlen($_text);
@@ -1492,7 +1458,7 @@ class search_it {
                 for($i = 0; $i < count($this->searchArray); $i++){
                     $hits = array();
                     $offset = 0;
-                    preg_match_all($this->encodeRegex('~((.{0,'.$this->maxHighlightedTextChars.'})'.preg_quote($this->searchArray[$i]['search'],'~').'(.{0,'.$this->maxHighlightedTextChars.'}))~ims'), $_text, $hits, PREG_SET_ORDER);
+                    preg_match_all('~((.{0,'.$this->maxHighlightedTextChars.'})'.preg_quote($this->searchArray[$i]['search'],'~').'(.{0,'.$this->maxHighlightedTextChars.'}))~imsu', $_text, $hits, PREG_SET_ORDER);
 
                     foreach($hits as $hit){
                         $offset = strpos($_text, $hit[0], $offset) + 1;
@@ -1558,7 +1524,7 @@ class search_it {
             case 'teaser':
                 $search = array();
                 foreach($this->searchArray as $keyword)
-                    $search[] = $this->encodeRegex('~'.preg_quote($keyword['search'],'~').'~is');
+                    $search[] = '~'.preg_quote($keyword['search'],'~').'~isu';
 
                 return preg_replace($search, $this->surroundTags[0].'$0'.$this->surroundTags[1], $this->getTeaserText($_text));
                 break;
@@ -1577,7 +1543,7 @@ class search_it {
      */
     function getTeaserText($_text){
         $i = 0;
-        $textArray = preg_split($this->encodeRegex('~\s+~si'), $_text, $this->maxTeaserChars);
+        $textArray = preg_split('~\s+~siu', $_text, $this->maxTeaserChars);
 
         $return = '';
         $aborted = false;
@@ -1872,7 +1838,7 @@ class search_it {
 
             $newsearch = array();
             foreach($this->searchArray as $keyword){
-                if(preg_match($this->encodeRegex('~\s~is'), $keyword['search'])) {
+                if(preg_match('~\s~isu', $keyword['search'])) {
                     $quotes = '"';
                 } else {
                     $quotes = '';

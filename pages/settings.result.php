@@ -8,6 +8,7 @@ if (rex_post('config-submit', 'boolean')) {
         ['maxteaserchars', 'string'],
         ['maxhighlightchars', 'string'],
         ['highlight', 'string'],
+        ['highlighterclass', 'string'],
 
         ['blacklist', 'string'],
         ['exclude_article_ids', 'array'],
@@ -58,6 +59,7 @@ if (rex_post('config-submit', 'boolean')) {
 
 
 $content = '';
+$content2 = array();
 $formElements = [];
 
 
@@ -81,7 +83,7 @@ if ($search_it->highlightType == 'array') {
 $sampleoutput .= '</div></div>';
 
 
-$content2[] = search_it_getSettingsFormSection(
+$content2a = search_it_getSettingsFormSection(
     'search_it_highlighting',
     $this->i18n('search_it_settings_highlight_header'),
     array(
@@ -166,9 +168,24 @@ $content2[] = search_it_getSettingsFormSection(
         array(
             'type' => 'directoutput',
             'output' => '<div class="rex-form-row">'.$sampleoutput.'</div>'
-        )
+        ),
     ),'edit'
 );
+
+$content2[] = $content2a . search_it_getSettingsFormSection(
+    'search_it_highlighterclass',
+    $this->i18n('search_it_settings_search_highlighter'),
+    array(
+        array(
+            'type' => 'string',
+            'id' => 'search_it_highlighterclass',
+            'name' => 'search_config[highlighterclass]',
+            'label' => $this->i18n('search_it_settings_highlighterclass'),
+            'value' => !empty($this->getConfig('highlighterclass')) ? $this->getConfig('highlighterclass') : ''
+        ),
+    ),'edit'
+);
+
 
 $categories = array();
 foreach(search_it_getCategories() as $id => $name){

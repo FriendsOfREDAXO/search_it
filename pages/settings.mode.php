@@ -12,11 +12,10 @@ if (rex_post('config-submit', 'boolean')) {
         ['indexmode', 'string'],
         ['indexoffline', 'bool'],
         ['automaticindex', 'bool'],
+        ['reindex_cols_onforms', 'bool'],
         ['ep_outputfilter', 'bool'],
 
     ]);
-
-
 
     /*    echo '<pre>';
     var_dump(rex_post('search_config'));
@@ -28,7 +27,6 @@ if (rex_post('config-submit', 'boolean')) {
         if(in_array($changed, array(
             'indexmode',
             'indexoffline',
-            'automaticindex',
             'ep_outputfilter',
             'blacklist',
             'exclude_article_ids',
@@ -207,6 +205,14 @@ $content[] = search_it_getSettingsFormSection(
             'label' => $this->i18n('search_it_settings_automaticindex_label'),
             'value' => '1',
             'checked' => $this->getConfig('automaticindex')
+        ),
+        array(
+            'type' => 'checkbox',
+            'id' => 'search_it_reindex_cols_onforms',
+            'name' => 'search_config[reindex_cols_onforms]',
+            'label' => $this->i18n('search_it_settings_reindex_cols_onforms_label'),
+            'value' => '1',
+            'checked' => $this->getConfig('reindex_cols_onforms')
         ),
         array(
             'type' => 'checkbox',

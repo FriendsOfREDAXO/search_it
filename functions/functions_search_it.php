@@ -307,6 +307,7 @@ function search_it_handle_extensionpoint($_ep){
                 $search_it->indexArticle($_params['article_id'], $_params['clang']);
             }
         break;
+
     }
 
     // Cache leeren
@@ -455,4 +456,78 @@ function search_it_config_unserialize($_str){
     }
   
     return $return;
+}
+
+// ex search highlighter plugin
+function search_it_search_highlighter_output($_ep){
+
+    $subject = $_ep->getSubject();
+
+    $suchbegriffe = rex_request('search_highlighter', 'string', '');
+
+    $si = rex_addon::get('search_it');
+    $beginn = '<span class="' . $si->getConfig('highlighterclass').'">';
+    $ende = '</span>';
+    $tags = array($beginn, $ende);
+
+    $bodystart = strpos($subject,'<body>')+6;
+    $bodyend = strpos($subject,'</body>');
+    $body = substr($subject,$bodystart,$bodyend-$bodystart);
+    $body = search_it_search_highlighter_getHighlightedText($body, $suchbegriffe, $tags);
+    $subject = substr($subject,0,$bodystart). $body .substr($subject,$bodyend);
+
+    return $subject;
+
+}
+
+function search_it_search_highlighter_getHighlightedText($_subject, $_searchString, $_tags){
+    preg_match_all('~(?:(\+*)"([^"]*)")|(?:(\+*)(\S+))~is', $_searchString, $matches, PREG_SET_ORDER);
+
+    $searchterms = array();
+    foreach ($matches as $match) {
+        if (count($match) == 5) {
+            // words without double quotes (foo)
+            $word = $match[4];
+        } elseif (!empty($match[2])) {
+            // words with double quotes ("foo bar")
+            $word = $match[2];
+        } else {
+            continue;
+        }
+        $searchterms[] = preg_quote($word, '~');
+    }
+
+    return preg_replace('~(?<!\<)(' . implode('|', $searchterms) . ')(?![^<]*\>)~ims', $_tags[0] . '$1' . $_tags[1], $_subject);
+}
+
+// ex reindex plugin
+function search_it_reindex_cols($_ep){
+
+    $_params = $_ep->getParams();
+    $si = rex_addon::get('search_it');
+
+    $id = 0;
+
+    if(!empty($_params['yform'])){
+        $tablename = $_params['form']->params['main_table'];
+        $wherecondition = $_params['form']->params['main_where'];
+    } else {
+        $tablename = $_params['form']->getTableName();
+        $wherecondition = $_params['form']->getWhereCondition();
+    }
+
+    $last_id = intval($_params['sql']->getLastId());
+
+    if(!array_key_exists($tablename,$si->getConfig('include')) OR !is_array($si->getConfig('include')[$tablename])) {
+        return true;
+    }
+
+    if(empty($id)) { $id = $last_id; }
+
+    $search_it = new search_it;
+    foreach($si->getConfig('include')[$tablename] as $col) {
+        $search_it->indexColumn($tablename, $col, false, false, false, false, $wherecondition);
+    }
+
+    return true;
 }

@@ -37,10 +37,3 @@ Bei der Installation werden fünf Datenbanktabellen angelegt:
 
 Nach der Installation sollten zunächst die Einstellungen vorgenommen werden und anschließend der Index vollständig generiert werden.
 
-## Credits
-
-Port von RexSearch für R4 auf REDAXO 5
-Original von XONG
-
-
-

@@ -24,6 +24,15 @@
     $curDir = __DIR__;
     require_once $curDir . '/functions/functions_search_it.php';
 
+    if ( rex_request('search_highlighter', 'string', '') != '' && rex_addon::get('search_it')->getConfig('highlighterclass') != '' ) {
+        rex_extension::register('OUTPUT_FILTER', 'search_it_search_highlighter_output');
+    }
+
+    if ( rex_addon::get('search_it')->getConfig('reindex_cols_onforms') == true ) {
+        rex_extension::register('REX_FORM_SAVED', 'search_it_reindex_cols');
+        rex_extension::register('REX_YFORM_SAVED', 'search_it_reindex_cols');
+        rex_extension::register('REX_FORM_DELETED', 'search_it_reindex_cols');
+    }
 
     if ( rex::isBackend() && rex::getUser() ) {
         // automatic indexing
@@ -41,7 +50,7 @@
                 'MEDIA_ADDED',
                 'MEDIA_UPDATED',
                 'SLICE_UPDATED',
-                'SLICE_SHOW'
+                'SLICE_SHOW',
             );
             search_it_register_extensions($extensionPoints);
         }

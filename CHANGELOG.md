@@ -1,5 +1,8 @@
 #Änderungen von search_it
 
+##Version 5.9.0 (2016-09-24)
+  - Plugin Search Highlighter und Reindex in das Addon eingebaut
+
 ##Version 5.8.2 (2016-09-18)
   - Viele Bugs beseitigt
   - Verbesserte Doku (wie yform-docs)
@@ -12,7 +15,7 @@
 
 ##Version 5.7.9 (2016-08-31)
   - Portierung auf R5
-  - Umbenennung von **"RexSearch"** in **"search_it"**
+  - Umbenennung von **"RexSearch"** in **"Search it"**
   - die sql->escape Methode umgibt das Ergebnis mit single Quotes, was alle SQL Abfragen fehlerhaft machte.
   - "Frontend-Mode" und "outputfilter anwenden" ging so nicht - rex::setProperty('redaxo') 
   haben dann aber geholfen.

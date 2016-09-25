@@ -28,6 +28,7 @@ search_it_settings_indexmode_viacache = Indexierung der Artikel über den Redaxo
 search_it_settings_indexmode_viacachetpl = Indexierung der Artikel über den Redaxo-Cache (mit Template, liefert das gleiche Ergebnis wie per HTTP-GET-Anfrage)
 search_it_settings_indexoffline = Offline-Artikel indexieren
 search_it_settings_automaticindex_label = Artikel (ADD, EDIT, DELETE) automatisch (de)indexieren
+search_it_settings_reindex_cols_onforms_label = Reindizieren aller Spalten, wenn Tabellen mit yform oder form bearbeitet werden
 search_it_settings_ep_outputfilter_label = Extension Point "OUTPUT_FILTER" aufrufen
 
 search_it_settings_searchmode = MySQL-Suchmodus
@@ -50,6 +51,8 @@ search_it_settings_highlight_surroundtextsingle = Für jeden gefundenen Suchbegr
 search_it_settings_highlight_teaser = Als Teaser, in dem eventuell vorkommende Suchbegriffe hervorgehoben sind
 search_it_settings_highlight_array = Als Array mit allen Suchbegriffen und Textstellen
 search_it_settings_highlight_sample = Beispielausgabe bei Sucheingabe
+search_it_settings_search_highlighter = Search Highlighter
+search_it_settings_highlighterclass = Wenn Sie hier eine CSS-Klasse angeben, wird um alle gefundenden Suchbegriffe ein <span> Element mit dieser Klasse gelegt, wenn ein Suchergebnis geklickt wurde und angezeigt wird.
 
 search_it_settings_similarwords_label = Ähnlichkeitssuche
 search_it_settings_similarwords_none = Deaktivieren

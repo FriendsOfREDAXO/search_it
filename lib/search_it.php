@@ -34,6 +34,7 @@ class search_it {
     var $groupBy = true;
     var $hashMe = '';
     var $highlightType = 'surroundtext';
+    var $highlighterclass = '';
     var $includeColumns = array();
     var $includeDirectories = array();
     var $includePath;
@@ -51,7 +52,6 @@ class search_it {
     var $maxTeaserChars = 200;
     var $mediaFolder;
     var $order = array('RELEVANCE_SEARCH_IT' => 'DESC');
-    var $redaxo = false;
     var $searchArray = array();
     var $searchEntities = false;
     var $searchInIDs = array();
@@ -96,7 +96,7 @@ class search_it {
             $this->indexWithTemplate = intval(rex_addon::get('search_it')->getConfig('indexmode')) == 2;
             $this->indexOffline = rex_addon::get('search_it')->getConfig('indexoffline');
             $this->similarwordsMode = intval(rex_addon::get('search_it')->getConfig('similarwordsmode'));
-            $this->similarwords = !!$this->similarwordsMode;
+            $this->similarwords = (bool) $this->similarwordsMode;
             $this->similarwordsPermanent = rex_addon::get('search_it')->getConfig('similarwords_permanent');
             $this->fileExtensions = rex_addon::get('search_it')->getConfig('fileextensions');
             $this->includeDirectories = is_array(rex_addon::get('search_it')->getConfig('indexfolders')) ? rex_addon::get('search_it')->getConfig('indexfolders') : array();
@@ -677,7 +677,6 @@ class search_it {
 
             $this->storeKeywords($keywords, false);
 
-            $this->endFrontendMode();
 
         } else {
             return false;
@@ -878,6 +877,7 @@ class search_it {
         return SEARCH_IT_FILE_GENERATED;
     }
 
+
     function getMinFID(){
         $minfid_sql = rex_sql::factory();
         $minfid_result = $minfid_sql->getArray('SELECT MIN(CONVERT(fid, SIGNED)) as minfid FROM `'.$this->tablePrefix.'search_it_index`');
@@ -980,7 +980,7 @@ class search_it {
      */
     function setBlacklist($_words){
         foreach($_words as $key => $word){
-            $this->blacklist[] = $tmpkey = (string) ($this->ci?strtolower($word):$word);
+            $this->blacklist[] = $tmpkey = (string) ( $this->ci ? strtolower($word) : $word );
             $this->hashMe .= $tmpkey;
         }
     }
@@ -1275,7 +1275,7 @@ class search_it {
             if($notBlacklisted){
                 // whitelisted words get extra weighted
                 $this->searchArray[$count] = array( 'search' => $word,
-                    'weight' => strlen($plus) + 1 + (array_key_exists($word,$this->whitelist)?$this->whitelist[$word]:0),
+                    'weight' => strlen($plus) + 1 + ( array_key_exists($word,$this->whitelist) ? $this->whitelist[$word] : 0 ),
                     'clang' => $this->clang
                 );
                 $count++;
@@ -1711,10 +1711,10 @@ class search_it {
                 $simWords[] = sprintf(
                     "(%s, '%s', '%s', '%s', %s)",
                     $simWordsSQL->escape($keyword['search']),
-                    ($this->similarwordsMode & SEARCH_IT_SIMILARWORDS_SOUNDEX)?soundex($keyword['search']):'',
-                    ($this->similarwordsMode & SEARCH_IT_SIMILARWORDS_METAPHONE)?metaphone($keyword['search']):'',
-                    ($this->similarwordsMode & SEARCH_IT_SIMILARWORDS_COLOGNEPHONE)?$this->cologne_phone($keyword['search']):'',
-                    (isset($keyword['clang']) AND $keyword['clang']!==false)?$keyword['clang']:'-1'
+                    ( $this->similarwordsMode & SEARCH_IT_SIMILARWORDS_SOUNDEX ) ? soundex($keyword['search']) : '',
+                    ( $this->similarwordsMode & SEARCH_IT_SIMILARWORDS_METAPHONE ) ? metaphone($keyword['search']) : '',
+                    ( $this->similarwordsMode & SEARCH_IT_SIMILARWORDS_COLOGNEPHONE ) ? $this->cologne_phone($keyword['search']) : '',
+                    ( isset($keyword['clang']) AND $keyword['clang'] !== false ) ? $keyword['clang'] : '-1'
                 );
             }
         }
@@ -1792,15 +1792,15 @@ class search_it {
             $simwords = array();
             foreach($this->searchArray as $keyword){
                 $sounds = array();
-                if($this->similarwordsMode & SEARCH_IT_SIMILARWORDS_SOUNDEX) {
+                if( $this->similarwordsMode & SEARCH_IT_SIMILARWORDS_SOUNDEX ) {
                     $sounds[] = "soundex = '" . soundex($keyword['search']) . "'";
                 }
 
-                if($this->similarwordsMode & SEARCH_IT_SIMILARWORDS_METAPHONE) {
+                if( $this->similarwordsMode & SEARCH_IT_SIMILARWORDS_METAPHONE ) {
                     $sounds[] = "metaphone = '" . metaphone($keyword['search']) . "'";
                 }
 
-                if($this->similarwordsMode & SEARCH_IT_SIMILARWORDS_COLOGNEPHONE) {
+                if( $this->similarwordsMode & SEARCH_IT_SIMILARWORDS_COLOGNEPHONE ) {
                     $sounds[] = "colognephone = '" . $this->cologne_phone($keyword['search']) . "'";
                 }
                 $simwords[] = sprintf("

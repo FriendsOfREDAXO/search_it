@@ -11,17 +11,17 @@
 <a name="wartung"></a>
 # Wartung
 
-Um die Suche in Betrieb zu nehmen, sollten zunächst alle gewünschten Einstellungen vorgenommen werden und anschließend der Suchindex eingerichtet werden.
+Um die Suche in Betrieb zu nehmen, sollten zunÃ¤chst alle gewÃ¼nschten Einstellungen vorgenommen werden und anschlieÃŸend der Suchindex eingerichtet werden.
 
-> Tipp: Die hier definierten Sucheinstellungen können auch direkt an der `search_it`-Klasse vorgenommen bzw. überschrieben werden, um mehrere Suchen auf einer Seite umzusetzen.
+> Tipp: Die hier definierten Sucheinstellungen kÃ¶nnen auch direkt an der `search_it`-Klasse vorgenommen bzw. Ã¼berschrieben werden, um mehrere Suchen auf einer Seite umzusetzen.
 
-Aktion | Erläuterung
+Aktion | ErlÃ¤uterung
 ------ | ------
-Index vollständig erstellen | Die Index-Tabelle wird gelöscht und neu aufgebaut.
-Index schrittweise erstellen | Führt die Indexierung in mehreren Schritten aus, um die Skriptlaufzeit (max_execution_time) gering zu halten. Artikel und Medien werden einzeln indexiert, Datenbankeinträge in 100er-Schriten.
-Suchcache löschen | Wenn eine Neuindexierung nicht erforderlich ist, kann auch ausschließlich der Cache gelöscht werden.
-Keyword-Index leeren | Löscht alle Keywords, die bei der Indexierung oder über Suchanfragen gesammelt wurden. Da diese Keywords z. B. für die Ähnlichkeitssuche gebraucht werden, sollten diese nur in Ausnahmefällen gelöscht werden.
-Statistik löschen | Setzt die Statistik zurück. Die Anzahl aller gesuchten Begriffe wird auf 0 gesetzt.
+Index vollstÃ¤ndig erstellen | Die Index-Tabelle wird gelÃ¶scht und neu aufgebaut.
+Index schrittweise erstellen | FÃ¼hrt die Indexierung in mehreren Schritten aus, um die Skriptlaufzeit (max_execution_time) gering zu halten. Artikel und Medien werden einzeln indexiert, DatenbankeintrÃ¤ge in 100er-Schriten.
+Suchcache lÃ¶schen | Wenn eine Neuindexierung nicht erforderlich ist, kann auch ausschlieÃŸlich der Cache gelÃ¶scht werden.
+Keyword-Index leeren | LÃ¶scht alle Keywords, die bei der Indexierung oder Ã¼ber Suchanfragen gesammelt wurden. Da diese Keywords z. B. fÃ¼r die Ã„hnlichkeitssuche gebraucht werden, sollten diese nur in AusnahmefÃ¤llen gelÃ¶scht werden.
+Statistik lÃ¶schen | Setzt die Statistik zurÃ¼ck. Die Anzahl aller gesuchten Begriffe wird auf 0 gesetzt.
 
 <a name="einstellungen"></a>
 # Einstellungen
@@ -29,9 +29,9 @@ Statistik löschen | Setzt die Statistik zurück. Die Anzahl aller gesuchten Begri
 <a name="einstellungen-suchmodus"></a>
 ## Suchmodus
 
-Dies sind die Standard-Einstellungen für jede Suche. 
+Dies sind die Standard-Einstellungen fÃ¼r jede Suche. 
 
-> Tipp: In den erweiterten Beispielen wird erklärt, wie das Suchobjekt mit eigenen Parametern überschrieben werden kann. So lassen sich mehrere Suchen in einer Website realisieren, bspw. eine Produktsuche oder eine Mitarbeiter-Suche.
+> Tipp: In den erweiterten Beispielen wird erklÃ¤rt, wie das Suchobjekt mit eigenen Parametern Ã¼berschrieben werden kann. So lassen sich mehrere Suchen in einer Website realisieren, bspw. eine Produktsuche oder eine Mitarbeiter-Suche.
 
 ### Suchmodi
 
@@ -39,46 +39,46 @@ Dies sind die Standard-Einstellungen für jede Suche.
 
 Wenn mehr als ein Begriff in das Suchfeld eingegeben wird, ...
 
-Option | Erläuterung
+Option | ErlÃ¤uterung
 ------ | ------
-`Konjunktive Suche (AND)` | ... müssen beide Begriffe im Treffer vorkommen.
-`Disjunktive Suche (OR)` | ... genügt einer von beiden Begriffen.
+`Konjunktive Suche (AND)` | ... mÃ¼ssen beide Begriffe im Treffer vorkommen.
+`Disjunktive Suche (OR)` | ... genÃ¼gt einer von beiden Begriffen.
 
 #### Textmodus
 
-Der Textmodus besagt, welche Inhalte für die Suche auf einer Seite verarbeitet werden.
+Der Textmodus besagt, welche Inhalte fÃ¼r die Suche auf einer Seite verarbeitet werden.
 
-Option | Erläuterung
+Option | ErlÃ¤uterung
 ------ | ------
-Durchsuche Text ohne HTML-Tags (Plain) | durchsuche ausschließlich Text (empfohlen)
+Durchsuche Text ohne HTML-Tags (Plain) | durchsuche ausschlieÃŸlich Text (empfohlen)
 Durchsuche Text mit HTML-Tags (HTML) | durchsucht auch HTML-Code und Attribute
 Durchsuche beides (HTML und Plain) |
 
 > Tipp: In der Datenbank `rex_search_it_index` werden die indexierten Varianten `plaintext` und `unchangedtext` abgelegt.
 
-#### Ähnlichkeitssuche
+#### Ã„hnlichkeitssuche
 
-Bei der Ähnlichkeitssuche werden ähnliche Begriffe dem gesuchten Begriff zugeordnet. Gleichklingende bekommen dabei einen gleichen Code. Beispiele hierfür sind:
+Bei der Ã„hnlichkeitssuche werden Ã¤hnliche Begriffe dem gesuchten Begriff zugeordnet. Gleichklingende bekommen dabei einen gleichen Code. Beispiele hierfÃ¼r sind:
 * Tippfehler: `Standard` vs. `Standart`
 * Verwechslungen: `Maier` vs. `Meyer`
 
-Option | Erläuterung
+Option | ErlÃ¤uterung
 ------ | ------
 Deaktivieren | Es werden nur exakte Treffer angezeigt.
-Soundex | Gleichklingende Wörter führen zu einem Treffer. Verwendet den [Soundex-Algorithmus](https://de.wikipedia.org/wiki/Soundex). 
-Metaphone | Gleichklingende Wörter führen zu einem Treffer. [Metaphone](https://de.wikipedia.org/wiki/Metaphone) eignet sich für englische Begriffe.
-Kölner Phonetik | Gleichklingende Wörter führen zu einem Treffer. [Kölner Phonetik](https://de.wikipedia.org/wiki/K%C3%B6lner_Phonetik) eignet sich für deutsche Begriffe.
-Alle | Überprüft Soundex, Metaphone und Kölner Phonetik nach Treffern.
-Die Ähnlichkeitssuche auch dann durchführen, wenn Ergebnisse vorhanden sind? | Ausschalten, um die Ähnlichkeitssuche nur dann zu aktivieren, wenn kein Suchergebnis gefunden wurde.
+Soundex | Gleichklingende WÃ¶rter fÃ¼hren zu einem Treffer. Verwendet den [Soundex-Algorithmus](https://de.wikipedia.org/wiki/Soundex). 
+Metaphone | Gleichklingende WÃ¶rter fÃ¼hren zu einem Treffer. [Metaphone](https://de.wikipedia.org/wiki/Metaphone) eignet sich fÃ¼r englische Begriffe.
+KÃ¶lner Phonetik | Gleichklingende WÃ¶rter fÃ¼hren zu einem Treffer. [KÃ¶lner Phonetik](https://de.wikipedia.org/wiki/K%C3%B6lner_Phonetik) eignet sich fÃ¼r deutsche Begriffe.
+Alle | ÃœberprÃ¼ft Soundex, Metaphone und KÃ¶lner Phonetik nach Treffern.
+Die Ã„hnlichkeitssuche auch dann durchfÃ¼hren, wenn Ergebnisse vorhanden sind? | Ausschalten, um die Ã„hnlichkeitssuche nur dann zu aktivieren, wenn kein Suchergebnis gefunden wurde.
 
 #### MySQL-Suchmodus
 
-Option | Erläuterung
+Option | ErlÃ¤uterung
 ------ | ------
-LIKE | findet auch Teilwörter, z.B. `Boot` in `Hausboot`, ist jedoch langsamer.
-MATCH AGAINST  | findet nur ganze Wörter, ist dafür schneller.
+LIKE | findet auch TeilwÃ¶rter, z.B. `Boot` in `Hausboot`, ist jedoch langsamer.
+MATCH AGAINST  | findet nur ganze WÃ¶rter, ist dafÃ¼r schneller.
 
-> Tipp: Obwohl die genauere Suche mit MATCH AGAINST weniger Suchergebnisse präsentiert, wird der Einsatz dieser Methode empfohlen, da die Suche dadurch beschleunigt wird. Das Manko der genaueren Suche - wenn man es denn so empfindet - kann über die Ähnlichkeitssuche ausgeglichen werden.
+> Tipp: Obwohl die genauere Suche mit MATCH AGAINST weniger Suchergebnisse prÃ¤sentiert, wird der Einsatz dieser Methode empfohlen, da die Suche dadurch beschleunigt wird. Das Manko der genaueren Suche - wenn man es denn so empfindet - kann Ã¼ber die Ã„hnlichkeitssuche ausgeglichen werden.
 
 ### Indexierung
 
@@ -88,59 +88,59 @@ Bei der Indexierung durchsucht Search it alle in den Einstellungen angegebenen O
 
 Legt fest, wie Artikel indexiert werden.
 
-Option | Erläuterung
+Option | ErlÃ¤uterung
 ------ | ------
-Indexierung der Artikel über eine HTTP-GET-Anfrage | indexiert Artikel so, als wenn Sie über das Frontend abgerufen werden.
-Indexierung der Artikel über den Redaxo-Cache (ohne Template, nur der Artikel) | indexiert den Artikel so, wie er in __todo__ 
-Indexierung der Artikel über den Redaxo-Cache (mit Template, liefert das gleiche Ergebnis wie per HTTP-GET-Anfrage) | indexiert die vollständige Seite.
+Indexierung der Artikel Ã¼ber eine HTTP-GET-Anfrage | indexiert Artikel so, als wenn Sie Ã¼ber das Frontend abgerufen werden.
+Indexierung der Artikel Ã¼ber den Redaxo-Cache (ohne Template, nur der Artikel) | indexiert den Artikel so, wie er in __todo__ 
+Indexierung der Artikel Ã¼ber den Redaxo-Cache (mit Template, liefert das gleiche Ergebnis wie per HTTP-GET-Anfrage) | indexiert die vollstÃ¤ndige Seite.
 Offline-Artikel indexieren | indexiert auch Artikel, die in der Struktur als `offline` markiert wurden.
-Artikel (ADD, EDIT, DELETE) automatisch (de)indexieren | indexiert automatisch neue Artikel, reindexiert bearbeitete Artikel und deindexiert Artikel, die gelöscht wurden.
-Extension Point `"OUTPUT_FILTER"` aufrufen | Ruft den OUTPUT_FILTER auf, bspw., wenn das SPROG-Addon benutzt wurde und die Einstellung `Indexierung der Artikel` über den Redaxo-Cache erfolgt. __todo__ ***stimmt das?***
+Artikel (ADD, EDIT, DELETE) automatisch (de)indexieren | indexiert automatisch neue Artikel, reindexiert bearbeitete Artikel und deindexiert Artikel, die gelÃ¶scht wurden.
+Extension Point `"OUTPUT_FILTER"` aufrufen | Ruft den OUTPUT_FILTER auf, bspw., wenn das SPROG-Addon benutzt wurde und die Einstellung `Indexierung der Artikel` Ã¼ber den Redaxo-Cache erfolgt. __todo__ ***stimmt das?***
 
 <a name="einstellungen-suchergebnis"></a>
 ## Suchergebnis
 
-Bei der Ausgabe der Suchergebnisse können Standard-Einstellungen gesetzt werden:
+Bei der Ausgabe der Suchergebnisse kÃ¶nnen Standard-Einstellungen gesetzt werden:
 
 ### Erscheinungsbild des Highlight-Texts
 
 Der Highlight-Text zeigt den gefundenen Suchbegriff als Teaser im Kontext. Der gefundene Suchbegriff kann im Highlight-Text ausgezeichnet werden, um ihn optisch zu formatieren, z.B. bei der Suche nach dem Begriff `Geld`:
 
 ```
-<p>... wie viel <strong class="search_it-keyword">Geld</strong> lässt sich damit verdienen? Erfahren ....</p>
+<p>... wie viel <strong class="search_it-keyword">Geld</strong> lÃ¤sst sich damit verdienen? Erfahren ....</p>
 ```
 
-Option | Erläuterung
+Option | ErlÃ¤uterung
 ------ | ------
 Start-Tag | Tag vor dem gefundenen Suchbegriff, z.B. `<strong class="search_it-keyword">`
 End-Tag | Tag nach dem gefunden Suchbegriff, z.B. `</strong>`
 Maximale Trefferanzahl | Wenn der gefundene Suchbegriff mehr als 1x im Highlight-Text erscheint: Gibt an, wie oft der Treffer angezeigt wird.
-Maximale Zeichenanzahl für Teaser | Anzahl der Zeichen, mit denen das Suchergebnis angeteasert wird.
+Maximale Zeichenanzahl fÃ¼r Teaser | Anzahl der Zeichen, mit denen das Suchergebnis angeteasert wird.
 Maximale Zeichenanzahl um hervorgehobene Suchbegriffe herum | Anazhl der Zeichen, mit denen der gefundene Suchbegriff umgeben wird.
 
 ### Hervorhebung
 
-Langer Rede kurzer Sinn: Die Hervorhebung wird bei der Auswahl in einer Vorschau dargestellt und könnte dort nicht besser erklärt werden als hier ;)
+Langer Rede kurzer Sinn: Die Hervorhebung wird bei der Auswahl in einer Vorschau dargestellt und kÃ¶nnte dort nicht besser erklÃ¤rt werden als hier ;)
 
-Option | Erläuterung
+Option | ErlÃ¤uterung
 ------ | ------
 Ab Anfang des Satzes, in dem mindestens einer der Suchbegriffe auftaucht | 
 Ab Anfang des Absatzes, in dem mindestens einer der Suchbegriffe auftaucht | 
-Alle gefundenen Suchbegriffe werden mit den sie umgebenden Wörtern dargestellt | 
-Für jeden gefundenen Suchbegriff wird genau eine Textstelle wiedergegeben | 
+Alle gefundenen Suchbegriffe werden mit den sie umgebenden WÃ¶rtern dargestellt | 
+FÃ¼r jeden gefundenen Suchbegriff wird genau eine Textstelle wiedergegeben | 
 Als Teaser, in dem eventuell vorkommende Suchebgriffe hervorgehoben sind | 
 Als Array mit allen Suchbegriffen und Textstellen | 
 Beispieltext mit Sucheingabe |
 
-### Wörter, Kategorien und Artikel von der Suche ausschließen
+### WÃ¶rter, Kategorien und Artikel von der Suche ausschlieÃŸen
 
-Schließt Begriffe, Artikel und Kategorien standardmäßig von der Suche aus. 
+SchlieÃŸt Begriffe, Artikel und Kategorien standardmÃ¤ÃŸig von der Suche aus. 
 
-> Hinweis: Diese Einstellungen betreffen nur die Suchergebnisse und können in der `search_it`-Klasse überschrieben werden. Begriffe, Kategorien und Artikel werden trotzdem bei der Indexierung berücksichtigt. __todo__ ***Stimmt das?***
+> Hinweis: Diese Einstellungen betreffen nur die Suchergebnisse und kÃ¶nnen in der `search_it`-Klasse Ã¼berschrieben werden. Begriffe, Kategorien und Artikel werden trotzdem bei der Indexierung berÃ¼cksichtigt. __todo__ ***Stimmt das?***
 
-Option | Erläuterung
+Option | ErlÃ¤uterung
 ------ | ------
-Wörter (kommaseperiert) | Begriffe, die von der Suche ausgeschlossen werden.
+WÃ¶rter (kommaseperiert) | Begriffe, die von der Suche ausgeschlossen werden.
 Artikel | Artikel (`rex_article`-IDs), die von der Suche ausgeschlossen werden.
 Kategorien | Kategorien (`rex_category`-IDs), die von der Suche ausgeschlossen werden.
 
@@ -149,41 +149,41 @@ Kategorien | Kategorien (`rex_category`-IDs), die von der Suche ausgeschlossen w
 <a name="einstellungen-quelle"></a>
 ## Quelle
 
-Hier werden Datenquellen für die Indexierung zusätzlich zu den Redaxo-Artikeln definiert, z. B. Datenbanktabellen, der Medienpool sowie externe Verzeichnisse.
+Hier werden Datenquellen fÃ¼r die Indexierung zusÃ¤tzlich zu den Redaxo-Artikeln definiert, z. B. Datenbanktabellen, der Medienpool sowie externe Verzeichnisse.
 
-### Datenbankspalten in die Suche einschließen
+### Datenbankspalten in die Suche einschlieÃŸen
 
-Hier können DB-Spalten ausgewählt werden, die auch durchsucht werden sollen. Hierfür bietet sich zusätzliche Addon-Felder an, z. B. `rex_article.yrewrite_description` oder Daten, die über das Addon `yform` erstellt werden.
+Hier kÃ¶nnen DB-Spalten ausgewÃ¤hlt werden, die auch durchsucht werden sollen. HierfÃ¼r bietet sich zusÃ¤tzliche Addon-Felder an, z. B. `rex_article.yrewrite_description` oder Daten, die Ã¼ber das Addon `yform` erstellt werden.
 
-> Tipp: Die Indexierung sollte neben den gewünschten Inhaltsfeldern auch das `id`-Feld / den Primary Key des Datensatzes indizieren sowie alle Felder, die bei der Ausgabe berücksichtigt werden sollen, bspw. Bilder, Teaser o.ä.
+> Tipp: Die Indexierung sollte neben den gewÃ¼nschten Inhaltsfeldern auch das `id`-Feld / den Primary Key des Datensatzes indizieren sowie alle Felder, die bei der Ausgabe berÃ¼cksichtigt werden sollen, bspw. Bilder, Teaser o.Ã¤.
 
 ### Dateisuche
 
-Die Dateisuche durchsucht angegebene Dateien nach Begriffen. Bei PDFs, deren Inhalt als Text vorliegt, wird eine Volltextsuche im PDF ermöglicht. 
+Die Dateisuche durchsucht angegebene Dateien nach Begriffen. Bei PDFs, deren Inhalt als Text vorliegt, wird eine Volltextsuche im PDF ermÃ¶glicht. 
 
-Option | Erläuterung
+Option | ErlÃ¤uterung
 ------ | ------
-Dateiendungen (frei lassen für beliebige Dateien) | Kommagetrennte Angabe von Dateien, die in der Medienpool-Indexierung
+Dateiendungen (frei lassen fÃ¼r beliebige Dateien) | Kommagetrennte Angabe von Dateien, die in der Medienpool-Indexierung
 Medienpool indexieren | Gibt an, ob die Tabelle `rex_media` zur Medienpool-Suche indexiert wird.
-Verzeichnistiefe | Gibt an, bis zu welcher Tiefe Dateien in den ausgewählten Verzeichnissen indexiert werden sollen.
-Folgende Ordner in die Suche einschließen | Externe Ordner innerhalb der Redaxo-Installation werden indexiert.
-Unterordner auswählen |
+Verzeichnistiefe | Gibt an, bis zu welcher Tiefe Dateien in den ausgewÃ¤hlten Verzeichnissen indexiert werden sollen.
+Folgende Ordner in die Suche einschlieÃŸen | Externe Ordner innerhalb der Redaxo-Installation werden indexiert.
+Unterordner auswÃ¤hlen |
 
 <a name="plaintext"></a>
 # Plaintext
 
-Option | Erläuterung
+Option | ErlÃ¤uterung
 ------ | ------
 CSS-Selektoren (komma-separiert) | __todo__
-Reguläre Ausdrücke | __todo__
+RegulÃ¤re AusdrÃ¼cke | __todo__
 Textile parsen | __todo__
 HTML-Tags entfernen | __todo__
-Standard-Plaintext-Konvertierung durchführen | __todo__
+Standard-Plaintext-Konvertierung durchfÃ¼hren | __todo__
 
 <a name="search_highlighter"></a>
 # Search Highlighter
 
-Option | Erläuterung
+Option | ErlÃ¤uterung
 ------ | ------
 Tag um die Suchbegriffe | __todo__
 Class | __todo__

@@ -21,7 +21,7 @@ Dieses Formular kann bspw. in den `<header>` eines Website-Templates eingebunden
 </form>
 ```
 
-> Tipp: Bei mehrsprachigen Websites kˆnnen die Platzhalter `{{ }}` mit dem Sprog-Addon ¸bersetzt werden.
+> Tipp: Bei mehrsprachigen Websites k√∂nnen die Platzhalter `{{ }}` mit dem Sprog-Addon √ºbersetzt werden.
 
 **CSS**
 

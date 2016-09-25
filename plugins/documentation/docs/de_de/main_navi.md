@@ -6,7 +6,7 @@
 	- [Einstellungen](search_it-settings.md) (in Arbeit)
 	- [Indexierung](search_it-index.md)
 	- [Aufbau der Suchergebnisse](search_it-result.md)
-	- [Klassen-Refernz](search_it-reference.md) (in Arbeit)
+	- [Klassen-Referenz](search_it-reference.md) (in Arbeit)
 - Plugins
 	- [Statistik](plugin-stats.md)
 - Beispiele
@@ -15,7 +15,7 @@
 	- [Erweiterte Suche](module-enhanced.md)
 	- [Mediensuche](module-media_search.md)
 	- [Komplexe Suche](module-complex.md) (in Arbeit)
-	- [Weitere Beispiele](modul-more_enhanced.md) (in Arbeit)
+	- [Weitere Beispiele](module-more_enhanced.md) (in Arbeit)
 - FAQ
 	- [Sprachabhängige Suche](howto-languages.md)
 	- [De- und Reindexierung](howto-reindex.md)

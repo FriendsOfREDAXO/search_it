@@ -1,20 +1,5 @@
 #Einsatz
 
-Es werden ein paar Beispielmodule gezeigt und erklärt. Alle Module erwarten den REQUEST-Parameter (also über GET oder POST) search_it.
-
-##Einfaches Sucheingabemodul
-
-Dieses Suchformular muss im gleichen Artikel wie das Modul, das die Suchergebnisse ausgibt, eingebunden werden. Wenn dies nicht der Fall sein soll und das Formular z. B. im Template eingebunden wird, muss die Artikel-ID manuell so angepasst werden, dass sie auf den Artikel verweist, der die Suchergebnisse präsentiert.
-
-        <form id="search_it_form" action="<?php echo rex_getUrl(rex_article::getCurrentId(), rex_clang::getCurrentId()); ?>" method="post">
-            <fieldset><legend>Suche</legend>
-                <input type="hidden" name="article_id" value="<?php echo rex_article::getCurrentId(); ?>" />
-                <input type="hidden" name="clang" value="<?php echo rex_clang::getCurrentId(); ?>" />
-                <input type="text" name="searchit" value="<?php if(!empty(rex_post('searchit','string'))) { echo htmlspecialchars(rex_post('searchit','string')); } ?>" />
-                <input class="button" type="submit" value="###suchen###" />
-            </fieldset>
-        </form>
-
 ##Einfaches Beispielmodul
 
 Dieses Suchmodul nimmt einen Suchbegriff entgegen und gibt gefundene Artikel aus. Dabei wird von den Standardeinstellungen des Addons ausgegangen.

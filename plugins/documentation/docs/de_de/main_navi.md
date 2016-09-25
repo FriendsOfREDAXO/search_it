@@ -10,11 +10,11 @@
 	- [Statistik](plugin-stats.md)
 - Beispiele
 	- [Such-Eingabe](module-form.md)
-	- [Einfache Suche](module-simple.md)
-	- [Erweiterte Suche](module-enhanced.md)
-	- [Mediensuche](module-media_search.md)
-	- [Komplexe Suche](module-complex.md)
-	- [Noch komplexere Suche](modul-more_enhanced.md)
+	- [Einfache Suche](module-simple.md) *
+	- [Erweiterte Suche](module-enhanced.md) *
+	- [Mediensuche](module-media_search.md) *
+	- [Komplexe Suche](module-complex.md) *
+	- [Noch komplexere Suche](modul-more_enhanced.md) *
 - FAQ
 	- [Sprachabhängige Suche](howto-languages.md)
 	- [De- und Reindexierung](howto-reindex.md)

@@ -1,4 +1,4 @@
-# Rückgabe der `search_it`-Klasse
+# Aufbau der Suchergebnisse
 
 - [Beispiel](#beispiel)
 - [Aufbau](#aufbau)

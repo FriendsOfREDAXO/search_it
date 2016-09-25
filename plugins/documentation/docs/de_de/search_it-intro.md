@@ -1,16 +1,38 @@
-##Zu dieser Dokumentation
+# Über Search it
 
-Diese Wikiseite erklärt die Konfiguration des Addons, die Schnittstelle der search_it-Klasse und zeigt anhand von Beispielen, wie Suchmodule aufgebaut werden können.
+Search it ist ein Redaxo 5-Addon für eine Volltextsuche im Frontend.
 
-##Allgemein/Voraussetzungen
+Dabei werden Artikel, Medien, Dateien, PDF-Inhalte und Datenbank-Felder in einer DB-Tabelle des Addons gespeichert und ausgewertet. Suchanfragen können außerdem in einer Cache-Tabelle gespeichert werden. Das spart Serverrechenleistung und führt zur schnelleren Anzeige von Suchergebnissen.
 
-Das Addon Search it fügt Redaxo eine Volltextsuche hinzu.
+## Systemvoraussetzungen
 
-Dabei werden Artikel und auswählbare Datenbankspalten in einer DB-Tabelle des Addons gespeichert.
+* PHP >= 5.5, 
+* MySQL >= 5.1
+* Redaxo >= 5.2
 
-Suchanfragen können außerdem in einer Cache-Tabelle gespeichert werden. Das spart Serverrechenleistung und führt zur schnelleren Anzeige von Suchergebnissen.
+## Plugins
 
-Das Addon setzt PHP >= 5.5, "MySQL >= 5.1" und Redaxo >= 5.2 voraus.
+* Reindex: Indiziert Artikel, Datenbank-Einträge und Medien nach dem hinzufügen, ändern und löschen.
+* Search Highlighter: Hebt den Suchbegriff in einem Artikel hervor, nachdem auf ein Suchergebnis geklickt wurde.
+* Statistik: Liefert Informationen zur Search it-Datenbank und zu den häufigsten Suchanfragen.
+
+# Wo finde ich weitere Hilfe?
+
+
+# Installation
+
+Die Installation erfolgt über den Redaxo 5 Installer, alternativ gibt es die aktuellste Beta-Version auf GitHub. 
+
+Bei der Installation werden vier Datenbanktabellen angelegt: 
+* Eine für die Indexierung von Artikeln und DB-Spalten, 
+* zwei für den Suchcache und 
+* eine für die Ähnlichkeitssuche.
+
+## First Steps
+
+Nach der Installation sollten zunächst die wichtigsten Einstellungen vorgenommen werden und anschließend der Index vollständig generiert werden.
+
+
 
 ##Funktionen/Merkmale
 - Volltextsuche für Artikel und beliebige Datenbankspalten mehrsprachenfähig
@@ -31,20 +53,7 @@ Das Addon setzt PHP >= 5.5, "MySQL >= 5.1" und Redaxo >= 5.2 voraus.
 - Angabe von Kategorien, Artikeln und DB-Spalten, in denen gesucht werden soll
 - Durchsuchen von beliebigen Ordnern mit beliebigen Dateien möglich
 - einfache Konfiguration im Backend
-- einstellbar, wer das Addon konfigurieren darf 
-
-
-##Installation
-
-Zur Installation des Addons muss sich der Ordner search_it im Addon-Ordner von Redaxo befinden.
-
-Über das Backend kann das Addon dann installiert und aktiviert werden.
-
-Das Addon legt dabei 4 Datenbanktabellen an: Eine für die Indexierung von Artikeln und DB-Spalten, zwei für den Suchcache und eine für die Ähnlichkeitssuche.
-
-Nach der Installation muss der Index einmal vollständig oder schrittweise erstellt werden.
- 
- 
+- einstellbar, wer das Addon konfigurieren darf  
  
 #Konfiguration
 
@@ -180,33 +189,33 @@ Um die Ähnlichkeitssuche effektiv einsetzen zu können, empfiehlt es sich, die 
  
  
  
-##Tipps, Tricks und FAQ
+## Tipps, Tricks und FAQ
  
-Die automatische Indexierung funktioniert nicht für meine ausgewählten Datenbankspalten. Was kann ich tun?
-Dieses Problem ist nicht trivial und allumfassend lösbar.
-Da das Addon nicht wissen kann, wann eine Datenbankspalte neu indexiert werden muss, kann keine automatische Indexierung erfolgen.
+### Die automatische Indexierung funktioniert nicht für meine ausgewählten Datenbankspalten. Was kann ich tun?
+
+Dieses Problem ist nicht trivial und allumfassend lösbar. Da das Addon nicht wissen kann, wann eine Datenbankspalte neu indexiert werden muss, kann keine automatische Indexierung erfolgen.
+
 Die Klasse search_it bietet allerdings die Methode indexColumn an. Über diese Methode können Datenbankspalten neu oder wieder indexiert werden.
 Müssen die Datenbankspalten nur zu einem bestimmten Datensatz indexiert werden, kann außerdem die ID dieses Datensatzes angegeben werden.
 Search it wird dann auch nur den betroffenen Datensatz reindexieren.
 
 Beispiel:
+
 Ein Addon arbeitet mit einer eigenen Datenbanktabelle. Search it soll Inhalte dieses Addons auch automatisch reindexieren.
 Da das Addon selbst weiß, wann die Beispieldatenbankspalte "beschreibung" reindexiert werden soll, kann die Methode indexColumn von diesem Addon aufgerufen werden:
  
-     $search_it = new search_it;
-     $search_it->indexColumn('TABELLE_DES_ADDONS', 'beschreibung', 'id', $datensatz_id);
- 
+```
+$search_it = new search_it;
+$search_it->indexColumn('tabelle', 'feld', 'id', $datensatz_id);
+``` 
  
 Die Methode indexColumn benötigt also 4 Parameter:
-    Die Namen der Datenbanktabelle und
-    der Datenbankspalte,
-    den Namen der identifizierenden Datenbankspalte und
-    die ID des Datensatzes, der aktualisiert wurde.
+*    Die Namen der Datenbanktabelle und
+*    der Datenbankspalte,
+*    den Namen der identifizierenden Datenbankspalte und
+*    die ID des Datensatzes, der aktualisiert wurde.
  
  
-Wörter mit Umlauten und Sonderzeichen werden bei der Suche nicht gefunden. Warum ist das so und wie kann ich das beheben?
-Es ist sehr wahrscheinlich, dass diese Sonderzeichen als Entitäten kodiert vorliegen (z. B. ü als &uuml;).
-Das Problem tritt häufig im Zusammenhang mit TinyMCE auf.
 Es gibt zwei Möglichkeiten, um das Problem zu lösen, wobei erstere zu bevorzugen ist:
     Die Zeichen müssen "roh" in die Datenbank.
     Um das zu erreichen, sollte UTF-8 als Zeichenkodierung genutzt werden.
@@ -216,25 +225,10 @@ Es gibt zwei Möglichkeiten, um das Problem zu lösen, wobei erstere zu bevorzug
 In diesem Zusammenhang sollte auch ein Fehler im Quellcode von Redaxo behoben werden, damit die Daten wirklich UTF-8-kodiert in die Datenbank geschrieben werden: http://forum.redaxo.de/ftopic12127.html
  
  
-##Ich komme mit der Installation nicht zurecht. Gibt es eine Schritt-für-Schritt-Anleitung?
-Ja! ;-) 
-
-Search it herunterladen: http://www.redaxo.de/180-0-addon-details.html?addon_id=587
-Ordner search_it in das Addon-Verzeichnis der Redaxo-Installation kopieren/entpacken
-das Addon im Backend installieren und aktivieren
-auf der Seite des Addons gewünschte Einstellungen vornehmen
-auf der Unterseite "Indexierung" die Indexierung starten (ich empfehle die schrittweise Indexierung)
-das Suchformular und eines der Suchmodule einrichten und das Suchmodul in einen Artikel einbinden
-Wichtig: Im Suchformular muss die Artikel-ID auf den Artikel mit dem Suchmodul verweisen!
-Suche testen 
- 
- 
- 
-##Wie kann ich sprachabhängig suchen?
+### Wie kann ich sprachabhängig suchen?
 
 Search it sucht per Standard in allen Sprachen.
+
 Um sprachabhängige Suchen zu erlauben, muss der Klasse die Sprach-ID der Sprache, in der gesucht werden soll, übergeben werden.
 Das geht in einem Suchmodul am einfachsten über die durch Redaxo definierte Konstante REX_CLANG_ID.
 Achtung: Die Sprach-ID sollte im Ergebnismodul $search_it = new search_it(REX_CLANG_ID); und im Suchformular <input type="hidden" name="clang" value="REX_CLANG_ID" /> gesetzt werden.
-
-

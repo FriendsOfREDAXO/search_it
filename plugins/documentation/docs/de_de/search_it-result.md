@@ -2,10 +2,17 @@
 
 - [Beispiel](#beispiel)
 - [Aufbau](#aufbau)
-    - [Hits](#aufbau-hits)
-    - [Keywords](#aufbau-keywords)
-    - [Quelle](#einstellungen-quelle)
-
+	- [hits](#hits)
+	- [keywords](#keywords)
+	- [searchterm](#searchterm)
+	- [sql](#sql)
+	- [blacklisted](#blacklisted)
+	- [time](#time)
+	- [count](#count)
+	- [hash](#hash)
+	- [simwordsnewsearch](#simwordsnewsearch)
+	- [simwords](#simwords)
+	
 ## Beispiel
 
 Mit jeder Suche gibt `search_it`-Klasse ein Ergebnis-Array mit Suchtreffern zurück.

@@ -10,17 +10,18 @@
 	- [Statistik](plugin-stats.md)
 - Beispiele
 	- [Such-Eingabe](module-form.md)
-	- [Einfache Suche](module-simple.md) *
-	- [Erweiterte Suche](module-enhanced.md) *
-	- [Mediensuche](module-media_search.md) *
-	- [Komplexe Suche](module-complex.md) *
-	- [Noch komplexere Suche](modul-more_enhanced.md) *
+	- [Einfache Suche](module-simple.md)
+	- [Erweiterte Suche](module-enhanced.md)
+	- [Mediensuche](module-media_search.md)
+	- [Komplexe Suche](module-complex.md) (in Arbeit)
+	- [Weitere Beispiele](modul-more_enhanced.md) (in Arbeit)
 - FAQ
 	- [Sprachabhängige Suche](howto-languages.md)
 	- [De- und Reindexierung](howto-reindex.md)
 	- [Ähnlichkeitssuche](howto-simsearch.md)
 	- [Highlighting](howto-highlighting.md)
-	
+	- [Auf Kategorien beschränken](howto-categories.md)
+	- [Paginierung](howto-pagination.md) (in Arbeit)	
 ---
 
 **Credits**

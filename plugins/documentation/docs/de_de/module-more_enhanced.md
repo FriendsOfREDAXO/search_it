@@ -1,122 +1,8 @@
-#Einsatz
+# Weitere RexSearch-Beispiel-Module
 
-##Einfaches Beispielmodul
+> Hinweis: Der nachfolgende Modul-Code wurde noch nicht an Search it für Redaxo 5 angpasst.
 
-Dieses Suchmodul nimmt einen Suchbegriff entgegen und gibt gefundene Artikel aus. Dabei wird von den Standardeinstellungen des Addons ausgegangen.
-
-        <?php
-              if(!empty(rex_request('searchit', 'string'))){
-                  $search_it = new search_it();
-                  $result = $search_it->search(rex_request('searchit', 'string'));
-          
-                  if($result['count'] > 0){
-                      echo '<ul class="searchresults">';
-                      foreach($result['hits'] as $hit){
-                          if($hit['type'] == 'article'){
-                              $article = rex_article::get($hit['fid']);
-                              echo '<li>
-                              <h4><a href="'.htmlspecialchars($article->getUrl()).'">'.$article->getName().'</a></h4>
-                              <p class="highlightedtext">'.$hit['highlightedtext'].'</p>
-                              <p class="url">'.rex_getUrl($hit['fid'], $hit['clang']).'</p></li>';
-                          }
-                      }
-                      echo '</ul>';
-                  }
-              }
-        ?>
-
-##Erweitertes Beispielmodul
-
-Dieses Suchmodul bezieht weitere DB-Spalten in die Suche ein. Dafür müssen im Backend in der Konfiguration des Addons folgende DB-Spalten ausgewählt werden:
-
-    PREFIX_article.name
-    PREFIX_article.art_description
-    PREFIX_article.art_keywords 
-
-Außerdem sollte das maximale Trefferlimit auf 20 gestellt werden.
-
-        <?php
-        if(!empty(rex_request('searchit', 'string'))){
-            $search_it = new search_it();
-            $result = $search_it->search(rex_request('searchit', 'string'));
-            
-            if($result['count'] > 0){
-                echo '<ul class="searchresults">';
-                foreach($result['hits'] as $hit){
-                    if($hit['type'] == 'db_column' AND $hit['table'] == rex::getTablePrefix().'article'){
-                        $text = $hit['article_teaser'];
-                    } else {
-                        $text = $hit['highlightedtext'];
-                    }
-                    $article = rex_article::get($hit['fid']);
-
-                    echo '<li><h4><a href="'.($url = htmlspecialchars($article->getUrl())).'">'.$article->getName().'</a></h4>
-                    <p class="highlightedtext">'.$text.'</p>
-                    <p class="url">'.rex_getUrl($hit['fid'], $hit['clang']).'</p></li>';
-                }
-                echo '</ul>';
-            }
-        }
-        ?>
-
-##Suche in einer bestimmten Kategorie/bestimmten Artikeln
-
-Dieses Suchmodul ist wie das erste, einfache Suchmodul aufgebaut. Einzig die Kategorien, in denen ausschließlich gesucht werden soll, sind zusätzlich angegeben.
-
-        <?php
-              if(!empty(rex_request('searchit', 'string'))){
-                  $search_it = new search_it();
-                  $search_it->searchInCategories(array(5,6,13));
-                  $result = $search_it->search(rex_request('searchit', 'string'));
-          
-                  if($result['count'] > 0){
-                      echo '<ul class="searchresults">';
-                      foreach($result['hits'] as $hit){
-                          if($hit['type'] == 'article'){
-                              $article = rex_article::get($hit['fid']);
-                              echo '<li>
-                              <h4><a href="'.htmlspecialchars($article->getUrl()).'">'.$article->getName().'</a></h4>
-                              <p class="highlightedtext">'.$hit['highlightedtext'].'</p>
-                              <p class="url">'.rex_getUrl($hit['fid'], $hit['clang']).'</p></li>';
-                          }
-                      }
-                      echo '</ul>';
-                  }
-              }
-        ?>
-
-##Bildersuche
-
-Eine Bildersuche kann mit Search it einfach realisiert werden.
-
-Die Suche zu den Bildern soll in den Bildbeschreibungen und -titeln, die über den Medienpool eingetragen werden, stattfinden.
-
-Dafür werden im Backend folgende Spalten in die Indexierung eingeschlossen:
-
-        PREFIX_media.title
-        PREFIX_media.med_description 
-
-        <?php
-        
-        if(!empty(rex_request('searchit', 'string'))){
-            $search_it = new search_it();
-            $search_it->searchInDbColumn(rex::getTablePrefix().'media','title');
-            $search_it->searchInDbColumn(rex::getTablePrefix().'media','med_description');
-            $result = $search_it->search(rex_request('searchit', 'string'));
-            
-            if($result['count'] > 0){
-                echo '<ul class="searchresults">';
-                foreach($result['hits'] as $hit){
-                    $media = rex_media::get($hit['filename']);
-                    echo '<li><h4>'.$media->getTitle().'</h4>
-                        <p class="image"><a href="'.$media->toLink().'">'.$media->toImage( array('alt'=> $media->getTitle()) ).'</a></p></li>';
-                }
-                echo '</ul>';
-            }
-        }
-        ?>
-
-##Suche mit Pagination
+## Suche mit Pagination
 
 Für umfangreiche Webauftritte kann eine Pagination für die Suchergebnisse sinnvoll oder notwendig sein.
 
@@ -124,6 +10,7 @@ Diese Beispielmodul benötigt die DB-Spalten id, name, art_description und art_k
 
 Über die Konstante SHOWMAX kann die maximale Anzahl an Treffern, die auf der Seite angezeigt werden sollen, eingestellt werden.
 
+```
         <?php
         
         define('SHOWMAX',10);
@@ -181,11 +68,12 @@ Diese Beispielmodul benötigt die DB-Spalten id, name, art_description und art_k
         }
         
         ?>
+```
 
-##Ähnlichkeitssuche
+## Ähnlichkeitssuche
 
 Dieses Beispielmodul erweitert das Paginationsmodul um eine Suche nach ähnlichen Wörtern. Wichtig ist dabei, dass die Ähnlichkeitssuche im Backend aktiviert ist.
-
+```
         <?php
         
           define('SHOWMAX',10);
@@ -243,11 +131,12 @@ Dieses Beispielmodul erweitert das Paginationsmodul um eine Suche nach ähnliche
           }
         
         ?>
-
-##Suche mit PDF-Dateien, Pagination und Ähnlichkeitssuche
+```
+## Suche mit PDF-Dateien, Pagination und Ähnlichkeitssuche
 
 Dieses Beispielmodul erweitert das Paginationsmodul und die Ähnlichkeitssuche um die Suche von PDF-Dateien aus dem Medienpool. Die Ähnlichkeitssuche sollte aktiviert, sowie bei der Dateisuche die Option "Medienpool indexieren" ausgewählt sein. Außerdem sollte in dem Feld für die Dateiendungen nur "pdf" stehen.
 
+```
         <?php
         
           define('SHOWMAX',10);
@@ -318,6 +207,7 @@ Dieses Beispielmodul erweitert das Paginationsmodul und die Ähnlichkeitssuche u
           }
         
         ?>
+```
 
 ##Komplexe Suche
 
@@ -330,7 +220,7 @@ Ein erweitertes Suchformular bietet dem Nutzer an, folgende Punkte auszuwählen:
 - Wieviele Ergebnisse pro Seite? 
 
 Wichtig: Dieses Modul ist nur für Search it ab Version 0.5.
-
+```
         <form id="search-form" method="get" action="<?php echo rex_geturl(REX_ARTICLE_ID, REX_CLANG_ID, array(), '&'); ?>">
         
           <fieldset>
@@ -369,9 +259,9 @@ Wichtig: Dieses Modul ist nur für Search it ab Version 0.5.
           </fieldset>
         
         </form>
-
+```
 In dem Modul zur Präsentation der Suchergebnisse werden die entsprechenden Einstellungen an Search it übergeben, die Suche ausgeführt und letztendlich die Suchergebnisse ausgegeben.
-
+```
         <?php
         
           $searchterm = rex_request('searchterm', 'string', '');
@@ -460,3 +350,4 @@ In dem Modul zur Präsentation der Suchergebnisse werden die entsprechenden Eins
           }
         
         ?>
+```

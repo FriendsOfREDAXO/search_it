@@ -1,477 +1,159 @@
-#Einsatz
+# Einfache Artikel-Suchergebnisse
 
-Es werden ein paar Beispielmodule gezeigt und erklärt. Alle Module erwarten den REQUEST-Parameter (also über GET oder POST) search_it.
+Dieses Suchergebnis-Modul nimmt einen Suchbegriff mittels GET/POST-Parameter `search` entgegen und gibt gefundene Artikel aus. Es werden keine im Backend gesetzten `Search it`-Einstellungen überschrieben.
 
-##Einfaches Sucheingabemodul
+## Modulausgabe (ohne Erläuterungen)
 
-Dieses Suchformular muss im gleichen Artikel wie das Modul, das die Suchergebnisse ausgibt, eingebunden werden. Wenn dies nicht der Fall sein soll und das Formular z. B. im Template eingebunden wird, muss die Artikel-ID manuell so angepasst werden, dass sie auf den Artikel verweist, der die Suchergebnisse präsentiert.
+```
+<section class="search_it-modul">
+    <p class="search_it-demotitle">[search_it] Suchergebnisse - Einfaches Beispielmodul</p>
+    <?php
+$server = rtrim(rex::getServer(),"/"); 
+$request = rex_request('search', 'string', false); 
 
-        <form id="search_it_form" action="<?php echo rex_getUrl(rex_article::getCurrentId(), rex_clang::getCurrentId()); ?>" method="post">
-            <fieldset><legend>Suche</legend>
-                <input type="hidden" name="article_id" value="<?php echo rex_article::getCurrentId(); ?>" />
-                <input type="hidden" name="clang" value="<?php echo rex_clang::getCurrentId(); ?>" />
-                <input type="text" name="searchit" value="<?php if(!empty(rex_post('searchit','string'))) { echo htmlspecialchars(rex_post('searchit','string')); } ?>" />
-                <input class="button" type="submit" value="###suchen###" />
-            </fieldset>
-        </form>
+if($request) { 
+    $search_it = new search_it(); 
+    $result = $search_it->search($request); 
+    echo "<pre><code>"; print_r($result); echo "</code></pre>"; 
 
-##Einfaches Beispielmodul
+    if($result['count']) { 
+        echo '<h2 class="search_it-headline">{{ Suchergebnisse }}</h2>'; 
 
-Dieses Suchmodul nimmt einen Suchbegriff entgegen und gibt gefundene Artikel aus. Dabei wird von den Standardeinstellungen des Addons ausgegangen.
+        echo '<ul class="search_it-results">';                           
+        foreach($result['hits'] as $hit) { 
 
-        <?php
-              if(!empty(rex_request('searchit', 'string'))){
-                  $search_it = new search_it();
-                  $result = $search_it->search(rex_request('searchit', 'string'));
-          
-                  if($result['count'] > 0){
-                      echo '<ul class="searchresults">';
-                      foreach($result['hits'] as $hit){
-                          if($hit['type'] == 'article'){
-                              $article = rex_article::get($hit['fid']);
-                              echo '<li>
-                              <h4><a href="'.htmlspecialchars($article->getUrl()).'">'.$article->getName().'</a></h4>
-                              <p class="highlightedtext">'.$hit['highlightedtext'].'</p>
-                              <p class="url">'.rex_getUrl($hit['fid'], $hit['clang']).'</p></li>';
-                          }
-                      }
-                      echo '</ul>';
-                  }
-              }
-        ?>
-
-##Erweitertes Beispielmodul
-
-Dieses Suchmodul bezieht weitere DB-Spalten in die Suche ein. Dafür müssen im Backend in der Konfiguration des Addons folgende DB-Spalten ausgewählt werden:
-
-    PREFIX_article.name
-    PREFIX_article.art_description
-    PREFIX_article.art_keywords 
-
-Außerdem sollte das maximale Trefferlimit auf 20 gestellt werden.
-
-        <?php
-        if(!empty(rex_request('searchit', 'string'))){
-            $search_it = new search_it();
-            $result = $search_it->search(rex_request('searchit', 'string'));
-            
-            if($result['count'] > 0){
-                echo '<ul class="searchresults">';
-                foreach($result['hits'] as $hit){
-                    if($hit['type'] == 'db_column' AND $hit['table'] == rex::getTablePrefix().'article'){
-                        $text = $hit['article_teaser'];
-                    } else {
-                        $text = $hit['highlightedtext'];
-                    }
-                    $article = rex_article::get($hit['fid']);
-
-                    echo '<li><h4><a href="'.($url = htmlspecialchars($article->getUrl())).'">'.$article->getName().'</a></h4>
-                    <p class="highlightedtext">'.$text.'</p>
-                    <p class="url">'.rex_getUrl($hit['fid'], $hit['clang']).'</p></li>';
-                }
-                echo '</ul>';
+            # echo "<pre><code>"; print_r($hit); echo "</code></pre>"; 
+            if($hit['type'] == 'article') { 
+                $article = rex_article::get($hit['fid']); 
+                echo '<li class="search_it-result search_it-article">
+                          <p class="search_it-title">
+                              <a href="'.$server.rex_getUrl($hit['fid'], $hit['clang'], array('search_highlighter' => $request)).'" title="'.$article->getName().'">'.$article->getName().'</a>
+                          </p>
+                          <p class="search_it-url">'.$server.rex_getUrl($hit['fid'], $hit['clang']).'</p>
+                          <p class="search_it-teaser">'.$hit['highlightedtext'].'</p>
+                      </li>'; 
+            } else {                                   
+                
+                
+                echo '<p class="search_it-missing_type">Das Suchergebnis vom Typ <i class="search_it-type">'.$hit['type'].' </i> kann nicht dargestellt werden.</p>';
             }
-        }
-        ?>
 
-##Suche in einer bestimmten Kategorie/bestimmten Artikeln
+        } 
+        echo '</ul>';
+    } else if(!$result['count']) { 
+        echo '<p class="search_it-zero">Die Suche nach <i class="search_it-request">'.$request.' </i> ergab keine Treffer.</p>';
+    }
+} 
+    ?>
+</section>
+```
 
-Dieses Suchmodul ist wie das erste, einfache Suchmodul aufgebaut. Einzig die Kategorien, in denen ausschließlich gesucht werden soll, sind zusätzlich angegeben.
+## Modulausgabe (mit Erläuterungen)
 
-        <?php
-              if(!empty(rex_request('searchit', 'string'))){
-                  $search_it = new search_it();
-                  $search_it->searchInCategories(array(5,6,13));
-                  $result = $search_it->search(rex_request('searchit', 'string'));
-          
-                  if($result['count'] > 0){
-                      echo '<ul class="searchresults">';
-                      foreach($result['hits'] as $hit){
-                          if($hit['type'] == 'article'){
-                              $article = rex_article::get($hit['fid']);
-                              echo '<li>
-                              <h4><a href="'.htmlspecialchars($article->getUrl()).'">'.$article->getName().'</a></h4>
-                              <p class="highlightedtext">'.$hit['highlightedtext'].'</p>
-                              <p class="url">'.rex_getUrl($hit['fid'], $hit['clang']).'</p></li>';
-                          }
-                      }
-                      echo '</ul>';
-                  }
-              }
-        ?>
+```
+<section class="search_it-modul">
+    <p class="search_it-demotitle">[search_it] Suchergebnisse - Einfaches Beispielmodul</p>
+    <?php
+$server = rtrim(rex::getServer(),"/"); // Aktuelle Website-Adresse ohne Slash am Ende;
+$request = rex_request('search', 'string', false); // GET/POST-Anfrage: Casting als String
 
-##Bildersuche
+if($request) { // Wenn ein Suchbegriff eingegeben wurde
+    $search_it = new search_it(); // Suche initialisieren
+    $result = $search_it->search($request); // Suche ausführen
+    # echo "<pre><code>"; print_r($result); echo "</code></pre>"; // Zum Debuggen ausgeben.
 
-Eine Bildersuche kann mit Search it einfach realisiert werden.
+    if($result['count']) { // Wenn Ergebnisse vorhanden sind...
+        echo '<h2 class="search_it-headline">{{ Suchergebnisse }}</h2>'; // Sprog-Addon zur Übersetzung benutzen
 
-Die Suche zu den Bildern soll in den Bildbeschreibungen und -titeln, die über den Medienpool eingetragen werden, stattfinden.
+        echo '<ul class="search_it-results">';                           
+        foreach($result['hits'] as $hit) { // Jeder Treffer in $hit
 
-Dafür werden im Backend folgende Spalten in die Indexierung eingeschlossen:
-
-        PREFIX_media.title
-        PREFIX_media.med_description 
-
-        <?php
-        
-        if(!empty(rex_request('searchit', 'string'))){
-            $search_it = new search_it();
-            $search_it->searchInDbColumn(rex::getTablePrefix().'media','title');
-            $search_it->searchInDbColumn(rex::getTablePrefix().'media','med_description');
-            $result = $search_it->search(rex_request('searchit', 'string'));
-            
-            if($result['count'] > 0){
-                echo '<ul class="searchresults">';
-                foreach($result['hits'] as $hit){
-                    $media = rex_media::get($hit['filename']);
-                    echo '<li><h4>'.$media->getTitle().'</h4>
-                        <p class="image"><a href="'.$media->toLink().'">'.$media->toImage( array('alt'=> $media->getTitle()) ).'</a></p></li>';
-                }
-                echo '</ul>';
+            # echo "<pre><code>"; print_r($hit); echo "</code></pre>"; // Zum Debuggen ausgeben.
+            if($hit['type'] == 'article') { // Wenn der Treffer aus der Artikelsuche stammt 
+                $article = rex_article::get($hit['fid']); // Redaxo-Artikel-Objekt holen
+                echo '<li class="search_it-result search_it-article">
+                          <p class="search_it-title">
+                              <a href="'.$server.rex_getUrl($hit['fid'], $hit['clang'], array('search_highlighter' => $request)).'" title="'.$article->getName().'">'.$article->getName().'</a>
+                          </p>
+                          <p class="search_it-url">'.$server.rex_getUrl($hit['fid'], $hit['clang']).'</p>
+                          <p class="search_it-teaser">'.$hit['highlightedtext'].'</p>
+                      </li>'; // Ausgabe des Suchtreffers
+            } else {                                   
+                // Wenn der Treffer nicht aus Redaxo-Artikeln stammt, z.B., weil Medienpool oder Datenbankspalten
+                // indiziert wurden. Siehe erweiterte Beispiele für die Ausgabe. Oder: Indexierung auf Artikel beschränken.
+                echo '<p class="search_it-missing_type">Das Suchergebnis vom Typ <i class="search_it-type">'.$hit['type'].' </i> kann nicht dargestellt werden.</p>';
             }
-        }
-        ?>
 
-##Suche mit Pagination
+        } // foreach($result['hits'] as $hit) END
+        echo '</ul>';
+    } else if(!$result['count']) { // Wenn keine Ergebnisse vorhanden sind.... 
+        echo '<p class="search_it-zero">Die Suche nach <i class="search_it-request">'.$request.' </i> ergab keine Treffer.</p>';
+    }
+} // if($request) END
+    ?>
+</section>
+```
 
-Für umfangreiche Webauftritte kann eine Pagination für die Suchergebnisse sinnvoll oder notwendig sein.
+## CSS
 
-Diese Beispielmodul benötigt die DB-Spalten id, name, art_description und art_keywords aus der Tabelle rex_article.
+Das Sucheingabe-Formular kann beliebig formatiert und mit Klassen ausgezeichnet werden. Das nachfolgende CSS formatiert das oben vorgegebene Beispiel.
 
-Über die Konstante SHOWMAX kann die maximale Anzahl an Treffern, die auf der Seite angezeigt werden sollen, eingestellt werden.
+```
+<style>
+    /* Diese CSS-Datei in das Design ausschneiden und anpassen */
+    .search_it-modul {
+        box-sizing: border-box;
+        font-size: 1rem;
+        font-family: sans-serif;
+        max-width: 640px;
+        margin: 0 auto;
+        border: 1px solid rgba(0,0,0,0.2);
+        padding: 0 2rem 2rem 2rem;
+    }
+    .search_it-demotitle {
+        font-size: 1.2rem;
+        font-weight: bold;
+        border-bottom: 1px solid  rgba(0,0,0,0.2);
+        color: rgba(0,0,0,0.4);
+        margin-bottom: 2rem;
+    }
+    
+    .search_it-results {
+        padding: 0;
+        margin: 0;
+    }
+    .search_it-result {
+        background: rgba(0,0,0,0.05);
+        border: 1px solid rgba(0,0,0,0.4);
+        padding: 1rem;
+        margin: 1rem 0;
+        list-style-type: none;
+        list-style-position: inline;
+    }
+    .search_it-title,
+    .search_it-title a {
+        font-weight: bold;
+        color: rgba(0,180,0,0.7);
+    }
 
-        <?php
-        
-        define('SHOWMAX',10);
-        
-        if(!empty(rex_request('searchit', 'string'))){
-            $search_it = new search_it();
-            $search_it->setLimit(array($start = isset(rex_get('start', 'int', 0))? intval(rex_get('start', 'int', 0)):0, SHOWMAX));
-            $search_it->doSearchArticles(true);
-            $search_it->searchInDbColumn(rex::getTablePrefix().'article', 'name');
-            $search_it->searchInDbColumn(rex::getTablePrefix().'article', 'art_description');
-            $search_it->searchInDbColumn(rex::getTablePrefix().'article', 'art_keywords');
-            
-            $result = $search_it->search(rex_request('searchit', 'string'));
-            if(count($result['simwords']) > 0){
-              $newsearchString = $result['simwordsnewsearch'];
-              $result = $search_it->search($newsearchString);
-              if($result['count'] > 0)
-                echo '<p>Meinten Sie <strong>'.$newsearchString.'</strong>?</p>';
-            }
-            
-            if($result['count'] > 0){
-              echo '<ul class="searchresults">';
-              foreach($result['hits'] as $hit){
-                if($hit['type'] == 'db_column'){
-                  $text = $hit['article_teaser'];
-                  if($hit['table'] == rex::getTablePrefix().'article')
-                    $hit['fid'] = $hit['values']['id'];
-                } else {
-                  $text = $hit['highlightedtext'];
-                }
-            
-                $article = OOArticle::getArticleById($hit['fid']);
-            
-                echo '<li>
-            <h4><a href="'.($url = htmlspecialchars($article->getUrl())).'">'.$article->getName().'</a></h4>
-              <p class="highlightedtext">'.$text.'</p>
-              <p class="url">'.rex::getServer().rex_getUrl($hit['fid'], $hit['clang']).'</p></li>';
-              }
-              echo '</ul>';
-            
-              // Pagination
-              if($result['count'] > SHOWMAX){
-                $self = OOArticle::getArticleById(REX_ARTICLE_ID);
-                echo '<ul class="pagination">';
-                for($i = 0; ($i*SHOWMAX) < $result['count']; $i++){
-                  if(($i*SHOWMAX) == $start){
-                    echo '<li>'.($i+1).'</li>';
-                  } else {
-                    echo '<li><a href="'.$self->getUrl(array('search_it' => rex_request('searchit', 'string'), 'start' => $i*SHOWMAX)).'">'.($i+1).'</a></li>';
-                  }
-                }
-                echo '</ul>';
-              }
-            }
-        }
-        
-        ?>
-
-##Ähnlichkeitssuche
-
-Dieses Beispielmodul erweitert das Paginationsmodul um eine Suche nach ähnlichen Wörtern. Wichtig ist dabei, dass die Ähnlichkeitssuche im Backend aktiviert ist.
-
-        <?php
-        
-          define('SHOWMAX',10);
-        
-          if(!empty(rex_request('searchit', 'string'))){
-            $search_it = new search_it();
-            $search_it->setLimit(array($start = isset(rex_get('start', 'int', 0))?intval(rex_get('start', 'int', 0)):0, SHOWMAX));
-        
-            $result = $search_it->search(rex_request('searchit', 'string'));
-            if(!$result['count'] AND count($result['simwords']) > 0){
-              $newsearchString = $result['simwordsnewsearch'];
-              $result = $search_it->search($newsearchString);
-              if($result['count'] > 0){
-                echo '<p>Meinten Sie <strong>'.$newsearchString.'</strong>?</p>';
-              }
-            }
-        
-            if($result['count'] > 0){
-              echo '<ul class="searchresults">';
-              foreach($result['hits'] as $hit){
-                if($hit['type'] == 'db_column'){
-                  $text = $hit['article_teaser'];
-                  if($hit['table'] == rex::getTablePrefix().'article'){
-                    $hit['fid'] = $hit['values']['id'];
-                  }
-                } else {
-                  $text = $hit['highlightedtext'];
-                }
-        
-                $article = OOArticle::getArticleById($hit['fid']);
-        
-                echo '<li>
-            <h4><a href="'.($url = htmlspecialchars($article->getUrl())).'">'.$article->getName().'</a></h4>
-              <p class="highlightedtext">'.$text.'</p>
-              <p class="url">'.rex::getServer().rex_getUrl($hit['fid'], $hit['clang']).'</p></li>';
-              }
-              echo '</ul>';
-        
-              // Pagination
-              if($result['count'] > SHOWMAX){
-                $self = OOArticle::getArticleById(REX_ARTICLE_ID);
-                echo '<ul class="pagination">';
-                for($i = 0; ($i*SHOWMAX) < $result['count']; $i++){
-                  if(($i*SHOWMAX) == $start){
-                    echo '<li>'.($i+1).'</li>';
-                  } else {
-                    echo '<li><a href="'.$self->getUrl(array('search_it' => rex_request('searchit', 'string'), 'start' => $i*SHOWMAX)).'">'.($i+1).'</a></li>';
-                  }
-                }
-                echo '</ul>';
-              }
-            } else {
-              echo '<em>Leider nichts gefunden.</em>';
-            }
-          }
-        
-        ?>
-
-##Suche mit PDF-Dateien, Pagination und Ähnlichkeitssuche
-
-Dieses Beispielmodul erweitert das Paginationsmodul und die Ähnlichkeitssuche um die Suche von PDF-Dateien aus dem Medienpool. Die Ähnlichkeitssuche sollte aktiviert, sowie bei der Dateisuche die Option "Medienpool indexieren" ausgewählt sein. Außerdem sollte in dem Feld für die Dateiendungen nur "pdf" stehen.
-
-        <?php
-        
-          define('SHOWMAX',10);
-        
-          if(!empty(rex_request('searchit', 'string'))){
-            $search_it = new search_it();
-            $search_it->setLimit(array($start = isset(rex_get('start', 'int', 0))?intval(rex_get('start', 'int', 0)):0, SHOWMAX));
-        
-            $result = $search_it->search(rex_request('searchit', 'string'));
-            if(!$result['count'] AND count($result['simwords']) > 0){
-              $newsearchString = $result['simwordsnewsearch'];
-              $result = $search_it->search($newsearchString);
-              if($result['count'] > 0){
-                echo '<p>Meinten Sie <strong>'.$newsearchString.'</strong>?</p>';
-              }
-            }
-        
-            if($result['count'] > 0){
-              echo '<ul class="searchresults">';
-              foreach($result['hits'] as $hit){
-                if($hit['type'] == 'db_column'){
-                  $text = $hit['article_teaser'];
-                  if($hit['table'] == rex::getTablePrefix().'article')
-                    $hit['fid'] = $hit['values']['id'];
-                } else {
-                  $text = $hit['highlightedtext'];
-                }
-        
-                if($hit['type'] == 'file' AND $hit['fileext'] == 'pdf'){
-                  // PDF-Datei
-                  $filename = explode('/', $hit['filename']);
-                  $pdf = OOMedia::getMediaByFileName($filename[count($filename)-1]);
-        
-                  echo '    <li class="pdf">
-              <h4><a href="'.htmlspecialchars($pdf->getFullPath()).'">'.$pdf->getOrgFileName().'</a></h4>
-              <p class="highlightedtext">'.$text.'</p>
-              <p class="url">'.rex::getServer().'files/'.$pdf->getOrgFileName().'</p>
-            </li>';
-                } else {
-                  // Artikel oder DB-Spalte aus der Artikel-Tabelle
-                  $article = OOArticle::getArticleById($hit['fid']);
-        
-                  echo '    <li>
-              <h4><a href="'.htmlspecialchars($article->getUrl()).'">'.$article->getName().'</a></h4>
-              <p class="highlightedtext">'.$text.'</p>
-              <p class="url">'.rex::getServer().rex_getUrl($hit['fid'], $hit['clang']).'</p>
-            </li>';
-                }
-              }
-              echo '</ul>';
-        
-              // Pagination
-              if($result['count'] > SHOWMAX){
-                $self = OOArticle::getArticleById(REX_ARTICLE_ID);
-                echo '<ul class="pagination">';
-                for($i = 0; ($i*SHOWMAX) < $result['count']; $i++){
-                  if(($i*SHOWMAX) == $start){
-                    echo '<li>'.($i+1).'</li>';
-                  } else {
-                    echo '<li><a href="'.$self->getUrl(array('search_it' => rex_request('searchit', 'string'), 'start' => $i*SHOWMAX)).'">'.($i+1).'</a></li>';
-                  }
-                }
-                echo '</ul>';
-              }
-            } else {
-              echo '<em>Leider nichts gefunden.</em>';
-            }
-          }
-        
-        ?>
-
-##Komplexe Suche
-
-Dieses Beispielmodul ähnelt dem Beispiel: Modul zur Suche mit PDF-Dateien, Pagination und Ähnlichkeitssuche. Die Ähnlichkeitssuche sollte aktiviert, sowie bei der Dateisuche die Option "Medienpool indexieren" ausgewählt sein. Außerdem sollte in dem Feld für die Dateiendungen nur "pdf" stehen.
-
-Ein erweitertes Suchformular bietet dem Nutzer an, folgende Punkte auszuwählen:
-
-- Suchmodus (AND oder OR)
-- Suchen in (Kategorieauswahl)
-- Wieviele Ergebnisse pro Seite? 
-
-Wichtig: Dieses Modul ist nur für Search it ab Version 0.5.
-
-        <form id="search-form" method="get" action="<?php echo rex_geturl(REX_ARTICLE_ID, REX_CLANG_ID, array(), '&'); ?>">
-        
-          <fieldset>
-            <legend>Suchformular</legend>
-        
-            <input type="hidden" name="article_id" value="REX_ARTICLE_ID" />
-            <input type="hidden" name="clang" value="REX_CLANG_ID" />
-        
-            <p><label for="searchterm">Suchbegriff:</label>
-            <input type="text" id="searchterm" name="searchterm" value="<?php echo htmlspecialchars(rex_request('searchterm', 'string', '')); ?>" /></p>
-        
-            <p><label for="logicalmode">Suchmodus:</label>
-            <select id="logicalmode" name="logicalmode">
-              <option value="and"<?php if(rex_request('logicalmode', 'string', 'and') == 'and') echo ' selected="selected"'; ?>>Suchergebnis muss alle Wörter enthalten</option>
-              <option value="or"<?php if(rex_request('logicalmode', 'string', 'and') == 'or') echo ' selected="selected"'; ?>>Suchergebnis muss mindestens ein Wort enthalten</option>
-            </select></p>
-        
-            <p><label for="searchin">Suchen in:</label>
-        
-        <?php $cat_select = new rex_category_select(true, REX_CLANG_ID, false, false); $cat_select->setAttribute('id', 'searchin'); $cat_select->setAttribute('name', 'searchin[]'); $cat_select->setAttribute('multiple', 'multiple'); $cat_select->setAttribute('size', '10'); $cat_select->setSelected(rex_request('searchin', 'array', array())); $cat_select->show(); ?></p>
-        
-            <p><input type="checkbox" value="1" name="subcats" id="subcats"<?php if(rex_request('subcats', 'int', 0)) echo ' checked="checked"'; ?> /><label for="subcats">Unterkategorien in die Suche einschließen</label></p>
-        
-            <p><label for="resultcount">Ergebnisse pro Seite:</label>
-            <select id="resultcount" name="resultcount">
-        
-        <?php $resultcount = rex_request('resultcount', 'int', 10); foreach(array(10,20,50,100) as $option)
-        
-          echo '    <option value="'.$option.'"'.($resultcount==$option?' selected="selected"':'').'>'.$option.'</option>'."\n";
-        
-        ?>
-        
-            </select></p>
-        
-            <p><input type="submit" id="submit" value="Suche starten" /></p>
-          </fieldset>
-        
-        </form>
-
-In dem Modul zur Präsentation der Suchergebnisse werden die entsprechenden Einstellungen an Search it übergeben, die Suche ausgeführt und letztendlich die Suchergebnisse ausgegeben.
-
-        <?php
-        
-          $searchterm = rex_request('searchterm', 'string', '');
-          $logicalmode = rex_request('logicalmode', 'string', 'and');
-          $showmax = rex_request('resultcount', 'int', 10);
-          $searchinIDs = rex_request('searchin', 'array', array());
-          $traverseSubcats = rex_request('subcats', 'bool', false);
-        
-          if(!empty($searchterm)){
-            $search_it = new search_it();
-            $search_it->setLimit(array($start = rex_get('start', 'int', 0), $showmax));
-            $search_it->setLogicalMode($logicalmode);
-            if($traverseSubcats){
-              $search_it->searchInCategories(a587_getCategories(true, true, $searchinIDs));
-            } else {
-              $search_it->searchInCategories($searchinIDs);
-            }
-        
-            $result = $search_it->search($searchterm);
-            if(!$result['count'] AND count($result['simwords']) > 0){
-              $newsearchString = $result['simwordsnewsearch'];
-              $result = $search_it->search($newsearchString);
-              if($result['count'] > 0){
-                echo '<p>Meinten Sie <strong>'.$newsearchString.'</strong>?</p>';
-              }
-            }
-        
-            if($result['count'] > 0){
-              echo '<ul class="searchresults">';
-              foreach($result['hits'] as $hit){
-                switch($hit['type']){
-                  case 'file':
-                    $text = $hit['highlightedtext'];
-        
-                    // PDF-Datei
-                    $filename = explode('/', $hit['filename']);
-                    $pdf = OOMedia::getMediaByFileName($filename[count($filename)-1]);
-        
-                    echo '    <li class="pdf">
-              <h4><a href="'.htmlspecialchars($pdf->getFullPath()).'">'.$pdf->getOrgFileName().'</a></h4>
-              <p class="highlightedtext">'.$text.'</p>
-              <p class="url">'.rex::getServer().'files/'.$pdf->getOrgFileName().'</p>
-            </li>';
-                  break;
-        
-                  case 'db_column':
-                  case 'article':
-                    if($hit['type'] == 'db_column'){
-                      $text = $hit['article_teaser'];
-                      if($hit['table'] == rex::getTablePrefix().'article')
-                        $hit['fid'] = $hit['values']['id'];
-                    } else {
-                      $text = $hit['highlightedtext'];
-                    }
-        
-                    // Artikel oder DB-Spalte aus der Artikel-Tabelle
-                    $article = OOArticle::getArticleById($hit['fid']);
-        
-                    echo '    <li>
-              <h4><a href="'.htmlspecialchars($article->getUrl()).'">'.$article->getName().'</a></h4>
-              <p class="highlightedtext">'.$text.'</p>
-              <p class="url">'.rex::getServer().rex_getUrl($hit['fid'], $hit['clang']).'</p>
-            </li>';
-                  break;
-        
-                }
-              }
-              echo '</ul>';
-        
-              // Pagination
-              if($result['count'] > $showmax){
-                $self = OOArticle::getArticleById(REX_ARTICLE_ID);
-                echo '<ul class="pagination">';
-                for($i = 0; ($i*$showmax) < $result['count']; $i++){
-                  if(($i*$showmax) == $start){
-                    echo '<li>'.($i+1).'</li>';
-                  } else {
-                    echo '<li><a href="'.$self->getUrl(array('search_it' => rex_request('searchit', 'string'), 'start' => $i*$showmax)).'">'.($i+1).'</a></li>';
-                  }
-                }
-                echo '</ul>';
-              }
-            } else {
-              echo '<em>Leider nichts gefunden.</em>';
-            }
-          }
-        
-        ?>
+    .search_it-result .search_it-teaser {
+        color: rgba(0,0,0,0.7);
+    }
+    .search_it-result .search_it-url {
+        color: rgba(0,0,0,0.4);
+    }
+    
+    .search_it-missing_type,
+    .search_it-zero {
+        background: rgba(180,0,0,0.05);
+        padding: 1rem;
+        border: 1px solid rgba(255,0,0,0.7);
+        margin: 1rem 0;
+        color: rgba(255,0,0,0.7);
+    }
+    .search_it-request,
+    .search_it-type {
+        font-weight: bold;
+    }
+</style>
+```

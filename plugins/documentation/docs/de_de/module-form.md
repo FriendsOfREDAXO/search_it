@@ -1,6 +1,6 @@
 # Modul-Eingabe
 
-Dieses Formular kann bspw. in den `header` eines Website-Templates eingebunden werden.
+Dieses Formular kann bspw. in den `<header>` eines Website-Templates eingebunden werden.
 
 **PHP** 
 

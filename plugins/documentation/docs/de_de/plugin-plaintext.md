@@ -1,4 +1,0 @@
-#Plaintext
-
-Das Plugin Plaintext .
-

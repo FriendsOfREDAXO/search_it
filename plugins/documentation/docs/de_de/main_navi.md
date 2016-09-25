@@ -19,6 +19,8 @@
 	- [Sprachabhängige Suche](howto-languages.md)
 	- [De- und Reindexierung](howto-reindex.md)
 	- [Ähnlichkeitssuche](howto-simsearch.md)
+	- [Highlighting](howto-highlighting.md)
+	
 ---
 
 **Credits**

@@ -22,7 +22,7 @@
 	- [Ähnlichkeitssuche](howto-simsearch.md)
 	- [Highlighting](howto-highlighting.md)
 	- [Auf Kategorien beschränken](howto-categories.md)
-	- [Paginierung](howto-pagination.md) (in Arbeit)	
+	- [Paginierung](howto-pagination.md) (in Arbeit)
 
 ---
 

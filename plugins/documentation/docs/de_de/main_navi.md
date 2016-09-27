@@ -18,8 +18,8 @@
 	- [Weitere Beispiele](module-more_enhanced.md) (in Arbeit)
 - FAQ
 	- [Sprachabhängige Suche](howto-languages.md)
-	- [De- und Reindexierung](howto-reindex.md)
-	- [Ähnlichkeitssuche](howto-simsearch.md)
+	- [De- und Reindexierung](howto-reindex.md) (in Arbeit)
+	- [Ähnlichkeitssuche](howto-simsearch.md) (in Arbeit)
 	- [Highlighting](howto-highlighting.md)
 	- [Auf Kategorien beschränken](howto-categories.md)
 	- [Paginierung](howto-pagination.md) (in Arbeit)

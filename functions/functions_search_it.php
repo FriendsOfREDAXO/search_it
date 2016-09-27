@@ -194,6 +194,7 @@ function search_it_handle_extensionpoint($_ep){
     $si = rex_addon::get('search_it');
 
     $_params = $_ep->getParams();
+    $_subject = $_ep->getSubject();
     $search_it = new search_it();
 
     switch($_ep->getName()){
@@ -206,7 +207,7 @@ function search_it_handle_extensionpoint($_ep){
         case 'ART_META_UPDATED':
         case 'ART_ADDED':
             foreach($search_it->includeColumns as $table => $columnArray){
-                if($table == rex::getTable('article')){
+                if($table == $search_it->tablePrefix.'article'){
                     foreach($columnArray as $column) {
                         $search_it->indexColumn($table, $column, 'id', $_params['id']);
                     }
@@ -223,7 +224,7 @@ function search_it_handle_extensionpoint($_ep){
             }
 
             foreach($search_it->includeColumns as $table => $columnArray){
-                if($table == rex::getTable('article')){
+                if($table == $search_it->tablePrefix.'article'){
                     foreach($columnArray as $column) {
                         $search_it->indexColumn($table, $column, 'id', $_params['id']);
                     }
@@ -234,7 +235,7 @@ function search_it_handle_extensionpoint($_ep){
 
         case 'ART_UPDATED':
             foreach($search_it->includeColumns as $table => $columnArray){
-                if($table == rex::getTable('article')){
+                if($table == $search_it->tablePrefix.'article'){
                     foreach($columnArray as $column) {
                         $search_it->indexColumn($table, $column, 'id', $_params['id']);
                     }
@@ -243,7 +244,7 @@ function search_it_handle_extensionpoint($_ep){
         break;
 
         case 'CAT_DELETED':
-            echo rex_warning(rex_i18n::msg('search_it_cat_deleted'));
+            //echo rex_view::warning(rex_i18n::rawMsg('search_it_cat_deleted'));
         break;
 
         case 'CAT_STATUS':
@@ -258,7 +259,7 @@ function search_it_handle_extensionpoint($_ep){
             }
 
             foreach($search_it->includeColumns as $table => $columnArray){
-                if($table == rex::getTable('article')){
+                if($table == $search_it->tablePrefix.'article'){
                     foreach($columnArray as $column) {
                         $search_it->indexColumn($table, $column, 'id', $_params['id']);
                     }
@@ -269,7 +270,7 @@ function search_it_handle_extensionpoint($_ep){
         case 'CAT_ADDED':
         case 'CAT_UPDATED':
             foreach($search_it->includeColumns as $table => $columnArray){
-                if($table == rex::getTable('article')){
+                if($table == $search_it->tablePrefix.'article'){
                     foreach($columnArray as $column) {
                         $search_it->indexColumn($table, $column, 'id', $_params['id']);
                     }
@@ -279,7 +280,7 @@ function search_it_handle_extensionpoint($_ep){
 
         case 'MEDIA_ADDED':
             foreach($search_it->includeColumns as $table => $columnArray){
-                if($table == rex::getTable('media')){
+                if($table == $search_it->tablePrefix.'media'){
                     foreach($columnArray as $column) {
                         $search_it->indexColumn($table, $column);
                     }
@@ -289,22 +290,24 @@ function search_it_handle_extensionpoint($_ep){
 
         case 'MEDIA_UPDATED':
             foreach($search_it->includeColumns as $table => $columnArray){
-                if($table == rex::getTable('media')){
+                if($table == $search_it->tablePrefix.'media'){
                     foreach($columnArray as $column) {
-                        $search_it->indexColumn($table, $column, 'id', $_params['file_id']);
+                        $search_it->indexColumn($table, $column, 'id', $_params['id']);
                     }
                 }
             }
         break;
 
         case 'SLICE_UPDATED':
+        case 'SLICE_DELETED':
+        case 'SLICE_ADDED':
             $search_it->indexArticle($_params['article_id'],$_params['clang']);
         break;
 
         case 'SLICE_SHOW':
-            // Das ist doch Müll? Nach der Message suchen?
-            if( strpos($_params['subject'],'<div class="alert alert-success">') !== false AND (!empty($_params['function']) OR rex_request('slice_id','int',0) == $_params['slice_id'])) {
-                $search_it->indexArticle($_params['article_id'], $_params['clang']);
+            // lus: Das ist doch Müll? Nach der Message im SliceOutput suchen? Sind Block Edit/Delete/up/down
+            if( strpos($_subject,'<div class="alert alert-success">') !== false AND (!empty($_params['function']) OR rex_request('slice_id','int',0) == $_params['slice_id']) ) {
+                //$search_it->indexArticle($_params['article_id'], $_params['clang']);
             }
         break;
 
@@ -458,6 +461,120 @@ function search_it_config_unserialize($_str){
     return $return;
 }
 
+
+/**
+ * A function for retrieving the Kölner Phonetik value of a string
+ *
+ * As described at http://de.wikipedia.org/wiki/Kölner_Phonetik
+ * Based on Hans Joachim Postel: Die Kölner Phonetik.
+ * Ein Verfahren zur Identifizierung von Personennamen auf der
+ * Grundlage der Gestaltanalyse.
+ * in: IBM-Nachrichten, 19. Jahrgang, 1969, S. 925-931
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * @package phonetics
+ * @version 1.0
+ * @link http://www.einfachmarke.de
+ * @license GPL 3.0 <http://www.gnu.org/licenses/>
+ * @copyright  2008 by einfachmarke.de
+ * @author Nicolas Zimmer <nicolas dot zimmer at einfachmarke.de>
+ */
+/**
+ * @param  string  $_word string to be analyzed
+ * @return string  $value represents the Kölner Phonetik value
+ * @access public
+ */
+function cologne_phone($_word){
+
+    //prepare for processing
+    $_word = strtolower($_word);
+    $substitution = array(
+        '?'=>'a',
+        '?'=>'o',
+        '?'=>'u',
+        '?'=>'ss',
+        'ph'=>'f'
+    );
+
+    foreach($substitution as $letter => $substitution) {
+        $_word = str_replace($letter, $substitution, $_word);
+    }
+
+    $len = strlen($_word);
+
+    //Rule for exeptions
+    $exceptionsLeading = array(
+        4=>array('ca','ch','ck','cl','co','cq','cu','cx'),
+        8=>array('dc','ds','dz','tc','ts','tz')
+    );
+
+    $exceptionsFollowing = array('sc','zc','cx','kx','qx');
+
+    //Table for coding
+    $codingTable = array(
+        0 => array('a','e','i','j','o','u','y'),
+        1 => array('b','p'),
+        2 => array('d','t'),
+        3 => array('f','v','w'),
+        4 => array('c','g','k','q'),
+        48 => array('x'),
+        5 => array('l'),
+        6 => array('m','n'),
+        7 => array('r'),
+        8 => array('c','s','z')
+    );
+
+    $value = array();
+    for($i=0; $i < $len; $i++) {
+        $value[$i] = '';
+
+        //Exceptions
+        if($i==0 AND $len > 1 AND $_word[$i].$_word[$i+1] == 'cr') { $value[$i] = 4; }
+
+        if($i < ($len - 1)) {
+            foreach($exceptionsLeading as $code=>$letters) {
+                if(in_array($_word[$i].$_word[$i+1],$letters)) { $value[$i] = $code; }
+            }
+        }
+
+        if($i AND in_array($_word[$i-1].$_word[$i], $exceptionsFollowing)) { $value[$i] = 8; }
+
+        //Normal encoding
+        if($value[$i] == '') {
+            foreach($codingTable as $code => $letters){
+                if(in_array($_word[$i], $letters)) { $value[$i] = $code; }
+            }
+        }
+    }
+
+    //delete double values
+    $len=count($value);
+
+    for($i=1;$i<$len;$i++){
+        if($value[$i] == $value[$i-1]) {
+            $value[$i] = '';
+        }
+    }
+
+    //delete vocals
+    for ($i=1;$i>$len;$i++){
+        //omitting first characer code and h
+        if($value[$i] == 0) {
+            $value[$i] = '';
+        }
+    }
+
+    $value = array_filter($value);
+    $value = implode('', $value);
+
+    return $value;
+}
+
+
 // ex search highlighter plugin
 function search_it_search_highlighter_output($_ep){
 
@@ -504,9 +621,8 @@ function search_it_search_highlighter_getHighlightedText($_subject, $_searchStri
 function search_it_reindex_cols($_ep){
 
     $_params = $_ep->getParams();
-    $si = rex_addon::get('search_it');
 
-    $id = 0;
+    $search_it = new search_it;
 
     if(!empty($_params['yform'])){
         $tablename = $_params['form']->params['main_table'];
@@ -516,16 +632,11 @@ function search_it_reindex_cols($_ep){
         $wherecondition = $_params['form']->getWhereCondition();
     }
 
-    $last_id = intval($_params['sql']->getLastId());
-
-    if(!array_key_exists($tablename,$si->getConfig('include')) OR !is_array($si->getConfig('include')[$tablename])) {
+    if(!array_key_exists($tablename,$search_it->includeColumns) OR !is_array($search_it->includeColumns[$tablename])) {
         return true;
     }
 
-    if(empty($id)) { $id = $last_id; }
-
-    $search_it = new search_it;
-    foreach($si->getConfig('include')[$tablename] as $col) {
+    foreach($search_it->includeColumns[$tablename] as $col) {
         $search_it->indexColumn($tablename, $col, false, false, false, false, $wherecondition);
     }
 

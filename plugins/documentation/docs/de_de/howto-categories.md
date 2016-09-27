@@ -1,6 +1,6 @@
 # Suchergebnisse nur aus bestimmten Kategorien anzeigen
 
-Der `search_it`-Klasse kann mitgeteilt werden, auf welche Kategorien und Artikel die Ausgabe der Suchergebnisse beschränkt wird. Diese Artikel und Kategorien müssen zuvor indexiert worden sein.
+Der `search_it`-Klasse kann mitgeteilt werden, auf welche Kategorien und Artikel die Ausgabe der Suchergebnisse beschrÃ¤nkt wird. Diese Artikel und Kategorien mÃ¼ssen zuvor indexiert worden sein.
 
 ```
 $search_it = new search_it();

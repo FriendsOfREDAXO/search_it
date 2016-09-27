@@ -1,6 +1,6 @@
-# Wie kann ich sprachabhängig suchen?
+# Wie kann ich sprachabhÃ¤ngig suchen?
 
-Search it sucht per Standard in allen Sprachen. Um sprachabhängige Suchen zu erlauben, muss der `search_it`-Klasse die Sprach-ID der Sprache, in der gesucht werden soll, übergeben werden.
+Search it sucht per Standard in allen Sprachen. Um sprachabhÃ¤ngige Suchen zu erlauben, muss der `search_it`-Klasse die Sprach-ID der Sprache, in der gesucht werden soll, Ã¼bergeben werden.
 
 *Such-Formular*
 

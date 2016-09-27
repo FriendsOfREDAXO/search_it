@@ -2,6 +2,21 @@
 
 `Search it` greift auf folgende Extension Points zurück, um Änderungen an den Inhalten von Redaxo-Artikeln zu erfassen:
 
+* `ART_DELETED`
+* `ART_META_UPDATED`
+* `ART_ADDED`
+* `ART_STATUS`
+* `ART_UPDATED`
+* `CAT_DELETED`
+* `CAT_STATUS`
+* `CAT_ADDED`
+* `CAT_UPDATED`
+* `MEDIA_ADDED`
+* `MEDIA_UPDATED`
+* `SLICE_UPDATED`
+* `SLICE_DELETED`
+* `SLICE_ADDED`
+* `SLICE_SHOW`
 
 ## Reindexierung von Artikeln via Cronjob
 

@@ -104,7 +104,7 @@ search_it_settings_show_none = Hide all
 
 search_it_ellipsis = …
 
-search_it_cat_deleted = All articles are still included in the search index. You have to <a href="index.php?page=search_it&subpage=generate">regenerate the search index</a>.
+search_it_cat_deleted = All articles are still included in the search index. You have to <a href="index.php?page=search_it/generate">regenerate the search index</a>.
 
 search_it_help_wiki = The documentation of this addon can be found at <a href="http://www.redaxo.org/de/wiki/index.php?n=R4.Rexsearch">http://www.redaxo.org/de/wiki/index.php?n=R4.Rexsearch</a>.
 search_it_help_forum = Any questions or suggestions can be asked/made at <a href="http://www.redaxo.org/de/forum/addons-f30/addon-search_it-fulltext-search-addon-t12965.html">http://www.redaxo.org/de/forum/addons-f30/addon-search_it-fulltext-search-addon-t12965.html</a>.

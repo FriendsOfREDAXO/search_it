@@ -28,7 +28,6 @@ function search_it_getArticles($cats = false) {
     return $return;
 }
 
-
 function search_it_getCategories($_ignoreoffline = true, $_onlyIDs = false, $_cats = false) {
     $si = rex_addon::get('search_it');
   
@@ -88,7 +87,6 @@ function search_it_getCategories($_ignoreoffline = true, $_onlyIDs = false, $_ca
     return $return;
 }
 
-
 function search_it_getDirs($_startDir = '', $_getSubdirs = false){
     $si = rex_addon::get('search_it');
 
@@ -127,7 +125,6 @@ function search_it_getDirs($_startDir = '', $_getSubdirs = false){
 
     return $return;
 }
-
 
 function search_it_getFiles($_startDir = '', $_fileexts = array(), $_getSubdirs = false){
     $si = rex_addon::get('search_it');
@@ -183,12 +180,6 @@ function search_it_getFiles($_startDir = '', $_fileexts = array(), $_getSubdirs 
 }
 
 
-function search_it_register_extensions($_Aep){
-    foreach($_Aep as $ep){
-        rex_extension::register($ep, 'search_it_handle_extensionpoint');
-    }
-}
-
 
 function search_it_handle_extensionpoint($_ep){
     $si = rex_addon::get('search_it');
@@ -206,6 +197,7 @@ function search_it_handle_extensionpoint($_ep){
         // update meta-infos for article
         case 'ART_META_UPDATED':
         case 'ART_ADDED':
+        case 'ART_UPDATED':
             foreach($search_it->includeColumns as $table => $columnArray){
                 if($table == $search_it->tablePrefix.'article'){
                     foreach($columnArray as $column) {
@@ -232,16 +224,6 @@ function search_it_handle_extensionpoint($_ep){
             }
         break;
 
-
-        case 'ART_UPDATED':
-            foreach($search_it->includeColumns as $table => $columnArray){
-                if($table == $search_it->tablePrefix.'article'){
-                    foreach($columnArray as $column) {
-                        $search_it->indexColumn($table, $column, 'id', $_params['id']);
-                    }
-                }
-            }
-        break;
 
         case 'CAT_DELETED':
             //echo rex_view::warning(rex_i18n::rawMsg('search_it_cat_deleted'));
@@ -281,7 +263,7 @@ function search_it_handle_extensionpoint($_ep){
         case 'MEDIA_ADDED':
             foreach($search_it->includeColumns as $table => $columnArray){
                 if($table == $search_it->tablePrefix.'media'){
-                    foreach($columnArray as $column) {
+                    foreach($columnArray as $column) {$tex[] = $table.$column;
                         $search_it->indexColumn($table, $column);
                     }
                 }

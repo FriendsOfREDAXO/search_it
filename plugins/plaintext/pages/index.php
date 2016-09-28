@@ -38,7 +38,7 @@ $content[] = search_it_getSettingsFormSection(
             'name' => 'search_it_plaintext[order]',
             'value' => !empty($this->getConfig('order')) ? htmlspecialchars($this->getConfig('order')) : ''
         )
-    ),false
+    ), false, false
 );
 
 

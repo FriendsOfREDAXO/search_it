@@ -46,7 +46,7 @@ $content[] = search_it_getSettingsFormSection(
             'type' => 'directoutput',
             'output' => ''
         )
-    ),false
+    ),false, false
 );
 
 $content[] =  '<div id="stats_elements">';

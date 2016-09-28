@@ -2,14 +2,10 @@
 
 Methode | Erläuterung
 -----|-----
-[function __construct($_clang = false, $_loadSettings = true, $_useStopwords = true)](https://github.com/pixelfirma/search_it/blob/Doku/lib/search_it.php#L72) | ###Alex###
-[cologne_phone($_word)](https://github.com/pixelfirma/search_it/blob/Doku/lib/search_it.php#L151) | A function for retrieving the K?lner Phonetik value of a string.
+[__construct($_clang = false, $_loadSettings = true, $_useStopwords = true)](https://github.com/pixelfirma/search_it/blob/Doku/lib/search_it.php#L72) | ###Alex###
 [doSearchArticles($_bool = false)](https://github.com/pixelfirma/search_it/blob/Doku/lib/search_it.php#L238) | ###Alex###
 [doGroupBy($_bool = true)](https://github.com/pixelfirma/search_it/blob/Doku/lib/search_it.php#L243) | ###Alex###
 [setSearchInIDs($_searchInIDs, $_reset = false)](https://github.com/pixelfirma/search_it/blob/Doku/lib/search_it.php#L251) | ###Alex###
-[encodeRegex($_regex)](https://github.com/pixelfirma/search_it/blob/Doku/lib/search_it.php#L319) | If utf8-encoding is used, the parameter will be appended with an "u". Since there is only UTF-8 supported, it always appends the "u".
-[beginFrontendMode()](https://github.com/pixelfirma/search_it/blob/Doku/lib/search_it.php#L327) | Simulates the frontend by setting $REX['REDAXO'] to false. The original state is saved in $this->redaxo.
-[endFrontendMode()](https://github.com/pixelfirma/search_it/blob/Doku/lib/search_it.php#L337) | Ends the frontend-mode by setting $REX['REDAXO'] to the original state.
 [setMaxTeaserChars($_count)](https://github.com/pixelfirma/search_it/blob/Doku/lib/search_it.php#L348) | Sets the maximum count of letters the teaser of a searched through text may have.
 [setMaxHighlightedTextChars($_count)](https://github.com/pixelfirma/search_it/blob/Doku/lib/search_it.php#L358) | Sets the maximum count of letters around an found search term in the highlighted text.
 [generateIndex()](https://github.com/pixelfirma/search_it/blob/Doku/lib/search_it.php#L366) | Generates the full index at once.
@@ -32,19 +28,18 @@ Methode | Erläuterung
 [setLogicalMode($_logicalMode)](https://github.com/pixelfirma/search_it/blob/Doku/lib/search_it.php#L1107) | Sets the mode of how the keywords are logical connected.
 [setTextMode($_textMode)](https://github.com/pixelfirma/search_it/blob/Doku/lib/search_it.php#L1143) | Sets the mode concerning which text is to be searched through.
 [setSearchMode($_searchMode)](https://github.com/pixelfirma/search_it/blob/Doku/lib/search_it.php#L1184) | Sets the MySQL search mode.
-[ function setOrder($_order)](https://github.com/pixelfirma/search_it/blob/Doku/lib/search_it.php#L1211) | Sets the sort order of the results.
+[setOrder($_order)](https://github.com/pixelfirma/search_it/blob/Doku/lib/search_it.php#L1211) | Sets the sort order of the results.
 [setHighlightType($_type)](https://github.com/pixelfirma/search_it/blob/Doku/lib/search_it.php#L1246) | Sets the type of the text with the highlighted keywords.
 [parseSearchString($_searchString)](https://github.com/pixelfirma/search_it/blob/Doku/lib/search_it.php#L1276) | Converts the search string to an array.
 [addWhitelist($_whitelist)](https://github.com/pixelfirma/search_it/blob/Doku/lib/search_it.php#L1334) | This method adds weight to special words.
 [setCaseInsensitive($_ci = true)](https://github.com/pixelfirma/search_it/blob/Doku/lib/search_it.php#L1350) | Case sensitive or case insensitive?
-[setCI($_ci = true)](https://github.com/pixelfirma/search_it/blob/Doku/lib/search_it.php#L1362) | Case sensitive or case insensitive?
 [setClang($_clang)](https://github.com/pixelfirma/search_it/blob/Doku/lib/search_it.php#L1374) | Sets the language-Id.
 [getPlaintext($_text)](https://github.com/pixelfirma/search_it/blob/Doku/lib/search_it.php#L1392) | Strips the HTML-Tags from a text and replaces them with spaces or line breaks
 [getHighlightedText($_text)](https://github.com/pixelfirma/search_it/blob/Doku/lib/search_it.php#L1419) | According to the highlight-type this method will return a string or an array. Found keywords will be highlighted with the surround-tags.
 [getTeaserText($_text)](https://github.com/pixelfirma/search_it/blob/Doku/lib/search_it.php#L1577) | Gets the teaser of a text.
 [isCached($_search)](https://github.com/pixelfirma/search_it/blob/Doku/lib/search_it.php#L1609) | Returns if a search term is already cached. The cached result will be stored in $this->cachedArray.
 [cacheSearch($_result, $_indexIds)](https://github.com/pixelfirma/search_it/blob/Doku/lib/search_it.php#L1644) | Stores a search result in the cache.
-[ function deleteCache($_indexIds = false)](https://github.com/pixelfirma/search_it/blob/Doku/lib/search_it.php#L1691) | Truncates the cache or deletes all data that are concerned with the given index-ids.
+[deleteCache($_indexIds = false)](https://github.com/pixelfirma/search_it/blob/Doku/lib/search_it.php#L1691) | Truncates the cache or deletes all data that are concerned with the given index-ids.
 [storeKeywords($_keywords, $_doCount = true)](https://github.com/pixelfirma/search_it/blob/Doku/lib/search_it.php#L1737) | ###Alex###
-[ function deleteKeywords()](https://github.com/pixelfirma/search_it/blob/Doku/lib/search_it.php#L1772) | ###Alex###
+[deleteKeywords()](https://github.com/pixelfirma/search_it/blob/Doku/lib/search_it.php#L1772) | ###Alex###
 [search($_search)](https://github.com/pixelfirma/search_it/blob/Doku/lib/search_it.php#L1785) | Executes the search.

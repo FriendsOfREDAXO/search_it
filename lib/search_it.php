@@ -78,7 +78,7 @@ class search_it {
             $this->setSearchMode(rex_addon::get('search_it')->getConfig('searchmode'));
             $this->setSurroundTags(rex_addon::get('search_it')->getConfig('surroundtags'));
             $this->setLimit(rex_addon::get('search_it')->getConfig('limit'));
-            $this->setCI(rex_addon::get('search_it')->getConfig('ci'));
+            $this->setCaseInsensitive(rex_addon::get('search_it')->getConfig('ci'));
             $this->setBlacklist(is_array(rex_addon::get('search_it')->getConfig('blacklist')) ? rex_addon::get('search_it')->getConfig('blacklist') : array() );
             $this->setExcludeIDs(is_array(rex_addon::get('search_it')->getConfig('exclude_article_ids')) ? rex_addon::get('search_it')->getConfig('exclude_article_ids') : array() );
             if(is_array(rex_addon::get('search_it')->getConfig('exclude_category_ids'))){
@@ -111,7 +111,6 @@ class search_it {
         $this->generatedPath = rex_path::cache().'addons/';
         $this->documentRoot = realpath($_SERVER['DOCUMENT_ROOT']);
         $this->mediaFolder = rex_path::media();
-
 
         $this->ellipsis = rex_i18n::msg('search_it_ellipsis');
 
@@ -200,25 +199,6 @@ class search_it {
     }
 
 
-    /**
-     * Sets the maximum count of letters the teaser of a searched through text may have.
-     *
-     * @param int $_count
-     */
-    function setMaxTeaserChars($_count){
-        $this->maxTeaserChars = intval($_count);
-        $this->hashMe .= $_count;
-    }
-
-
-    /**
-     * Sets the maximum count of letters around an found search term in the highlighted text.
-     * @param int $_count
-     */
-    function setMaxHighlightedTextChars($_count){
-        $this->maxHighlightedTextChars = intval($_count);
-        $this->hashMe .= $_count;
-    }
 
     /**
      * Generates the full index at once.
@@ -426,8 +406,10 @@ class search_it {
         $delete = rex_sql::factory();
 
         $where = sprintf(" `ftable` = '%s' AND `fcolumn` = '%s' AND `texttype` = 'db_column'",$_table,$_column);
-        //if(is_string($_idcol) AND ($_id !== false))
-        //$where .= sprintf(' AND fid = %d',$_id);
+        //lus: reaktiviert damit einzeln gelöscht werden kann
+        if(is_string($_idcol) AND ($_id !== false)) {
+            $where .= sprintf(' AND fid = %d', $_id);
+        }
 
         // delete from cache
         $select = rex_sql::factory();
@@ -441,8 +423,8 @@ class search_it {
             $this->deleteCache($indexIds);
         }
 
-        // delete old data
-        if($_start === 0){
+        // delete old data + lus: immer alle löschen
+        if( $_start === 0 || $_start === false || (is_string($_idcol) AND ($_id !== false)) ){
             $delete->setTable($this->tablePrefix.'search_it_index');
             $delete->setWhere($where);
             $delete->delete();
@@ -464,7 +446,8 @@ class search_it {
             $where .= sprintf(' AND (%s = %d)', $_idcol, $_id);
         }
         if(!empty($_where) AND is_string($_where)) {
-            $where .= ' AND (' . $_where . ')';
+            // lus: sorry,muss ale neu schreiben, weil ich oben alle lösche
+            //$where .= ' AND (' . $_where . ')';
         }
 
         if(is_numeric($_start) AND is_numeric($_count)) {
@@ -824,6 +807,26 @@ class search_it {
 
 
     /**
+     * Sets the maximum count of letters the teaser of a searched through text may have.
+     *
+     * @param int $_count
+     */
+    function setMaxTeaserChars($_count){
+        $this->maxTeaserChars = intval($_count);
+        $this->hashMe .= $_count;
+    }
+
+
+    /**
+     * Sets the maximum count of letters around an found search term in the highlighted text.
+     * @param int $_count
+     */
+    function setMaxHighlightedTextChars($_count){
+        $this->maxHighlightedTextChars = intval($_count);
+        $this->hashMe .= $_count;
+    }
+
+    /**
      * Sets the surround-tags for found keywords.
      *
      * Expects either the start- and the end-tag
@@ -987,7 +990,6 @@ class search_it {
         return true;
     }
 
-
     /**
      * Sets the mode concerning which text is to be searched through.
      *
@@ -1028,7 +1030,6 @@ class search_it {
         return true;
     }
 
-
     /**
      * Sets the MySQL search mode.
      *
@@ -1053,7 +1054,6 @@ class search_it {
 
         return true;
     }
-
 
     /**
      * Sets the sort order of the results.
@@ -1092,7 +1092,6 @@ class search_it {
         return true;
     }
 
-
     /**
      * Sets the type of the text with the highlighted keywords.
      *
@@ -1119,7 +1118,6 @@ class search_it {
 
         $this->hashMe .= $this->highlightType;
     }
-
 
     /**
      * Converts the search string to an array.
@@ -1196,7 +1194,6 @@ class search_it {
         }
     }
 
-
     /**
      * Case sensitive or case insensitive?
      *
@@ -1205,21 +1202,8 @@ class search_it {
      * @ignore
      */
     function setCaseInsensitive($_ci = true){
-        setCI($_ci);
-    }
-
-
-    /**
-     * Case sensitive or case insensitive?
-     *
-     * @param bool $_ci
-     *
-     * @ignore
-     */
-    function setCI($_ci = true){
         $this->ci = (bool) $_ci;
     }
-
 
     /**
      * Sets the language-Id.
@@ -1237,6 +1221,7 @@ class search_it {
 
         $this->hashMe .= $_clang;
     }
+
 
 
     /**
@@ -1455,6 +1440,7 @@ class search_it {
     }
 
 
+
     /**
      * Returns if a search term is already cached.
      * The cached result will be stored in $this->cachedArray.
@@ -1477,7 +1463,6 @@ class search_it {
         return false;
     }
 
-
     /**
      * Calculates the cache hash.
      *
@@ -1488,7 +1473,6 @@ class search_it {
     function cacheHash($_searchString){
         return md5($_searchString.$this->hashMe);
     }
-
 
     /**
      * Stores a search result in the cache.
@@ -1536,7 +1520,6 @@ class search_it {
 
         }
     }
-
 
     /**
      * Truncates the cache or deletes all data that are concerned with the given index-ids.
@@ -1591,6 +1574,7 @@ class search_it {
     }
 
 
+
     function storeKeywords($_keywords, $_doCount = true){
         // store similar words
         $simWordsSQL = rex_sql::factory();
@@ -1625,11 +1609,11 @@ class search_it {
         }
     }
 
-
     function deleteKeywords(){
         $kw_sql = rex_sql::factory();
         return $kw_sql->setQuery(sprintf('TRUNCATE TABLE `%s`', $this->tablePrefix.'search_it_keywords'));
     }
+
 
 
     /**

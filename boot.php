@@ -49,10 +49,14 @@
                 'CAT_UPDATED',
                 'MEDIA_ADDED',
                 'MEDIA_UPDATED',
+                'SLICE_ADDED',
+                'SLICE_DELETED',
                 'SLICE_UPDATED',
                 'SLICE_SHOW',
             );
-            search_it_register_extensions($extensionPoints);
+            foreach($extensionPoints as $ep){
+                rex_extension::register($ep, 'search_it_handle_extensionpoint');
+            }
         }
 
         //set default Values on installation

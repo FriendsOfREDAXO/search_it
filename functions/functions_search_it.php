@@ -445,115 +445,249 @@ function search_it_config_unserialize($_str){
 
 
 /**
- * A function for retrieving the Kölner Phonetik value of a string
+ * Phonetik für die deutsche Sprache nach dem Kölner Verfahren
  *
- * As described at http://de.wikipedia.org/wiki/Kölner_Phonetik
- * Based on Hans Joachim Postel: Die Kölner Phonetik.
- * Ein Verfahren zur Identifizierung von Personennamen auf der
- * Grundlage der Gestaltanalyse.
- * in: IBM-Nachrichten, 19. Jahrgang, 1969, S. 925-931
+ * Die Kölner Phonetik (auch Kölner Verfahren) ist ein phonetischer Algorithmus,
+ * der Wörtern nach ihrem Sprachklang eine Zeichenfolge zuordnet, den phonetischen
+ * Code. Ziel dieses Verfahrens ist es, gleich klingenden Wörtern den selben Code
+ * zuzuordnen, um bei Suchfunktionen eine Ähnlichkeitssuche zu implementieren. Damit
+ * ist es beispielsweise möglich, in einer Namensliste Einträge wie "Meier" auch unter
+ * anderen Schreibweisen, wie "Maier", "Mayer" oder "Mayr", zu finden.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * Die Kölner Phonetik ist, im Vergleich zum bekannteren Russell-Soundex-Verfahren,
+ * besser auf die deutsche Sprache abgestimmt. Sie wurde 1969 von Postel veröffentlicht.
  *
- * @package phonetics
- * @version 1.0
- * @link http://www.einfachmarke.de
- * @license GPL 3.0 <http://www.gnu.org/licenses/>
- * @copyright  2008 by einfachmarke.de
- * @author Nicolas Zimmer <nicolas dot zimmer at einfachmarke.de>
+ * Infos: http://www.uni-koeln.de/phil-fak/phonetik/Lehre/MA-Arbeiten/magister_wilz.pdf
+ *
+ * Die Umwandlung eines Wortes erfolgt in drei Schritten:
+ *
+ * 1. buchstabenweise Codierung von links nach rechts entsprechend der Umwandlungstabelle
+ * 2. entfernen aller mehrfachen Codes
+ * 3. entfernen aller Codes "0" ausser am Anfang
+ *
+ * Beispiel  Der Name "Müller-Lüdenscheidt" wird folgendermaßen kodiert:
+ *
+ * 1. buchstabenweise Codierung: 60550750206880022
+ * 2. entfernen aller mehrfachen Codes: 6050750206802
+ * 3. entfernen aller Codes "0": 65752682
+ *
+ * Umwandlungstabelle:
+ * ============================================
+ * Buchstabe      Kontext                  Code
+ * -------------  -----------------------  ----
+ * A,E,I,J,O,U,Y                            0
+ * H                                        -
+ * B                                        1
+ * P              nicht vor H               1
+ * D,T            nicht vor C,S,Z           2
+ * F,V,W                                    3
+ * P              vor H                     3
+ * G,K,Q                                    4
+ * C              im Wortanfang
+ *                vor A,H,K,L,O,Q,R,U,X     4
+ * C              vor A,H,K,O,Q,U,X
+ *                ausser nach S,Z           4
+ * X              nicht nach C,K,Q         48
+ * L                                        5
+ * M,N                                      6
+ * R                                        7
+ * S,Z                                      8
+ * C              nach S,Z                  8
+ * C              im Wortanfang ausser vor
+ *                A,H,K,L,O,Q,R,U,X         8
+ * C              nicht vor A,H,K,O,Q,U,X   8
+ * D,T            vor C,S,Z                 8
+ * X              nach C,K,Q                8
+ * --------------------------------------------
+ *
+ * ---------------------------------------------------------------------
+ * Support/Info/Download: https://github.com/deezaster/germanphonetic
+ * ---------------------------------------------------------------------
+ *
+ * @package    x3m
+ * @version    1.3
+ * @author     Andy Theiler <andy@x3m.ch>
+ * @copyright  Copyright (c) 1996 - 2014, Xtreme Software GmbH, Switzerland (www.x3m.ch)
+ * @license    http://www.opensource.org/licenses/bsd-license.php  BSD License
  */
-/**
- * @param  string  $_word string to be analyzed
- * @return string  $value represents the Kölner Phonetik value
- * @access public
- */
-function cologne_phone($_word){
+function soundex_ger($word)
+{
+    //echo "<br>input: <b>" . $word . "</b>";
 
-    //prepare for processing
-    $_word = strtolower($_word);
-    $substitution = array(
-        '?'=>'a',
-        '?'=>'o',
-        '?'=>'u',
-        '?'=>'ss',
-        'ph'=>'f'
-    );
+    $code    = "";
+    $word    = strtolower($word);
 
-    foreach($substitution as $letter => $substitution) {
-        $_word = str_replace($letter, $substitution, $_word);
-    }
+    if (strlen($word) < 1) { return ""; }
 
-    $len = strlen($_word);
+    // Umwandlung: v->f, w->f, j->i, y->i, ph->f, ä->a, ö->o, ü->u, ß->ss, é->e, è->e, ê->e, à->a, á->a, â->a, ë->e
+    $word = str_replace(array("ç","v","w","j","y","ph","ä","ö","ü","ß","é","è","ê","à","á","â","ë"), array("c","f","f","i","i","f","a","o","u","ss","e","e","e","a","a","a","e"), $word);
+    //echo "<br>optimiert1: <b>" . $word . "</b>";
 
-    //Rule for exeptions
-    $exceptionsLeading = array(
-        4=>array('ca','ch','ck','cl','co','cq','cu','cx'),
-        8=>array('dc','ds','dz','tc','ts','tz')
-    );
+    // Nur Buchstaben (keine Zahlen, keine Sonderzeichen)
+    $word = preg_replace('/[^a-zA-Z]/', '', $word);
+    //echo "<br>optimiert2: <b>" . $word . "</b>";
 
-    $exceptionsFollowing = array('sc','zc','cx','kx','qx');
 
-    //Table for coding
-    $codingTable = array(
-        0 => array('a','e','i','j','o','u','y'),
-        1 => array('b','p'),
-        2 => array('d','t'),
-        3 => array('f','v','w'),
-        4 => array('c','g','k','q'),
-        48 => array('x'),
-        5 => array('l'),
-        6 => array('m','n'),
-        7 => array('r'),
-        8 => array('c','s','z')
-    );
 
-    $value = array();
-    for($i=0; $i < $len; $i++) {
-        $value[$i] = '';
+    $wordlen = strlen($word);
+    $char    = str_split($word);
 
-        //Exceptions
-        if($i==0 AND $len > 1 AND $_word[$i].$_word[$i+1] == 'cr') { $value[$i] = 4; }
 
-        if($i < ($len - 1)) {
-            foreach($exceptionsLeading as $code=>$letters) {
-                if(in_array($_word[$i].$_word[$i+1],$letters)) { $value[$i] = $code; }
+    // Sonderfälle bei Wortanfang (Anlaut)
+    if ($char[0] == 'c')
+    {
+        if ($wordlen == 1)
+        {
+            $code = 8;
+            $x = 1;
+        }
+        else
+        {
+            // vor a,h,k,l,o,q,r,u,x
+            switch ($char[1]) {
+                case 'a':
+                case 'h':
+                case 'k':
+                case 'l':
+                case 'o':
+                case 'q':
+                case 'r':
+                case 'u':
+                case 'x':
+                    $code = "4";
+                    break;
+                default:
+                    $code = "8";
+                    break;
             }
+            $x = 1;
+        }
+    }
+    else
+    {
+        $x = 0;
+    }
+    for (; $x < $wordlen; $x++)
+    {
+        switch ($char[$x]) {
+            case 'a':
+            case 'e':
+            case 'i':
+            case 'o':
+            case 'u':
+                $code .= "0";
+                break;
+            case 'b':
+            case 'p':
+                $code .= "1";
+                break;
+            case 'd':
+            case 't':
+                if ($x+1 < $wordlen) {
+                    switch ($char[$x+1]) {
+                        case 'c':
+                        case 's':
+                        case 'z':
+                            $code .= "8";
+                            break;
+                        default:
+                            $code .= "2";
+                            break;
+                    }
+                }
+                else {
+                    $code .= "2";
+                }
+                break;
+            case 'f':
+                $code .= "3";
+                break;
+            case 'g':
+            case 'k':
+            case 'q':
+                $code .= "4";
+                break;
+            case 'c':
+                if ($x+1 < $wordlen) {
+                    switch ($char[$x+1]) {
+                        case 'a':
+                        case 'h':
+                        case 'k':
+                        case 'o':
+                        case 'q':
+                        case 'u':
+                        case 'x':
+                            switch ($char[$x-1]) {
+                                case 's':
+                                case 'z':
+                                    $code .= "8";
+                                    break;
+                                default:
+                                    $code .= "4";
+                            }
+                            break;
+                        default:
+                            $code .= "8";
+                            break;
+                    }
+                }
+                else {
+                    $code .= "8";
+                }
+                break;
+            case 'x':
+                if ($x > 0) {
+                    switch ($char[$x-1]) {
+                        case 'c':
+                        case 'k':
+                        case 'q':
+                            $code .= "8";
+                            break;
+                        default:
+                            $code .= "48";
+                            break;
+                    }
+                }
+                else {
+                    $code .= "48";
+                }
+                break;
+            case 'l':
+                $code .= "5";
+                break;
+            case 'm':
+            case 'n':
+                $code .= "6";
+                break;
+            case 'r':
+                $code .= "7";
+                break;
+            case 's':
+            case 'z':
+                $code .= "8";
+                break;
         }
 
-        if($i AND in_array($_word[$i-1].$_word[$i], $exceptionsFollowing)) { $value[$i] = 8; }
+    }
+    //echo "<br>code1: <b>" . $code . "</b><br />";
 
-        //Normal encoding
-        if($value[$i] == '') {
-            foreach($codingTable as $code => $letters){
-                if(in_array($_word[$i], $letters)) { $value[$i] = $code; }
-            }
+    // Mehrfach Codes entfernen
+    $code =  preg_replace("/(.)\\1+/", "\\1", $code);
+    //echo "<br>code2: <b>" . $code . "</b><br />";
+    // entfernen aller Codes "0" ausser am Anfang
+    $codelen      = strlen($code);
+    $num          = array();
+    $num          = str_split($code);
+    $phoneticcode = $num[0];
+
+    for ($x = 1; $x < $codelen; $x++)
+    {
+        if ($num[$x] != "0") {
+            $phoneticcode .= $num[$x];
         }
     }
 
-    //delete double values
-    $len=count($value);
-
-    for($i=1;$i<$len;$i++){
-        if($value[$i] == $value[$i-1]) {
-            $value[$i] = '';
-        }
-    }
-
-    //delete vocals
-    for ($i=1;$i>$len;$i++){
-        //omitting first characer code and h
-        if($value[$i] == 0) {
-            $value[$i] = '';
-        }
-    }
-
-    $value = array_filter($value);
-    $value = implode('', $value);
-
-    return $value;
+    return $phoneticcode;
 }
 
 

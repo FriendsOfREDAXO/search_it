@@ -1587,7 +1587,7 @@ class search_it {
                     $simWordsSQL->escape($keyword['search']),
                     ( $this->similarwordsMode & SEARCH_IT_SIMILARWORDS_SOUNDEX ) ? soundex($keyword['search']) : '',
                     ( $this->similarwordsMode & SEARCH_IT_SIMILARWORDS_METAPHONE ) ? metaphone($keyword['search']) : '',
-                    ( $this->similarwordsMode & SEARCH_IT_SIMILARWORDS_COLOGNEPHONE ) ? cologne_phone($keyword['search']) : '',
+                    ( $this->similarwordsMode & SEARCH_IT_SIMILARWORDS_COLOGNEPHONE ) ? soundex_ger($keyword['search']) : '',
                     ( isset($keyword['clang']) AND $keyword['clang'] !== false ) ? $keyword['clang'] : '-1'
                 );
             }
@@ -1675,7 +1675,7 @@ class search_it {
                 }
 
                 if( $this->similarwordsMode & SEARCH_IT_SIMILARWORDS_COLOGNEPHONE ) {
-                    $sounds[] = "colognephone = '" . cologne_phone($keyword['search']) . "'";
+                    $sounds[] = "colognephone = '" . soundex_ger($keyword['search']) . "'";
                 }
                 $simwords[] = sprintf("
                   SELECT

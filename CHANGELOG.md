@@ -1,5 +1,8 @@
 #Änderungen von search_it
 
+##Version 5.9.1 (2016-09-24)
+  - Methode cologne_phon() durch soundex_ger() ersetzt (wegen Lizenz, jetzt BSD) 
+  
 ##Version 5.9.0 (2016-09-24)
   - Plugin Search Highlighter und Reindex in das Addon eingebaut
 

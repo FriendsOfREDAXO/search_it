@@ -23,7 +23,11 @@ page:
 requires:
     redaxo: '^5.2.0'
 
+system_plugins:
+    - documentation
+
 plugins:
     - plaintext
     - stats
-    - documentation
+
+

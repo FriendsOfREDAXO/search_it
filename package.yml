@@ -1,7 +1,7 @@
 package: search_it
 version: '5.9.1'
 author: Robert Rupf/Norbert Micheel
-supportpage: http://www.redaxo.org/de/wiki/index.php?n=R4.Rexsearch
+supportpage: https://github.com/tyrant88/search_it
 
 
 page:

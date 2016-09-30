@@ -1,9 +1,8 @@
 package: search_it/plaintext
 version: '5.8.2'
 author: Robert Rupf/Norbert Micheel
-supportpage: http://www.redaxo.org/de/wiki/index.php?n=R4.Xsearch-PluginPlaintext
-title: 'translate:search_it_plaintext_title'
 
+title: 'translate:search_it_plaintext_title'
 description: 'translate:search_it_plaintext_title'
 
 page:

@@ -1,9 +1,8 @@
 package: search_it/stats
 version: '5.8.2'
 author: Robert Rupf/Norbert Micheel
-supportpage: http://www.redaxo.org/de/wiki/index.php?n=R4.Xsearch-PluginStats
-title: 'translate:search_it_stats_plugin_title'
 
+title: 'translate:search_it_stats_plugin_title'
 description: 'translate:search_it_stats_plugin'
 
 page:

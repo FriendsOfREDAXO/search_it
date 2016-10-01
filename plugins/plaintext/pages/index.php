@@ -161,7 +161,7 @@ $content[] = search_it_getSettingsFormSection(
                     ondrag = false;
                 }, 100);
             }
-        }).disableSelection();
+        });
 
         jQuery('#sortable-elements .panel-title').each(function () {
             jQuery(this).parent().css('cursor', 'move').css('z-index','10000');

@@ -35,11 +35,11 @@ class rex_cronjob_reindex extends rex_cronjob
 
                 case 1:
                 default:
-                    $message .= $search_it->generateIndex();
+                    $search_it->generateIndex();
                     break;
             }
 
-            if ( $message != '' ) { $this->setMessage($message); }
+            //if ( $message != '' ) { $this->setMessage($message); }
             return true;
         }
         $this->setMessage('Search it is not installed');

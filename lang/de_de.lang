@@ -5,6 +5,7 @@ search_it_readme = Readme
 
 search_it_info = Such Addon
 search_it_infotext = Such Addon
+search_it_reindex = Re-indizieren
 
 search_it_settings_mode = Suchmodus
 search_it_settings_result = Suchergebnis
@@ -91,6 +92,8 @@ search_it_generate_done = Index wurde erstellt
 search_it_generate_cancel = Erstellung des Index abgebrochen
 search_it_generate_duration = Dauer: 
 search_it_generate_timeleft = Verbleibend: 
+search_it_generate_articles = Artikel neu-indizieren
+search_it_generate_columns = Tabellen neu-indizieren
 
 search_it_settings_fileext_header = Dateisuche
 search_it_settings_fileext_label = Dateiendungen (z.B. 'txt,csv,pdf')<br />(frei lassen für beliebige Dateien)

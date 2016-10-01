@@ -5,6 +5,7 @@ search_it_readme = Readme
 
 search_it_info = Such Addon
 search_it_infotext = Such Addon
+search_it_reindex = Re-index
 
 search_it_settings_mode = Searchmode
 search_it_settings_result = Searchresult
@@ -91,6 +92,8 @@ search_it_generate_done = Index generated
 search_it_generate_cancel = Indexing aborted
 search_it_generate_duration = Time: 
 search_it_generate_timeleft = Remaining: 
+search_it_generate_articles = re-index articles
+search_it_generate_columns = re-index tables
 
 search_it_settings_fileext_header = File search
 search_it_settings_fileext_label = Extensions (i.e. 'txt,csv,pdf' <br />(keep empty for any files)

@@ -33,7 +33,9 @@
         rex_extension::register('REX_YFORM_SAVED', 'search_it_reindex_cols');
         rex_extension::register('REX_FORM_DELETED', 'search_it_reindex_cols');
     }
-
+    if ( rex_addon::get('cronjob')->isAvailable() && !rex::isSafeMode() ) {
+        rex_cronjob_manager::registerType('rex_cronjob_reindex');
+    }
     if ( rex::isBackend() && rex::getUser() ) {
         // automatic indexing
         if ( rex_addon::get('search_it')->getConfig('automaticindex') == true ){

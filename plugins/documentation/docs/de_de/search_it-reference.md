@@ -4,7 +4,7 @@ Methode | Erläuterung
 -----|-----
 [__construct($_clang = false, $_loadSettings = true, $_useStopwords = true)](https://github.com/pixelfirma/search_it/blob/Doku/lib/search_it.php#L72) | Class constructor
 [doSearchArticles($_bool = false)](https://github.com/pixelfirma/search_it/blob/Doku/lib/search_it.php#L238) | Selects if articles will be searched
-[doGroupBy($_bool = true)](https://github.com/pixelfirma/search_it/blob/Doku/lib/search_it.php#L243) | ###Alex###
+[doGroupBy($_bool = true)](https://github.com/pixelfirma/search_it/blob/Doku/lib/search_it.php#L243) | Use GROUP BY to group results
 [setSearchInIDs($_searchInIDs, $_reset = false)](https://github.com/pixelfirma/search_it/blob/Doku/lib/search_it.php#L251) | Creates an array of ids which will be searched
 [setMaxTeaserChars($_count)](https://github.com/pixelfirma/search_it/blob/Doku/lib/search_it.php#L348) | Sets the maximum count of letters the teaser of a searched through text may have.
 [setMaxHighlightedTextChars($_count)](https://github.com/pixelfirma/search_it/blob/Doku/lib/search_it.php#L358) | Sets the maximum count of letters around an found search term in the highlighted text.

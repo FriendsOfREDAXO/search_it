@@ -28,6 +28,7 @@
 
 **Credits**
 
-tyrant88 (Norbert Micheel)
-xong (Robert Rupf)  
-alexplusde (Alexander Walther)  
+@tyrant88 (Norbert Micheel)
+@xong (Robert Rupf)  
+@alexplusde (Alexander Walther)  
+@pixelfirma (Paul Götz)  

@@ -380,7 +380,7 @@ function search_it_getSettingsFormSection($id = '', $title = '&nbsp;', $elements
 
             // DIRECT OUTPUT
             case 'directoutput':
-                if ($element['outputleft']!='') { $n['label'] = $element['outputleft']; }
+                if ( isset($element['outputleft']) && $element['outputleft']!='') { $n['label'] = $element['outputleft']; }
                 $n['field'] = $element['output'];
             break;
         }

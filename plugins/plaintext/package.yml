@@ -1,5 +1,5 @@
 package: search_it/plaintext
-version: '5.8.2'
+version: '6.0.0-rc1'
 author: Robert Rupf/Norbert Micheel
 
 title: 'translate:search_it_plaintext_title'

@@ -1,5 +1,8 @@
 #Änderungen von search_it
 
+##Version 6.0.0-rc1 (2016-10-10)
+  - Re-indizierung jetzt per cronjob möglich 
+
 ##Version 5.9.1 (2016-09-24)
   - Methode cologne_phon() durch soundex_ger() ersetzt (wegen Lizenz, jetzt BSD) 
   

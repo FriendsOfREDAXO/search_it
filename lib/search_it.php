@@ -237,7 +237,7 @@ class search_it {
             $mediaSQL->setTable($this->tablePrefix.'media');
             if($mediaSQL->select('id, category_id, filename')){
                 foreach($mediaSQL->getArray() as $file){
-                    $this->indexFile($file['filename'], false, false, $file['id'], $file['category_id']);
+                    $this->indexFile('media/'.$file['filename'], false, false, $file['id'], $file['category_id']);
                 }
             }
         }
@@ -245,7 +245,8 @@ class search_it {
         // index files
         foreach($this->includeDirectories as $dir){
             foreach(search_it_getFiles($dir, $this->fileExtensions) as $filename){
-                $this->indexFile($filename);
+                //$filename is a full path with dir
+                $this->indexFile(substr($filename,1));
             }
         }
     }
@@ -571,6 +572,7 @@ class search_it {
      * @return mixed
      */
     function indexFile($_filename, $_doPlaintext = false, $_clang = false, $_fid = false, $_catid = false){
+        // $_filename comes with path but stripped of first slash
         // extract file-extension
         $filenameArray = explode('.', $_filename);
         $fileext = $filenameArray[count($filenameArray) - 1];
@@ -629,8 +631,9 @@ class search_it {
                 if (function_exists('exec')) {
                     $tempFile = tempnam($this->generatedPath . '/mediapool/', 'search_it');
                     $encoding = 'UTF-8';
+                    //echo 'pdftotext ' . escapeshellarg(rex_path::base($_filename)) . ' ' . escapeshellarg($tempFile) . ' -enc ' . $encoding;
+                    exec('pdftotext ' . escapeshellarg(rex_path::base($_filename)) . ' ' . escapeshellarg($tempFile) . ' -enc ' . $encoding, $dummy, $return);
 
-                    exec('pdftotext ' . escapeshellarg(rex_path::media($_filename)) . ' ' . escapeshellarg($tempFile) . ' -enc ' . $encoding, $dummy, $return);
                     if ($return > 0) {
                         if ($return == 1) {
                             $error = SEARCH_IT_FILE_XPDFERR_OPENSRC;
@@ -657,7 +660,7 @@ class search_it {
 
                 if (!$xpdf) {
                     // if xpdf returned an error, try pdf2txt via php
-                    if (false === $pdfContent = @rex_file::get(rex_path::media($_filename))){
+                    if ( false === $pdfContent = @rex_file::get(rex_path::base($_filename)) ){
                         $error = SEARCH_IT_FILE_NOEXIST;
                     } else {
                         $text = pdf2txt::directConvert($pdfContent);
@@ -667,7 +670,7 @@ class search_it {
 
                 if ($error !== false) {
                     return $error;
-                } elseif (trim($text) == '') {
+                } elseif ( trim($text) == '' ) {
                     return SEARCH_IT_FILE_EMPTY;
                 }
 
@@ -678,7 +681,7 @@ class search_it {
             case 'htm':
             case 'html':
             case 'php':
-                if (false === $text = @rex_file::get($_filename)) {
+                if ( false === $text = @rex_file::get(rex_path::base($_filename)) ) {
                     return SEARCH_IT_FILE_NOEXIST;
                 }
 
@@ -687,7 +690,7 @@ class search_it {
 
             // other filetype
             default:
-                if (false === $text = @rex_file::get($_filename)) {
+                if ( false === $text = @rex_file::get(rex_path::base($_filename)) ) {
                     return SEARCH_IT_FILE_NOEXIST;
                 }
 

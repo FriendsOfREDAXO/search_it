@@ -44,7 +44,7 @@ switch($ajax) {
                 if(rex_get('type') == 'file'){
                     $return = $search_it->indexFile(rex_get('name'));
                 } else {
-                    $return = $search_it->indexFile(rex_path::media(rex_get('name')), false, false, rex_get('file_id'), rex_get('category_id'));
+                    $return = $search_it->indexFile(rex_get('name'), false, false, rex_get('file_id'), rex_get('category_id'));
                     $additionalOutput = ' <em>(Mediapool)</em>';
                 }
 

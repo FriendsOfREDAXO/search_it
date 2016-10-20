@@ -30,6 +30,16 @@ Dabei werden Artikel, Medien, Dateien, PDF-Inhalte und Datenbank-Felder in einer
 * Suchfeld-Modul / Suchfeld-Template hinzufügen [(Hilfe)](module-form.md)
 * Suchergebnis-Modul hinzufügen [(Hilfe)](module-simple.md)
 
+## Wenn auch PDF-Dokumente durchsucht werden sollen...
+
+Um ein sinnvolles Ergebnis zu bekommen, muss auf dem Server das Programm `pdftotext` aus dem Paket `poppler-utils.php` installiert sein.
+
+Installation in diversen Linux-Distributionen
+yum install poppler-utils
+
+Installation unter Ubuntu / Debian
+sudo apt-get install poppler-utils
+
 ## Wo finde ich weitere Hilfe?
 
 Die aktuelle Search it-Version wird in [GitHub von tyrant88](https://github.com/tyrant88/search_it) gepflegt. Dort können Fragen gestellt und Bugs gemeldet werden (Issues). Fragen können auch im [Redaxo Forum](www.redaxo.org/de/forum/) oder im [Redaxo-Channel auf Slack](https://friendsofredaxo.slack.com/messages/redaxo/) gestellt werden.

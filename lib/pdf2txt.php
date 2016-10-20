@@ -194,7 +194,7 @@ class pdf2txt
             $isString = false;
             $openBracketCount = 0;
 
-            foreach (preg_split('~(?:\s+(Td|TD|T\*|"|\')\s+)|(\()|(\))~ism', $textObject, -1, PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_NO_EMPTY) as $k => $part) {
+            foreach (preg_split('~(?:\s+(Td|TD|Tm|Tj|Tc|Tf|T\*|"|\')\s+)|(\()|(\))~ism', $textObject, -1, PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_NO_EMPTY) as $k => $part) {
                 switch ($part) {
                     // new line
                     case 'Td':

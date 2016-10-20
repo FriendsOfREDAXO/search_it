@@ -630,7 +630,7 @@ class search_it {
                     $tempFile = tempnam($this->generatedPath . '/mediapool/', 'search_it');
                     $encoding = 'UTF-8';
 
-                    exec('pdftotext ' . escapeshellarg($this->documentRoot . '' . $_filename) . ' ' . escapeshellarg($tempFile) . ' -enc ' . $encoding, $dummy, $return);
+                    exec('pdftotext ' . escapeshellarg(rex_path::media($_filename)) . ' ' . escapeshellarg($tempFile) . ' -enc ' . $encoding, $dummy, $return);
                     if ($return > 0) {
                         if ($return == 1) {
                             $error = SEARCH_IT_FILE_XPDFERR_OPENSRC;
@@ -657,8 +657,7 @@ class search_it {
 
                 if (!$xpdf) {
                     // if xpdf returned an error, try pdf2txt via php
-
-                    if (false === $pdfContent = @rex_file::get($_filename)){
+                    if (false === $pdfContent = @rex_file::get(rex_path::media($_filename))){
                         $error = SEARCH_IT_FILE_NOEXIST;
                     } else {
                         $text = pdf2txt::directConvert($pdfContent);

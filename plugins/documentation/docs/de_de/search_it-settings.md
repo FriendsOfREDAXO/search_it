@@ -4,7 +4,8 @@
 - [Einstellungen](#einstellungen)
     - [Suchmodus](#einstellungen-suchmodus)
     - [Suchergebnis](#einstellungen-suchergebnis)
-    - [Quelle](#einstellungen-quelle)
+    - [Zusätzl. Datenquellen](#einstellungen-quelle)
+    - [Blacklist](#einstellungen-blacklist)
 - [Plaintext](#plaintext)
 - [Search Highlighter](#search_highlighter)
 
@@ -132,22 +133,9 @@ Als Teaser, in dem eventuell vorkommende Suchebgriffe hervorgehoben sind |
 Als Array mit allen Suchbegriffen und Textstellen | 
 Beispieltext mit Sucheingabe |
 
-### Wörter, Kategorien und Artikel von der Suche ausschließen
-
-Schließt Begriffe, Artikel und Kategorien standardmäßig von der Suche aus. 
-
-> Hinweis: Diese Einstellungen betreffen nur die Suchergebnisse und können in der `search_it`-Klasse überschrieben werden. Begriffe, Kategorien und Artikel werden trotzdem bei der Indexierung berücksichtigt. __todo__ ***Stimmt das?***
-
-Option | Erläuterung
------- | ------
-Wörter (kommaseperiert) | Begriffe, die von der Suche ausgeschlossen werden.
-Artikel | Artikel (`rex_article`-IDs), die von der Suche ausgeschlossen werden.
-Kategorien | Kategorien (`rex_category`-IDs), die von der Suche ausgeschlossen werden.
-
-> Tipp: Der Artikel des Suchergebnis sollte von der Suche ausgeschlossen werden.
 
 <a name="einstellungen-quelle"></a>
-## Quelle
+## Zusätzliche Datenquellen
 
 Hier werden Datenquellen für die Indexierung zusätzlich zu den Redaxo-Artikeln definiert, z. B. Datenbanktabellen, der Medienpool sowie externe Verzeichnisse.
 
@@ -168,6 +156,29 @@ Medienpool indexieren | Gibt an, ob die Tabelle `rex_media` zur Medienpool-Suche
 Verzeichnistiefe | Gibt an, bis zu welcher Tiefe Dateien in den ausgewählten Verzeichnissen indexiert werden sollen.
 Folgende Ordner in die Suche einschließen | Externe Ordner innerhalb der Redaxo-Installation werden indexiert.
 Unterordner auswählen |
+
+
+<a name="einstellungen-blacklist"></a>
+## Blacklist
+
+### Wörter, Kategorien und Artikel von der Suche ausschließen
+
+Schließt Begriffe, Artikel und Kategorien standardmäßig von der Suche aus. 
+
+> Hinweis: Diese Einstellungen betreffen nur die Suchergebnisse und können in der `search_it`-Klasse überschrieben werden. Begriffe, Kategorien und Artikel werden trotzdem bei der Indexierung berücksichtigt. __todo__ ***Stimmt das?***
+
+Option | Erläuterung
+------ | ------
+Wörter (kommaseperiert) | Begriffe, die von der Suche ausgeschlossen werden.
+Artikel | Artikel (`rex_article`-IDs), die von der Suche ausgeschlossen werden.
+Kategorien | Kategorien (`rex_category`-IDs), die von der Suche ausgeschlossen werden.
+
+> Tipp: Der Artikel des Suchergebnis sollte von der Suche ausgeschlossen werden.
+
+
+
+
+
 
 <a name="plaintext"></a>
 # Plaintext

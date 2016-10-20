@@ -19,6 +19,7 @@ page:
                          mode: { title: 'translate:settings_mode' }
                          result: { title: 'translate:settings_result' }
                          origin: { title: 'translate:settings_origin' }
+                         blacklist: { title: 'translate:settings_blacklist' }
 
 requires:
     redaxo: '^5.2.0'

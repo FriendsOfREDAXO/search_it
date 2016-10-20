@@ -89,24 +89,13 @@
 
 
 
-
-
-#search_it_settings_form .checkbox-heading {
-    clear: both;
-    padding-left: 1%;
-    font-weight: bold;
-    cursor: pointer;
-}
-
 #search_it_settings_form .checkbox {
     margin: 2px 0 5px;
 }
 
+#search_it_settings_form mark,
+#search_it_settings_form .mark { background-color: transparent; color: #3bb594; }
 
-#search_it_settings_form .checkbox label { padding-left:5px; }
-#search_it_settings_form .checkbox input:checked + label {
-    font-weight:bold;
-}
 
 #search_it_settings_folders {
     color:#14568A;

@@ -352,9 +352,17 @@ function search_it_getSettingsFormSection($id = '', $title = '&nbsp;', $elements
             case 'multiplecheckboxes':
                 $checkboxes = '';
                 foreach($element['options'] as $option){
-                    $id = !empty($option['id'])?' id="'.$option['id'].'"':'';
-                    $for = !empty($option['id'])?' for="'.$option['id'].'"':'';
-                  $checkboxes .= '<div class="checkbox col-xs-3"><input type="checkbox" id="'.$option['id'].'" name="'.$element['name'].'" value="'.$option['value'].'" '.($option['checked'] ? ' checked="checked"' : '').' /> <label for="'.$option['id'].'">'.$option['name'].'</label></div>';
+                  //$checkboxes .= '<div class="checkbox col-xs-3"><input type="checkbox" id="'.$option['id'].'" name="'.$element['name'].'" value="'.$option['value'].'" '.($option['checked'] ? ' checked="checked"' : '').' /> <label for="'.$option['id'].'">'.$option['name'].'</label></div>';
+                    $formUnterElements = [];
+                    $un = [];
+                    $un['label'] = '<label for="'.$option['id'].'">'.$option['name'].'</label>';
+                    $un['field'] = '<input type="checkbox" id="'.$option['id'].'" name="'.$element['name'].'" value="'.$option['value'].'" '.($option['checked'] ? ' checked="checked"' : '').' />';
+                    $un['highlight'] = $option['checked'];
+                    $formUnterElements[] = $un;
+                    $fragment = new rex_fragment();
+                    $fragment->setVar('grouped', true);
+                    $fragment->setVar('elements', $formUnterElements, false);
+                    $checkboxes .= '<div class="col-xs-3">'.$fragment->parse('core/form/checkbox.php').'</div>';
                 }
                 $n['label'] = '<label for="'.$element['id'].'">'.$element['label'].'</label>';
                 $n['field'] = '<div class="rex-form-col-a rex-form-text"><div class="form-group">'.$checkboxes.'</div></div>';
@@ -374,8 +382,16 @@ function search_it_getSettingsFormSection($id = '', $title = '&nbsp;', $elements
 
             // CHECKBOX
             case 'checkbox':
-                $n['label'] = '<label for="'.$element['id'].'">'.$element['label'].'</label>';
-                $n['field'] = '<input class="rex-form-checkbox" type="checkbox" name="'.$element['name'].'" id="'.$element['id'].'" value="'.$element['value'].'"'.($element['checked'] ? ' checked="checked"' : '').' />';
+                $formUnterElements = [];
+                $un = [];
+                $un['label'] = '<label for="'.$element['id'].'">'.$element['label'].'</label>';
+                $un['field'] = '<input type="checkbox" id="'.$element['id'].'" name="'.$element['name'].'" value="'.$element['value'].'" '.($element['checked'] ? ' checked="checked"' : '').' />';
+                $un['highlight'] = $element['checked'];
+                $formUnterElements[] = $un;
+                $fragmentun = new rex_fragment();
+                $fragmentun->setVar('elements', $formUnterElements, false);
+                $n['field'] = $fragmentun->parse('core/form/checkbox.php');
+
             break;
 
             // DIRECT OUTPUT

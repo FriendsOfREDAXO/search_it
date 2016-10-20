@@ -10,18 +10,7 @@ if (rex_post('config-submit', 'boolean')) {
         ['highlight', 'string'],
         ['highlighterclass', 'string'],
 
-        ['blacklist', 'string'],
-        ['exclude_article_ids', 'array'],
-        ['exclude_category_ids', 'array'],
-
     ]);
-
-    // aus Komma-Listen arrays machen, bzw. arrays umformen
-    if( !empty($posted_config['blacklist']) ) {
-        $posted_config['blacklist'] = explode(',',$posted_config['blacklist']);
-    } else {
-        $posted_config['blacklist'] = array();
-    }
 
 
     /*    echo '<pre>';
@@ -172,7 +161,9 @@ $content2a = search_it_getSettingsFormSection(
     ),'edit'
 );
 
-$content2[] = $content2a . search_it_getSettingsFormSection(
+$content2[] = $content2a;
+
+$content2[] = search_it_getSettingsFormSection(
     'search_it_highlighterclass',
     $this->i18n('search_it_settings_search_highlighter'),
     array(
@@ -183,53 +174,6 @@ $content2[] = $content2a . search_it_getSettingsFormSection(
             'label' => $this->i18n('search_it_settings_highlighterclass'),
             'value' => !empty($this->getConfig('highlighterclass')) ? $this->getConfig('highlighterclass') : ''
         ),
-    ),'edit'
-);
-
-
-$categories = array();
-foreach(search_it_getCategories() as $id => $name){
-  $categories[] = array(
-      'value' => $id,
-      'selected' => !empty($this->getConfig('exclude_category_ids')) AND is_array($this->getConfig('exclude_category_ids')) AND in_array($id,$this->getConfig('exclude_category_ids')),
-      'name' => $name.' ('.$id.')'
-  );
-}
-$articles = array();
-foreach(search_it_getArticles() as $id => $name){
-  $articles[] = array(
-      'value' => $id,
-      'selected' => !empty($this->getConfig('exclude_article_ids')) AND is_array($this->getConfig('exclude_article_ids')) AND in_array($id,$this->getConfig('exclude_article_ids')),
-      'name' => $name.' ('.$id.')'
-  );
-}
-$content2[] = search_it_getSettingsFormSection(
-    'search_it_exclude',
-    $this->i18n('search_it_settings_exclude'),
-    array(
-        array(
-            'type' => 'text',
-            'id' => 'search_it_settings_exclude_blacklist',
-            'name' => 'search_config[blacklist]',
-            'label' => $this->i18n('search_it_settings_exclude_blacklist'),
-            'value' => !empty($this->getConfig('blacklist')) ? htmlspecialchars(implode(',',$this->getConfig('blacklist'))) : ''
-        ),
-        array(
-            'type' => 'multipleselect',
-            'id' => 'search_it_exclude_article_ids',
-            'name' => 'search_config[exclude_article_ids][]',
-            'label' => $this->i18n('search_it_settings_exclude_articles'),
-            'size' => 15,
-            'options' => $articles
-        ),
-        array(
-            'type' => 'multipleselect',
-            'id' => 'search_it_exclude_category_ids',
-            'name' => 'search_config[exclude_category_ids][]',
-            'label' => $this->i18n('search_it_settings_exclude_categories'),
-            'size' => 15,
-            'options' => $categories
-        )
     ),'edit'
 );
 

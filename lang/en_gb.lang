@@ -9,7 +9,8 @@ search_it_reindex = Re-index
 
 search_it_settings_mode = Searchmode
 search_it_settings_result = Searchresult
-search_it_settings_origin = Origin
+search_it_settings_origin = Add. data sources
+search_it_settings_blacklist = Blacklist
 
 search_it_settings_logicalmode = Logical search mode
 search_it_settings_logicalmode_and = Conjunctive search (AND)

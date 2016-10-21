@@ -1,5 +1,8 @@
 #Änderungen von search_it
 
+##Version 6.0.0 (2016-10-21)
+  - Fehler beim Indizieren von PDFs behoben, Einstellungen umgestellt 
+  
 ##Version 6.0.0-rc1 (2016-10-10)
   - Re-indizierung jetzt per cronjob möglich 
 

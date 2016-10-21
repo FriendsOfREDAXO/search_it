@@ -1661,6 +1661,7 @@ class search_it {
         }
 
         $return = array();
+        $return['errormessages'] = '';
         $return['simwordsnewsearch'] = '';
         $return['simwords'] = array();
         if($this->similarwords){

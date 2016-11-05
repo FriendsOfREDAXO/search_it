@@ -1,5 +1,9 @@
 #Änderungen von search_it
 
+##Version 6.0.1 (2016-11-05)
+  - Fehler beim Indizieren per HTTP und Verwendung von YRewrite behoben
+   - statt `file_get_contents` wird jetzt `rex_socket` verwendet
+
 ##Version 6.0.0 (2016-10-21)
   - Fehler beim Indizieren von PDFs behoben, Einstellungen umgestellt 
   

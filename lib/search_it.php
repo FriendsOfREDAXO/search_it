@@ -26,7 +26,6 @@ class search_it {
     var $ci = true; // case insensitive?
     var $clang = false;
     var $documentRoot;
-    var $dontIndexRedirects = true;
     var $ellipsis;
     var $ep_outputfilter = false;
     var $excludeIDs = array();
@@ -120,8 +119,6 @@ class search_it {
             $this->stopwords = $german_stopwords;
         }
     }
-
-
 
 
 
@@ -304,11 +301,31 @@ class search_it {
             $article = rex_article::get(intval($_id), $langID);
             if(is_object($article) AND ($article->isOnline() OR $this->indexOffline)){
 
-                if(ini_get('allow_url_fopen') AND $this->indexViaHTTP){
+                if( $this->indexViaHTTP ){
 
-                    $articleText = @file_get_contents(rex::getServer().substr(rex_getUrl($_id,$langID),3));
+                    try {
+                        $scanurl = rtrim(rex::getServer(),"/").'/'.str_replace(array('../','./'),'',rex_getUrl($_id,$langID));
+                        $files_socket = rex_socket::factoryURL($scanurl);
+                        $response = $files_socket->doGet();
 
-                } elseif ($_id != 0 AND $this->dontIndexRedirects){
+                        $redircount = 0;
+                        while ( $response->isRedirection() && $redircount < 3 ) {
+                            $scanurl = rtrim(rex::getServer(),"/").'/'.str_replace(array('../','./'),'',$response->getHeader('location'));
+                            $files_socket = rex_socket::factoryURL($scanurl);
+                            $response = $files_socket->doGet();
+                            $redircount++;
+                        }
+                        if($response->isOk()) {
+                            $articleText = $response->getBody();
+                        } else {
+                            $articleText = '';
+                        }
+
+                    } catch(rex_socket_exception $e) {
+                        $articleText = '';
+                    }
+
+                } elseif ( $_id != 0 ){
                     $rex_article = new rex_article_content(intval($_id), $langID);
                     $article_content_file = rex_path::addonCache('structure', $_id . '.' . $langID . '.content');
                     if(!file_exists($article_content_file)){

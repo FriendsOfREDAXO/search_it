@@ -5,7 +5,7 @@
  * This class is still being tested.
  * Please report errors at http://forum.redaxo.de.
  *
- * @author    Robert Rupf
+ * @author    Robert Rupf/Norbert Micheel
  * @package   search_it
  */
 
@@ -13,241 +13,169 @@
 /**
  * @package   search_it
  */
-class search_it {
+class search_it
+{
 
-    var $searchArticles = false;
-    var $blacklist = array();
-    var $blacklisted = array();
-    var $cache = true;
-    var $cachedArray = array();
-    /**
-    * @ignore
-    */
-    var $ci = true; // case insensitive?
-    var $clang = false;
-    var $documentRoot;
-    var $ellipsis;
-    var $ep_outputfilter = false;
-    var $excludeIDs = array();
-    var $fileExtensions = array();
-    var $groupBy = true;
-    var $hashMe = '';
-    var $highlightType = 'surroundtext';
-    var $highlighterclass = '';
-    var $includeColumns = array();
-    var $includeDirectories = array();
-    var $includePath;
-    var $generatedPath;
-    var $indexUnknownFileExtensions = false;
-    var $indexMediapool = false;
-    var $indexMissingFileExtensions = false;
-    var $indexOffline = false;
-    var $indexViaHTTP = false;
-    var $indexWithTemplate = false;
-    var $languages;
-    var $limit = array(0,10);
-    var $logicalMode = ' AND ';
-    var $maxHighlightedTextChars = 100;
-    var $maxTeaserChars = 200;
-    var $mediaFolder;
-    var $order = array('RELEVANCE_SEARCH_IT' => 'DESC');
-    var $searchArray = array();
-    var $searchEntities = false;
-    var $searchInIDs = array();
-    var $searchMode = 'like';
-    var $searchString = '';
-    var $significantCharacterCount = 3;
-    var $similarwords = false;
-    var $similarwordsMode = 0;
-    var $similarwordsPermanent = false;
-    var $stopwords = array();
-    var $surroundTags = array('<strong>','</strong>');
-    var $tablePrefix;
-    var $textMode = 'plain';
-    var $whitelist = array();
-    var $where = '';
-    var $errormessages = '';
+    private $searchString = '';
+    private $hashMe = '';
+    private $clang = false;
+    private $ellipsis;
+    private $tablePrefix;
+    private $significantCharacterCount = 3;
+    private $stopwords = array();
+    private $errormessages = '';
+
+    private $ci = true;
+    private $where = '';
+    private $groupBy = true;
+    private $order = array('RELEVANCE_SEARCH_IT' => 'DESC');
+
+    private $searchArray = array();
+    private $searchHtmlEntities = false;
+    private $cache = true;
+    private $cachedArray = array();
+    private $searchInIDs = array();
+    private $searchAllArticlesAnyway = false;
+    private $whitelist = array();
 
 
-    function __construct($_clang = false, $_loadSettings = true, $_useStopwords = true){
+    /* config values */
+    private $logicalMode = ' AND ';
+    private $textMode = 'plain';
+    private $similarwords = false;
+    private $similarwordsMode = 0;
+    private $similarwordsPermanent = false;
+    private $searchMode = 'like';
 
-        if($_loadSettings) {
+    private $indexViaHTTP = false;
+    private $indexWithTemplate = false;
+
+    private $surroundTags = array('<strong>', '</strong>');
+    private $limit = array(0, 10);
+    private $maxTeaserChars = 200;
+    private $maxHighlightedTextChars = 100;
+    private $highlightType = 'surroundtext';
+
+    private $includeColumns = array();
+    private $fileExtensions = array();
+    private $indexMediapool = false;
+    private $fileDirectories = array();
+
+    private $blacklist = array();
+    private $blacklisted = array();
+    private $excludeIDs = array();
+
+
+    function __construct($_clang = false, $_loadSettings = true, $_useStopwords = true)
+    {
+
+        if ($_loadSettings) {
+
+            $this->setCaseInsensitive(rex_addon::get('search_it')->getConfig('ci'));
+
             $this->setLogicalMode(rex_addon::get('search_it')->getConfig('logicalmode'));
             $this->setTextMode(rex_addon::get('search_it')->getConfig('textmode'));
+            $this->similarwordsMode = intval(rex_addon::get('search_it')->getConfig('similarwordsmode'));
+            $this->similarwords = (bool)$this->similarwordsMode;
+            $this->similarwordsPermanent = rex_addon::get('search_it')->getConfig('similarwords_permanent');
             $this->setSearchMode(rex_addon::get('search_it')->getConfig('searchmode'));
+
+            $this->indexViaHTTP = intval(rex_addon::get('search_it')->getConfig('indexmode')) == 0;
+            $this->indexWithTemplate = intval(rex_addon::get('search_it')->getConfig('indexmode')) == 2;
+
+
             $this->setSurroundTags(rex_addon::get('search_it')->getConfig('surroundtags'));
             $this->setLimit(rex_addon::get('search_it')->getConfig('limit'));
-            $this->setCaseInsensitive(rex_addon::get('search_it')->getConfig('ci'));
-            $this->setBlacklist(is_array(rex_addon::get('search_it')->getConfig('blacklist')) ? rex_addon::get('search_it')->getConfig('blacklist') : array() );
-            $this->setExcludeIDs(is_array(rex_addon::get('search_it')->getConfig('exclude_article_ids')) ? rex_addon::get('search_it')->getConfig('exclude_article_ids') : array() );
-            if(is_array(rex_addon::get('search_it')->getConfig('exclude_category_ids'))){
+            $this->setMaxTeaserChars(rex_addon::get('search_it')->getConfig('maxteaserchars'));
+            if (rex_addon::get('search_it')->getConfig('maxhighlightchars') > 0) {
+                $this->setMaxHighlightedTextChars(rex_addon::get('search_it')->getConfig('maxhighlightchars'));
+            }
+            $this->setHighlightType(rex_addon::get('search_it')->getConfig('highlight'));
+
+            $this->includeColumns = is_array(rex_addon::get('search_it')->getConfig('include')) ? rex_addon::get('search_it')->getConfig('include') : array();
+            $this->fileExtensions = rex_addon::get('search_it')->getConfig('fileextensions');
+            $this->indexMediapool = rex_addon::get('search_it')->getConfig('indexmediapool');
+            $this->fileDirectories = is_array(rex_addon::get('search_it')->getConfig('indexfolders')) ? rex_addon::get('search_it')->getConfig('indexfolders') : array();
+
+            $this->setBlacklist(is_array(rex_addon::get('search_it')->getConfig('blacklist')) ? rex_addon::get('search_it')->getConfig('blacklist') : array());
+            $this->setExcludeIDs(is_array(rex_addon::get('search_it')->getConfig('exclude_article_ids')) ? rex_addon::get('search_it')->getConfig('exclude_article_ids') : array());
+            if (is_array(rex_addon::get('search_it')->getConfig('exclude_category_ids'))) {
                 $ids = array();
-                foreach(rex_addon::get('search_it')->getConfig('exclude_category_ids') as $catID){
-                    foreach(search_it_getArticles(array($catID)) as $id => $name) { $ids[] = $id; }
+                foreach (rex_addon::get('search_it')->getConfig('exclude_category_ids') as $catID) {
+                    foreach (search_it_getArticles(array($catID)) as $id => $name) {
+                        $ids[] = $id;
+                    }
                     $this->setExcludeIDs($ids);
                 }
             }
-            $this->setIncludeColumns(rex_addon::get('search_it')->getConfig('include'));
-            $this->setMaxTeaserChars(rex_addon::get('search_it')->getConfig('maxteaserchars'));
-            if (rex_addon::get('search_it')->getConfig('maxhighlightchars')>0) { $this->setMaxHighlightedTextChars(rex_addon::get('search_it')->getConfig('maxhighlightchars'));}
-            $this->setHighlightType(rex_addon::get('search_it')->getConfig('highlight'));
-            $this->indexViaHTTP = intval(rex_addon::get('search_it')->getConfig('indexmode')) == 0;
-            $this->indexWithTemplate = intval(rex_addon::get('search_it')->getConfig('indexmode')) == 2;
-            $this->indexOffline = rex_addon::get('search_it')->getConfig('indexoffline');
-            $this->similarwordsMode = intval(rex_addon::get('search_it')->getConfig('similarwordsmode'));
-            $this->similarwords = (bool) $this->similarwordsMode;
-            $this->similarwordsPermanent = rex_addon::get('search_it')->getConfig('similarwords_permanent');
-            $this->fileExtensions = rex_addon::get('search_it')->getConfig('fileextensions');
-            $this->includeDirectories = is_array(rex_addon::get('search_it')->getConfig('indexfolders')) ? rex_addon::get('search_it')->getConfig('indexfolders') : array();
-            $this->indexMediapool = rex_addon::get('search_it')->getConfig('indexmediapool');
-            $this->ep_outputfilter = rex_addon::get('search_it')->getConfig('ep_outputfilter');
         }
 
         $this->setClang($_clang);
-        $this->languages = rex_clang::getAll() ;
         $this->tablePrefix = rex::getTablePrefix();
-        $this->includePath = rex_path::addon('search_it');
-        $this->generatedPath = rex_path::cache().'addons/';
-        $this->documentRoot = realpath($_SERVER['DOCUMENT_ROOT']);
-        $this->mediaFolder = rex_path::media();
-
         $this->ellipsis = rex_i18n::msg('search_it_ellipsis');
 
         // german stopwords
-        if($_useStopwords){
-            include rex_path::addon('search_it','/lang/stopwords.php');
+        if ($_useStopwords) {
+            include rex_path::addon('search_it', '/lang/stopwords.php');
             $this->stopwords = $german_stopwords;
         }
     }
 
 
 
-    function doSearchArticles($_bool = false){
-        $this->searchArticles = $_bool;
-        $this->hashMe .= $_bool;
-    }
 
-    function doGroupBy($_bool = true){
-        $this->groupBy = $_bool;
-        $this->hashMe .= $_bool;
-    }
-
-    /**
-     *
-     */
-    function setSearchInIDs($_searchInIDs, $_reset = false){
-        if($_reset) {
-            $this->searchInIDs = array();
-        }
-        if(array_key_exists('articles',$_searchInIDs)){
-            if(!array_key_exists('articles',$this->searchInIDs)) {
-                $this->searchInIDs['articles'] = array();
-            }
-            foreach($_searchInIDs['articles'] as $id){
-                if($id = intval($id)){
-                    $this->searchInIDs['articles'][] = $id;
-                    $this->hashMe .= 'a'.$id;
-                }
-            }
-        }
-
-        if(array_key_exists('categories',$_searchInIDs)){
-            if(!array_key_exists('categories',$this->searchInIDs)) {
-                $this->searchInIDs['categories'] = array();
-            }
-            foreach($_searchInIDs['categories'] as $id){
-                if($id = intval($id)){
-                    $this->searchInIDs['categories'][] = $id;
-                    $this->hashMe .= 'c'.$id;
-                }
-            }
-        }
-
-        if(array_key_exists('filecategories',$_searchInIDs)){
-            if(!array_key_exists('filecategories',$this->searchInIDs)){
-                $this->searchInIDs['filecategories'] = array();
-            }
-            foreach($_searchInIDs['filecategories'] as $id){
-                if($id = intval($id)){
-                    $this->searchInIDs['filecategories'][] = $id;
-                    $this->hashMe .= 'f'.$id;
-                }
-            }
-        }
-
-        if(array_key_exists('db_columns',$_searchInIDs)){
-            if(!array_key_exists('db_columns',$this->searchInIDs)){
-                $this->searchInIDs['db_columns'] = array();
-            }
-            foreach($_searchInIDs['db_columns'] as $table => $columnArray){
-                $this->hashMe .= $table;
-                $tmp = array();
-                foreach($columnArray as $column){
-                    $tmp[] = $column;
-                    $this->hashMe .= $column;
-                }
-                if(!array_key_exists($table,$this->searchInIDs['db_columns'])) {
-                    $this->searchInIDs['db_columns'][$table] = $tmp;
-                } else {
-                    $this->searchInIDs['db_columns'][$table] = array_merge($this->searchInIDs['db_columns'][$table], $tmp);
-                }
-            }
-        }
-    }
-
-
-
+    /* indexing */
     /**
      * Generates the full index at once.
      */
-    function generateIndex(){
+    public function generateIndex()
+    {
         // delete old index
         $delete = rex_sql::factory();
-        $delete->setTable($this->tablePrefix.'search_it_index');
+        $delete->setTable($this->tablePrefix . 'search_it_index');
         $delete->delete();
         $delete2 = rex_sql::factory();
-        $delete2->setTable($this->tablePrefix.'search_it_cacheindex_ids');
+        $delete2->setTable($this->tablePrefix . 'search_it_cacheindex_ids');
         $delete2->delete();
         $delete3 = rex_sql::factory();
-        $delete3->setTable($this->tablePrefix.'search_it_cache');
+        $delete3->setTable($this->tablePrefix . 'search_it_cache');
         $delete3->delete();
 
         // index articles
         $art_sql = rex_sql::factory();
-        $art_sql->setTable($this->tablePrefix.'article');
-        if($art_sql->select('id,clang_id')){
-            foreach($art_sql->getArray() as $art){
+        $art_sql->setTable($this->tablePrefix . 'article');
+        if ($art_sql->select('id,clang_id')) {
+            foreach ($art_sql->getArray() as $art) {
                 $this->indexArticle($art['id'], $art['clang_id']);
             }
         }
 
         // index columns
-        foreach($this->includeColumns as $table => $columnArray){
-            foreach($columnArray as $column){
+        foreach ($this->includeColumns as $table => $columnArray) {
+            foreach ($columnArray as $column) {
                 $this->indexColumn($table, $column);
             }
         }
 
         // index mediapool
-        if($this->indexMediapool){
+        if ($this->indexMediapool) {
             $mediaSQL = rex_sql::factory();
-            $mediaSQL->setTable($this->tablePrefix.'media');
-            if($mediaSQL->select('id, category_id, filename')){
-                foreach($mediaSQL->getArray() as $file){
-                    $this->indexFile('media/'.$file['filename'], false, false, $file['id'], $file['category_id']);
+            $mediaSQL->setTable($this->tablePrefix . 'media');
+            if ($mediaSQL->select('id, category_id, filename')) {
+                foreach ($mediaSQL->getArray() as $file) {
+                    $this->indexFile('media/' . $file['filename'], false, false, $file['id'], $file['category_id']);
                 }
             }
         }
 
         // index files
-        foreach($this->includeDirectories as $dir){
-            foreach(search_it_getFiles($dir, $this->fileExtensions) as $filename){
+        foreach ($this->fileDirectories as $dir) {
+            foreach (search_it_getFiles($dir, $this->fileExtensions) as $filename) {
                 //$filename is a full path with dir
-                $this->indexFile(substr($filename,1));
+                $this->indexFile(substr($filename, 1));
             }
         }
     }
-
 
     /**
      * Indexes a certain article.
@@ -257,112 +185,119 @@ class search_it {
      *
      * @return int
      */
-    function indexArticle($_id,$_clang = false) {
+    public function indexArticle($_id, $_clang = false)
+    {
 
-        if($_clang === false) {
-            $langs = $this->languages;
+        if ($_clang === false) {
+            $langs = rex_clang::getAll();
         } else {
-            //$langs = array(intval($_clang) => $this->languages[intval($_clang)]);
             $langs = array(rex_clang::get($_clang));
         }
-        $return = array();
+        $actual_lang = rex_clang::getCurrentId();
 
+        // start Frontend mode
+        rex::setProperty('redaxo', false);
+        // setzen von rex_article::getCurrentId()
+        rex_addon::get('structure')->setProperty('article_id', $_id);
+
+        $return = array();
         $keywords = array();
-        foreach($langs as $lang){
+        foreach ($langs as $lang) {
             $langID = $lang->getId();
             $v = $lang->getName();
-            if(in_array($_id, $this->excludeIDs)){
+            if (in_array($_id, $this->excludeIDs)) {
                 $return[$v] = SEARCH_IT_ART_EXCLUDED;
                 continue;
             }
 
             rex_clang::setCurrentId($langID);
             $delete = rex_sql::factory();
-            $where = sprintf("ftable = '%s' AND fid = %d AND clang = %d", $this->tablePrefix.'article', $_id, $langID);
+            $where = sprintf("ftable = '%s' AND fid = %d AND clang = %d", $this->tablePrefix . 'article', $_id, $langID);
 
             // delete from cache
             $select = rex_sql::factory();
-            $select->setTable($this->tablePrefix.'search_it_index');
+            $select->setTable($this->tablePrefix . 'search_it_index');
             $select->setWhere($where);
             $select->select('id');
 
             $indexIds = array();
-            foreach($select->getArray() as $result) {
+            foreach ($select->getArray() as $result) {
                 $indexIds[] = $result['id'];
             }
             $this->deleteCache($indexIds);
 
             // delete old
-            $delete->setTable($this->tablePrefix.'search_it_index');
+            $delete->setTable($this->tablePrefix . 'search_it_index');
             $delete->setWhere($where);
             $delete->delete();
 
             // index article
             $article = rex_article::get(intval($_id), $langID);
-            if(is_object($article) AND ($article->isOnline() OR $this->indexOffline)){
 
-                if( $this->indexViaHTTP ){
+            if (is_object($article) AND ($article->isOnline() OR rex_addon::get('search_it')->getConfig('indexoffline'))) {
+
+                if ($this->indexViaHTTP) {
 
                     try {
-                        $scanurl = rtrim(rex::getServer(),"/").'/'.str_replace(array('../','./'),'',rex_getUrl($_id,$langID));
+                        $scanurl = rtrim(rex::getServer(), "/") . '/' . str_replace(array('../', './'), '', rex_getUrl($_id, $langID));
                         $files_socket = rex_socket::factoryURL($scanurl);
                         $response = $files_socket->doGet();
 
                         $redircount = 0;
-                        while ( $response->isRedirection() && $redircount < 3 ) {
-                            $scanurl = rtrim(rex::getServer(),"/").'/'.str_replace(array('../','./'),'',$response->getHeader('location'));
+                        while ($response->isRedirection() && $redircount < 3) {
+                            $scanurl = rtrim(rex::getServer(), "/") . '/' . str_replace(array('../', './'), '', $response->getHeader('location'));
                             $files_socket = rex_socket::factoryURL($scanurl);
                             $response = $files_socket->doGet();
                             $redircount++;
                         }
-                        if($response->isOk()) {
+                        if ($response->isOk()) {
                             $articleText = $response->getBody();
                         } else {
                             $articleText = '';
                         }
 
-                    } catch(rex_socket_exception $e) {
+                    } catch (rex_socket_exception $e) {
                         $articleText = '';
                     }
 
-                } elseif ( $_id != 0 ){
+                } elseif ($_id != 0) {
+
                     $rex_article = new rex_article_content(intval($_id), $langID);
+
+                    // nur für Fehlermeldungen
                     $article_content_file = rex_path::addonCache('structure', $_id . '.' . $langID . '.content');
-                    if(!file_exists($article_content_file)){
+                    if (!file_exists($article_content_file)) {
                         $generated = rex_content_service::generateArticleContent($_id, $langID);
-                        if($generated !== true){
+                        if ($generated !== true) {
                             $return[$v] = SEARCH_IT_ART_IDNOTFOUND;
                             continue;
                         }
                     }
 
-                    if(file_exists($article_content_file) AND preg_match('~(header\s*\(\s*["\']\s*Location\s*:)|(rex_redirect\s*\()~isu', rex_file::get($article_content_file))){
+                    if (file_exists($article_content_file) AND preg_match('~(header\s*\(\s*["\']\s*Location\s*:)|(rex_redirect\s*\()~isu', rex_file::get($article_content_file))) {
                         $return[$v] = SEARCH_IT_ART_REDIRECT;
                         continue;
                     }
 
-                    if($this->indexWithTemplate) {
+                    // den eigentlichen Inhalt holen
+                    if ($this->indexWithTemplate) {
                         $articleText = $rex_article->getArticleTemplate();
                     } else {
                         $articleText = $rex_article->getArticle();
                     }
-                    if( $this->ep_outputfilter ){
-                        $tmp = array(
-                            'artid' => rex_article::getCurrentId(),
-                            'clang' => rex_clang::getCurrentId()
-                        );
-
-                        rex_clang::setCurrentId($langID);
-                        $articleText = rex_extension::registerPoint(new rex_extension_point('OUTPUT_FILTER', $articleText, array('environment' => 'frontend','sendcharset' => false)));
-                        rex_clang::setCurrentId($tmp['clang']);
+                    if (rex_addon::get('search_it')->getConfig('ep_outputfilter')) {
+                        $articleText = rex_extension::registerPoint(new rex_extension_point('OUTPUT_FILTER', $articleText, array('environment' => 'frontend', 'sendcharset' => false)));
                     }
+
                 }
+
+
 
                 $insert = rex_sql::factory();
                 $articleData = array();
 
                 $articleData['texttype'] = 'article';
-                $articleData['ftable'] = $this->tablePrefix.'article';
+                $articleData['ftable'] = $this->tablePrefix . 'article';
                 $articleData['fcolumn'] = NULL;
                 $articleData['clang'] = $article->getClang();
                 $articleData['fid'] = intval($_id);
@@ -371,28 +306,28 @@ class search_it {
                 $plaintext = $this->getPlaintext($articleText);
                 $articleData['plaintext'] = $plaintext;
 
-                if(array_key_exists($this->tablePrefix.'article', $this->includeColumns)){
+                if (array_key_exists($this->tablePrefix . 'article', $this->includeColumns)) {
                     $additionalValues = array();
                     $select->flushValues();
-                    $select->setTable($this->tablePrefix.'article');
-                    $select->setWhere('id = '.$_id.' AND clang_id = '.$langID);
-                    $select->select('`'.implode('`,`', $this->includeColumns[$this->tablePrefix.'article']).'`');
-                    foreach($this->includeColumns[$this->tablePrefix.'article'] as $col){
+                    $select->setTable($this->tablePrefix . 'article');
+                    $select->setWhere('id = ' . $_id . ' AND clang_id = ' . $langID);
+                    $select->select('`' . implode('`,`', $this->includeColumns[$this->tablePrefix . 'article']) . '`');
+                    foreach ($this->includeColumns[$this->tablePrefix . 'article'] as $col) {
                         $additionalValues[$col] = $select->getValue($col);
                     }
 
                     $articleData['values'] = serialize($additionalValues);
                 }
 
-                foreach(preg_split('~[[:punct:][:space:]]+~ismu', $plaintext) as $keyword){
-                    if($this->significantCharacterCount <= mb_strlen($keyword,'UTF-8')) {
+                foreach (preg_split('~[[:punct:][:space:]]+~ismu', $plaintext) as $keyword) {
+                    if ($this->significantCharacterCount <= mb_strlen($keyword, 'UTF-8')) {
                         $keywords[] = array('search' => $keyword, 'clang' => $langID);
                     }
                 }
 
                 $articleData['teaser'] = $this->getTeaserText($plaintext);
 
-                $insert->setTable($this->tablePrefix.'search_it_index');
+                $insert->setTable($this->tablePrefix . 'search_it_index');
                 $insert->setValues($articleData);
                 $insert->insert();
 
@@ -401,11 +336,48 @@ class search_it {
             }
         }
 
+        // end Frontend-Mode
+        rex::setProperty('redaxo', true);
+        rex_addon::get('structure')->setProperty('article_id', 1);
+        rex_clang::setCurrentId($actual_lang);
+
         $this->storeKeywords($keywords, false);
 
         return $return;
     }
 
+    /**
+     * Excludes an article from the index.
+     *
+     * @param int $_id
+     * @param mixed $_clang
+     */
+    public function unindexArticle($_id, $_clang = false)
+    {
+        // exclude article
+        $art_sql = rex_sql::factory();
+        $art_sql->setTable($this->tablePrefix . 'search_it_index');
+
+        $where = "fid = " . intval($_id) . " AND texttype='article'";
+        if ($_clang !== false) {
+            $where .= " AND clang='" . intval($_clang) . "'";
+        }
+
+        $art_sql->setWhere($where);
+        $art_sql->delete();
+
+        // delete from cache
+        $select = rex_sql::factory();
+        $select->setTable($this->tablePrefix . 'search_it_index');
+        $select->setWhere($where);
+        $select->select('id');
+
+        $indexIds = array();
+        foreach ($select->getArray() as $result) {
+            $indexIds[] = $result['id'];
+        }
+        $this->deleteCache($indexIds);
+    }
 
     /**
      * Indexes a certain column.
@@ -420,30 +392,31 @@ class search_it {
      *
      * @return mixed
      */
-    function indexColumn($_table, $_column, $_idcol = false, $_id = false, $_start = false, $_count = false, $_where = false){
+    public function indexColumn($_table, $_column, $_idcol = false, $_id = false, $_start = false, $_count = false, $_where = false)
+    {
         $delete = rex_sql::factory();
 
-        $where = sprintf(" `ftable` = '%s' AND `fcolumn` = '%s' AND `texttype` = 'db_column'",$_table,$_column);
+        $where = sprintf(" `ftable` = '%s' AND `fcolumn` = '%s' AND `texttype` = 'db_column'", $_table, $_column);
         //lus: reaktiviert damit einzeln gelöscht werden kann
-        if(is_string($_idcol) AND ($_id !== false)) {
+        if (is_string($_idcol) AND ($_id !== false)) {
             $where .= sprintf(' AND fid = %d', $_id);
         }
 
         // delete from cache
         $select = rex_sql::factory();
-        $select->setTable($this->tablePrefix.'search_it_index');
+        $select->setTable($this->tablePrefix . 'search_it_index');
         $select->setWhere($where);
         $indexIds = array();
-        if($select->select('id')){
-            foreach($select->getArray() as $result) {
+        if ($select->select('id')) {
+            foreach ($select->getArray() as $result) {
                 $indexIds[] = $result['id'];
             }
             $this->deleteCache($indexIds);
         }
 
         // delete old data + lus: immer alle löschen
-        if( $_start === 0 || $_start === false || (is_string($_idcol) AND ($_id !== false)) ){
-            $delete->setTable($this->tablePrefix.'search_it_index');
+        if ($_start === 0 || $_start === false || (is_string($_idcol) AND ($_id !== false))) {
+            $delete->setTable($this->tablePrefix . 'search_it_index');
             $delete->setWhere($where);
             $delete->delete();
         }
@@ -452,7 +425,7 @@ class search_it {
 
         // get primary key column(s)
         $primaryKeys = array();
-        foreach($sql->getArray("SHOW COLUMNS FROM `".$_table."` WHERE `KEY` = 'PRI'") as $col) {
+        foreach ($sql->getArray("SHOW COLUMNS FROM `" . $_table . "` WHERE `KEY` = 'PRI'") as $col) {
             $primaryKeys[] = $col['Field'];
         }
 
@@ -460,28 +433,29 @@ class search_it {
         $sql->flushValues();
         $sql->setTable($_table);
         $where = '1 ';
-        if(is_string($_idcol) AND $_id) {
+        if (is_string($_idcol) AND $_id) {
             $where .= sprintf(' AND (%s = %d)', $_idcol, $_id);
         }
-        if(!empty($_where) AND is_string($_where)) {
+        if (!empty($_where) AND is_string($_where)) {
             // lus: sorry,muss ale neu schreiben, weil ich oben alle lösche
             //$where .= ' AND (' . $_where . ')';
         }
 
-        if(is_numeric($_start) AND is_numeric($_count)) {
+        if (is_numeric($_start) AND is_numeric($_count)) {
             $where .= ' LIMIT ' . $_start . ',' . $_count;
         }
 
         $sql->setWhere($where);
         $count = false;
-        if($sql->select('*')){
+        if ($sql->select('*')) {
 
             $count = 0;
             $keywords = array();
 
-            foreach($sql->getArray() as $row){
-                if( !empty($row[$_column]) AND ($this->indexOffline OR $this->tablePrefix.'article' != $_table OR $row['status'] == '1')
-                    AND ($this->tablePrefix.'article' != $_table OR !in_array($row['id'],$this->excludeIDs)) ){
+            foreach ($sql->getArray() as $row) {
+                if (!empty($row[$_column]) AND ( rex_addon::get('search_it')->getConfig('indexoffline') OR $this->tablePrefix . 'article' != $_table OR $row['status'] == '1')
+                    AND ($this->tablePrefix . 'article' != $_table OR !in_array($row['id'], $this->excludeIDs))
+                ) {
                     $insert = rex_sql::factory();
                     $indexData = array();
 
@@ -489,76 +463,76 @@ class search_it {
                     $indexData['ftable'] = $_table;
                     $indexData['fcolumn'] = $_column;
 
-                    if(array_key_exists('clang',$row)) {
+                    if (array_key_exists('clang', $row)) {
                         $indexData['clang'] = $row['clang_id'];
                     } else {
                         $indexData['clang'] = NULL;
                     }
                     $indexData['fid'] = NULL;
-                    if(is_string($_idcol) AND array_key_exists($_idcol,$row)) {
+                    if (is_string($_idcol) AND array_key_exists($_idcol, $row)) {
                         $indexData['fid'] = $row[$_idcol];
-                    } elseif($_table == $this->tablePrefix.'article'){
+                    } elseif ($_table == $this->tablePrefix . 'article') {
                         $indexData['fid'] = $row['id'];
-                    } elseif(count($primaryKeys) == 1) {
+                    } elseif (count($primaryKeys) == 1) {
                         $indexData['fid'] = $row[$primaryKeys[0]];
-                    } elseif(count($primaryKeys)){
+                    } elseif (count($primaryKeys)) {
                         $fids = array();
-                        foreach($primaryKeys as $pk){
+                        foreach ($primaryKeys as $pk) {
                             $fids[$pk] = $row[$pk];
                         }
                         $indexData['fid'] = json_encode($fids);
                     }
 
-                    if(is_null($indexData['fid'])) {
+                    if (is_null($indexData['fid'])) {
                         $indexData['fid'] = $this->getMinFID();
                     }
-                    if(array_key_exists('parent_id',$row)){
+                    if (array_key_exists('parent_id', $row)) {
                         $indexData['catid'] = $row['parent_id'];
-                        if($_table == $this->tablePrefix.'article'){
+                        if ($_table == $this->tablePrefix . 'article') {
                             $indexData['catid'] = intval($row['startarticle']) ? $row['id'] : $row['parent_id'];
                         }
-                    } elseif(array_key_exists('category_id',$row)) {
+                    } elseif (array_key_exists('category_id', $row)) {
                         $indexData['catid'] = $row['category_id'];
                     } else {
                         $indexData['catid'] = NULL;
                     }
                     $additionalValues = array();
-                    foreach($this->includeColumns[$_table] as $col){
+                    foreach ($this->includeColumns[$_table] as $col) {
                         $additionalValues[$col] = $row[$col];
                     }
                     $indexData['values'] = serialize($additionalValues);
 
-                    $indexData['unchangedtext'] = (string) $row[$_column];
+                    $indexData['unchangedtext'] = (string)$row[$_column];
                     $plaintext = $this->getPlaintext($row[$_column]);
                     $indexData['plaintext'] = $plaintext;
 
-                    foreach(preg_split('~[[:punct:][:space:]]+~ismu', $plaintext) as $keyword){
-                        if($this->significantCharacterCount <= mb_strlen($keyword,'UTF-8')) {
+                    foreach (preg_split('~[[:punct:][:space:]]+~ismu', $plaintext) as $keyword) {
+                        if ($this->significantCharacterCount <= mb_strlen($keyword, 'UTF-8')) {
                             $keywords[] = array('search' => $keyword, 'clang' => is_null($indexData['clang']) ? false : $indexData['clang']);
                         }
                     }
 
                     $indexData['teaser'] = '';
-                    if($this->tablePrefix.'article' == $_table){
+                    if ($this->tablePrefix . 'article' == $_table) {
                         $rex_article = new rex_article_content(intval($row['id']), intval($row['clang_id']));
                         $teaser = true;
                         $article_content_file = rex_path::addonCache('structure', intval($row['id']) . '.' . intval($row['clang_id']) . '.content');
-                        if(!file_exists($article_content_file)){
+                        if (!file_exists($article_content_file)) {
                             $generated = rex_content_service::generateArticleContent(intval($row['id']), intval($row['clang_id']));
-                            if($generated !== true){
+                            if ($generated !== true) {
                                 $teaser = false;
                                 continue;
                             }
                         }
 
-                        if(file_exists($article_content_file) AND preg_match('~(header\s*\(\s*["\']\s*Location\s*:)|(rex_redirect\s*\()~isu', rex_file::get($article_content_file))){
+                        if (file_exists($article_content_file) AND preg_match('~(header\s*\(\s*["\']\s*Location\s*:)|(rex_redirect\s*\()~isu', rex_file::get($article_content_file))) {
                             $teaser = false;
                         }
 
                         $indexData['teaser'] = $teaser ? $this->getTeaserText($this->getPlaintext($rex_article->getArticle())) : '';
                     }
 
-                    $insert->setTable($this->tablePrefix.'search_it_index');
+                    $insert->setTable($this->tablePrefix . 'search_it_index');
                     $insert->setValues($indexData);
                     $insert->insert();
 
@@ -576,7 +550,6 @@ class search_it {
         return $count;
     }
 
-
     /**
      * Indexes a certain file.
      * Returns SEARCH_IT_FILE_GENERATED or an error code.
@@ -588,14 +561,15 @@ class search_it {
      *
      * @return mixed
      */
-    function indexFile($_filename, $_doPlaintext = false, $_clang = false, $_fid = false, $_catid = false){
+    public function indexFile($_filename, $_doPlaintext = false, $_clang = false, $_fid = false, $_catid = false)
+    {
         // $_filename comes with path but stripped of first slash
         // extract file-extension
         $filenameArray = explode('.', $_filename);
         $fileext = $filenameArray[count($filenameArray) - 1];
 
         // check file-extension
-        if ((!in_array($fileext, $this->fileExtensions) AND !empty($this->fileExtensions)) AND !$this->indexUnknownFileExtensions AND !$this->indexMissingFileExtensions) {
+        if ((!in_array($fileext, $this->fileExtensions) AND !empty($this->fileExtensions)) ) {
             return SEARCH_IT_FILE_FORBIDDEN_EXTENSION;
         }
 
@@ -646,7 +620,7 @@ class search_it {
                 $error = false;
 
                 if (function_exists('exec')) {
-                    $tempFile = tempnam($this->generatedPath . '/mediapool/', 'search_it');
+                    $tempFile = tempnam(rex_path::cache() . 'addons/mediapool/', 'search_it');
                     $encoding = 'UTF-8';
                     //echo 'pdftotext ' . escapeshellarg(rex_path::base($_filename)) . ' ' . escapeshellarg($tempFile) . ' -enc ' . $encoding;
                     exec('pdftotext ' . escapeshellarg(rex_path::base($_filename)) . ' ' . escapeshellarg($tempFile) . ' -enc ' . $encoding, $dummy, $return);
@@ -677,7 +651,7 @@ class search_it {
 
                 if (!$xpdf) {
                     // if xpdf returned an error, try pdf2txt via php
-                    if ( false === $pdfContent = @rex_file::get(rex_path::base($_filename)) ){
+                    if (false === $pdfContent = @rex_file::get(rex_path::base($_filename))) {
                         $error = SEARCH_IT_FILE_NOEXIST;
                     } else {
                         $text = pdf2txt::directConvert($pdfContent);
@@ -687,7 +661,7 @@ class search_it {
 
                 if ($error !== false) {
                     return $error;
-                } elseif ( trim($text) == '' ) {
+                } elseif (trim($text) == '') {
                     return SEARCH_IT_FILE_EMPTY;
                 }
 
@@ -698,7 +672,7 @@ class search_it {
             case 'htm':
             case 'html':
             case 'php':
-                if ( false === $text = @rex_file::get(rex_path::base($_filename)) ) {
+                if (false === $text = @rex_file::get(rex_path::base($_filename))) {
                     return SEARCH_IT_FILE_NOEXIST;
                 }
 
@@ -707,7 +681,7 @@ class search_it {
 
             // other filetype
             default:
-                if ( false === $text = @rex_file::get(rex_path::base($_filename)) ) {
+                if (false === $text = @rex_file::get(rex_path::base($_filename))) {
                     return SEARCH_IT_FILE_NOEXIST;
                 }
 
@@ -742,19 +716,19 @@ class search_it {
             $fileData['fid'] = NULL;
         }
 
-        if(is_null($fileData['fid'])) {
+        if (is_null($fileData['fid'])) {
             $fileData['fid'] = $this->getMinFID();
         }
 
-        if($_catid !== false) {
+        if ($_catid !== false) {
             $fileData['catid'] = intval($_catid);
         }
         $fileData['unchangedtext'] = $text;
         $fileData['plaintext'] = $plaintext;
 
         $keywords = array();
-        foreach(preg_split('~[[:punct:][:space:]]+~ismu', $plaintext) as $keyword){
-            if($this->significantCharacterCount <= mb_strlen($keyword,'UTF-8')) {
+        foreach (preg_split('~[[:punct:][:space:]]+~ismu', $plaintext) as $keyword) {
+            if ($this->significantCharacterCount <= mb_strlen($keyword, 'UTF-8')) {
                 $keywords[] = array('search' => $keyword, 'clang' => !isset($fileData['clang']) ? false : $fileData['clang']);
             }
         }
@@ -762,185 +736,331 @@ class search_it {
 
         $fileData['teaser'] = $this->getTeaserText($plaintext);
 
-        $insert->setTable($this->tablePrefix.'search_it_index');
+        $insert->setTable($this->tablePrefix . 'search_it_index');
         $insert->setValues($fileData);
         $insert->insert();
 
         return SEARCH_IT_FILE_GENERATED;
     }
 
+    /**
+     * Strips the HTML-Tags from a text and replaces them with spaces or line breaks
+     *
+     * @param string $_text
+     *
+     * @return string
+     */
+    private function getPlaintext($_text)
+    {
+        $process = true;
+        $extensionReturn = rex_extension::registerPoint(new rex_extension_point('SEARCH_IT_PLAINTEXT', $_text));
+        if (is_array($extensionReturn)) {
+            $_text = $extensionReturn['text'];
+            $process = !empty($extensionReturn['process']);
+        } elseif (is_string($extensionReturn)) {
+            $_text = $extensionReturn;
+        }
 
-    function getMinFID(){
+        if ($process) {
+            $tags2nl = '~</?(address|blockquote|center|del|dir|div|dl|fieldset|form|h1|h2|h3|h4|h5|h6|hr|ins|isindex|menu|noframes|noscript|ol|p|pre|table|ul)[^>]+>~siu';
+            $_text = trim(strip_tags(preg_replace(array('~<(head|script).+?</(head|script)>~siu', $tags2nl, '~<[^>]+>~siu', '~[\n\r]+~siu', '~[\t ]+~siu'), array('', "\n", ' ', "\n", ' '), $_text)));
+        }
+
+        return $_text;
+    }
+
+    /**
+     * Gets the teaser of a text.
+     *
+     * @param string $_text
+     *
+     * @return string
+     */
+    private function getTeaserText($_text)
+    {
+        $i = 0;
+        $textArray = preg_split('~\s+~siu', $_text, $this->maxTeaserChars);
+
+        $return = '';
+        $aborted = false;
+        foreach ($textArray as $word) {
+            if ((($strlen = strlen($word)) + $i) > $this->maxTeaserChars) {
+                $aborted = true;
+                break;
+            }
+
+            $return .= $word . ' ';
+            $i += $strlen + 1;
+        }
+
+        if ($aborted) {
+            $return .= $this->ellipsis;
+        }
+
+        return $return;
+    }
+
+    /**
+     * In some cases there is no id for the field fid in the index table (like media files). Therefore Search it counts into the negative.
+     *
+     */
+    private static function getMinFID()
+    {
         $minfid_sql = rex_sql::factory();
-        $minfid_result = $minfid_sql->getArray('SELECT MIN(CONVERT(fid, SIGNED)) as minfid FROM `'.$this->tablePrefix.'search_it_index`');
+        $minfid_result = $minfid_sql->getArray('SELECT MIN(CONVERT(fid, SIGNED)) as minfid FROM `' . rex::getTable('search_it_index') . '`');
         $minfid = intval($minfid_result[0]['minfid']);
 
         return ($minfid < 0) ? --$minfid : -1;
     }
 
-
-    /**
-     * Excludes an article from the index.
-     *
-     * @param int $_id
-     * @param mixed $_clang
-     */
-    function excludeArticle($_id,$_clang = false){
-        // exclude article
-        $art_sql = rex_sql::factory();
-        $art_sql->setTable($this->tablePrefix.'search_it_index');
-
-        $where = "fid = ".intval($_id)." AND texttype='article'";
-        if($_clang !== false) {
-            $where .= " AND clang='" . intval($_clang) . "'";
-        }
-
-        $art_sql->setWhere($where);
-        $art_sql->delete();
-
-        // delete from cache
-        $select = rex_sql::factory();
-        $select->setTable($this->tablePrefix.'search_it_index');
-        $select->setWhere($where);
-        $select->select('id');
-
-        $indexIds = array();
-        foreach($select->getArray() as $result) {
-            $indexIds[] = $result['id'];
-        }
-        $this->deleteCache($indexIds);
-    }
-
-
     /**
      * Deletes the complete search index.
      *
      */
-    function deleteIndex(){
+    public function deleteIndex()
+    {
         $delete = rex_sql::factory();
-        $delete->setTable($this->tablePrefix.'search_it_index');
+        $delete->setTable($this->tablePrefix . 'search_it_index');
         $delete->delete();
 
         $this->deleteCache();
     }
-
-
-    /**
-     * Sets the maximum count of letters the teaser of a searched through text may have.
-     *
-     * @param int $_count
-     */
-    function setMaxTeaserChars($_count){
-        $this->maxTeaserChars = intval($_count);
-        $this->hashMe .= $_count;
-    }
-
-
-    /**
-     * Sets the maximum count of letters around an found search term in the highlighted text.
-     * @param int $_count
-     */
-    function setMaxHighlightedTextChars($_count){
-        $this->maxHighlightedTextChars = intval($_count);
-        $this->hashMe .= $_count;
-    }
-
-    /**
-     * Sets the surround-tags for found keywords.
-     *
-     * Expects either the start- and the end-tag
-     * or an array with both tags.
-     */
-    function setSurroundTags($_tags, $_endtag = false){
-        if(is_array($_tags) AND $_endtag === false) {
-            $this->surroundTags = $_tags;
-        } else {
-            $this->surroundTags = array((string)$_tags, (string)$_endtag);
-        }
-        $this->hashMe .= $this->surroundTags[0].$this->surroundTags[1];
-    }
-
-
-    /**
-     * Sets the maximum count of results.
-     *
-     * Expects either the start- and the count-limit
-     * or an array with both limits
-     * or only the count-limit.
-     *
-     * example method calls:
-     * setLimit(10,10);       // start with 10th result
-     * setLimit(20);          // maximum of 20 results starting with the first result
-     * setLimit(array(0,20)); // maximum of 20 results starting with the first result
-     */
-    function setLimit($_limit, $_countLimit = false){
-        if (is_array($_limit) AND $_countLimit === false) {
-            $this->limit = array((int)$_limit[0], (int)$_limit[1]);
-        } elseif($_countLimit === false) {
-            $this->limit = array(0, (int)$_limit);
-        } else {
-            $this->limit = array((int)$_limit, (int)$_countLimit);
-        }
-        $this->hashMe .= $this->limit[0].$this->limit[1];
-    }
-
-
-    /**
-     * Sets words, which must not be found.
-     *
-     * Expects an array with the words as parameters.
-     */
-    function setBlacklist($_words){
-        foreach($_words as $key => $word){
-            $this->blacklist[] = $tmpkey = (string) ( $this->ci ? strtolower($word) : $word );
-            $this->hashMe .= $tmpkey;
-        }
-    }
-
 
     /**
      * Exclude Articles with the transfered IDs.
      *
      * Expects an array with the IDs as parameters.
      */
-    function setExcludeIDs($_ids){
-        foreach($_ids as $key => $id){
+    private function setExcludeIDs($_ids)
+    {
+        foreach ($_ids as $key => $id) {
             $this->excludeIDs[] = intval($id);
         }
 
         $this->excludeIDs = array_unique($this->excludeIDs);
     }
 
+    /**
+     * Sets words, which must not be found.
+     *
+     * Expects an array with the words as parameters.
+     */
+    public function setBlacklist($_words)
+    {
+        foreach ($_words as $key => $word) {
+            $this->blacklist[] = $tmpkey = (string)($this->ci ? strtolower($word) : $word);
+            $this->hashMe .= $tmpkey;
+        }
+    }
+
+
+
+
+    /* search */
+    /**
+     * Sets search string.
+     *
+     * Expects a string.
+     */
+    public function setSearchString($_searchString)
+    {
+        $this->searchString = $_searchString;
+    }
+
+    /**
+     * Converts the search string to an array.
+     *
+     * Returns the number of search terms.
+     *
+     * @param string $_searchString
+     *
+     * @return int
+     */
+    public function parseSearchString($_searchString)
+    {
+        // reset searchArray
+        $this->searchArray = array();
+
+        $matches = array();
+        preg_match_all('~(?:(\+*)"([^"]*)")|(?:(\+*)(\S+))~isu', $_searchString, $matches, PREG_SET_ORDER);
+
+        $count = 0;
+        $replaceValues = array();
+        $sql = rex_sql::factory();
+        foreach ($matches as $match) {
+            if (count($match) == 5) {
+                // words without double quotes (foo)
+                $word = $match[4];
+                $plus = $match[3];
+            } elseif (!empty($match[2])) {
+                // words with double quotes ("foo bar")
+                $word = $match[2];
+                $plus = $match[1];
+            } else {
+                continue;
+            }
+
+            $notBlacklisted = true;
+            // blacklisted words are excluded
+            foreach ($this->blacklist as $blacklistedWord) {
+                if (preg_match('~\b' . preg_quote($blacklistedWord, '~') . '\b~isu', $word)) {
+                    $this->blacklisted[] = array($blacklistedWord => $word);
+                    $notBlacklisted = false;
+                }
+            }
+
+            if ($notBlacklisted) {
+                // whitelisted words get extra weighted
+                $this->searchArray[$count] = array('search' => $word,
+                    'weight' => strlen($plus) + 1 + (array_key_exists($word, $this->whitelist) ? $this->whitelist[$word] : 0),
+                    'clang' => $this->clang
+                );
+                $count++;
+            }
+        }
+
+        return $count;
+    }
+
+    /**
+     * Which words are important?
+     *
+     * This method adds weight to special words.
+     * If an word already exists, the method adds the weight.
+     * Expects an array with the keys containing the words
+     * and the values containing the weight to add.
+     *
+     * @param array $_whitelist
+     *
+     *
+     */
+    public function addWhitelist($_whitelist)
+    {
+        foreach ($_whitelist as $word => $weight) {
+            $key = (string)($this->ci ? strtolower($word) : $word);
+            $this->hashMe .= $key;
+            $this->whitelist[$key] = intval($this->whitelist[$key]) + intval($weight);
+        }
+    }
+
+    /**
+     * Sets array of IDs for search restriction
+     */
+    private function setSearchInIDs($_searchInIDs, $_reset = false)
+    {
+        if ($_reset) {
+            $this->searchInIDs = array();
+        }
+        if (array_key_exists('articles', $_searchInIDs)) {
+            if (!array_key_exists('articles', $this->searchInIDs)) {
+                $this->searchInIDs['articles'] = array();
+            }
+            foreach ($_searchInIDs['articles'] as $id) {
+                if ($id = intval($id)) {
+                    $this->searchInIDs['articles'][] = $id;
+                    $this->hashMe .= 'a' . $id;
+                }
+            }
+        }
+
+        if (array_key_exists('categories', $_searchInIDs)) {
+            if (!array_key_exists('categories', $this->searchInIDs)) {
+                $this->searchInIDs['categories'] = array();
+            }
+            foreach ($_searchInIDs['categories'] as $id) {
+                if ($id = intval($id)) {
+                    $this->searchInIDs['categories'][] = $id;
+                    $this->hashMe .= 'c' . $id;
+                }
+            }
+        }
+
+        if (array_key_exists('filecategories', $_searchInIDs)) {
+            if (!array_key_exists('filecategories', $this->searchInIDs)) {
+                $this->searchInIDs['filecategories'] = array();
+            }
+            foreach ($_searchInIDs['filecategories'] as $id) {
+                if ($id = intval($id)) {
+                    $this->searchInIDs['filecategories'][] = $id;
+                    $this->hashMe .= 'f' . $id;
+                }
+            }
+        }
+
+        if (array_key_exists('db_columns', $_searchInIDs)) {
+            if (!array_key_exists('db_columns', $this->searchInIDs)) {
+                $this->searchInIDs['db_columns'] = array();
+            }
+            foreach ($_searchInIDs['db_columns'] as $table => $columnArray) {
+                $this->hashMe .= $table;
+                $tmp = array();
+                foreach ($columnArray as $column) {
+                    $tmp[] = $column;
+                    $this->hashMe .= $column;
+                }
+                if (!array_key_exists($table, $this->searchInIDs['db_columns'])) {
+                    $this->searchInIDs['db_columns'][$table] = $tmp;
+                } else {
+                    $this->searchInIDs['db_columns'][$table] = array_merge($this->searchInIDs['db_columns'][$table], $tmp);
+                }
+            }
+        }
+    }
+
+    /**
+     * if IDs are set to filter search, you can tell Search it to search any article anyway
+     *
+     * @param bool $_bool
+     *
+     * @ignore
+     */
+    public function setSearchAllArticlesAnyway($_bool = false)
+    {
+        $this->searchAllArticlesAnyway = $_bool;
+        $this->hashMe .= $_bool;
+    }
+    /**
+     * deprecated: use setSearchAllArticlesAnyway()
+     *
+     * @param bool $_bool
+     *
+     * @ignore
+     */
+    public function doSearchArticles($_bool = false)
+    {
+        $this->searchAllArticlesAnyway = $_bool;
+        $this->hashMe .= $_bool;
+    }
 
     /**
      * Sets the IDs of the articles which are only to be searched through.
      *
      * Expects an array with the IDs as parameters.
      */
-    function searchInArticles($_ids){
+    public function searchInArticles($_ids)
+    {
         $this->setSearchInIDs(array('articles' => $_ids));
     }
-
 
     /**
      * Sets the IDs of the categories which are only to be searched through.
      *
      * Expects an array with the IDs as parameters.
      */
-    function searchInCategories($_ids){
+    public function searchInCategories($_ids)
+    {
         $this->setSearchInIDs(array('categories' => $_ids));
     }
-
 
     /**
      * Sets the IDs of the mediapool-categories which are only to be searched through.
      *
      * Expects an array with the IDs as parameters.
      */
-    function searchInFileCategories($_ids){
+    public function searchInFileCategories($_ids)
+    {
         $this->setSearchInIDs(array('filecategories' => $_ids));
     }
-
 
     /**
      * Sets the columns which only should be searched through.
@@ -948,29 +1068,103 @@ class search_it {
      * @param string $_table
      * @param string $_column
      */
-    function searchInDbColumn($_table, $_column){
+    public function searchInDbColumn($_table, $_column)
+    {
         $this->setSearchinIDs(array('db_columns' => array($_table => array($_column))));
     }
 
-
     /**
-     * Sets the columns which should be indexed.
+     * Sets an addition WHERE Condition to the search query.
      *
-     * @param array $_columns
+     * Expects a string suitable as SQL WHERE condition.
      */
-    function setIncludeColumns($_columns = array()){
-        if (is_array($_columns)) {
-            $this->includeColumns = $_columns;
-        } else {
-            $this->includeColumns = array();
-        }
-    }
-
-
-    function setWhere($_where){
+    public function setWhere($_where)
+    {
         $this->where = $_where;
         $this->hashMe .= $_where;
     }
+
+    /**
+     * Sets the sort order of the results.
+     *
+     * The parameter has to be an array with the columns as keys
+     * and the direction (DESC or ASC) as value (e.g.: array['COLUMN'] = 'ASC').
+     *
+     * @param array $_order
+     *
+     * @return bool
+     */
+    public function setOrder($_order)
+    {
+        if (!is_array($_order)) {
+            $this->errormessages = 'Wrong parameter. Expecting an array';
+            return false;
+        }
+
+        $i = 0;
+        $dir2upper = '';
+        $col2upper = '';
+        foreach ($_order as $col => $dir) {
+            $i++;
+            if ('RELEVANCE_SEARCH_IT' == ($col2upper = strtoupper((string)$col))) {
+                $this->errormessages = sprintf('Column %d must not be named "RELEVANCE_SEARCH_IT". Column %d is ignored for the sort order', $i, $i);
+            } else {
+                if (!in_array($dir2upper = strtoupper((string)$dir), array('ASC', 'DESC'))) {
+                    $this->errormessages = sprintf('Column %d has no correct sort order (ASC or DESC). Descending (DESC) sort order is assumed', $i);
+                    $dir2upper = 'DESC';
+                }
+
+                $this->order[$col2upper] = $dir2upper;
+                $this->hashMe .= $col2upper . $dir2upper;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * group results by ftable,fid,clang ?
+     *
+     * @param bool $_bool
+     *
+     * @ignore
+     */
+    public function doGroupBy($_bool = true)
+    {
+        $this->groupBy = $_bool;
+        $this->hashMe .= $_bool;
+    }
+
+    /**
+     * Case sensitive or case insensitive?
+     *
+     * @param bool $_ci
+     *
+     * @ignore
+     */
+    public function setCaseInsensitive($_ci = true)
+    {
+        $this->ci = (bool)$_ci;
+    }
+
+    /**
+     * Sets the language-Id.
+     *
+     * @param mixed $_clang
+     *
+     *
+     */
+    private function setClang($_clang)
+    {
+        if ($_clang === false) {
+            $this->clang = false;
+        } else {
+            $this->clang = intval($_clang);
+        }
+
+        $this->hashMe .= $_clang;
+    }
+
 
 
     /**
@@ -983,8 +1177,9 @@ class search_it {
      *
      * @return bool
      */
-    function setLogicalMode($_logicalMode){
-        switch(strtolower($_logicalMode)){
+    public function setLogicalMode($_logicalMode)
+    {
+        switch (strtolower($_logicalMode)) {
             case 'and':
             case 'konj':
             case 'strict':
@@ -1018,8 +1213,9 @@ class search_it {
      *
      * @return bool
      */
-    function setTextMode($_textMode){
-        switch(strtolower($_textMode)){
+    public function setTextMode($_textMode)
+    {
+        switch (strtolower($_textMode)) {
             case 'html':
             case 'xhtml':
             case 'unmodified':
@@ -1058,8 +1254,9 @@ class search_it {
      *
      * @return bool
      */
-    function setSearchMode($_searchMode){
-        switch(strtolower($_searchMode)){
+    public function setSearchMode($_searchMode)
+    {
+        switch (strtolower($_searchMode)) {
             case 'like':
             case 'match':
                 $this->searchMode = strtolower($_searchMode);
@@ -1074,41 +1271,70 @@ class search_it {
         return true;
     }
 
-    /**
-     * Sets the sort order of the results.
+
+
+
+
+    /* search output */
+        /**
+     * Sets the surround-tags for found keywords.
      *
-     * The parameter has to be an array with the columns as keys
-     * and the direction (DESC or ASC) as value (e.g.: array['COLUMN'] = 'ASC').
-     *
-     * @param array $_order
-     *
-     * @return bool
+     * Expects either the start- and the end-tag
+     * or an array with both tags.
      */
-    function setOrder($_order){
-        if(!is_array($_order)){
-            $this->errormessages = 'Wrong parameter. Expecting an array';
-            return false;
+    public function setSurroundTags($_tags, $_endtag = false)
+    {
+        if (is_array($_tags) AND $_endtag === false) {
+            $this->surroundTags = $_tags;
+        } else {
+            $this->surroundTags = array((string)$_tags, (string)$_endtag);
         }
+        $this->hashMe .= $this->surroundTags[0] . $this->surroundTags[1];
+    }
 
-        $i = 0;
-        $dir2upper = '';
-        $col2upper = '';
-        foreach($_order as $col => $dir){
-            $i++;
-            if('RELEVANCE_SEARCH_IT' == ($col2upper = strtoupper((string)$col))){
-                $this->errormessages = sprintf('Column %d must not be named "RELEVANCE_SEARCH_IT". Column %d is ignored for the sort order',$i,$i);
-            } else {
-                if(!in_array($dir2upper = strtoupper((string)$dir), array('ASC','DESC'))){
-                    $this->errormessages = sprintf('Column %d has no correct sort order (ASC or DESC). Descending (DESC) sort order is assumed',$i);
-                    $dir2upper = 'DESC';
-                }
-
-                $this->order[$col2upper] = $dir2upper;
-                $this->hashMe .= $col2upper.$dir2upper;
-            }
+    /**
+     * Sets the maximum count of results.
+     *
+     * Expects either the start- and the count-limit
+     * or an array with both limits
+     * or only the count-limit.
+     *
+     * example method calls:
+     * setLimit(10,10);       // start with 10th result
+     * setLimit(20);          // maximum of 20 results starting with the first result
+     * setLimit(array(0,20)); // maximum of 20 results starting with the first result
+     */
+    public function setLimit($_limit, $_countLimit = false)
+    {
+        if (is_array($_limit) AND $_countLimit === false) {
+            $this->limit = array((int)$_limit[0], (int)$_limit[1]);
+        } elseif ($_countLimit === false) {
+            $this->limit = array(0, (int)$_limit);
+        } else {
+            $this->limit = array((int)$_limit, (int)$_countLimit);
         }
+        $this->hashMe .= $this->limit[0] . $this->limit[1];
+    }
 
-        return true;
+    /**
+     * Sets the maximum count of letters the teaser of a searched through text may have.
+     *
+     * @param int $_count
+     */
+    public function setMaxTeaserChars($_count)
+    {
+        $this->maxTeaserChars = intval($_count);
+        $this->hashMe .= $_count;
+    }
+
+    /**
+     * Sets the maximum count of letters around an found search term in the highlighted text.
+     * @param int $_count
+     */
+    public function setMaxHighlightedTextChars($_count)
+    {
+        $this->maxHighlightedTextChars = intval($_count);
+        $this->hashMe .= $_count;
     }
 
     /**
@@ -1118,8 +1344,9 @@ class search_it {
      *
      * @return bool
      */
-    function setHighlightType($_type){
-        switch($_type){
+    public function setHighlightType($_type)
+    {
+        switch ($_type) {
             case 'sentence':
             case 'paragraph':
             case 'surroundtext':
@@ -1139,137 +1366,6 @@ class search_it {
     }
 
     /**
-     * Converts the search string to an array.
-     *
-     * Returns the number of search terms.
-     *
-     * @param string $_searchString
-     *
-     * @return int
-     */
-    function parseSearchString($_searchString){
-        // reset searchArray
-        $this->searchArray = array();
-
-        $matches = array();
-        preg_match_all('~(?:(\+*)"([^"]*)")|(?:(\+*)(\S+))~isu', $_searchString, $matches, PREG_SET_ORDER);
-
-        $count = 0;
-        $replaceValues = array();
-        $sql = rex_sql::factory();
-        foreach($matches as $match){
-            if(count($match) == 5){
-                // words without double quotes (foo)
-                $word = $match[4];
-                $plus = $match[3];
-            } elseif(!empty($match[2])) {
-                // words with double quotes ("foo bar")
-                $word = $match[2];
-                $plus = $match[1];
-            } else {
-                continue;
-            }
-
-            $notBlacklisted = true;
-            // blacklisted words are excluded
-            foreach($this->blacklist as $blacklistedWord){
-                if(preg_match('~\b'.preg_quote($blacklistedWord,'~').'\b~isu', $word)){
-                    $this->blacklisted[] = array($blacklistedWord => $word);
-                    $notBlacklisted = false;
-                }
-            }
-
-            if($notBlacklisted){
-                // whitelisted words get extra weighted
-                $this->searchArray[$count] = array( 'search' => $word,
-                    'weight' => strlen($plus) + 1 + ( array_key_exists($word,$this->whitelist) ? $this->whitelist[$word] : 0 ),
-                    'clang' => $this->clang
-                );
-                $count++;
-            }
-        }
-
-        return $count;
-    }
-
-
-    /**
-     * Which words are important?
-     *
-     * This method adds weight to special words.
-     * If an word already exists, the method adds the weight.
-     * Expects an array with the keys containing the words
-     * and the values containing the weight to add.
-     *
-     * @param array $_whitelist
-     *
-     *
-     */
-    function addWhitelist($_whitelist){
-        foreach($_whitelist as $word => $weight){
-            $key = (string)($this->ci ? strtolower($word) : $word);
-            $this->hashMe .= $key;
-            $this->whitelist[$key] = intval($this->whitelist[$key]) + intval($weight);
-        }
-    }
-
-    /**
-     * Case sensitive or case insensitive?
-     *
-     * @param bool $_ci
-     *
-     * @ignore
-     */
-    function setCaseInsensitive($_ci = true){
-        $this->ci = (bool) $_ci;
-    }
-
-    /**
-     * Sets the language-Id.
-     *
-     * @param mixed $_clang
-     *
-     *
-     */
-    function setClang($_clang){
-        if($_clang === false) {
-            $this->clang = false;
-        } else {
-            $this->clang = intval($_clang);
-        }
-
-        $this->hashMe .= $_clang;
-    }
-
-
-
-    /**
-     * Strips the HTML-Tags from a text and replaces them with spaces or line breaks
-     *
-     * @param string $_text
-     *
-     * @return string
-     */
-    function getPlaintext($_text){
-        $process = true;
-        $extensionReturn = rex_extension::registerPoint(new rex_extension_point('SEARCH_IT_PLAINTEXT', $_text));
-        if(is_array($extensionReturn)){
-            $_text = $extensionReturn['text'];
-            $process = !empty($extensionReturn['process']);
-        } elseif(is_string($extensionReturn)) {
-            $_text = $extensionReturn;
-        }
-
-        if($process){
-            $tags2nl = '~</?(address|blockquote|center|del|dir|div|dl|fieldset|form|h1|h2|h3|h4|h5|h6|hr|ins|isindex|menu|noframes|noscript|ol|p|pre|table|ul)[^>]+>~siu';
-            $_text = trim(strip_tags(preg_replace(array('~<(head|script).+?</(head|script)>~siu', $tags2nl, '~<[^>]+>~siu', '~[\n\r]+~siu', '~[\t ]+~siu'), array('',"\n",' ',"\n",' '), $_text)));
-        }
-
-        return $_text;
-    }
-
-
-    /**
      * According to the highlight-type this method will return a string or an array.
      * Found keywords will be highlighted with the surround-tags.
      *
@@ -1277,24 +1373,25 @@ class search_it {
      *
      * @return mixed
      */
-    function getHighlightedText($_text){
+    public function getHighlightedText($_text)
+    {
         $tmp_searchArray = $this->searchArray;
 
-        if($this->searchEntities){
-            foreach($this->searchArray as $keyword){
+        if ($this->searchHtmlEntities) {
+            foreach ($this->searchArray as $keyword) {
                 $this->searchArray[] = array('search' => htmlentities($keyword['search'], ENT_COMPAT, 'UTF-8'));
             }
         }
 
-        switch($this->highlightType){
+        switch ($this->highlightType) {
             case 'sentence':
             case 'paragraph':
                 // split text at punctuation marks
-                if($this->highlightType == 'sentence') {
+                if ($this->highlightType == 'sentence') {
                     $regex = '~(\!|\.|\?|[\n]+)~siu';
                 }
                 // split text at line breaks
-                if($this->highlightType == 'paragraph'){
+                if ($this->highlightType == 'paragraph') {
                     $regex = '~([\r\n])~siu';
                 }
 
@@ -1302,33 +1399,33 @@ class search_it {
 
                 $search = array();
                 $replace = array();
-                foreach($this->searchArray as $keyword){
-                    $search[] = preg_quote($keyword['search'],'~');
-                    $replace[] = '~'.preg_quote($keyword['search'],'~').'~isu';
+                foreach ($this->searchArray as $keyword) {
+                    $search[] = preg_quote($keyword['search'], '~');
+                    $replace[] = '~' . preg_quote($keyword['search'], '~') . '~isu';
                 }
 
                 $i = 0;
-                for($i = 0; $i < count($Apieces); $i++) {
+                for ($i = 0; $i < count($Apieces); $i++) {
                     if (preg_match('~(' . implode('|', $search) . ')~isu', $Apieces[$i])) {
                         break;
                     }
                 }
                 $return = '';
-                if($i < count($Apieces)) {
+                if ($i < count($Apieces)) {
                     $return .= $Apieces[$i];
                 }
 
                 $cutted = array();
-                preg_match('~^.*?('.implode('|',$search).').{0,'.$this->maxHighlightedTextChars.'}~imsu', $return, $cutted);
+                preg_match('~^.*?(' . implode('|', $search) . ').{0,' . $this->maxHighlightedTextChars . '}~imsu', $return, $cutted);
 
                 $needEllipses = false;
-                if(strlen($cutted[1]) != strlen($return)) {
+                if (strlen($cutted[1]) != strlen($return)) {
                     $needEllipses = true;
                 }
 
-                $return = preg_replace($replace, $this->surroundTags[0].'$0'.$this->surroundTags[1], substr($cutted[0],0,strrpos($cutted[0],' ')));
+                $return = preg_replace($replace, $this->surroundTags[0] . '$0' . $this->surroundTags[1], substr($cutted[0], 0, strrpos($cutted[0], ' ')));
 
-                if($needEllipses) {
+                if ($needEllipses) {
                     $return .= ' ' . $this->ellipsis;
                 }
 
@@ -1343,84 +1440,84 @@ class search_it {
                 $Ahighlighted = array();
                 $_text = preg_replace('~\s+~', ' ', $_text);
                 $replace = array();
-                foreach($this->searchArray as $keyword) {
+                foreach ($this->searchArray as $keyword) {
                     $replace[] = '~' . preg_quote($keyword['search'], '~') . '~isu';
                 }
 
                 $strlen = mb_strlen($_text);
                 $positions = array();
-                for($i = 0; $i < count($this->searchArray); $i++){
+                for ($i = 0; $i < count($this->searchArray); $i++) {
                     $hits = array();
                     $offset = 0;
-                    preg_match_all('~((.{0,'.$this->maxHighlightedTextChars.'})'.preg_quote($this->searchArray[$i]['search'],'~').'(.{0,'.$this->maxHighlightedTextChars.'}))~imsu', $_text, $hits, PREG_SET_ORDER);
+                    preg_match_all('~((.{0,' . $this->maxHighlightedTextChars . '})' . preg_quote($this->searchArray[$i]['search'], '~') . '(.{0,' . $this->maxHighlightedTextChars . '}))~imsu', $_text, $hits, PREG_SET_ORDER);
 
-                    foreach($hits as $hit){
+                    foreach ($hits as $hit) {
                         $offset = strpos($_text, $hit[0], $offset) + 1;
                         $currentposition = ceil(intval(($offset - 1) / (2 * $this->maxHighlightedTextChars)));
 
-                        if($this->highlightType == 'array' AND !array_key_exists($this->searchArray[$i]['search'], $Ahighlighted)) {
+                        if ($this->highlightType == 'array' AND !array_key_exists($this->searchArray[$i]['search'], $Ahighlighted)) {
                             $Ahighlighted[$this->searchArray[$i]['search']] = array();
                         }
 
-                        if(trim($hit[1]) != ''){
+                        if (trim($hit[1]) != '') {
                             $surroundText = $hit[1];
 
-                            if(strlen($hit[2]) > 0 AND false !== strpos($hit[2], ' ')) {
+                            if (strlen($hit[2]) > 0 AND false !== strpos($hit[2], ' ')) {
                                 $surroundText = substr($surroundText, strpos($surroundText, ' '));
                             }
 
-                            if(strlen($hit[3]) > 0 AND false !== strpos($hit[3], ' ')) {
+                            if (strlen($hit[3]) > 0 AND false !== strpos($hit[3], ' ')) {
                                 $surroundText = substr($surroundText, 0, strrpos($surroundText, ' '));
                             }
 
-                            if($i == 0 AND strlen($hit[2]) > 0) {
+                            if ($i == 0 AND strlen($hit[2]) > 0) {
                                 $startEllipsis = true;
                             }
 
-                            if($i == (count($this->searchArray) - 1) AND strlen($hit[3]) > 0) {
+                            if ($i == (count($this->searchArray) - 1) AND strlen($hit[3]) > 0) {
                                 $endEllipsis = true;
                             }
 
-                            if($this->highlightType == 'array') {
+                            if ($this->highlightType == 'array') {
                                 $Ahighlighted[$this->searchArray[$i]['search']][] = preg_replace($replace, $this->surroundTags[0] . '$0' . $this->surroundTags[1], trim($surroundText));
-                            } else if(!in_array($currentposition, $positions)) {
+                            } else if (!in_array($currentposition, $positions)) {
                                 $Ahighlighted[] = trim($surroundText);
                             }
 
                             $positions[] = $currentposition;
 
-                            if($this->highlightType == 'surroundtextsingle') {
+                            if ($this->highlightType == 'surroundtextsingle') {
                                 break;
                             }
                         }
                     }
                 }
 
-                if($this->highlightType == 'array') {
+                if ($this->highlightType == 'array') {
                     return $Ahighlighted;
                 }
 
-                $return = implode(' '.$this->ellipsis.' ', $Ahighlighted);
+                $return = implode(' ' . $this->ellipsis . ' ', $Ahighlighted);
 
-                if($startEllipsis) {
+                if ($startEllipsis) {
                     $return = $this->ellipsis . ' ' . $return;
                 }
 
-                if($endEllipsis) {
+                if ($endEllipsis) {
                     $return = $return . ' ' . $this->ellipsis;
                 }
 
-                $return = preg_replace($replace, $this->surroundTags[0].'$0'.$this->surroundTags[1], $return);
+                $return = preg_replace($replace, $this->surroundTags[0] . '$0' . $this->surroundTags[1], $return);
 
                 return $return;
                 break;
 
             case 'teaser':
                 $search = array();
-                foreach($this->searchArray as $keyword)
-                    $search[] = '~'.preg_quote($keyword['search'],'~').'~isu';
+                foreach ($this->searchArray as $keyword)
+                    $search[] = '~' . preg_quote($keyword['search'], '~') . '~isu';
 
-                return preg_replace($search, $this->surroundTags[0].'$0'.$this->surroundTags[1], $this->getTeaserText($_text));
+                return preg_replace($search, $this->surroundTags[0] . '$0' . $this->surroundTags[1], $this->getTeaserText($_text));
                 break;
         }
 
@@ -1428,38 +1525,8 @@ class search_it {
     }
 
 
-    /**
-     * Gets the teaser of a text.
-     *
-     * @param string $_text
-     *
-     * @return string
-     */
-    function getTeaserText($_text){
-        $i = 0;
-        $textArray = preg_split('~\s+~siu', $_text, $this->maxTeaserChars);
 
-        $return = '';
-        $aborted = false;
-        foreach($textArray as $word){
-            if((($strlen = strlen($word)) + $i) > $this->maxTeaserChars){
-                $aborted = true;
-                break;
-            }
-
-            $return .= $word.' ';
-            $i += $strlen + 1;
-        }
-
-        if($aborted) {
-            $return .= $this->ellipsis;
-        }
-
-        return $return;
-    }
-
-
-
+    /* caching */
     /**
      * Returns if a search term is already cached.
      * The cached result will be stored in $this->cachedArray.
@@ -1468,13 +1535,14 @@ class search_it {
      *
      * @return bool
      */
-    function isCached($_search){
+    private function isCached($_search)
+    {
         $sql = rex_sql::factory();
-        $sql->setTable($this->tablePrefix.'search_it_cache');
-        $sql->setWhere(sprintf("hash = '%s'",$this->cacheHash($_search)));
+        $sql->setTable($this->tablePrefix . 'search_it_cache');
+        $sql->setWhere(sprintf("hash = '%s'", $this->cacheHash($_search)));
 
-        if($sql->select('returnarray')){
-            foreach($sql->getArray() as $value){
+        if ($sql->select('returnarray')) {
+            foreach ($sql->getArray() as $value) {
                 return false !== ($this->cachedArray = unserialize($value['returnarray']));
             }
         }
@@ -1489,8 +1557,9 @@ class search_it {
      *
      * @return string
      */
-    function cacheHash($_searchString){
-        return md5($_searchString.$this->hashMe);
+    private function cacheHash($_searchString)
+    {
+        return md5($_searchString . $this->hashMe);
     }
 
     /**
@@ -1501,9 +1570,10 @@ class search_it {
      *
      * @return bool
      */
-    function cacheSearch($_result, $_indexIds){
+    private function cacheSearch($_result, $_indexIds)
+    {
         $sql = rex_sql::factory();
-        $sql->setTable($this->tablePrefix.'search_it_cache');
+        $sql->setTable($this->tablePrefix . 'search_it_cache');
         $sql->setValues(array(
                 'hash' => $this->cacheHash($this->searchString),
                 'returnarray' => $_result
@@ -1513,11 +1583,11 @@ class search_it {
         $lastId = $sql->getLastId();
 
         $Ainsert = array();
-        foreach($_indexIds as $id){
-            $Ainsert[] = sprintf('(%d,%d)',$id,$lastId);
+        foreach ($_indexIds as $id) {
+            $Ainsert[] = sprintf('(%d,%d)', $id, $lastId);
         }
 
-        if (isset($Ainsert) && implode(',',$Ainsert) != '') {
+        if (isset($Ainsert) && implode(',', $Ainsert) != '') {
             $sql2 = rex_sql::factory();
 
             try {
@@ -1547,72 +1617,75 @@ class search_it {
      *
      *
      */
-    function deleteCache($_indexIds = false){
-        if($_indexIds === false){
+    public function deleteCache($_indexIds = false)
+    {
+        if ($_indexIds === false) {
             // delete entire search-chache
             $delete = rex_sql::factory();
-            $delete->setTable($this->tablePrefix.'search_it_cacheindex_ids');
+            $delete->setTable($this->tablePrefix . 'search_it_cacheindex_ids');
             $delete->delete();
             $delete2 = rex_sql::factory();
-            $delete2->setTable($this->tablePrefix.'search_it_cache');
+            $delete2->setTable($this->tablePrefix . 'search_it_cache');
             $delete2->delete();
-        } elseif(is_array($_indexIds) AND !empty($_indexIds)){
+        } elseif (is_array($_indexIds) AND !empty($_indexIds)) {
             $sql = rex_sql::factory();
 
             $query = sprintf('
             SELECT cache_id
             FROM %s
             WHERE index_id IN (%s)',
-                $this->tablePrefix.'search_it_cacheindex_ids',
-                implode(',',$_indexIds)
+                $this->tablePrefix . 'search_it_cacheindex_ids',
+                implode(',', $_indexIds)
             );
 
             $deleteIds = array(0);
-            foreach($sql->getArray($query) as $cacheId) {
+            foreach ($sql->getArray($query) as $cacheId) {
                 $deleteIds[] = $cacheId['cache_id'];
             }
 
             // delete from search-cache where indexed IDs exist
             $delete = rex_sql::factory();
-            $delete->setTable($this->tablePrefix.'search_it_cache');
-            $delete->setWhere('id IN ('.implode(',',$deleteIds).')');
+            $delete->setTable($this->tablePrefix . 'search_it_cache');
+            $delete->setWhere('id IN (' . implode(',', $deleteIds) . ')');
             $delete->delete();
 
             // delete the cache-ID and index-ID
             $delete2 = rex_sql::factory();
-            $delete2->setTable($this->tablePrefix.'search_it_cacheindex_ids');
-            $delete2->setWhere('cache_id IN ('.implode(',',$deleteIds).')');
+            $delete2->setTable($this->tablePrefix . 'search_it_cacheindex_ids');
+            $delete2->setWhere('cache_id IN (' . implode(',', $deleteIds) . ')');
             $delete2->delete();
 
             // delete all cached searches which had no result (because now they maybe will have)
             $delete3 = rex_sql::factory();
-            $delete3->setTable($this->tablePrefix.'search_it_cache');
-            $delete3->setWhere(sprintf('id NOT IN (SELECT cache_id FROM `%s`)',$this->tablePrefix.'search_it_cacheindex_ids'));
+            $delete3->setTable($this->tablePrefix . 'search_it_cache');
+            $delete3->setWhere(sprintf('id NOT IN (SELECT cache_id FROM `%s`)', $this->tablePrefix . 'search_it_cacheindex_ids'));
             $delete3->delete();
         }
     }
 
 
-
-    function storeKeywords($_keywords, $_doCount = true){
+    /* keywords */
+    private function storeKeywords($_keywords, $_doCount = true)
+    {
         // store similar words
         $simWordsSQL = rex_sql::factory();
         $simWords = array();
-        foreach($_keywords as $keyword){
-            if( !in_array(mb_strtolower($keyword['search'], 'UTF-8'), $this->blacklist) AND
-                !in_array(mb_strtolower($keyword['search'], 'UTF-8'), $this->stopwords) ){
+        foreach ($_keywords as $keyword) {
+            if (!in_array(mb_strtolower($keyword['search'], 'UTF-8'), $this->blacklist) AND
+                !in_array(mb_strtolower($keyword['search'], 'UTF-8'), $this->stopwords)
+            ) {
                 $simWords[] = sprintf(
                     "(%s, '%s', '%s', '%s', %s)",
                     $simWordsSQL->escape($keyword['search']),
-                    ( $this->similarwordsMode & SEARCH_IT_SIMILARWORDS_SOUNDEX ) ? soundex($keyword['search']) : '',
-                    ( $this->similarwordsMode & SEARCH_IT_SIMILARWORDS_METAPHONE ) ? metaphone($keyword['search']) : '',
-                    ( $this->similarwordsMode & SEARCH_IT_SIMILARWORDS_COLOGNEPHONE ) ? soundex_ger($keyword['search']) : '',
-                    ( isset($keyword['clang']) AND $keyword['clang'] !== false ) ? $keyword['clang'] : '-1'
+                    ($this->similarwordsMode & SEARCH_IT_SIMILARWORDS_SOUNDEX) ? soundex($keyword['search']) : '',
+                    ($this->similarwordsMode & SEARCH_IT_SIMILARWORDS_METAPHONE) ? metaphone($keyword['search']) : '',
+                    ($this->similarwordsMode & SEARCH_IT_SIMILARWORDS_COLOGNEPHONE) ? soundex_ger($keyword['search']) : '',
+                    (isset($keyword['clang']) AND $keyword['clang'] !== false) ? $keyword['clang'] : '-1'
                 );
             }
         }
 
-        if(!empty($simWords)){
+        if (!empty($simWords)) {
             $simWordsSQL->setQuery(
                 sprintf("
               INSERT INTO `%s`
@@ -1620,7 +1693,7 @@ class search_it {
               VALUES
               %s
               ON DUPLICATE KEY UPDATE count = count + %d",
-                    $this->tablePrefix.'search_it_keywords',
+                    $this->tablePrefix . 'search_it_keywords',
                     implode(',', $simWords),
                     $_doCount ? 1 : 0
                 )
@@ -1628,11 +1701,11 @@ class search_it {
         }
     }
 
-    function deleteKeywords(){
+    public function deleteKeywords()
+    {
         $kw_sql = rex_sql::factory();
-        return $kw_sql->setQuery(sprintf('TRUNCATE TABLE `%s`', $this->tablePrefix.'search_it_keywords'));
+        return $kw_sql->setQuery(sprintf('TRUNCATE TABLE `%s`', $this->tablePrefix . 'search_it_keywords'));
     }
-
 
 
     /**
@@ -1642,13 +1715,14 @@ class search_it {
      *
      * @return array
      */
-    function search($_search){
+    function search($_search)
+    {
         $startTime = microtime(true);
         $this->searchString = trim(stripslashes($_search));
 
         $keywordCount = $this->parseSearchString($this->searchString);
 
-        if(empty($this->searchString) OR empty($this->searchArray)){
+        if (empty($this->searchString) OR empty($this->searchArray)) {
             return array(
                 'count' => 0,
                 'hits' => array(),
@@ -1664,10 +1738,10 @@ class search_it {
         }
 
         // ask cache
-        if($this->cache AND $this->isCached($this->searchString)){
+        if ($this->cache AND $this->isCached($this->searchString)) {
             $this->cachedArray['time'] = microtime(true) - $startTime;
 
-            if($this->similarwords AND $this->cachedArray['count'] > 0){
+            if ($this->similarwords AND $this->cachedArray['count'] > 0) {
                 $this->storeKeywords($this->searchArray);
             }
 
@@ -1681,20 +1755,20 @@ class search_it {
         $return['errormessages'] = '';
         $return['simwordsnewsearch'] = '';
         $return['simwords'] = array();
-        if($this->similarwords){
+        if ($this->similarwords) {
             $simWordsSQL = rex_sql::factory();
             $simwords = array();
-            foreach($this->searchArray as $keyword){
+            foreach ($this->searchArray as $keyword) {
                 $sounds = array();
-                if( $this->similarwordsMode & SEARCH_IT_SIMILARWORDS_SOUNDEX ) {
+                if ($this->similarwordsMode & SEARCH_IT_SIMILARWORDS_SOUNDEX) {
                     $sounds[] = "soundex = '" . soundex($keyword['search']) . "'";
                 }
 
-                if( $this->similarwordsMode & SEARCH_IT_SIMILARWORDS_METAPHONE ) {
+                if ($this->similarwordsMode & SEARCH_IT_SIMILARWORDS_METAPHONE) {
                     $sounds[] = "metaphone = '" . metaphone($keyword['search']) . "'";
                 }
 
-                if( $this->similarwordsMode & SEARCH_IT_SIMILARWORDS_COLOGNEPHONE ) {
+                if ($this->similarwordsMode & SEARCH_IT_SIMILARWORDS_COLOGNEPHONE) {
                     $sounds[] = "colognephone = '" . soundex_ger($keyword['search']) . "'";
                 }
                 $simwords[] = sprintf("
@@ -1707,22 +1781,22 @@ class search_it {
                     %s
                     AND (%s)",
                     $simWordsSQL->escape($keyword['search']),
-                    $this->tablePrefix.'search_it_keywords',
-                    ($this->clang !== false) ? 'AND (clang = '.intval($this->clang).' OR clang IS NULL)' : '',
+                    $this->tablePrefix . 'search_it_keywords',
+                    ($this->clang !== false) ? 'AND (clang = ' . intval($this->clang) . ' OR clang IS NULL)' : '',
                     implode(' OR ', $sounds)
                 );
             }
 
             // simwords
             $simWordsSQL = rex_sql::factory();
-            foreach($simWordsSQL->getArray(sprintf("
+            foreach ($simWordsSQL->getArray(sprintf("
             %s
             GROUP BY %s
             ORDER BY SUM(count)",
                     implode(' UNION ', $simwords),
                     $this->similarwordsPermanent ? "''" : 'keyword, typedin'
                 )
-            ) as $simword){
+            ) as $simword) {
                 $return['simwords'][$simword['typedin']] = array(
                     'keyword' => $simword['keyword'],
                     'typedin' => $simword['typedin'],
@@ -1731,29 +1805,29 @@ class search_it {
             }
 
             $newsearch = array();
-            foreach($this->searchArray as $keyword){
-                if(preg_match('~\s~isu', $keyword['search'])) {
+            foreach ($this->searchArray as $keyword) {
+                if (preg_match('~\s~isu', $keyword['search'])) {
                     $quotes = '"';
                 } else {
                     $quotes = '';
                 }
 
-                if(array_key_exists($keyword['search'], $return['simwords'])){
-                    $newsearch[] = $quotes.$return['simwords'][$keyword['search']]['keyword'].$quotes;
+                if (array_key_exists($keyword['search'], $return['simwords'])) {
+                    $newsearch[] = $quotes . $return['simwords'][$keyword['search']]['keyword'] . $quotes;
                 } else {
-                    $newsearch[] = $quotes.$keyword['search'].$quotes;
+                    $newsearch[] = $quotes . $keyword['search'] . $quotes;
                 }
             }
 
             $return['simwordsnewsearch'] = implode(' ', $newsearch);
         }
 
-        if($this->similarwordsPermanent) {
+        if ($this->similarwordsPermanent) {
             $keywordCount = $this->parseSearchString($this->searchString . ' ' . $return['simwordsnewsearch']);
         }
 
         $searchColumns = array();
-        switch($this->textMode){
+        switch ($this->textMode) {
             case 'unmodified':
                 $searchColumns[] = 'unchangedtext';
                 break;
@@ -1772,29 +1846,29 @@ class search_it {
         $Awhere = array();
         $Amatch = array();
 
-        foreach($this->searchArray as $keyword){
+        foreach ($this->searchArray as $keyword) {
             // build MATCH-Array
-            $match = sprintf("(( MATCH (`%s`) AGAINST (%s)) * %d)", implode('`,`',$searchColumns), $sql->escape($keyword['search']), $keyword['weight']);
+            $match = sprintf("(( MATCH (`%s`) AGAINST (%s)) * %d)", implode('`,`', $searchColumns), $sql->escape($keyword['search']), $keyword['weight']);
 
-            if($this->searchEntities){
-                $match .= ' + '.sprintf("(( MATCH (`%s`) AGAINST (%s)) * %d)", implode('`,`',$searchColumns), $sql->escape(htmlentities($keyword['search'], ENT_COMPAT, 'UTF-8')), $keyword['weight']);
+            if ($this->searchHtmlEntities) {
+                $match .= ' + ' . sprintf("(( MATCH (`%s`) AGAINST (%s)) * %d)", implode('`,`', $searchColumns), $sql->escape(htmlentities($keyword['search'], ENT_COMPAT, 'UTF-8')), $keyword['weight']);
             }
 
             $Amatch[] = $match;
 
             // build WHERE-Array
-            if($this->searchMode == 'match'){
+            if ($this->searchMode == 'match') {
                 $AWhere[] = $match;
             } else {
                 $tmpWhere = array();
-                foreach($searchColumns as $searchColumn) {
-                    $tmpWhere[] = sprintf("(`%s` LIKE '%%%s%%')", $searchColumn, str_replace(array('%','_'),array('\%','\_'), substr($sql->escape($keyword['search']),1,-1)  ));
+                foreach ($searchColumns as $searchColumn) {
+                    $tmpWhere[] = sprintf("(`%s` LIKE '%%%s%%')", $searchColumn, str_replace(array('%', '_'), array('\%', '\_'), substr($sql->escape($keyword['search']), 1, -1)));
 
-                    if($this->searchEntities){
-                        $tmpWhere[] = sprintf("(`%s` LIKE '%%%s%%')", $searchColumn, str_replace(array('%','_'),array('\%','\_'),htmlentities($keyword['search'], ENT_COMPAT, 'UTF-8')));
+                    if ($this->searchHtmlEntities) {
+                        $tmpWhere[] = sprintf("(`%s` LIKE '%%%s%%')", $searchColumn, str_replace(array('%', '_'), array('\%', '\_'), htmlentities($keyword['search'], ENT_COMPAT, 'UTF-8')));
                     }
                 }
-                $AWhere[] = '('.implode(' OR ',$tmpWhere).')';
+                $AWhere[] = '(' . implode(' OR ', $tmpWhere) . ')';
             }
 
             /*if($this->logicalMode == ' AND ')
@@ -1804,71 +1878,71 @@ class search_it {
         }
 
         // build MATCH-String
-        $match = '('.implode(' + ',$Amatch).' + 1)';
+        $match = '(' . implode(' + ', $Amatch) . ' + 1)';
 
         // build WHERE-String
-        $where = '('.implode($this->logicalMode,$AWhere).')';
+        $where = '(' . implode($this->logicalMode, $AWhere) . ')';
         #$where = sprintf("( MATCH (%s) AGAINST ('%s' IN BOOLEAN MODE)) > 0",implode(',',$searchColumns),implode(' ',$Awhere));
 
         // language
-        if($this->clang !== false) {
+        if ($this->clang !== false) {
             $where .= ' AND (clang = ' . intval($this->clang) . ' OR clang IS NULL)';
         }
 
         $AwhereToSearch = array();
 
-        if(array_key_exists('articles',$this->searchInIDs) AND count($this->searchInIDs['articles'])){
+        if (array_key_exists('articles', $this->searchInIDs) AND count($this->searchInIDs['articles'])) {
             $AwhereToSearch[] = "texttype = 'article'";
-            $AwhereToSearch[] = "(fid IN (".implode(',',$this->searchInIDs['articles'])."))";
+            $AwhereToSearch[] = "(fid IN (" . implode(',', $this->searchInIDs['articles']) . "))";
         }
 
-        if(array_key_exists('categories',$this->searchInIDs) AND count($this->searchInIDs['categories'])){
-            $AwhereToSearch[] = "(catid IN (".implode(',',$this->searchInIDs['categories']).") AND ftable = '".$this->tablePrefix."article')";
+        if (array_key_exists('categories', $this->searchInIDs) AND count($this->searchInIDs['categories'])) {
+            $AwhereToSearch[] = "(catid IN (" . implode(',', $this->searchInIDs['categories']) . ") AND ftable = '" . $this->tablePrefix . "article')";
         }
 
-        if(array_key_exists('filecategories',$this->searchInIDs) AND count($this->searchInIDs['filecategories'])){
-            $AwhereToSearch[] = "(catid IN (".implode(',',$this->searchInIDs['filecategories']).") AND ftable = '".$this->tablePrefix."media')";
+        if (array_key_exists('filecategories', $this->searchInIDs) AND count($this->searchInIDs['filecategories'])) {
+            $AwhereToSearch[] = "(catid IN (" . implode(',', $this->searchInIDs['filecategories']) . ") AND ftable = '" . $this->tablePrefix . "media')";
         }
 
-        if(array_key_exists('db_columns',$this->searchInIDs) AND count($this->searchInIDs['db_columns'])){
+        if (array_key_exists('db_columns', $this->searchInIDs) AND count($this->searchInIDs['db_columns'])) {
             $AwhereToSearch[] = "texttype = 'db_column'";
 
             $Acolumns = array();
 
-            foreach($this->searchInIDs['db_columns'] as $table => $colArray){
-                foreach($colArray as $column){
-                    //$Acolumns[] = sprintf("(ftable = '%s' AND fcolumn = '%s' %s)", $table, $column, $strSearchArticles);
+            foreach ($this->searchInIDs['db_columns'] as $table => $colArray) {
+                foreach ($colArray as $column) {
+                    //$Acolumns[] = sprintf("(ftable = '%s' AND fcolumn = '%s' %s)", $table, $column, $strsearchAllArticlesAnyway);
                     $Acolumns[] = sprintf("(ftable = '%s' AND fcolumn = '%s')", $table, $column);
                 }
             }
 
-            $AwhereToSearch[] = '('.implode(' OR ',$Acolumns).')';
+            $AwhereToSearch[] = '(' . implode(' OR ', $Acolumns) . ')';
         }
 
-        if(count($AwhereToSearch)){
-            if($this->searchArticles) {
+        if (count($AwhereToSearch)) {
+            if ($this->searchAllArticlesAnyway) {
                 $where .= " AND ((texttype = 'article') OR (" . implode(' AND ', $AwhereToSearch) . '))';
             } else {
                 $where .= ' AND (' . implode(' AND ', $AwhereToSearch) . ')';
             }
         }
 
-        if(!empty($this->where)) {
+        if (!empty($this->where)) {
             $where .= ' AND (' . $this->where . ')';
         }
 
         // build ORDER-BY-String
         $Aorder = array();
-        foreach($this->order as $col => $dir) {
+        foreach ($this->order as $col => $dir) {
             $Aorder[] = $col . ' ' . $dir;
         }
 
         $selectFields = array();
-        if($this->groupBy){
-            $selectFields[] = sprintf('(SELECT SUM%s FROM `%s` summe WHERE summe.fid = r1.fid AND summe.ftable = r1.ftable) AS RELEVANCE_SEARCH_IT', $match, $this->tablePrefix.'search_it_index');
-            $selectFields[] = sprintf('(SELECT COUNT(*) FROM `%s` summe WHERE summe.fid = r1.fid AND (summe.ftable IS NULL OR summe.ftable = r1.ftable) AND (summe.fcolumn IS NULL OR summe.fcolumn = r1.fcolumn) AND summe.texttype = r1.texttype) AS COUNT_SEARCH_IT', $this->tablePrefix.'search_it_index');
+        if ($this->groupBy) {
+            $selectFields[] = sprintf('(SELECT SUM%s FROM `%s` summe WHERE summe.fid = r1.fid AND summe.ftable = r1.ftable) AS RELEVANCE_SEARCH_IT', $match, $this->tablePrefix . 'search_it_index');
+            $selectFields[] = sprintf('(SELECT COUNT(*) FROM `%s` summe WHERE summe.fid = r1.fid AND (summe.ftable IS NULL OR summe.ftable = r1.ftable) AND (summe.fcolumn IS NULL OR summe.fcolumn = r1.fcolumn) AND summe.texttype = r1.texttype) AS COUNT_SEARCH_IT', $this->tablePrefix . 'search_it_index');
         } else {
-            $selectFields[] = $match.' AS RELEVANCE_SEARCH_IT';
+            $selectFields[] = $match . ' AS RELEVANCE_SEARCH_IT';
         }
 
         $selectFields[] = '`id`';
@@ -1885,7 +1959,7 @@ class search_it {
         $selectFields[] = '`filename`';
         $selectFields[] = '`fileext`';
 
-        if($this->groupBy){
+        if ($this->groupBy) {
             $query = sprintf('
             SELECT SQL_CALC_FOUND_ROWS %s
             FROM `%s` r1
@@ -1899,15 +1973,15 @@ class search_it {
             GROUP BY ftable,fid,clang
             ORDER BY %s
             LIMIT %d,%d',
-                implode(",\n",$selectFields),
-                $this->tablePrefix.'search_it_index',
+                implode(",\n", $selectFields),
+                $this->tablePrefix . 'search_it_index',
                 $where,
                 $match,
                 $match,
-                $this->tablePrefix.'search_it_index',
-                ($this->clang !== false) ? 'AND (clang = '.intval($this->clang).' OR clang IS NULL)' : '',
-                implode(",\n",$Aorder),
-                $this->limit[0],$this->limit[1]
+                $this->tablePrefix . 'search_it_index',
+                ($this->clang !== false) ? 'AND (clang = ' . intval($this->clang) . ' OR clang IS NULL)' : '',
+                implode(",\n", $Aorder),
+                $this->limit[0], $this->limit[1]
             );
         } else {
             $query = sprintf('
@@ -1916,11 +1990,11 @@ class search_it {
             WHERE %s
             ORDER BY %s
             LIMIT %d,%d',
-                implode(",\n",$selectFields),
-                $this->tablePrefix.'search_it_index',
+                implode(",\n", $selectFields),
+                $this->tablePrefix . 'search_it_index',
                 $where,
-                implode(",\n",$Aorder),
-                $this->limit[0],$this->limit[1]
+                implode(",\n", $Aorder),
+                $this->limit[0], $this->limit[1]
             );
         }
         //echo '<pre>'.$query.'</pre>';
@@ -1945,12 +2019,12 @@ class search_it {
         // hits
         $return['hits'] = array();
         $i = 0;
-        foreach($sqlResult as $hit){
+        foreach ($sqlResult as $hit) {
             $indexIds[] = $hit['id'];
             $return['hits'][$i] = array();
             $return['hits'][$i]['id'] = $hit['id'];
             $return['hits'][$i]['fid'] = $hit['fid'];
-            if(!is_numeric($hit['fid']) AND !is_null($json_decode_fid = json_decode($hit['fid'], true))) {
+            if (!is_numeric($hit['fid']) AND !is_null($json_decode_fid = json_decode($hit['fid'], true))) {
                 $return['hits'][$i]['fid'] = $json_decode_fid;
             }
             $return['hits'][$i]['table'] = $hit['ftable'];
@@ -1967,25 +2041,25 @@ class search_it {
             $return['hits'][$i]['fileext'] = $hit['fileext'];
             $i++;
 
-            if($this->groupBy) {
+            if ($this->groupBy) {
                 $count += $hit['COUNT_SEARCH_IT'];
             }
         }
 
-        if($this->groupBy){
+        if ($this->groupBy) {
             $indexIds = array();
-            foreach($sql->getArray(
+            foreach ($sql->getArray(
                 sprintf('
                 SELECT id
                 FROM `%s`
                 WHERE %s
                 LIMIT %d,%d',
 
-                    $this->tablePrefix.'search_it_index',
+                    $this->tablePrefix . 'search_it_index',
                     $where,
-                    $this->limit[0],$count
+                    $this->limit[0], $count
                 )
-            ) as $hit){
+            ) as $hit) {
                 $indexIds[] = $hit['id'];
             }
         }
@@ -1999,17 +2073,17 @@ class search_it {
 
         // was any blacklisted word searched for?
         $return['blacklisted'] = false;
-        if(count($this->blacklisted) > 0) {
+        if (count($this->blacklisted) > 0) {
             $return['blacklisted'] = $this->blacklisted;
         }
 
         $return['hash'] = $this->cacheHash($this->searchString);
 
-        if($this->similarwords AND $i){
+        if ($this->similarwords AND $i) {
             $this->storeKeywords($this->searchArray);
         }
 
-        if($this->cache) {
+        if ($this->cache) {
             $this->cacheSearch(serialize($return), $indexIds);
         }
 

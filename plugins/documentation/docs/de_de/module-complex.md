@@ -146,7 +146,7 @@ Diese Beispielmodul benötigt die DB-Spalten id, name, art_description und art_k
         if(!empty(rex_request('searchit', 'string'))){
             $search_it = new search_it();
             $search_it->setLimit(array($start = isset(rex_get('start', 'int', 0))? intval(rex_get('start', 'int', 0)):0, SHOWMAX));
-            $search_it->doSearchArticles(true);
+            $search_it->setSearchAllArticlesAnyway(true);
             $search_it->searchInDbColumn(rex::getTablePrefix().'article', 'name');
             $search_it->searchInDbColumn(rex::getTablePrefix().'article', 'art_description');
             $search_it->searchInDbColumn(rex::getTablePrefix().'article', 'art_keywords');

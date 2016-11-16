@@ -11,34 +11,28 @@ if (rex_post('config-submit', 'boolean')) {
 
         ['indexmode', 'string'],
         ['indexoffline', 'bool'],
+        ['ep_outputfilter', 'bool'],
         ['automaticindex', 'bool'],
         ['reindex_cols_onforms', 'bool'],
-        ['ep_outputfilter', 'bool'],
 
     ]);
 
-    /*    echo '<pre>';
-    var_dump(rex_post('search_config'));
-    echo "\n";
-    var_dump( $this->getConfig());
-    echo '</pre>';*/
 
-    foreach( array_keys(array_merge(array_diff_assoc($posted_config,$this->getConfig(), array_diff_assoc($this->getConfig(),$posted_config)))) as $changed) {
-        if(in_array($changed, array(
-            'indexmode',
-            'indexoffline',
-            'ep_outputfilter',
-            'blacklist',
-            'exclude_article_ids',
-            'exclude_category_ids',
-            'include',
-            'fileextensions',
-            'indexmediapool',
-            'dirdepth',
-            'indexfolders',
-        ))) {
+    $changed = array_keys(array_merge(array_diff_assoc($posted_config,$this->getConfig()), array_diff_assoc($this->getConfig(),$posted_config)));
+    foreach ( array(
+                  'indexmode',
+                  'indexoffline',
+                  'ep_outputfilter',
+              ) as $index ) {
+        if ( in_array($index, $changed) ){
+            echo rex_view::warning($this->i18n('search_it_settings_saved_warning')); break;
+        } elseif ( is_array($this->getConfig($index)) && is_array($posted_config[$index]) ) { // Der Konfig-Wert ist ein Array
+            if ( count(array_merge(
+                    array_diff_assoc($this->getConfig($index), $posted_config[$index]),
+                    array_diff_assoc($posted_config[$index], $this->getConfig($index)) )) > 0 ) {
                 echo rex_view::warning($this->i18n('search_it_settings_saved_warning')); break;
             }
+        }
     }
 
     // do it
@@ -53,6 +47,68 @@ if (rex_post('config-submit', 'boolean')) {
 $content = '';
 $formElements = [];
 
+
+$content[] = search_it_getSettingsFormSection(
+    'search_it_index',
+    $this->i18n('search_it_settings_title_indexmode'),
+    array(
+        array(
+            'type' => 'select',
+            'id' => 'search_it_settings_indexmode',
+            'name' => 'search_config[indexmode]',
+            'label' => $this->i18n('search_it_settings_indexmode_label'),
+            'options' => array(
+                array(
+                    'value' => '0',
+                    'name' => $this->i18n('search_it_settings_indexmode_viahttp'),
+                    'selected' => $this->getConfig('indexmode') == '0',
+                ),
+                array(
+                    'value' => '1',
+                    'name' => $this->i18n('search_it_settings_indexmode_viacache'),
+                    'selected' => $this->getConfig('indexmode') == '1',
+                ),
+                array(
+                    'value' => '2',
+                    'name' => $this->i18n('search_it_settings_indexmode_viacachetpl'),
+                    'selected' => $this->getConfig('indexmode') == '2',
+                )
+            )
+        ),
+        array(
+            'type' => 'checkbox',
+            'id' => 'search_it_indexoffline',
+            'name' => 'search_config[indexoffline]',
+            'label' => $this->i18n('search_it_settings_indexoffline'),
+            'value' => '1',
+            'checked' => $this->getConfig('indexoffline')
+        ),
+        array(
+            'type' => 'checkbox',
+            'id' => 'search_it_ep_outputfilter',
+            'name' => 'search_config[ep_outputfilter]',
+            'label' => $this->i18n('search_it_settings_ep_outputfilter_label'),
+            'value' => '1',
+            'checked' => $this->getConfig('ep_outputfilter')
+        ),
+        array(
+            'type' => 'checkbox',
+            'id' => 'search_it_automaticindex',
+            'name' => 'search_config[automaticindex]',
+            'label' => $this->i18n('search_it_settings_automaticindex_label'),
+            'value' => '1',
+            'checked' => $this->getConfig('automaticindex')
+        ),
+        array(
+            'type' => 'checkbox',
+            'id' => 'search_it_reindex_cols_onforms',
+            'name' => 'search_config[reindex_cols_onforms]',
+            'label' => $this->i18n('search_it_settings_reindex_cols_onforms_label'),
+            'value' => '1',
+            'checked' => $this->getConfig('reindex_cols_onforms')
+        )
+    ),'edit'
+);
 
 $content[] = search_it_getSettingsFormSection(
     'search_it_modi',
@@ -163,67 +219,7 @@ $content[] = search_it_getSettingsFormSection(
 
 
 
-$content[] = search_it_getSettingsFormSection(
-    'search_it_index',
-    $this->i18n('search_it_settings_title_indexmode'),
-    array(
-        array(
-            'type' => 'select',
-            'id' => 'search_it_settings_indexmode',
-            'name' => 'search_config[indexmode]',
-            'label' => $this->i18n('search_it_settings_indexmode_label'),
-            'options' => array(
-                array(
-                    'value' => '0',
-                    'name' => $this->i18n('search_it_settings_indexmode_viahttp'),
-                    'selected' => $this->getConfig('indexmode') == '0',
-                ),
-                array(
-                    'value' => '1',
-                    'name' => $this->i18n('search_it_settings_indexmode_viacache'),
-                    'selected' => $this->getConfig('indexmode') == '1',
-                ),
-                array(
-                    'value' => '2',
-                    'name' => $this->i18n('search_it_settings_indexmode_viacachetpl'),
-                    'selected' => $this->getConfig('indexmode') == '2',
-                )
-            )
-        ),
-        array(
-            'type' => 'checkbox',
-            'id' => 'search_it_indexoffline',
-            'name' => 'search_config[indexoffline]',
-            'label' => $this->i18n('search_it_settings_indexoffline'),
-            'value' => '1',
-            'checked' => $this->getConfig('indexoffline')
-        ),
-        array(
-            'type' => 'checkbox',
-            'id' => 'search_it_automaticindex',
-            'name' => 'search_config[automaticindex]',
-            'label' => $this->i18n('search_it_settings_automaticindex_label'),
-            'value' => '1',
-            'checked' => $this->getConfig('automaticindex')
-        ),
-        array(
-            'type' => 'checkbox',
-            'id' => 'search_it_reindex_cols_onforms',
-            'name' => 'search_config[reindex_cols_onforms]',
-            'label' => $this->i18n('search_it_settings_reindex_cols_onforms_label'),
-            'value' => '1',
-            'checked' => $this->getConfig('reindex_cols_onforms')
-        ),
-        array(
-            'type' => 'checkbox',
-            'id' => 'search_it_ep_outputfilter',
-            'name' => 'search_config[ep_outputfilter]',
-            'label' => $this->i18n('search_it_settings_ep_outputfilter_label'),
-            'value' => '1',
-            'checked' => $this->getConfig('ep_outputfilter')
-        )
-    ),'edit'
-);
+
 
 
 $fragment = new rex_fragment();

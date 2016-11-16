@@ -9,7 +9,7 @@ search_it_reindex = Search it: Reindexieren
 
 search_it_settings_mode = Suchmodus
 search_it_settings_result = Suchergebnis
-search_it_settings_origin = Zusätzl. Datenquellen
+search_it_settings_addsources = Zusätzl. Datenquellen
 search_it_settings_blacklist = Blacklist
 
 search_it_settings_logicalmode = Logischer Suchmodus
@@ -25,12 +25,12 @@ search_it_settings_textmode_both = Durchsuche beides (HTML und Plain)
 
 search_it_settings_title_indexmode = Indexierung
 search_it_settings_indexmode_label = Art und Weise
-search_it_settings_indexmode_viahttp = Indexierung der Artikel über eine HTTP-GET-Anfrage
-search_it_settings_indexmode_viacache = Indexierung der Artikel über den Redaxo-Cache (ohne Template, nur der Artikel)
-search_it_settings_indexmode_viacachetpl = Indexierung der Artikel über den Redaxo-Cache (mit Template, liefert das gleiche Ergebnis wie per HTTP-GET-Anfrage)
+search_it_settings_indexmode_viahttp = HTTP-GET : Indexierung der Artikel über eine HTTP-GET-Anfrage
+search_it_settings_indexmode_viacache = Artikel-Inhalte (CACHE) : Indexierung der Artikel ohne Template
+search_it_settings_indexmode_viacachetpl = Komplette Seiten (CACHE) : Indexierung der Artikel mit Template
 search_it_settings_indexoffline = Offline-Artikel indexieren
 search_it_settings_automaticindex_label = Artikel (ADD, EDIT, DELETE) automatisch (de)indexieren
-search_it_settings_reindex_cols_onforms_label = Reindizieren aller Spalten, wenn Tabellen mit yform oder form bearbeitet werden
+search_it_settings_reindex_cols_onforms_label = Reindexieren aller Spalten, wenn Tabellen mit YForm oder form bearbeitet werden
 search_it_settings_ep_outputfilter_label = Extension Point "OUTPUT_FILTER" aufrufen
 
 search_it_settings_searchmode = MySQL-Suchmodus
@@ -93,8 +93,8 @@ search_it_generate_done = Index wurde erstellt
 search_it_generate_cancel = Erstellung des Index abgebrochen
 search_it_generate_duration = Dauer: 
 search_it_generate_timeleft = Verbleibend: 
-search_it_generate_articles = Artikel neu-indizieren
-search_it_generate_columns = Tabellen neu-indizieren
+search_it_generate_articles = Artikel neu-indexieren
+search_it_generate_columns = Tabellen neu-indexieren
 
 search_it_settings_fileext_header = Dateisuche
 search_it_settings_fileext_label = Dateiendungen (z.B. 'txt,csv,pdf')<br />(frei lassen für beliebige Dateien)
@@ -110,5 +110,3 @@ search_it_ellipsis = …
 
 search_it_cat_deleted = Alle Artikel der Kategorie sind noch im Suchindex enthalten. Sie müssen den <a href="index.php?page=search_it/generate">Suchindex erneuern</a>.
 
-search_it_help_wiki = Die Dokumentation des Addons finden Sie unter <a href="http://www.redaxo.org/de/wiki/index.php?n=R4.Rexsearch">http://www.redaxo.org/de/wiki/index.php?n=R4.Rexsearch</a>.
-search_it_help_forum = Sollten Sie Fragen oder Probleme haben, können Sie diese im Redaxo-Forum stellen: <a href="http://www.redaxo.org/de/forum/addons-f30/addon-search_it-fulltext-search-addon-t12965.html">http://www.redaxo.org/de/forum/addons-f30/addon-search_it-fulltext-search-addon-t12965.html</a>.

@@ -186,20 +186,21 @@ function search_it_handle_extensionpoint($_ep){
 
     $_params = $_ep->getParams();
     $_subject = $_ep->getSubject();
+    $includeColumns = is_array(rex_addon::get('search_it')->getConfig('include')) ? rex_addon::get('search_it')->getConfig('include') : array();
     $search_it = new search_it();
 
     switch($_ep->getName()){
         // delete article from index
         case 'ART_DELETED':
-            $search_it->excludeArticle($_params['id']);
+            $search_it->unindexArticle($_params['id']);
         break;
 
         // update meta-infos for article
         case 'ART_META_UPDATED':
         case 'ART_ADDED':
         case 'ART_UPDATED':
-            foreach($search_it->includeColumns as $table => $columnArray){
-                if($table == $search_it->tablePrefix.'article'){
+            foreach( $includeColumns as $table => $columnArray){
+                if($table == rex::getTable('article')){
                     foreach($columnArray as $column) {
                         $search_it->indexColumn($table, $column, 'id', $_params['id']);
                     }
@@ -212,11 +213,11 @@ function search_it_handle_extensionpoint($_ep){
             if( $_params['status'] || $si->getConfig('indexoffline') ) {
                 $search_it->indexArticle($_params['id'], $_params['clang']);
             } else {
-                $search_it->excludeArticle($_params['id'], $_params['clang']);
+                $search_it->unindexArticle($_params['id'], $_params['clang']);
             }
 
-            foreach($search_it->includeColumns as $table => $columnArray){
-                if($table == $search_it->tablePrefix.'article'){
+            foreach( $includeColumns as $table => $columnArray){
+                if($table == rex::getTable('article')){
                     foreach($columnArray as $column) {
                         $search_it->indexColumn($table, $column, 'id', $_params['id']);
                     }
@@ -231,17 +232,17 @@ function search_it_handle_extensionpoint($_ep){
 
         case 'CAT_STATUS':
             if( $_params['status'] || $si->getConfig('indexoffline') ){
-                foreach(search_it_getArticles(array($_params['id'])) as $art_id => $art_name) {
+                foreach( search_it_getArticles(array($_params['id'])) as $art_id => $art_name ) {
                     $search_it->indexArticle($art_id, $_params['clang']);
                 }
             } else {
-                foreach(search_it_getArticles(array($_params['id'])) as $art_id => $art_name) {
-                    $search_it->excludeArticle($art_id, $_params['clang']);
+                foreach( search_it_getArticles(array($_params['id'])) as $art_id => $art_name ) {
+                    $search_it->unindexArticle($art_id, $_params['clang']);
                 }
             }
 
-            foreach($search_it->includeColumns as $table => $columnArray){
-                if($table == $search_it->tablePrefix.'article'){
+            foreach( $includeColumns as $table => $columnArray ){
+                if($table == rex::getTable('article')){
                     foreach($columnArray as $column) {
                         $search_it->indexColumn($table, $column, 'id', $_params['id']);
                     }
@@ -251,8 +252,8 @@ function search_it_handle_extensionpoint($_ep){
 
         case 'CAT_ADDED':
         case 'CAT_UPDATED':
-            foreach($search_it->includeColumns as $table => $columnArray){
-                if($table == $search_it->tablePrefix.'article'){
+            foreach ( $includeColumns as $table => $columnArray ){
+                if($table == rex::getTable('article')){
                     foreach($columnArray as $column) {
                         $search_it->indexColumn($table, $column, 'id', $_params['id']);
                     }
@@ -261,8 +262,8 @@ function search_it_handle_extensionpoint($_ep){
         break;
 
         case 'MEDIA_ADDED':
-            foreach($search_it->includeColumns as $table => $columnArray){
-                if($table == $search_it->tablePrefix.'media'){
+            foreach( $includeColumns as $table => $columnArray){
+                if($table == rex::getTable('media')){
                     foreach($columnArray as $column) {$tex[] = $table.$column;
                         $search_it->indexColumn($table, $column);
                     }
@@ -271,8 +272,8 @@ function search_it_handle_extensionpoint($_ep){
         break;
 
         case 'MEDIA_UPDATED':
-            foreach($search_it->includeColumns as $table => $columnArray){
-                if($table == $search_it->tablePrefix.'media'){
+            foreach( $includeColumns as $table => $columnArray){
+                if($table == rex::getTable('media')){
                     foreach($columnArray as $column) {
                         $search_it->indexColumn($table, $column, 'id', $_params['id']);
                     }
@@ -754,6 +755,7 @@ function search_it_reindex_cols($_ep){
 
     $_params = $_ep->getParams();
 
+    $includeColumns = is_array(rex_addon::get('search_it')->getConfig('include')) ? rex_addon::get('search_it')->getConfig('include') : array();
     $search_it = new search_it;
 
     if(!empty($_params['yform'])){
@@ -764,11 +766,11 @@ function search_it_reindex_cols($_ep){
         $wherecondition = $_params['form']->getWhereCondition();
     }
 
-    if(!array_key_exists($tablename,$search_it->includeColumns) OR !is_array($search_it->includeColumns[$tablename])) {
+    if(!array_key_exists($tablename, $includeColumns) OR !is_array($includeColumns[$tablename])) {
         return true;
     }
 
-    foreach($search_it->includeColumns[$tablename] as $col) {
+    foreach($includeColumns[$tablename] as $col) {
         $search_it->indexColumn($tablename, $col, false, false, false, false, $wherecondition);
     }
 

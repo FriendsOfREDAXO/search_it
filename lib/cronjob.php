@@ -12,10 +12,11 @@ class rex_cronjob_reindex extends rex_cronjob
             //$message = $this->getParam('action').':'."\n";
 
             $search_it = new search_it();
+            $includeColumns = is_array(rex_addon::get('search_it')->getConfig('include')) ? rex_addon::get('search_it')->getConfig('include') : array();
             switch ($this->getParam('action')){
                 case 2:
-                    // Spalten neu indizieren
-                    foreach( $search_it->includeColumns as $table => $columnArray ){
+                    // Spalten neu indexieren
+                    foreach( $includeColumns as $table => $columnArray ){
                         foreach( $columnArray as $column ){
                             $search_it->indexColumn($table, $column);
                         }
@@ -23,9 +24,9 @@ class rex_cronjob_reindex extends rex_cronjob
                     break;
 
                 case 3:
-                    // Artikel neu indizieren
+                    // Artikel neu indexieren
                     $art_sql = rex_sql::factory();
-                    $art_sql->setTable($search_it->tablePrefix.'article');
+                    $art_sql->setTable(rex::getTable('article'));
                     if( $art_sql->select('id,clang_id') ){
                         foreach( $art_sql->getArray() as $art ){
                             $search_it->indexArticle($art['id'], $art['clang_id']);

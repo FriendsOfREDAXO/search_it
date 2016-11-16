@@ -1,11 +1,20 @@
 #Änderungen von search_it
 
+##Version 6.1.0 (2016-11-16)
+  - neuer alter "Frontend mode" als Fix für #66
+  - "indiziern" -> "indexieren"
+  - PHP Zugriffslevel gesetzt private/public/protected 
+  - **ACHTUNG**: Funktion `doSearchArticles()` deprecated, wird in nächster Version entfernt, bitte `setSearchAllArticlesAnyway()` nutzen
+  - Funktion `excludeArticle()` umbenannt in `unindexArticle()`
+  - Backend-Message "Suchindex muss erneuert werden" wird jetzt auch bei geänderten Werten angezeigt, die ein array sind.
+  - diverse ungenutze Variablen entfernt (indexUnknownFileExtensions, indexMissingFileExtensions)
+
 ##Version 6.0.1 (2016-11-05)
-  - Fehler beim Indizieren per HTTP und Verwendung von YRewrite behoben
-   - statt `file_get_contents` wird jetzt `rex_socket` verwendet
+  - Fehler beim Indexieren per HTTP und Verwendung von YRewrite behoben
+  - statt `file_get_contents` wird jetzt `rex_socket` verwendet
 
 ##Version 6.0.0 (2016-10-21)
-  - Fehler beim Indizieren von PDFs behoben, Einstellungen umgestellt 
+  - Fehler beim Indexieren von PDFs behoben, Einstellungen umgestellt 
   
 ##Version 6.0.0-rc1 (2016-10-10)
   - Re-indizierung jetzt per cronjob möglich 
@@ -32,7 +41,7 @@
   - die sql->escape Methode umgibt das Ergebnis mit single Quotes, was alle SQL Abfragen fehlerhaft machte.
   - "Frontend-Mode" und "outputfilter anwenden" ging so nicht - rex::setProperty('redaxo') 
   haben dann aber geholfen.
-  - Beim indizieren per HTTP musste ich "rex_url::init(new rex_path_default_provider('/', 'redaxo', true))" verwenden
+  - Beim indexieren per HTTP musste ich "rex_url::init(new rex_path_default_provider('/', 'redaxo', true))" verwenden
   - PDF2TXT funzt nicht
   - in "function indexArticle" musste die neue clang-Objektstruktur beachtet werden
   - den re-index-Link im Backend beim Artikelmenu kann man so nicht mehr setzen, weil der EXTENSIONPOINT so nicht mehr existiert

@@ -100,7 +100,7 @@ EOT;
         $search_it->setHighlightType(rex_get('type'));
         $search_it->parseSearchString('"velit esse" accusam');
 
-        if($search_it->highlightType == 'array'){
+        if( rex_addon::get('search_it')->getConfig('highlight') == 'array' ){
             echo '<pre>';
             print_r($search_it->getHighlightedText($sample));
             echo '</pre>';

@@ -2,7 +2,7 @@
 
 - [Wartung](#wartung)
 - [Einstellungen](#einstellungen)
-    - [Suchmodus](#einstellungen-suchmodus)
+    - [Index und Suchmodus](#einstellungen-suchmodus)
     - [Suchergebnis](#einstellungen-suchergebnis)
     - [Zusätzl. Datenquellen](#einstellungen-quelle)
     - [Blacklist](#einstellungen-blacklist)
@@ -28,11 +28,29 @@ Statistik löschen | Setzt die Statistik zurück. Die Anzahl aller gesuchten Beg
 # Einstellungen
 
 <a name="einstellungen-suchmodus"></a>
-## Suchmodus
+## Index und Suchmodus
 
 Dies sind die Standard-Einstellungen für jede Suche. 
 
 > Tipp: In den erweiterten Beispielen wird erklärt, wie das Suchobjekt mit eigenen Parametern überschrieben werden kann. So lassen sich mehrere Suchen in einer Website realisieren, bspw. eine Produktsuche oder eine Mitarbeiter-Suche.
+
+### Indexierung
+
+Bei der Indexierung durchsucht Search it alle in den Einstellungen angegebenen Orte (Artikel, Datenbank, Medienpool) und erstellt einen Suchindex-Cache. 
+
+#### Art und Weise
+
+Legt fest, wie Artikel indexiert werden.
+
+Option | Erläuterung
+------ | ------
+HTTP-GET : Indexierung der Artikel über eine HTTP-GET-Anfrage | indexiert Artikel so, als wenn Sie über das Frontend abgerufen werden.
+Artikel-Inhalte (CACHE) : Indexierung der Artikel ohne Template | indexiert nur die Artikel-Inhalte, die im REDAXO Backend angelegt wurden, ohne das Template 
+Komplette Seiten (CACHE) : Indexierung der Artikel mit Template | indexiert die vollständige Seite wie sie aus dem REDAXO Cache geliefert wird.
+Offline-Artikel indexieren | indexiert auch Artikel, die in der Struktur als `offline` markiert wurden.
+Artikel (ADD, EDIT, DELETE) automatisch (de)indexieren | indexiert automatisch neue Artikel, reindexiert bearbeitete Artikel und deindexiert Artikel, die gelöscht wurden.
+Extension Point `"OUTPUT_FILTER"` aufrufen | Ruft den OUTPUT_FILTER auf, bspw., wenn das SPROG-Addon benutzt wurde und die Einstellung `Indexierung der Artikel` über den Redaxo-Cache erfolgt. __todo__ ***stimmt das?***
+
 
 ### Suchmodi
 
@@ -81,22 +99,6 @@ MATCH AGAINST  | findet nur ganze Wörter, ist dafür schneller.
 
 > Tipp: Obwohl die genauere Suche mit MATCH AGAINST weniger Suchergebnisse präsentiert, wird der Einsatz dieser Methode empfohlen, da die Suche dadurch beschleunigt wird. Das Manko der genaueren Suche - wenn man es denn so empfindet - kann über die Ähnlichkeitssuche ausgeglichen werden.
 
-### Indexierung
-
-Bei der Indexierung durchsucht Search it alle in den Einstellungen angegebenen Orte (Artikel, Datenbank, Medienpool) und erstellt einen Suchindex-Cache. 
-
-#### Art und Weise
-
-Legt fest, wie Artikel indexiert werden.
-
-Option | Erläuterung
------- | ------
-Indexierung der Artikel über eine HTTP-GET-Anfrage | indexiert Artikel so, als wenn Sie über das Frontend abgerufen werden.
-Indexierung der Artikel über den Redaxo-Cache (ohne Template, nur der Artikel) | indexiert den Artikel so, wie er in __todo__ 
-Indexierung der Artikel über den Redaxo-Cache (mit Template, liefert das gleiche Ergebnis wie per HTTP-GET-Anfrage) | indexiert die vollständige Seite.
-Offline-Artikel indexieren | indexiert auch Artikel, die in der Struktur als `offline` markiert wurden.
-Artikel (ADD, EDIT, DELETE) automatisch (de)indexieren | indexiert automatisch neue Artikel, reindexiert bearbeitete Artikel und deindexiert Artikel, die gelöscht wurden.
-Extension Point `"OUTPUT_FILTER"` aufrufen | Ruft den OUTPUT_FILTER auf, bspw., wenn das SPROG-Addon benutzt wurde und die Einstellung `Indexierung der Artikel` über den Redaxo-Cache erfolgt. __todo__ ***stimmt das?***
 
 <a name="einstellungen-suchergebnis"></a>
 ## Suchergebnis
@@ -137,13 +139,15 @@ Beispieltext mit Sucheingabe |
 <a name="einstellungen-quelle"></a>
 ## Zusätzliche Datenquellen
 
-Hier werden Datenquellen für die Indexierung zusätzlich zu den Redaxo-Artikeln definiert, z. B. Datenbanktabellen, der Medienpool sowie externe Verzeichnisse.
+Hier werden Datenquellen für die Indexierung zusätzlich zu den sichtbaren Inhalten der Redaxo-Artikeln definiert, z. B. Metainfos der Artikle, Datenbanktabellen, der Medienpool sowie externe Verzeichnisse.
+Wichtigstes Beispiel dürften hier die Metainfos wie Artikel-Titel oder Meta Descriptions sein, die durchsucht werden sollen, obwohl sie nicht im Artikel angezeigt werden.
+
 
 ### Datenbankspalten in die Suche einschließen
 
 Hier können DB-Spalten ausgewählt werden, die auch durchsucht werden sollen. Hierfür bietet sich zusätzliche Addon-Felder an, z. B. `rex_article.yrewrite_description` oder Daten, die über das Addon `yform` erstellt werden.
 
-> Tipp: Die Indexierung sollte neben den gewünschten Inhaltsfeldern auch das `id`-Feld / den Primary Key des Datensatzes indizieren sowie alle Felder, die bei der Ausgabe berücksichtigt werden sollen, bspw. Bilder, Teaser o.ä.
+> Tipp: Die Indexierung sollte neben den gewünschten Inhaltsfeldern auch das `id`-Feld / den Primary Key des Datensatzes indexieren sowie alle Felder, die bei der Ausgabe berücksichtigt werden sollen, bspw. Bilder, Teaser o.ä.
 
 ### Dateisuche
 

@@ -1,5 +1,5 @@
 package: search_it/documentation
-version: '6.0.1'
+version: '6.1.0'
 author: Alexander Walther/Norbert Micheel
 
 title: 'translate:search_it_documentation_title'

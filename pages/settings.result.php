@@ -12,32 +12,6 @@ if (rex_post('config-submit', 'boolean')) {
 
     ]);
 
-
-    /*    echo '<pre>';
-    var_dump(rex_post('search_config'));
-    echo "\n";
-    var_dump( $this->getConfig());
-    echo '</pre>';*/
-
-    foreach( array_keys(array_merge(array_diff_assoc($posted_config,$this->getConfig(), array_diff_assoc($this->getConfig(),$posted_config)))) as $changed) {
-        if(in_array($changed, array(
-            'indexmode',
-            'indexoffline',
-            'automaticindex',
-            'ep_outputfilter',
-            'blacklist',
-            'exclude_article_ids',
-            'exclude_category_ids',
-            'include',
-            'fileextensions',
-            'indexmediapool',
-            'dirdepth',
-            'indexfolders',
-        ))) {
-                echo rex_view::warning($this->i18n('search_it_settings_saved_warning')); break;
-            }
-    }
-
     // do it
     $this->setConfig($posted_config);
 
@@ -60,9 +34,9 @@ $sampleoutput = '<div id="search_it_sample_wrapper">
         <h5 class="rex-form-text">'.$this->i18n('search_it_settings_highlight_sample').':<strong>"velit esse" accusam</strong></h5>
         <div id="search_it_sample">';
 $search_it = new search_it();
-$search_it->searchString = '"velit esse" accusam';
+$search_it->setSearchString('"velit esse" accusam');
 $search_it->parseSearchString('"velit esse" accusam');
-if ($search_it->highlightType == 'array') {
+if ( $this->getConfig('highlight') == 'array' ) {
     $sampleoutput .= '<pre>';
     $sampleoutput .= print_r($search_it->getHighlightedText($sample), true);
     $sampleoutput .= '</pre>';

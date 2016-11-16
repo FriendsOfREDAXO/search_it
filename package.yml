@@ -1,5 +1,5 @@
 package: search_it
-version: '6.0.1'
+version: '6.1.0'
 author: Robert Rupf/Norbert Micheel
 supportpage: https://github.com/tyrant88/search_it
 
@@ -18,7 +18,7 @@ page:
             subpages:
                          mode: { title: 'translate:settings_mode' }
                          result: { title: 'translate:settings_result' }
-                         origin: { title: 'translate:settings_origin' }
+                         addsources: { title: 'translate:settings_addsources' }
                          blacklist: { title: 'translate:settings_blacklist' }
 
 requires:

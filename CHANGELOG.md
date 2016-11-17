@@ -1,5 +1,9 @@
 #Änderungen von search_it
 
+##Version 6.1.1 (2016-11-17)
+  - neue Funktion `searchInCategoryTree`, die die Suche auf alle Unterkategorien einer Kategorie beschränkt ( nützlich bei multi-domain sites ) Auf Anregung von @alex_wenz, thx
+  - Bezeichnungen im Backend geändert (hoffentlich verbessert)
+  
 ##Version 6.1.0 (2016-11-16)
   - neuer alter "Frontend mode" als Fix für #66
   - "indiziern" -> "indexieren"

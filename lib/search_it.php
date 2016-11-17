@@ -1053,6 +1053,35 @@ class search_it
     }
 
     /**
+     * Sets an ID of a category as root search category. All searched articles need to be contained by it.
+     *
+     * Expects an ID as parameter.
+     */
+    public function searchInCategoryTree($_id)
+    {
+        $subcats = self::getChildList($_id);
+        $this->setSearchInIDs(array('categories' => $subcats));
+    }
+
+    /**
+     * Retrieves a list of IDs of all categories which are subcategories to the given one.
+     *
+     * Expects a category ID as parameter.
+     */
+    private function getChildList($_id)
+    {
+        $subs= rex_category::get($_id)->getChildren();
+        $childlist = array();
+        $childlist[] = (int) $_id;
+        if( !empty($subs)){
+            foreach ( $subs as $sub){
+                $childlist = array_merge($childlist,self::getChildList((int)$sub->getId()));
+            }
+        }
+        return $childlist;
+    }
+
+    /**
      * Sets the IDs of the mediapool-categories which are only to be searched through.
      *
      * Expects an array with the IDs as parameters.
@@ -1417,18 +1446,18 @@ class search_it
 
                 $cutted = array();
                 preg_match('~^.*?(' . implode('|', $search) . ').{0,' . $this->maxHighlightedTextChars . '}~imsu', $return, $cutted);
+                if (!empty($cutted)) {
+                    $needEllipses = false;
+                    if (isset($cutted[1]) && strlen($cutted[1]) != strlen($return)) {
+                        $needEllipses = true;
+                    }
 
-                $needEllipses = false;
-                if (strlen($cutted[1]) != strlen($return)) {
-                    $needEllipses = true;
+                    $return = preg_replace($replace, $this->surroundTags[0] . '$0' . $this->surroundTags[1], substr($cutted[0], 0, strrpos($cutted[0], ' ')));
+
+                    if ($needEllipses) {
+                        $return .= ' ' . $this->ellipsis;
+                    }
                 }
-
-                $return = preg_replace($replace, $this->surroundTags[0] . '$0' . $this->surroundTags[1], substr($cutted[0], 0, strrpos($cutted[0], ' ')));
-
-                if ($needEllipses) {
-                    $return .= ' ' . $this->ellipsis;
-                }
-
                 return $return;
                 break;
 

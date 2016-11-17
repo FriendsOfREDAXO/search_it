@@ -7,7 +7,7 @@ search_it_info = Such Addon
 search_it_infotext = Such Addon
 search_it_reindex = Search it: Reindexieren
 
-search_it_settings_mode = Suchmodus
+search_it_settings_mode = Index und Suchmodus
 search_it_settings_result = Suchergebnis
 search_it_settings_addsources = Zusätzl. Datenquellen
 search_it_settings_blacklist = Blacklist
@@ -19,8 +19,8 @@ search_it_settings_logicalmode_or = Disjunktive Suche (OR)
 search_it_settings_modi_header = Suchmodi
 
 search_it_settings_textmode = Textmodus
-search_it_settings_textmode_plain = Durchsuche Text ohne HTML-Tags (Plain)
-search_it_settings_textmode_html = Durchsuche Text mit HTML-Tags (HTML)
+search_it_settings_textmode_plain = Durchsuche Text (Plain)
+search_it_settings_textmode_html = Durchsuche HTML-Quellcode
 search_it_settings_textmode_both = Durchsuche beides (HTML und Plain)
 
 search_it_settings_title_indexmode = Indexierung

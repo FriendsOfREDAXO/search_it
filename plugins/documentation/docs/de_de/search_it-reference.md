@@ -13,8 +13,10 @@ Methode | Erläuterung
 [deleteKeywords()](https://github.com/pixelfirma/search_it/blob/Doku/lib/search_it.php#L1772) | Delete Keywords
 -----|-----
 [setSearchString($_searchString)](https://github.com/pixelfirma/search_it/blob/Doku/lib/search_it.php#L860) | Set search string
+searchInCategoryTree
 [searchInArticles($_ids)](https://github.com/pixelfirma/search_it/blob/Doku/lib/search_it.php#L1041) | Sets the IDs of the articles which are only to be searched through. Expects an array with the IDs as parameters.
 [searchInCategories($_ids)](https://github.com/pixelfirma/search_it/blob/Doku/lib/search_it.php#L1051) | Sets the IDs of the categories which are only to be searched through. Expects an array with the IDs as parameters.
+[searchInCategoryTree($_id)](https://github.com/pixelfirma/search_it/blob/Doku/lib/search_it.php#L1051) | Sets an ID of a category as root search category. All searched articles need to be contained by it.
 [searchInFileCategories($_ids)](https://github.com/pixelfirma/search_it/blob/Doku/lib/search_it.php#L1061) | Sets the IDs of the mediapool-categories which are only to be searched through. Expects an array with the IDs as parameters.
 [searchInDbColumn($_table, $_column)](https://github.com/pixelfirma/search_it/blob/Doku/lib/search_it.php#L1072) | Sets the columns which only should be searched through.
 [setSearchAllArticlesAnyway($_bool = false)](https://github.com/pixelfirma/search_it/blob/Doku/lib/search_it.php#L238) | Selects if articles will be searched

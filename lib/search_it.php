@@ -130,16 +130,10 @@ class search_it
      */
     public function generateIndex()
     {
-        // delete old index
-        $delete = rex_sql::factory();
-        $delete->setTable($this->tablePrefix . 'search_it_index');
-        $delete->delete();
-        $delete2 = rex_sql::factory();
-        $delete2->setTable($this->tablePrefix . 'search_it_cacheindex_ids');
-        $delete2->delete();
-        $delete3 = rex_sql::factory();
-        $delete3->setTable($this->tablePrefix . 'search_it_cache');
-        $delete3->delete();
+        // delete old index and cache
+        $this->deleteIndex();
+        $this->deleteCache();
+
 
         // index articles
         $art_sql = rex_sql::factory();
@@ -820,8 +814,7 @@ class search_it
     public function deleteIndex()
     {
         $delete = rex_sql::factory();
-        $delete->setTable($this->tablePrefix . 'search_it_index');
-        $delete->delete();
+        $delete->setQuery('TRUNCATE '. $this->tablePrefix . 'search_it_index');
 
         $this->deleteCache();
     }
@@ -1651,11 +1644,9 @@ class search_it
         if ($_indexIds === false) {
             // delete entire search-chache
             $delete = rex_sql::factory();
-            $delete->setTable($this->tablePrefix . 'search_it_cacheindex_ids');
-            $delete->delete();
-            $delete2 = rex_sql::factory();
-            $delete2->setTable($this->tablePrefix . 'search_it_cache');
-            $delete2->delete();
+            $delete->setQuery('TRUNCATE '. $this->tablePrefix .'search_it_cacheindex_ids');
+            $delete->setQuery('TRUNCATE '. $this->tablePrefix . 'search_it_cache');
+
         } elseif (is_array($_indexIds) AND !empty($_indexIds)) {
             $sql = rex_sql::factory();
 

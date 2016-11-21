@@ -1,8 +1,8 @@
 #Änderungen von search_it
 
-##Version 6.1.2 (2016-11-20)
+##Version 6.1.2 (2016-11-21)
   - beim Löschen von Tabellen wird jetzt `TRUNCATE` benutzt, damit die autoincrementwerte zurückgesetzt werden @Flo
-  
+  - update.php löscht die alten Plugins "search_highlighter" und "reindex" aus den 5er Versionen 
 
 ##Version 6.1.1 (2016-11-17)
   - neue Funktion `searchInCategoryTree`, die die Suche auf alle Unterkategorien einer Kategorie beschränkt ( nützlich bei multi-domain sites ) Auf Anregung von @alex_wenz, thx

@@ -1,0 +1,4 @@
+search_it_reindex_plugin_title = Reindexierung
+search_it_reindex_article = Reindexieren
+search_it_reindex_done = Artikel wurde neu indexiert.
+search_it_reindex_plugin_info = Automatisch den Index neu erstellen

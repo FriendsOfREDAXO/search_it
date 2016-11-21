@@ -1,0 +1,11 @@
+package: search_it/search_highlighter
+version: '5.7.8'
+author: TimoHuber/Norbert Micheel
+supportpage: http://www.redaxo.org/de/wiki/index.php?n=R4.Xsearch-PluginSearchHighlighter
+title: 'translate:search_it_search_highlighter_site_title'
+
+description: 'translate:search_it_search_highlighter_site_title'
+
+page:
+    title: 'translate:search_it_search_highlighter_site_title'
+

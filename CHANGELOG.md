@@ -1,5 +1,9 @@
 #Änderungen von search_it
 
+##Version 6.1.3 (2016-12-27)
+  - Ähnlichkeitssuche bei konjunktiver Suche (AND) jetzt korrekt implementiert
+  - Hinweis dass der Suchindex erneuert werden muss, wenn Ähnlichkeitssuche eingeschaltet wird
+
 ##Version 6.1.2 (2016-11-21)
   - beim Löschen von Tabellen wird jetzt `TRUNCATE` benutzt, damit die autoincrementwerte zurückgesetzt werden @Flo
   - update.php löscht die alten Plugins "search_highlighter" und "reindex" aus den 5er Versionen 

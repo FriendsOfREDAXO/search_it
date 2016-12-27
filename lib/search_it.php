@@ -878,8 +878,8 @@ class search_it
         preg_match_all('~(?:(\+*)"([^"]*)")|(?:(\+*)(\S+))~isu', $_searchString, $matches, PREG_SET_ORDER);
 
         $count = 0;
-        $replaceValues = array();
-        $sql = rex_sql::factory();
+        $searchWords = array();
+
         foreach ($matches as $match) {
             if (count($match) == 5) {
                 // words without double quotes (foo)
@@ -892,6 +892,7 @@ class search_it
             } else {
                 continue;
             }
+            if ( in_array($word,$searchWords) ) { continue; } else { $searchWords[] = $word; }
 
             $notBlacklisted = true;
             // blacklisted words are excluded
@@ -1012,6 +1013,7 @@ class search_it
         $this->searchAllArticlesAnyway = $_bool;
         $this->hashMe .= $_bool;
     }
+
     /**
      * deprecated: use setSearchAllArticlesAnyway()
      *
@@ -1738,9 +1740,14 @@ class search_it
     function search($_search)
     {
         $startTime = microtime(true);
-        $this->searchString = trim(stripslashes($_search));
 
-        $keywordCount = $this->parseSearchString($this->searchString);
+        $return = array();
+        $return['errormessages'] = '';
+        $return['simwordsnewsearch'] = '';
+        $return['simwords'] = array();
+
+        $this->searchString = trim(stripslashes($_search));
+        $keywordCount = $this->parseSearchString($this->searchString); // setzt $this->searchArray
 
         if (empty($this->searchString) OR empty($this->searchArray)) {
             return array(
@@ -1767,17 +1774,14 @@ class search_it
 
             // EP registrieren
             rex_extension::registerPoint(new rex_extension_point('SEARCH_IT_SEARCH_EXECUTED', $this->cachedArray));
-            //var_dump($this->cachedArray['sql']);
+
             return $this->cachedArray;
         }
 
-        $return = array();
-        $return['errormessages'] = '';
-        $return['simwordsnewsearch'] = '';
-        $return['simwords'] = array();
+
         if ($this->similarwords) {
             $simWordsSQL = rex_sql::factory();
-            $simwords = array();
+            $simwordQuerys = array();
             foreach ($this->searchArray as $keyword) {
                 $sounds = array();
                 if ($this->similarwordsMode & SEARCH_IT_SIMILARWORDS_SOUNDEX) {
@@ -1791,39 +1795,47 @@ class search_it
                 if ($this->similarwordsMode & SEARCH_IT_SIMILARWORDS_COLOGNEPHONE) {
                     $sounds[] = "colognephone = '" . soundex_ger($keyword['search']) . "'";
                 }
-                $simwords[] = sprintf("
-                  SELECT
+                $simwordQuerys[] = sprintf("
+                  (SELECT
                     GROUP_CONCAT(DISTINCT keyword SEPARATOR ' ') as keyword,
                     %s AS typedin,
                     SUM(count) as count
                   FROM `%s`
                   WHERE 1
                     %s
-                    AND (%s)",
+                    AND (%s))",
                     $simWordsSQL->escape($keyword['search']),
                     $this->tablePrefix . 'search_it_keywords',
                     ($this->clang !== false) ? 'AND (clang = ' . intval($this->clang) . ' OR clang IS NULL)' : '',
                     implode(' OR ', $sounds)
                 );
             }
+            //echo '<br><pre>'; var_dump($simwordQuerys);echo '</pre>'; // Eine SQL-Abfrage pro Suchwort
 
             // simwords
             $simWordsSQL = rex_sql::factory();
             foreach ($simWordsSQL->getArray(sprintf("
-            %s
-            GROUP BY %s
-            ORDER BY SUM(count)",
-                    implode(' UNION ', $simwords),
-                    $this->similarwordsPermanent ? "''" : 'keyword, typedin'
-                )
-            ) as $simword) {
+                SELECT * FROM (%s) AS t
+                %s
+                ORDER BY count",
+                        implode(' UNION ', $simwordQuerys),
+                        $this->similarwordsPermanent ? '' : 'GROUP BY keyword, typedin'
+                    )
+                ) as $simword) {
+                //echo '<br><pre>'; var_dump($simword);echo '</pre>';
                 $return['simwords'][$simword['typedin']] = array(
                     'keyword' => $simword['keyword'],
                     'typedin' => $simword['typedin'],
                     'count' => $simword['count'],
                 );
             }
-
+            /*echo '<br><pre>' .sprintf("
+            SELECT * FROM (%s) AS t
+            %s
+            ORDER BY count",
+                implode(' UNION ', $simwordQuerys),
+                $this->similarwordsPermanent ? '' : 'GROUP BY keyword, typedin'
+            ).'</pre>'; die();*/
             $newsearch = array();
             foreach ($this->searchArray as $keyword) {
                 if (preg_match('~\s~isu', $keyword['search'])) {
@@ -1842,9 +1854,12 @@ class search_it
             $return['simwordsnewsearch'] = implode(' ', $newsearch);
         }
 
+        //print_r($this->searchArray);echo '<br><br>';
         if ($this->similarwordsPermanent) {
             $keywordCount = $this->parseSearchString($this->searchString . ' ' . $return['simwordsnewsearch']);
         }
+        //echo '<br><pre>'; print_r($return['simwords']); echo '</pre>';
+
 
         $searchColumns = array();
         switch ($this->textMode) {
@@ -1861,48 +1876,55 @@ class search_it
                 $searchColumns[] = 'plaintext';
         }
 
-        $sql = rex_sql::factory();
 
-        $Awhere = array();
+        $sql = rex_sql::factory();
+        $A2Where = array();
         $Amatch = array();
 
-        foreach ($this->searchArray as $keyword) {
-            // build MATCH-Array
-            $match = sprintf("(( MATCH (`%s`) AGAINST (%s)) * %d)", implode('`,`', $searchColumns), $sql->escape($keyword['search']), $keyword['weight']);
-
-            if ($this->searchHtmlEntities) {
-                $match .= ' + ' . sprintf("(( MATCH (`%s`) AGAINST (%s)) * %d)", implode('`,`', $searchColumns), $sql->escape(htmlentities($keyword['search'], ENT_COMPAT, 'UTF-8')), $keyword['weight']);
-            }
-
-            $Amatch[] = $match;
-
-            // build WHERE-Array
-            if ($this->searchMode == 'match') {
-                $AWhere[] = $match;
-            } else {
-                $tmpWhere = array();
-                foreach ($searchColumns as $searchColumn) {
-                    $tmpWhere[] = sprintf("(`%s` LIKE '%%%s%%')", $searchColumn, str_replace(array('%', '_'), array('\%', '\_'), substr($sql->escape($keyword['search']), 1, -1)));
-
-                    if ($this->searchHtmlEntities) {
-                        $tmpWhere[] = sprintf("(`%s` LIKE '%%%s%%')", $searchColumn, str_replace(array('%', '_'), array('\%', '\_'), htmlentities($keyword['search'], ENT_COMPAT, 'UTF-8')));
-                    }
+        foreach ($this->searchArray as $searchword) {
+            $AWhere = array();
+            $similarkeywords = '';
+            if ( $this->similarwords && !isset($return['simwords'][$searchword['search']])) { continue; }
+            if ( isset($return['simwords'][$searchword['search']]['keyword']) ) { $similarkeywords = $return['simwords'][$searchword['search']]['keyword']; }
+            foreach ($this->searchArray as $keyword) {
+                if ( $keyword['search'] !== $searchword['search'] && !in_array( $keyword['search'], explode(' ', $similarkeywords)) ) { continue; }
+                // build MATCH-Array
+                $match = sprintf("(( MATCH (`%s`) AGAINST (%s)) * %d)", implode('`,`', $searchColumns), $sql->escape($keyword['search']), $keyword['weight']);
+                if ($this->searchHtmlEntities) {
+                    $match .= ' + ' . sprintf("(( MATCH (`%s`) AGAINST (%s)) * %d)", implode('`,`', $searchColumns), $sql->escape(htmlentities($keyword['search'], ENT_COMPAT, 'UTF-8')), $keyword['weight']);
                 }
-                $AWhere[] = '(' . implode(' OR ', $tmpWhere) . ')';
+                $Amatch[] = $match;
+
+                // build WHERE-Array
+                if ($this->searchMode == 'match') {
+                    $AWhere[] = $match;
+                } else {
+                    $tmpWhere = array();
+                    foreach ($searchColumns as $searchColumn) {
+                        $tmpWhere[] = sprintf("(`%s` LIKE '%%%s%%')", $searchColumn, str_replace(array('%', '_'), array('\%', '\_'), substr($sql->escape($keyword['search']), 1, -1)));
+
+                        if ($this->searchHtmlEntities) {
+                            $tmpWhere[] = sprintf("(`%s` LIKE '%%%s%%')", $searchColumn, str_replace(array('%', '_'), array('\%', '\_'), htmlentities($keyword['search'], ENT_COMPAT, 'UTF-8')));
+                        }
+                    }
+                    $AWhere[] = '(' . implode(' OR ', $tmpWhere) . ')';
+                }
+                // echo '<br><pre>'; print_r($keyword); var_dump($AWhere);echo '</pre>';
+
+                /*if($this->logicalMode == ' AND ')
+                $Awhere[] = '+*'.$keyword['search'].'*';
+                else
+                $AWhere[] = '*'.$keyword['search'].'*';*/
             }
-
-            /*if($this->logicalMode == ' AND ')
-            $Awhere[] = '+*'.$keyword['search'].'*';
-            else
-            $AWhere[] = '*'.$keyword['search'].'*';*/
+            $A2Where[] = '(' . implode(' OR ', $AWhere) . ')';
         }
-
         // build MATCH-String
         $match = '(' . implode(' + ', $Amatch) . ' + 1)';
 
         // build WHERE-String
-        $where = '(' . implode($this->logicalMode, $AWhere) . ')';
-        #$where = sprintf("( MATCH (%s) AGAINST ('%s' IN BOOLEAN MODE)) > 0",implode(',',$searchColumns),implode(' ',$Awhere));
+        $where = '(' . implode($this->logicalMode, $A2Where) . ')';
+        //$where = sprintf("( MATCH (%s) AGAINST ('%s' IN BOOLEAN MODE)) > 0",implode(',',$searchColumns),implode(' ',$Awhere));
+
 
         // language
         if ($this->clang !== false) {
@@ -2017,7 +2039,7 @@ class search_it
                 $this->limit[0], $this->limit[1]
             );
         }
-        //echo '<pre>'.$query.'</pre>';
+        //echo '<pre>'.$query.'</pre>';die();
         //echo '<pre>'.implode(",\n",$selectFields).'</pre>';
         try {
             $sqlResult = $sql->getArray($query);

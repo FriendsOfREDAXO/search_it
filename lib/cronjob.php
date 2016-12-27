@@ -1,7 +1,5 @@
 <?php
-/**
- * @package redaxo\search_it
- */
+
 class rex_cronjob_reindex extends rex_cronjob
 {
     public function execute()

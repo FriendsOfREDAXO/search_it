@@ -4,11 +4,10 @@ $langpath = rex::getProperty('lang');
 $path = rex_path::plugin('search_it','documentation','docs/'.$langpath.'/');
 
 $files = [];
-foreach(scandir($path) as $i_file) {
-    if ($i_file != "." && $i_file != "..") {
-        $files[$i_file] = $i_file;
-    }
+foreach(rex_finder::factory($path)->filesOnly() as $file) {
+    $files[$file->getFileName()] = $file->getFileName();
 }
+
 
 if ( rex_request("search_it_document_image","string") != "" && isset($files[rex_request("search_it_document_image","string")]) ) {
     ob_end_clean();

@@ -7,7 +7,7 @@ class pdf2txt
     var $data;
 
     // constructor
-    function pdf2txt($_src = false, $_dest = false)
+    function __construct($_src = false, $_dest = false)
     {
         $this->setSource($_src);
         $this->setDestination($_dest);

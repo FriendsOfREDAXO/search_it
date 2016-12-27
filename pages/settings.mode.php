@@ -20,6 +20,7 @@ if (rex_post('config-submit', 'boolean')) {
 
     $changed = array_keys(array_merge(array_diff_assoc($posted_config,$this->getConfig()), array_diff_assoc($this->getConfig(),$posted_config)));
     foreach ( array(
+                  'similarwordsmode',
                   'indexmode',
                   'indexoffline',
                   'ep_outputfilter',

@@ -49,7 +49,7 @@ $content = '';
 $formElements = [];
 
 
-$content[] = search_it_getSettingsFormSection(
+$content3[] = search_it_getSettingsFormSection(
     'search_it_index',
     $this->i18n('search_it_settings_title_indexmode'),
     array(
@@ -111,7 +111,7 @@ $content[] = search_it_getSettingsFormSection(
     ),'edit'
 );
 
-$content[] = search_it_getSettingsFormSection(
+$content3[] = search_it_getSettingsFormSection(
     'search_it_modi',
     $this->i18n('search_it_settings_modi_header'),
     array(
@@ -224,7 +224,7 @@ $content[] = search_it_getSettingsFormSection(
 
 
 $fragment = new rex_fragment();
-$fragment->setVar('content', $content, false);
+$fragment->setVar('content', $content3, false);
 $content = $fragment->parse('core/page/grid.php');
 
 

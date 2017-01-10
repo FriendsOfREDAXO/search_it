@@ -1,5 +1,8 @@
 #Änderungen von search_it
 
+##Version 6.1.4 (2017-01-10)
+  - PHP 7.1 Anpassung dont [] a ""
+
 ##Version 6.1.3 (2016-12-27)
   - Ähnlichkeitssuche bei konjunktiver Suche (AND) jetzt korrekt implementiert
   - Hinweis dass der Suchindex erneuert werden muss, wenn Ähnlichkeitssuche eingeschaltet wird

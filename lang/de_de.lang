@@ -3,8 +3,8 @@ search_it_settings = Einstellungen
 search_it_generate = Wartung
 search_it_readme = Readme
 
-search_it_info = Such Addon
-search_it_infotext = Such Addon
+search_it_info = Such-Addon
+search_it_infotext = Such-Addon
 search_it_reindex = Search it: Reindexieren
 
 search_it_settings_mode = Index und Suchmodus
@@ -58,9 +58,9 @@ search_it_settings_highlighterclass = Wenn Sie hier eine CSS-Klasse angeben, wir
 
 search_it_settings_similarwords_label = Ähnlichkeitssuche
 search_it_settings_similarwords_none = Deaktivieren
-search_it_settings_similarwords_soundex = Soundex
-search_it_settings_similarwords_metaphone = Metaphone
-search_it_settings_similarwords_cologne = Kölner Phonetik
+search_it_settings_similarwords_soundex = Soundex (Allgemein)
+search_it_settings_similarwords_metaphone = Metaphone (EN)
+search_it_settings_similarwords_cologne = Kölner Phonetik (DE)
 search_it_settings_similarwords_all = Alle
 search_it_settings_similarwords_permanent = Die Ähnlichkeitssuche auch dann durchführen, wenn Ergebnisse vorhanden sind.
 
@@ -96,9 +96,9 @@ search_it_generate_timeleft = Verbleibend: 
 search_it_generate_articles = Artikel neu-indexieren
 search_it_generate_columns = Tabellen neu-indexieren
 
-search_it_settings_fileext_header = Dateisuche
-search_it_settings_fileext_label = Dateiendungen (z.B. 'txt,csv,pdf')<br />(frei lassen für beliebige Dateien)
-search_it_settings_file_mediapool = Medienpool indexieren
+search_it_settings_fileext_header = Datei-Inhalte durchsuchen
+search_it_settings_fileext_label = Dateiendungen (z.B. <code>txt,csv,pdf</code>)<br />(frei lassen für beliebige Dateien)
+search_it_settings_file_mediapool = <code>/media/</code>-Dateien indexieren
 search_it_settings_file_dirdepth_label = Verzeichnistiefe
 search_it_settings_folders_label = Folgende Ordner in die Suche einschließen
 search_it_settings_folders_dirselect_label = Unterordner der Tiefe %DEPTH% auswählen

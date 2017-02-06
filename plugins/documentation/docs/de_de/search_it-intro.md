@@ -34,11 +34,8 @@ Dabei werden Artikel, Medien, Dateien, PDF-Inhalte und Datenbank-Felder in einer
 
 Um ein sinnvolles Ergebnis zu bekommen, muss auf dem Server das Programm `pdftotext` aus dem Paket `poppler-utils.php` installiert sein.
 
-Installation in diversen Linux-Distributionen
-yum install poppler-utils
-
-Installation unter Ubuntu / Debian
-sudo apt-get install poppler-utils
+* Installation in diversen Linux-Distributionen `yum install poppler-utils`
+* Installation unter Ubuntu / Debian `sudo apt-get install poppler-utils`
 
 ## Wo finde ich weitere Hilfe?
 

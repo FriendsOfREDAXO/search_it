@@ -192,6 +192,7 @@ class search_it
         // start Frontend mode
         rex::setProperty('redaxo', false);
         // setzen von rex_article::getCurrentId()
+        $actual_article = rex_addon::get('structure')->getProperty('article_id');
         rex_addon::get('structure')->setProperty('article_id', $_id);
 
         $return = array();
@@ -286,7 +287,6 @@ class search_it
                 }
 
 
-
                 $insert = rex_sql::factory();
                 $articleData = array();
 
@@ -332,7 +332,7 @@ class search_it
 
         // end Frontend-Mode
         rex::setProperty('redaxo', true);
-        rex_addon::get('structure')->setProperty('article_id', 1);
+        rex_addon::get('structure')->setProperty('article_id', $actual_article);
         rex_clang::setCurrentId($actual_lang);
 
         $this->storeKeywords($keywords, false);

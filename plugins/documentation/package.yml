@@ -1,6 +1,6 @@
 package: search_it/documentation
 version: '6.1.4'
-author: Alexander Walther/Norbert Micheel
+author: Friends Of REDAXO/Alexander Walther/Norbert Micheel
 
 title: 'translate:search_it_documentation_title'
 description: 'translate:search_it_documentation_title'

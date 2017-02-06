@@ -1,6 +1,6 @@
 package: search_it/plaintext
 version: '6.1.4'
-author: Friends Of REDAXO/Robert Rupf/Norbert Micheel
+author: Friends Of REDAXO
 
 title: 'translate:search_it_plaintext_title'
 description: 'translate:search_it_plaintext_title'

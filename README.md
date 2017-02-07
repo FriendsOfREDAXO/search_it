@@ -21,11 +21,12 @@ Search it basiert auf [RexSearch (Xong) für REDAXO 4](https://github.com/xong/r
 
 ## Wo finde ich weitere Hilfe?
 
-Die aktuelle Search it-Version wird in [GitHub von tyrant88](https://github.com/tyrant88/search_it) gepflegt. Dort können Fragen gestellt und Bugs gemeldet werden (Issues). Fragen können auch im [REDAXO-Forum](www.redaxo.org/de/forum/) oder im [REDAXO-Channel auf Slack](https://friendsofredaxo.slack.com/messages/redaxo/) gestellt werden.
+Search it verfügt über ein umfangreiches Dokumentations-Plugin im Backend, das auch Beispiel Module für die Suche enthält.
+Fragen können auch im [REDAXO-Forum](www.redaxo.org/de/forum/) oder im [REDAXO-Channel auf Slack](https://friendsofredaxo.slack.com/messages/redaxo/) gestellt werden.
 
 # Installation
 
-Die Installation erfolgt über den REDAXO-Installer, alternativ gibt es die aktuellste Beta-Version auf [GitHub](https://github.com/tyrant88/search_it). 
+Die Installation erfolgt über den REDAXO-Installer, alternativ gibt es die aktuellste Beta-Version auf [GitHub](https://github.com/FriendsOfREDAXO/search_it). 
 
 Bei der Installation werden fünf Datenbanktabellen angelegt: 
 * `rex_search_it_index` für die Indexierung von Artikeln und DB-Spalten

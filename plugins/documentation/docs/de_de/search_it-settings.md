@@ -147,7 +147,7 @@ Wichtigstes Beispiel dürften hier die Metainfos wie Artikel-Titel oder Meta Des
 
 Hier können DB-Spalten ausgewählt werden, die auch durchsucht werden sollen. Hierfür bietet sich zusätzliche Addon-Felder an, z. B. `rex_article.yrewrite_description` oder Daten, die über das Addon `yform` erstellt werden.
 
-> Tipp: Die Indexierung sollte neben den gewünschten Inhaltsfeldern auch das `id`-Feld / den Primary Key des Datensatzes indexieren sowie alle Felder, die bei der Ausgabe berücksichtigt werden sollen, bspw. Bilder, Teaser o.ä.
+> Tipp: Die Indexierung sollte nur die gewünschten Inhaltsfelder indexieren. Die `id` des gefundenden Datensatztreffers befindet sich in `$hit['fid']`, der Tabellenname in `$hit['table']`. Weitere Felder, die bei der Ausgabe benötigt weredn (bspw. Bilder, Teaser o.ä.), sollten nicht über die Indexierung, sondern via SQL im Suchergebnis direkt abgefragt werden.
 
 ### Dateisuche
 
@@ -178,11 +178,6 @@ Artikel | Artikel (`rex_article`-IDs), die von der Suche ausgeschlossen werden.
 Kategorien | Kategorien (`rex_category`-IDs), die von der Suche ausgeschlossen werden.
 
 > Tipp: Der Artikel des Suchergebnis sollte von der Suche ausgeschlossen werden.
-
-
-
-
-
 
 <a name="plaintext"></a>
 # Plaintext

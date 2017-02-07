@@ -1,6 +1,6 @@
 <?php
 /**
- * Search it Addon.
+ * Search it AddOn.
  * @author @tyrant88
  * @package search_it
  * @var rex_addon $this

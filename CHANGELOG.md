@@ -38,7 +38,7 @@
   - Methode cologne_phon() durch soundex_ger() ersetzt (wegen Lizenz, jetzt BSD) 
   
 ##Version 5.9.0 (2016-09-24)
-  - Plugin Search Highlighter und Reindex in das Addon eingebaut
+  - Plugin Search Highlighter und Reindex in das AddOn eingebaut
 
 ##Version 5.8.2 (2016-09-18)
   - Viele Bugs beseitigt
@@ -112,7 +112,7 @@
   - Bug bei Ermittlung der minimalen FID behoben
 
 ##Version 0.7 (2010-10-06)
-  - Name des Addons in RexSearch geändert
+  - Name des AddOns in RexSearch geändert
   - Ausgabe der schrittweisen Indexierung bei mehrsprachigen Redaxo-
     installationen verbessert
 

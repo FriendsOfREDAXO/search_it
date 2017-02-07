@@ -49,7 +49,7 @@ Artikel-Inhalte (CACHE) : Indexierung der Artikel ohne Template | indexiert nur 
 Komplette Seiten (CACHE) : Indexierung der Artikel mit Template | indexiert die vollständige Seite wie sie aus dem REDAXO Cache geliefert wird.
 Offline-Artikel indexieren | indexiert auch Artikel, die in der Struktur als `offline` markiert wurden.
 Artikel (ADD, EDIT, DELETE) automatisch (de)indexieren | indexiert automatisch neue Artikel, reindexiert bearbeitete Artikel und deindexiert Artikel, die gelöscht wurden.
-Extension Point `"OUTPUT_FILTER"` aufrufen | Ruft den OUTPUT_FILTER auf, bspw., wenn das SPROG-Addon benutzt wurde und die Einstellung `Indexierung der Artikel` über den Redaxo-Cache erfolgt. __todo__ ***stimmt das?***
+Extension Point `"OUTPUT_FILTER"` aufrufen | Ruft den OUTPUT_FILTER auf, bspw., wenn das SPROG-AddOn benutzt wurde und die Einstellung `Indexierung der Artikel` über den Redaxo-Cache erfolgt. __todo__ ***stimmt das?***
 
 
 ### Suchmodi
@@ -145,7 +145,7 @@ Wichtigstes Beispiel dürften hier die Metainfos wie Artikel-Titel oder Meta Des
 
 ### Datenbankspalten in die Suche einschließen
 
-Hier können DB-Spalten ausgewählt werden, die auch durchsucht werden sollen. Hierfür bietet sich zusätzliche Addon-Felder an, z. B. `rex_article.yrewrite_description` oder Daten, die über das Addon `yform` erstellt werden.
+Hier können DB-Spalten ausgewählt werden, die auch durchsucht werden sollen. Hierfür bietet sich zusätzliche AddOn-Felder an, z. B. `rex_article.yrewrite_description` oder Daten, die über das AddOn `yform` erstellt werden.
 
 > Tipp: Die Indexierung sollte nur die gewünschten Inhaltsfelder indexieren. Die `id` des gefundenden Datensatztreffers befindet sich in `$hit['fid']`, der Tabellenname in `$hit['table']`. Weitere Felder, die bei der Ausgabe benötigt weredn (bspw. Bilder, Teaser o.ä.), sollten nicht über die Indexierung, sondern via SQL im Suchergebnis direkt abgefragt werden.
 

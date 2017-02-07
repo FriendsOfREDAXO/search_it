@@ -1,6 +1,6 @@
 # Artikel-Suchergebnisse einschließlich Metadaten
 
-Dieses Suchmodul bezieht weitere DB-Spalten in die Suche ein, z.B. den Artikel-Name und das SEO-Description-Feld des YRewrite-Addons. 
+Dieses Suchmodul bezieht weitere DB-Spalten in die Suche ein, z.B. den Artikel-Name und das SEO-Description-Feld des YRewrite-AddOns. 
 
 ## Search it Einstellungen
 
@@ -78,7 +78,7 @@ if($request) { // Wenn ein Suchbegriff eingegeben wurde
     # echo "<pre><code>"; print_r($result); echo "</code></pre>"; // Zum Debuggen ausgeben.
 
     if($result['count']) { // Wenn Ergebnisse vorhanden sind...
-        echo '<h2 class="search_it-headline">{{ Suchergebnisse }}</h2>'; // Sprog-Addon zur Übersetzung benutzen
+        echo '<h2 class="search_it-headline">{{ Suchergebnisse }}</h2>'; // Sprog-AddOn zur Übersetzung benutzen
 
         echo '<ul class="search_it-results">';                           
         foreach($result['hits'] as $hit) { // Jeder Treffer ein $hit

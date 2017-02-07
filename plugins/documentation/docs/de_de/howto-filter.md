@@ -9,7 +9,7 @@ Mögliche Szenarien für eine solche View sind:
 * Nur Produkte aus einer Produkt-Tabelle, die den status "online" haben
 * Suche in mehreren Datenbanktabellen, die über Relationen mit einander verbunden sind.
 
-> **Tipp:** Mit dem Redaxo-Addon `Adminer` lassen sich die nachfolgenden Schritte direkt aus dem Redaxo-Backend erledigen, ohne sich in `PHPMyAdmin` oder ein anderes DBMS einzuloggen.
+> **Tipp:** Mit dem Redaxo-AddOn `Adminer` lassen sich die nachfolgenden Schritte direkt aus dem Redaxo-Backend erledigen, ohne sich in `PHPMyAdmin` oder ein anderes DBMS einzuloggen.
 
 ## Schritt für Schritt-Anleitung
 

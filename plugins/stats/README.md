@@ -2,7 +2,7 @@
 
 Port von Version für R4 auf R5
 
-Dieses Addon erzeugt einfache Statistiken mit Grafiken.
+Dieses AddOn erzeugt einfache Statistiken mit Grafiken.
 
 
 Die Dokumentation des Plugins findest du [im alten Wiki](http://www.redaxo.org/de/wiki/index.php?n=R4.RexSearch) .

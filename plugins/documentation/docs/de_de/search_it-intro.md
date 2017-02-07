@@ -1,8 +1,8 @@
 # Über Search it
 
-`Search it` ist ein Redaxo 5-Addon für eine Volltextsuche im Frontend.
+`Search it` ist ein Redaxo 5-AddOn für eine Volltextsuche im Frontend.
 
-Dabei werden Artikel, Medien, Dateien, PDF-Inhalte und Datenbank-Felder in einer DB-Tabelle des Addons gespeichert und ausgewertet. Suchanfragen können außerdem in einer Cache-Tabelle gespeichert werden. Das spart Serverrechenleistung und führt zur schnelleren Anzeige von Suchergebnissen.
+Dabei werden Artikel, Medien, Dateien, PDF-Inhalte und Datenbank-Felder in einer DB-Tabelle des AddOns gespeichert und ausgewertet. Suchanfragen können außerdem in einer Cache-Tabelle gespeichert werden. Das spart Serverrechenleistung und führt zur schnelleren Anzeige von Suchergebnissen.
 
 `Search it` basiert auf [RexSearch (Xong) für Redaxo 4](https://github.com/xong/rexsearch/).
 
@@ -23,7 +23,7 @@ Dabei werden Artikel, Medien, Dateien, PDF-Inhalte und Datenbank-Felder in einer
 ## First Steps
 
 * Installation des aktuellen Release über GitHub oder den Redaxo Installer
-* `Search it`-Addon und Plugins aktivieren
+* `Search it`-AddOn und Plugins aktivieren
 * Einstellungen von `Search it` festlegen [(Hilfe)](search_it-settings.md)
 * Indexierung starten
 * Suchergebnis-Artikel anlegen 

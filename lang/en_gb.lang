@@ -3,8 +3,8 @@ search_it_settings = Settings
 search_it_generate = Maintenance
 search_it_readme = Readme
 
-search_it_info = Search Addon
-search_it_infotext = Search Addon
+search_it_info = Search AddOn
+search_it_infotext = Search AddOn
 search_it_reindex = Search it: reindex
 
 search_it_settings_mode = Index and Search mode

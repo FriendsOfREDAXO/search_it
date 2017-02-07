@@ -17,7 +17,7 @@ Dieses Suchformular muss im gleichen Artikel wie das Modul, das die Suchergebnis
 
 ##Einfaches Beispielmodul
 
-Dieses Suchmodul nimmt einen Suchbegriff entgegen und gibt gefundene Artikel aus. Dabei wird von den Standardeinstellungen des Addons ausgegangen.
+Dieses Suchmodul nimmt einen Suchbegriff entgegen und gibt gefundene Artikel aus. Dabei wird von den Standardeinstellungen des AddOns ausgegangen.
 
         <?php
               if(!empty(rex_request('searchit', 'string'))){
@@ -42,7 +42,7 @@ Dieses Suchmodul nimmt einen Suchbegriff entgegen und gibt gefundene Artikel aus
 
 ##Erweitertes Beispielmodul
 
-Dieses Suchmodul bezieht weitere DB-Spalten in die Suche ein. Dafür müssen im Backend in der Konfiguration des Addons folgende DB-Spalten ausgewählt werden:
+Dieses Suchmodul bezieht weitere DB-Spalten in die Suche ein. Dafür müssen im Backend in der Konfiguration des AddOns folgende DB-Spalten ausgewählt werden:
 
     PREFIX_article.name
     PREFIX_article.art_description

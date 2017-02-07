@@ -1,6 +1,6 @@
 # Ähnlichkeitssuche
 
-Die Ähnlichkeitssuche muss in den Addon-Einstellungen aktiviert sein.
+Die Ähnlichkeitssuche muss in den AddOn-Einstellungen aktiviert sein.
 
 Search it baut anschließend bei jeder Suche, die einen Treffer ergab, einen Schlagwortindex aus. Dabei wird angenommen, dass Wörter, die zu Suchergebnissen führen, richtig geschrieben sind.
 

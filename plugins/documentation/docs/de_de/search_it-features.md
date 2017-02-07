@@ -20,4 +20,4 @@
 * Angabe von Kategorien, Artikeln und DB-Spalten, in denen gesucht werden soll
 * Durchsuchen von beliebigen Ordnern mit beliebigen Dateien möglich
 * einfache Konfiguration im Backend
-* einstellbar, wer das Addon konfigurieren darf  
+* einstellbar, wer das AddOn konfigurieren darf  

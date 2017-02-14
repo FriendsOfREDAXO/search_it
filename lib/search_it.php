@@ -1333,10 +1333,12 @@ class search_it
         if (is_array($_limit) AND $_countLimit === false) {
             $this->limit = array((int)$_limit[0], (int)$_limit[1]);
         } elseif ($_countLimit === false) {
+
             $this->limit = array(0, (int)$_limit);
         } else {
             $this->limit = array((int)$_limit, (int)$_countLimit);
         }
+        if ( empty($this->limit[1]) ) { $this->limit[1] = 10; }
         $this->hashMe .= $this->limit[0] . $this->limit[1];
     }
 
@@ -1347,6 +1349,7 @@ class search_it
      */
     public function setMaxTeaserChars($_count)
     {
+        if ( empty($_count) || !is_numeric($_count) ) { $_count = 200; }
         $this->maxTeaserChars = intval($_count);
         $this->hashMe .= $_count;
     }
@@ -1357,6 +1360,7 @@ class search_it
      */
     public function setMaxHighlightedTextChars($_count)
     {
+        if ( empty($_count) || !is_numeric($_count) ) { $_count = 100; }
         $this->maxHighlightedTextChars = intval($_count);
         $this->hashMe .= $_count;
     }

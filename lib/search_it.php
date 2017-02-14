@@ -1338,7 +1338,7 @@ class search_it
         } else {
             $this->limit = array((int)$_limit, (int)$_countLimit);
         }
-        if ( empty($this->limit[1]) ) { $this->limit[1] = 10; }
+        if ( empty($this->limit[1]) || !is_numeric($this->limit[1]) ) { $this->limit[1] = 10; }
         $this->hashMe .= $this->limit[0] . $this->limit[1];
     }
 

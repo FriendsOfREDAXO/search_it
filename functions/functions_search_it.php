@@ -720,11 +720,9 @@ function search_it_search_highlighter_output($_ep){
     $ende = '</span>';
     $tags = array($beginn, $ende);
 
-    $bodystart = strpos($subject,'<body>')+6;
-    $bodyend = strpos($subject,'</body>');
-    $body = substr($subject,$bodystart,$bodyend-$bodystart);
-    $body = search_it_search_highlighter_getHighlightedText($body, $suchbegriffe, $tags);
-    $subject = substr($subject,0,$bodystart). $body .substr($subject,$bodyend);
+    preg_match('/<body[^>]*>(.*?)<\/body>/is', $subject, $matches);
+    $body = search_it_search_highlighter_getHighlightedText($matches[1], $suchbegriffe, $tags);
+    $subject = preg_replace('/<body[^>]*>(.*?)<\/body>/is',$body,$subject);
 
     return $subject;
 

@@ -74,21 +74,21 @@ $content2a = search_it_getSettingsFormSection(
             'id' => 'search_it_limit',
             'name' => 'search_config[limit][1]',
             'label' => $this->i18n('search_it_settings_limit'),
-            'value' => !empty($this->getConfig('limit')[1]) ? intval($this->getConfig('limit')[1]) : ''
+            'value' => !empty($this->getConfig('limit')[1]) && is_numeric($this->getConfig('limit')[1]) ? $this->getConfig('limit')[1] : ''
         ),
         array(
             'type' => 'string',
             'id' => 'search_it_maxteaserchars',
             'name' => 'search_config[maxteaserchars]',
             'label' => $this->i18n('search_it_settings_maxteaserchars'),
-            'value' => !empty($this->getConfig('maxteaserchars')) ? intval($this->getConfig('maxteaserchars')) : ''
+            'value' => !empty($this->getConfig('maxteaserchars')) && is_numeric($this->getConfig('maxteaserchars')) ? $this->getConfig('maxteaserchars') : ''
         ),
         array(
             'type' => 'string',
             'id' => 'search_it_maxhighlightchars',
             'name' => 'search_config[maxhighlightchars]',
             'label' => $this->i18n('search_it_settings_maxhighlightchars'),
-            'value' => !empty($this->getConfig('maxhighlightchars')) ? intval($this->getConfig('maxhighlightchars')) : ''
+            'value' => !empty($this->getConfig('maxhighlightchars')) && is_numeric($this->getConfig('maxhighlightchars')) ? $this->getConfig('maxhighlightchars') : ''
         ),
         array(
             'type' => 'select',

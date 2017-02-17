@@ -1,6 +1,6 @@
 # Artikel-Suchergebnisse einschließlich Metadaten
 
-Dieses Suchmodul bezieht weitere DB-Spalten in die Suche ein, z.B. den Artikel-Name und das SEO-Description-Feld des YRewrite-AddOns. 
+Dieses Suchmodul bezieht weitere DB-Spalten in die Suche ein, z.B. den Artikel-Name und das SEO-Description-Feld des YRewrite-Addons. 
 
 ## Search it Einstellungen
 
@@ -23,7 +23,7 @@ $request = rex_request('search', 'string', false);
 if($request) { 
     $search_it = new search_it(); 
     $result = $search_it->search($request); 
-    # echo "<pre><code>"; print_r($result); echo "</code></pre>"; 
+	# dump($result); // Zum Debuggen ausgeben.
 
     if($result['count']) { 
         echo '<h2 class="search_it-headline">{{ Suchergebnisse }}</h2>'; 
@@ -31,7 +31,7 @@ if($request) {
         echo '<ul class="search_it-results">';                           
         foreach($result['hits'] as $hit) { 
 
-            # echo "<pre><code>"; print_r($hit); echo "</code></pre>"; 
+            # dump($hit);
             if($hit['type'] == 'db_column' AND $hit['table'] == rex::getTablePrefix().'article'){
                 $text = $hit['article_teaser'];
             } else {
@@ -75,15 +75,15 @@ $request = rex_request('search', 'string', false); // GET/POST-Anfrage: Casting 
 if($request) { // Wenn ein Suchbegriff eingegeben wurde
     $search_it = new search_it(); // Suche initialisieren
     $result = $search_it->search($request); // Suche ausführen
-    # echo "<pre><code>"; print_r($result); echo "</code></pre>"; // Zum Debuggen ausgeben.
+	# dump($result); // Zum Debuggen ausgeben.
 
     if($result['count']) { // Wenn Ergebnisse vorhanden sind...
-        echo '<h2 class="search_it-headline">{{ Suchergebnisse }}</h2>'; // Sprog-AddOn zur Übersetzung benutzen
+        echo '<h2 class="search_it-headline">{{ Suchergebnisse }}</h2>'; // Sprog-Addon zur Übersetzung benutzen
 
         echo '<ul class="search_it-results">';                           
         foreach($result['hits'] as $hit) { // Jeder Treffer ein $hit
 
-            # echo "<pre><code>"; print_r($hit); echo "</code></pre>"; // Zum Debuggen ausgeben.
+            # dump($hit); // Zum Debuggen ausgeben.
             if($hit['type'] == 'db_column' AND $hit['table'] == rex::getTablePrefix().'article'){
                 $text = $hit['article_teaser'];
             } else {

@@ -1,20 +1,19 @@
 #Konfiguration
 
+Um die Suche in Betrieb zu nehmen, sollten zunächst alle gewünschten Einstellungen vorgenommen werden und anschließend der Suchindex eingerichtet werden.
+
+> Hinweis: Es werden zu Beginn nur Artikelinhalte ohne Medien, Metainfos (wie bspw. dem Artikelname) oder zusätzlichen Datenbanktabellen indexiert. Um Meta-Infos, Medien und Datenbanktabellen zu indexieren, müssen entsprechende Einstellungen bearbeitet werden.
+
 - [Wartung](#wartung)
 - [Einstellungen](#einstellungen)
-    - [Index und Suchmodus](#einstellungen-suchmodus)
+    - [Suchmodus](#einstellungen-suchmodus)
     - [Suchergebnis](#einstellungen-suchergebnis)
-    - [Zusätzl. Datenquellen](#einstellungen-quelle)
-    - [Blacklist](#einstellungen-blacklist)
+    - [Quelle](#einstellungen-quelle)
 - [Plaintext](#plaintext)
 - [Search Highlighter](#search_highlighter)
 
 <a name="wartung"></a>
 # Wartung
-
-Um die Suche in Betrieb zu nehmen, sollten zunächst alle gewünschten Einstellungen vorgenommen werden und anschließend der Suchindex eingerichtet werden.
-
-> Tipp: Die hier definierten Sucheinstellungen können auch direkt an der `search_it`-Klasse vorgenommen bzw. überschrieben werden, um mehrere Suchen auf einer Seite umzusetzen.
 
 Aktion | Erläuterung
 ------ | ------
@@ -27,30 +26,14 @@ Statistik löschen | Setzt die Statistik zurück. Die Anzahl aller gesuchten Beg
 <a name="einstellungen"></a>
 # Einstellungen
 
+> Tipp: Die hier definierten Sucheinstellungen können auch direkt an der `search_it`-Klasse vorgenommen bzw. überschrieben werden, um mehrere Suchen auf einer Seite umzusetzen.
+
 <a name="einstellungen-suchmodus"></a>
-## Index und Suchmodus
+## Suchmodus
 
 Dies sind die Standard-Einstellungen für jede Suche. 
 
-> Tipp: In den erweiterten Beispielen wird erklärt, wie das Suchobjekt mit eigenen Parametern überschrieben werden kann. So lassen sich mehrere Suchen in einer Website realisieren, bspw. eine Produktsuche oder eine Mitarbeiter-Suche.
-
-### Indexierung
-
-Bei der Indexierung durchsucht Search it alle in den Einstellungen angegebenen Orte (Artikel, Datenbank, Medienpool) und erstellt einen Suchindex-Cache. 
-
-#### Art und Weise
-
-Legt fest, wie Artikel indexiert werden.
-
-Option | Erläuterung
------- | ------
-HTTP-GET : Indexierung der Artikel über eine HTTP-GET-Anfrage | indexiert Artikel so, als wenn Sie über das Frontend abgerufen werden.
-Artikel-Inhalte (CACHE) : Indexierung der Artikel ohne Template | indexiert nur die Artikel-Inhalte, die im REDAXO Backend angelegt wurden, ohne das Template 
-Komplette Seiten (CACHE) : Indexierung der Artikel mit Template | indexiert die vollständige Seite wie sie aus dem REDAXO Cache geliefert wird.
-Offline-Artikel indexieren | indexiert auch Artikel, die in der Struktur als `offline` markiert wurden.
-Artikel (ADD, EDIT, DELETE) automatisch (de)indexieren | indexiert automatisch neue Artikel, reindexiert bearbeitete Artikel und deindexiert Artikel, die gelöscht wurden.
-Extension Point `"OUTPUT_FILTER"` aufrufen | Ruft den OUTPUT_FILTER auf, bspw., wenn das SPROG-AddOn benutzt wurde und die Einstellung `Indexierung der Artikel` über den Redaxo-Cache erfolgt. __todo__ ***stimmt das?***
-
+> Tipp: In den erweiterten Beispielen wird erklärt, wie das Suchobjekt mit eigenen Parametern überschrieben werden kann. So lassen sich mehrere Suchen in einer Website umsetzen, bspw. eine Produktsuche oder eine Mitarbeiter-Suche.
 
 ### Suchmodi
 
@@ -99,6 +82,22 @@ MATCH AGAINST  | findet nur ganze Wörter, ist dafür schneller.
 
 > Tipp: Obwohl die genauere Suche mit MATCH AGAINST weniger Suchergebnisse präsentiert, wird der Einsatz dieser Methode empfohlen, da die Suche dadurch beschleunigt wird. Das Manko der genaueren Suche - wenn man es denn so empfindet - kann über die Ähnlichkeitssuche ausgeglichen werden.
 
+### Indexierung
+
+Bei der Indexierung durchsucht Search it alle in den Einstellungen angegebenen Orte (Artikel, Datenbank, Medienpool) und erstellt einen Suchindex-Cache. 
+
+#### Art und Weise
+
+Legt fest, wie Artikel indexiert werden.
+
+Option | Erläuterung
+------ | ------
+Indexierung der Artikel über eine HTTP-GET-Anfrage | indexiert Artikel so, als wenn Sie über das Frontend abgerufen werden.
+Indexierung der Artikel über den Redaxo-Cache (ohne Template, nur der Artikel) | indexiert den Artikel so, wie er in __todo__ 
+Indexierung der Artikel über den Redaxo-Cache (mit Template, liefert das gleiche Ergebnis wie per HTTP-GET-Anfrage) | indexiert die vollständige Seite.
+Offline-Artikel indexieren | indexiert auch Artikel, die in der Struktur als `offline` markiert wurden.
+Artikel (ADD, EDIT, DELETE) automatisch (de)indexieren | indexiert automatisch neue Artikel, reindexiert bearbeitete Artikel und deindexiert Artikel, die gelöscht wurden.
+Extension Point `"OUTPUT_FILTER"` aufrufen | Ruft den OUTPUT_FILTER auf, bspw., wenn das SPROG-Addon benutzt wurde und die Einstellung `Indexierung der Artikel` über den Redaxo-Cache erfolgt. __todo__ ***stimmt das?***
 
 <a name="einstellungen-suchergebnis"></a>
 ## Suchergebnis
@@ -135,36 +134,6 @@ Als Teaser, in dem eventuell vorkommende Suchebgriffe hervorgehoben sind |
 Als Array mit allen Suchbegriffen und Textstellen | 
 Beispieltext mit Sucheingabe |
 
-
-<a name="einstellungen-quelle"></a>
-## Zusätzliche Datenquellen
-
-Hier werden Datenquellen für die Indexierung zusätzlich zu den sichtbaren Inhalten der Redaxo-Artikeln definiert, z. B. Metainfos der Artikle, Datenbanktabellen, der Medienpool sowie externe Verzeichnisse.
-Wichtigstes Beispiel dürften hier die Metainfos wie Artikel-Titel oder Meta Descriptions sein, die durchsucht werden sollen, obwohl sie nicht im Artikel angezeigt werden.
-
-
-### Datenbankspalten in die Suche einschließen
-
-Hier können DB-Spalten ausgewählt werden, die auch durchsucht werden sollen. Hierfür bietet sich zusätzliche AddOn-Felder an, z. B. `rex_article.yrewrite_description` oder Daten, die über das AddOn `yform` erstellt werden.
-
-> Tipp: Die Indexierung sollte nur die gewünschten Inhaltsfelder indexieren. Die `id` des gefundenden Datensatztreffers befindet sich in `$hit['fid']`, der Tabellenname in `$hit['table']`. Weitere Felder, die bei der Ausgabe benötigt weredn (bspw. Bilder, Teaser o.ä.), sollten nicht über die Indexierung, sondern via SQL im Suchergebnis direkt abgefragt werden.
-
-### Dateisuche
-
-Die Dateisuche durchsucht angegebene Dateien nach Begriffen. Bei PDFs, deren Inhalt als Text vorliegt, wird eine Volltextsuche im PDF ermöglicht. 
-
-Option | Erläuterung
------- | ------
-Dateiendungen (frei lassen für beliebige Dateien) | Kommagetrennte Angabe von Dateien, die in der Medienpool-Indexierung
-Medienpool indexieren | Gibt an, ob die Tabelle `rex_media` zur Medienpool-Suche indexiert wird.
-Verzeichnistiefe | Gibt an, bis zu welcher Tiefe Dateien in den ausgewählten Verzeichnissen indexiert werden sollen.
-Folgende Ordner in die Suche einschließen | Externe Ordner innerhalb der Redaxo-Installation werden indexiert.
-Unterordner auswählen |
-
-
-<a name="einstellungen-blacklist"></a>
-## Blacklist
-
 ### Wörter, Kategorien und Artikel von der Suche ausschließen
 
 Schließt Begriffe, Artikel und Kategorien standardmäßig von der Suche aus. 
@@ -178,6 +147,29 @@ Artikel | Artikel (`rex_article`-IDs), die von der Suche ausgeschlossen werden.
 Kategorien | Kategorien (`rex_category`-IDs), die von der Suche ausgeschlossen werden.
 
 > Tipp: Der Artikel des Suchergebnis sollte von der Suche ausgeschlossen werden.
+
+<a name="einstellungen-quelle"></a>
+## Quelle
+
+Hier werden Datenquellen für die Indexierung zusätzlich zu den Redaxo-Artikeln definiert, z. B. Datenbanktabellen, der Medienpool sowie externe Verzeichnisse.
+
+### Datenbankspalten in die Suche einschließen
+
+Hier können DB-Spalten ausgewählt werden, die auch durchsucht werden sollen. Hierfür bietet sich zusätzliche Addon-Felder an, z. B. `rex_article.yrewrite_description` oder Daten, die über das Addon `yform` erstellt werden.
+
+> Tipp: Die Indexierung sollte neben den gewünschten Inhaltsfeldern auch das `id`-Feld / den Primary Key des Datensatzes indizieren sowie alle Felder, die bei der Ausgabe berücksichtigt werden sollen, bspw. Bilder, Teaser o.ä.
+
+### Dateisuche
+
+Die Dateisuche durchsucht angegebene Dateien nach Begriffen. Bei PDFs, deren Inhalt als Text vorliegt, wird eine Volltextsuche im PDF ermöglicht. 
+
+Option | Erläuterung
+------ | ------
+Dateiendungen (frei lassen für beliebige Dateien) | Kommagetrennte Angabe von Dateien, die in der Medienpool-Indexierung
+Medienpool indexieren | Gibt an, ob die Tabelle `rex_media` zur Medienpool-Suche indexiert wird.
+Verzeichnistiefe | Gibt an, bis zu welcher Tiefe Dateien in den ausgewählten Verzeichnissen indexiert werden sollen.
+Folgende Ordner in die Suche einschließen | Externe Ordner innerhalb der Redaxo-Installation werden indexiert.
+Unterordner auswählen |
 
 <a name="plaintext"></a>
 # Plaintext

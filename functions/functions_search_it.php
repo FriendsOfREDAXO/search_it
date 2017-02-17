@@ -287,12 +287,6 @@ function search_it_handle_extensionpoint($_ep){
             $search_it->indexArticle($_params['article_id'],$_params['clang']);
         break;
 
-        case 'SLICE_SHOW':
-            // lus: Das ist doch Müll? Nach der Message im SliceOutput suchen? Sind Block Edit/Delete/up/down
-            if( strpos($_subject,'<div class="alert alert-success">') !== false AND (!empty($_params['function']) OR rex_request('slice_id','int',0) == $_params['slice_id']) ) {
-                //$search_it->indexArticle($_params['article_id'], $_params['clang']);
-            }
-        break;
 
     }
 

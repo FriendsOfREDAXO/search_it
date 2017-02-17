@@ -54,7 +54,6 @@
                 'SLICE_ADDED',
                 'SLICE_DELETED',
                 'SLICE_UPDATED',
-                'SLICE_SHOW',
             );
             foreach($extensionPoints as $ep){
                 rex_extension::register($ep, 'search_it_handle_extensionpoint');

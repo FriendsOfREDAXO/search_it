@@ -1,5 +1,11 @@
 #Änderungen von search_it
 
+##Version 6.1.5 (2017-02-17)
+  - Extensionpoint "SLICE_SHOW" ist wirklich nicht mehr nötig --> entfernt, thx @darwin26 
+  - issue #77 Der Search-Highlighter zeichnet auch im <title> Tag aus,  thx@DanielWeitenauer
+  - issue #76 Maximale Trefferanzahl prüfen, thx@DanielWeitenauer
+  - Fixes am "frontend mode" @skerbis
+
 ##Version 6.1.4 (2017-01-10)
   - PHP 7.1 Anpassung dont [] a ""
 
@@ -121,7 +127,7 @@
     indexierte Spalten einer Datenbanktabelle werden in dieses Feld
     ein getragen und stehen bei der Ausgabe der Suchergebnisse zur
     Verfügung
-  - automatische Indexierung optimiert (search_it_handle_extensionpoint)
+  - automatische Indexierung optimiert (rexsearch_handle_extensionpoint)
 
 ##Version 0.6 (2010-09-16)
   - Datenbankfeld "fid" vom Typ INT zum Typ VARCHAR(255) geändert

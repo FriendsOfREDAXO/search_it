@@ -5,7 +5,7 @@ search_it_plaintext_description = Elements marked with this symbol can be shifte
 search_it_plaintext_selectors = CSS-selectors (comma-separated)
 search_it_plaintext_selectors_label = All matching elements will be removed from plaintext.
 search_it_plaintext_regex = Regular Expressions (row-separated)
-search_it_plaintext_regex_label = Every 1. Line: Regex<br />Every 2. Line: Replacement<br /><a href="http://php.net/preg_replace">preg_replace()</a><br /><br />Example:<br />~\s+~ism<br /> <em>(space)</em>
+search_it_plaintext_regex_label = Every 1. Line: Regex<br />Every 2. Line: Replacement<br /><a href="http://php.net/preg_replace">preg_replace()</a><br /><br />Example:<br /><code>'<h1>.+</h1>'</code><br /><code>' '</code>
 search_it_plaintext_striptags = Remove HTML-tags
 search_it_plaintext_striptags_label = Executes the strip_tags()-function.
 search_it_plaintext_textile = parse with textile

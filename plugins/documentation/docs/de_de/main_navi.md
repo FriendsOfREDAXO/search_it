@@ -17,11 +17,11 @@
 	- [Komplexe Suche](module-complex.md) (in Arbeit)
 	- [Weitere Beispiele](module-more_enhanced.md) (in Arbeit)
 - FAQ
+	- [Tipps zur Konfiguration](howto-setup.md)
 	- [Sprachabhängige Suche](howto-languages.md)
 	- [De- und Reindexierung](howto-reindex.md) (in Arbeit)
 	- [Ähnlichkeitssuche](howto-simsearch.md) (in Arbeit)
 	- [Highlighting](howto-highlighting.md)
-	- [Suche einschränken und filtern](howto-filter.md)
 	- [Auf Kategorien beschränken](howto-categories.md)
 	- [Paginierung](howto-pagination.md) (in Arbeit)
 
@@ -29,7 +29,6 @@
 
 **Credits**
 
-@tyrant88 (Norbert Micheel)
-@xong (Robert Rupf)  
-@alexplusde (Alexander Walther)  
-@pixelfirma (Paul Götz)  
+tyrant88 (Norbert Micheel)
+xong (Robert Rupf)  
+alexplusde (Alexander Walther)  

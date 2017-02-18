@@ -2,7 +2,7 @@ search_it_plaintext_title = Plaintext
 search_it_plaintext = Einstellungen
 search_it_plaintext_description_title = Beschreibung
 search_it_plaintext_description = Elemente mit diesem Symbol können per Drag & Drop verschoben werden, um so die Reihenfolge der Abarbeitung zu beeinflussen.
-search_it_plaintext_selectors = CSS-Selektoren (komma-separiert)
+search_it_plaintext_selectors = CSS-Selektoren, z.B. <br /><code>script,head,header,footer,div.donotsearch</code>
 search_it_plaintext_selectors_label = Alle Elemente, auf die die Selektoren passen, werden aus dem Plaintext entfernt.
 search_it_plaintext_regex = Reguläre Ausdrücke (zeilenweise getrennt)
 search_it_plaintext_regex_label = Jede 1. Zeile: Regex<br />Jede 2. Zeile: Ersetzung<br /><a href="http://php.net/preg_replace">preg_replace()</a><br /><br />Beispiel:<br />~\s+~ism<br /> <em>(Leerzeichen)</em>

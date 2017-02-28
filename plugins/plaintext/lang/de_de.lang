@@ -5,7 +5,7 @@ search_it_plaintext_description = Elemente mit diesem Symbol können per Drag & 
 search_it_plaintext_selectors = CSS-Selektoren, z.B. <br /><code>script,head,header,footer,div.donotsearch</code>
 search_it_plaintext_selectors_label = Alle Elemente, auf die die Selektoren passen, werden aus dem Plaintext entfernt.
 search_it_plaintext_regex = Reguläre Ausdrücke (zeilenweise getrennt)
-search_it_plaintext_regex_label = Jede 1. Zeile: Regex<br />Jede 2. Zeile: Ersetzung<br /><a href="http://php.net/preg_replace">preg_replace()</a><br /><br />Beispiel:<br /><code>'<h1>.+</h1>'</code><br /><code>' '</code>
+search_it_plaintext_regex_label = Jede 1. Zeile: Regex<br />Jede 2. Zeile: Ersetzung<br /><br />Beispiel:<br /><code>'<h1>.+</h1>'</code><br /><code>' '</code>
 search_it_plaintext_striptags = HTML-Tags entfernen
 search_it_plaintext_striptags_label = Wendet die Funktion strip_tags() auf den Plaintext an.
 search_it_plaintext_textile = Textile parsen

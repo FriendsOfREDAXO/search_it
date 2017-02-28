@@ -6,6 +6,7 @@ title: 'translate:search_it_documentation_title'
 description: 'translate:search_it_documentation_title'
 
 page:
+    perm: search_it[plugin:documentation]
     title: 'translate:search_it_documentation_title'
     pjax: false
     icon: rex-icon fa-book

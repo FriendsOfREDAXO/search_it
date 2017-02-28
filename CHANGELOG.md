@@ -1,9 +1,11 @@
 #Änderungen von search_it
 
+  - PlugIn Permissions @DanielWeitenauer
+
 ##Version 6.1.5 (2017-02-17)
   - Extensionpoint "SLICE_SHOW" ist wirklich nicht mehr nötig --> entfernt, thx @darwin26 
   - issue #77 Der Search-Highlighter zeichnet auch im <title> Tag aus,  thx@DanielWeitenauer
-  - issue #76 Maximale Trefferanzahl prüfen, thx@DanielWeitenauer
+  - issue #76 Maximale Trefferanzahl prüfen, thx @DanielWeitenauer
   - Fixes am "frontend mode" @skerbis
 
 ##Version 6.1.4 (2017-01-10)

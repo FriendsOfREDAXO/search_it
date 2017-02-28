@@ -50,7 +50,7 @@ Indexierung der Artikel über eine HTTP-GET-Anfrage | indexiert Artikel so, als 
 Indexierung der Artikel über den Redaxo-Cache (ohne Template, nur der Artikel) | indexiert den Artikel so, wie er in __todo__ 
 Indexierung der Artikel über den Redaxo-Cache (mit Template, liefert das gleiche Ergebnis wie per HTTP-GET-Anfrage) | indexiert die vollständige Seite.
 Offline-Artikel indexieren | indexiert auch Artikel, die in der Struktur als `offline` markiert wurden.
-Extension Point `"OUTPUT_FILTER"` aufrufen | Ruft den OUTPUT_FILTER auf, bspw., wenn das SPROG-Addon benutzt wurde und die Einstellung `Indexierung der Artikel` über den Redaxo-Cache erfolgt.
+Extension Point `"OUTPUT_FILTER"` aufrufen | Ruft den OUTPUT_FILTER auf, bspw., wenn das SPROG-AddOn benutzt wurde und die Einstellung `Indexierung der Artikel` über den Redaxo-Cache erfolgt.
 Artikel (ADD, EDIT, DELETE) automatisch (de)indexieren | indexiert automatisch neue Artikel, reindexiert bearbeitete Artikel und deindexiert Artikel, die gelöscht wurden.
 Reindexieren aller Spalten, wenn Tabellen mit YForm oder form bearbeitet werden | indexiert automatisch neue YForm-/ form-Datensätze.
 
@@ -154,7 +154,7 @@ Hier werden Datenquellen für die Indexierung zusätzlich zu den Redaxo-Artikeln
 
 ### Datenbankspalten in die Suche einschließen
 
-Hier können DB-Spalten ausgewählt werden, die auch durchsucht werden sollen. Hierfür bietet sich zusätzliche Addon-Felder an, z. B. `rex_article.yrewrite_description` oder Daten, die über das Addon `yform` erstellt werden.
+Hier können DB-Spalten ausgewählt werden, die auch durchsucht werden sollen. Hierfür bietet sich zusätzliche AddOn-Felder an, z. B. `rex_article.yrewrite_description` oder Daten, die über das AddOn `yform` erstellt werden.
 
 > Tipp: Die Indexierung sollte neben den gewünschten Inhaltsfeldern auch das `id`-Feld / den Primary Key des Datensatzes indizieren sowie alle Felder, die bei der Ausgabe berücksichtigt werden sollen, bspw. Bilder, Teaser o.ä.
 
@@ -200,4 +200,4 @@ Textile parsen | Führt die Funktion `rex_textile::parse()` aus.
 HTML-Tags entfernen | Wendet die Funktion `strip_tags()` auf den Plaintext an.
 Standard-Plaintext-Konvertierung durchführen | Führt die Plaintext-Konvertierung von Search it zusätzlich aus.
 
-> Hinweis: Um die Einstellungen des Plaintext-Addons zu übernehmen, muss die Indexierung erneut ausgeführt werden.
+> Hinweis: Um die Einstellungen des Plaintext-AddOns zu übernehmen, muss die Indexierung erneut ausgeführt werden.

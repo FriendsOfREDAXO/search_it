@@ -1,20 +1,20 @@
 #Konfiguration
 
+Um die Suche in Betrieb zu nehmen, sollten zunächst alle gewünschten Einstellungen vorgenommen werden und anschließend der Suchindex eingerichtet werden.
+
+> Hinweis: Es werden zu Beginn nur Artikelinhalte ohne Medien, Metainfos (wie bspw. dem Artikelname) oder zusätzlichen Datenbanktabellen indexiert. Um Meta-Infos, Medien und Datenbanktabellen zu indexieren, müssen entsprechende Einstellungen bearbeitet werden.
+
 - [Wartung](#wartung)
 - [Einstellungen](#einstellungen)
     - [Index und Suchmodus](#einstellungen-suchmodus)
     - [Suchergebnis](#einstellungen-suchergebnis)
-    - [Zusätzl. Datenquellen](#einstellungen-quelle)
+    - [Zusätzliche Datenquellen](#einstellungen-quelle)
     - [Blacklist](#einstellungen-blacklist)
 - [Plaintext](#plaintext)
 - [Search Highlighter](#search_highlighter)
 
 <a name="wartung"></a>
 # Wartung
-
-Um die Suche in Betrieb zu nehmen, sollten zunächst alle gewünschten Einstellungen vorgenommen werden und anschließend der Suchindex eingerichtet werden.
-
-> Tipp: Die hier definierten Sucheinstellungen können auch direkt an der `search_it`-Klasse vorgenommen bzw. überschrieben werden, um mehrere Suchen auf einer Seite umzusetzen.
 
 Aktion | Erläuterung
 ------ | ------
@@ -27,12 +27,14 @@ Statistik löschen | Setzt die Statistik zurück. Die Anzahl aller gesuchten Beg
 <a name="einstellungen"></a>
 # Einstellungen
 
+> Tipp: Die hier definierten Sucheinstellungen können auch direkt an der `search_it`-Klasse vorgenommen bzw. überschrieben werden, um mehrere Suchen auf einer Seite umzusetzen.
+
 <a name="einstellungen-suchmodus"></a>
 ## Index und Suchmodus
 
-Dies sind die Standard-Einstellungen für jede Suche. 
+Dies sind die Standard-Einstellungen für den Aufbau eines Suchindex und die Durchführung der Suche. 
 
-> Tipp: In den erweiterten Beispielen wird erklärt, wie das Suchobjekt mit eigenen Parametern überschrieben werden kann. So lassen sich mehrere Suchen in einer Website realisieren, bspw. eine Produktsuche oder eine Mitarbeiter-Suche.
+> Tipp: In den erweiterten Beispielen wird erklärt, wie das Suchobjekt mit eigenen Parametern überschrieben werden kann. So lassen sich mehrere Suchen in einer Website umsetzen, bspw. eine Produktsuche oder eine Mitarbeiter-Suche.
 
 ### Indexierung
 
@@ -44,13 +46,13 @@ Legt fest, wie Artikel indexiert werden.
 
 Option | Erläuterung
 ------ | ------
-HTTP-GET : Indexierung der Artikel über eine HTTP-GET-Anfrage | indexiert Artikel so, als wenn Sie über das Frontend abgerufen werden.
-Artikel-Inhalte (CACHE) : Indexierung der Artikel ohne Template | indexiert nur die Artikel-Inhalte, die im REDAXO Backend angelegt wurden, ohne das Template 
-Komplette Seiten (CACHE) : Indexierung der Artikel mit Template | indexiert die vollständige Seite wie sie aus dem REDAXO Cache geliefert wird.
+Indexierung der Artikel über eine HTTP-GET-Anfrage | indexiert Artikel so, als wenn Sie über das Frontend abgerufen werden.
+Indexierung der Artikel über den Redaxo-Cache (ohne Template, nur der Artikel) | indexiert den Artikel so, wie er in __todo__ 
+Indexierung der Artikel über den Redaxo-Cache (mit Template, liefert das gleiche Ergebnis wie per HTTP-GET-Anfrage) | indexiert die vollständige Seite.
 Offline-Artikel indexieren | indexiert auch Artikel, die in der Struktur als `offline` markiert wurden.
+Extension Point `"OUTPUT_FILTER"` aufrufen | Ruft den OUTPUT_FILTER auf, bspw., wenn das SPROG-Addon benutzt wurde und die Einstellung `Indexierung der Artikel` über den Redaxo-Cache erfolgt.
 Artikel (ADD, EDIT, DELETE) automatisch (de)indexieren | indexiert automatisch neue Artikel, reindexiert bearbeitete Artikel und deindexiert Artikel, die gelöscht wurden.
-Extension Point `"OUTPUT_FILTER"` aufrufen | Ruft den OUTPUT_FILTER auf, bspw., wenn das SPROG-AddOn benutzt wurde und die Einstellung `Indexierung der Artikel` über den Redaxo-Cache erfolgt. __todo__ ***stimmt das?***
-
+Reindexieren aller Spalten, wenn Tabellen mit YForm oder form bearbeitet werden | indexiert automatisch neue YForm-/ form-Datensätze.
 
 ### Suchmodi
 
@@ -123,53 +125,59 @@ Maximale Zeichenanzahl um hervorgehobene Suchbegriffe herum | Anazhl der Zeichen
 
 ### Hervorhebung
 
+Markiert den Suchbegriff innerhalb der Suchergebnis-Liste.
+
 Langer Rede kurzer Sinn: Die Hervorhebung wird bei der Auswahl in einer Vorschau dargestellt und könnte dort nicht besser erklärt werden als hier ;)
 
 Option | Erläuterung
 ------ | ------
-Ab Anfang des Satzes, in dem mindestens einer der Suchbegriffe auftaucht | 
-Ab Anfang des Absatzes, in dem mindestens einer der Suchbegriffe auftaucht | 
-Alle gefundenen Suchbegriffe werden mit den sie umgebenden Wörtern dargestellt | 
-Für jeden gefundenen Suchbegriff wird genau eine Textstelle wiedergegeben | 
-Als Teaser, in dem eventuell vorkommende Suchebgriffe hervorgehoben sind | 
-Als Array mit allen Suchbegriffen und Textstellen | 
-Beispieltext mit Sucheingabe |
+Ab Anfang des Satzes, in dem mindestens einer der Suchbegriffe auftaucht | *Siehe Einstellung*
+Ab Anfang des Absatzes, in dem mindestens einer der Suchbegriffe auftaucht | *Siehe Einstellung*
+Alle gefundenen Suchbegriffe werden mit den sie umgebenden Wörtern dargestellt | *Siehe Einstellung*
+Für jeden gefundenen Suchbegriff wird genau eine Textstelle wiedergegeben | *Siehe Einstellung*
+Als Teaser, in dem eventuell vorkommende Suchebgriffe hervorgehoben sind | *Siehe Einstellung*
+Als Array mit allen Suchbegriffen und Textstellen | *Siehe Einstellung*
+Beispieltext mit Sucheingabe | *Siehe Einstellung*
 
+### Search Highlighter
+
+Markiert den Suchbegriff auf der tatsächlichen Seite zum Suchbegriff mit einem `<span class="">`, wenn auf den Link des Suchergebnis geklickt wurde.
+
+Option | Erläuterung
+------ | ------
+CSS-Klasse | CSS-Klasse, die das `<span>`-Element tragen soll, bspw. `search_it-hit`
 
 <a name="einstellungen-quelle"></a>
-## Zusätzliche Datenquellen
+## Zusätzl. Datenquellen
 
-Hier werden Datenquellen für die Indexierung zusätzlich zu den sichtbaren Inhalten der Redaxo-Artikeln definiert, z. B. Metainfos der Artikle, Datenbanktabellen, der Medienpool sowie externe Verzeichnisse.
-Wichtigstes Beispiel dürften hier die Metainfos wie Artikel-Titel oder Meta Descriptions sein, die durchsucht werden sollen, obwohl sie nicht im Artikel angezeigt werden.
-
+Hier werden Datenquellen für die Indexierung zusätzlich zu den Redaxo-Artikeln definiert, z. B. Datenbanktabellen, der Medienpool sowie externe Verzeichnisse.
 
 ### Datenbankspalten in die Suche einschließen
 
-Hier können DB-Spalten ausgewählt werden, die auch durchsucht werden sollen. Hierfür bietet sich zusätzliche AddOn-Felder an, z. B. `rex_article.yrewrite_description` oder Daten, die über das AddOn `yform` erstellt werden.
+Hier können DB-Spalten ausgewählt werden, die auch durchsucht werden sollen. Hierfür bietet sich zusätzliche Addon-Felder an, z. B. `rex_article.yrewrite_description` oder Daten, die über das Addon `yform` erstellt werden.
 
-> Tipp: Die Indexierung sollte nur die gewünschten Inhaltsfelder indexieren. Die `id` des gefundenden Datensatztreffers befindet sich in `$hit['fid']`, der Tabellenname in `$hit['table']`. Weitere Felder, die bei der Ausgabe benötigt weredn (bspw. Bilder, Teaser o.ä.), sollten nicht über die Indexierung, sondern via SQL im Suchergebnis direkt abgefragt werden.
+> Tipp: Die Indexierung sollte neben den gewünschten Inhaltsfeldern auch das `id`-Feld / den Primary Key des Datensatzes indizieren sowie alle Felder, die bei der Ausgabe berücksichtigt werden sollen, bspw. Bilder, Teaser o.ä.
 
-### Dateisuche
+### Datei-Inhalte durchsuchen
 
 Die Dateisuche durchsucht angegebene Dateien nach Begriffen. Bei PDFs, deren Inhalt als Text vorliegt, wird eine Volltextsuche im PDF ermöglicht. 
 
 Option | Erläuterung
 ------ | ------
-Dateiendungen (frei lassen für beliebige Dateien) | Kommagetrennte Angabe von Dateien, die in der Medienpool-Indexierung
-Medienpool indexieren | Gibt an, ob die Tabelle `rex_media` zur Medienpool-Suche indexiert wird.
+Dateiendungen (frei lassen für beliebige Dateien) | Kommagetrennte Angabe von Dateien, die in der Medienpool-Indexierung, z. B. `txt,csv,pdf`
+`/media/`-Dateien indexieren | Gibt an, ob das Verzeichnis `/media/` indexiert werden soll.
 Verzeichnistiefe | Gibt an, bis zu welcher Tiefe Dateien in den ausgewählten Verzeichnissen indexiert werden sollen.
 Folgende Ordner in die Suche einschließen | Externe Ordner innerhalb der Redaxo-Installation werden indexiert.
-Unterordner auswählen |
+Unterordner auswählen | 
 
-
-<a name="einstellungen-blacklist"></a>
+<a name="blacklist"></a>
 ## Blacklist
 
 ### Wörter, Kategorien und Artikel von der Suche ausschließen
 
 Schließt Begriffe, Artikel und Kategorien standardmäßig von der Suche aus. 
 
-> Hinweis: Diese Einstellungen betreffen nur die Suchergebnisse und können in der `search_it`-Klasse überschrieben werden. Begriffe, Kategorien und Artikel werden trotzdem bei der Indexierung berücksichtigt. __todo__ ***Stimmt das?***
+> Hinweis: Diese Einstellungen betreffen nur die Suchergebnisse und können in der `search_it`-Klasse überschrieben werden. Begriffe, Kategorien und Artikel werden trotzdem bei der Indexierung berücksichtigt.
 
 Option | Erläuterung
 ------ | ------
@@ -182,22 +190,14 @@ Kategorien | Kategorien (`rex_category`-IDs), die von der Suche ausgeschlossen w
 <a name="plaintext"></a>
 # Plaintext
 
-Option | Erläuterung
------- | ------
-CSS-Selektoren (komma-separiert) | __todo__
-Reguläre Ausdrücke | __todo__
-Textile parsen | __todo__
-HTML-Tags entfernen | __todo__
-Standard-Plaintext-Konvertierung durchführen | __todo__
-
-<a name="search_highlighter"></a>
-# Search Highlighter
+> Tipp: Die Reihenfolge der nachfolgenden Optionen lässt sich per Drag & Drop festlegen.
 
 Option | Erläuterung
 ------ | ------
-Tag um die Suchbegriffe | __todo__
-Class | __todo__
-inline CSS | __todo__
-Stil CSS einbinden | __todo__
-Stil (CSS) | __todo__
-Eigener Stil | __todo__
+CSS-Selektoren | Kommagetrennte Liste an Selektoren, deren Inhalte von der Suche auschgeschlossen werden. Bspw. werden mit `div.donotsearch` alle Inhalte der entsprechenden `<div>`-Elemente nicht in den Index übernommen. 
+Reguläre Ausdrücke | Reguläre Ausdrücke, die im Suchindex ersetzt werden sollen. In jeder ungeraden Zeile wird das Suchmuster festgelegt, in jeder darauffolgenden Zeile das Ersetzungsmuster.
+Textile parsen | Führt die Funktion `rex_textile::parse()` aus.
+HTML-Tags entfernen | Wendet die Funktion `strip_tags()` auf den Plaintext an.
+Standard-Plaintext-Konvertierung durchführen | Führt die Plaintext-Konvertierung von Search it zusätzlich aus.
+
+> Hinweis: Um die Einstellungen des Plaintext-Addons zu übernehmen, muss die Indexierung erneut ausgeführt werden.

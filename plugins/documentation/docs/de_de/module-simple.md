@@ -63,7 +63,7 @@ if($request) { // Wenn ein Suchbegriff eingegeben wurde
 	# dump($result); // Zum Debuggen ausgeben.
 
     if($result['count']) { // Wenn Ergebnisse vorhanden sind...
-        echo '<h2 class="search_it-headline">{{ Suchergebnisse }}</h2>'; // Sprog-Addon zur Übersetzung benutzen
+        echo '<h2 class="search_it-headline">{{ Suchergebnisse }}</h2>'; // Sprog-AddOn zur Übersetzung benutzen
 
         echo '<ul class="search_it-results">';                           
         foreach($result['hits'] as $hit) { // Jeder Treffer in $hit

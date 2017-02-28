@@ -19,15 +19,15 @@
 
 ## Reindexierung von Artikeln via Cronjob
 
-`Search it` fügt ein eigenes Cronjob-Profil hinzu, das sich im Cronjob-Addon zeitgesteuert ausführen lässt.
+`Search it` fügt ein eigenes Cronjob-Profil hinzu, das sich im Cronjob-AddOn zeitgesteuert ausführen lässt.
 
 ## Reindexierung von Datenbank-Feldern
 
 Die Klasse `search_it` bietet allerdings die Methode `indexColumn` an. Über diese Methode können Datenbankspalten neu oder wieder indexiert werden. Müssen die Datenbankspalten nur zu einem bestimmten Datensatz indexiert werden, kann außerdem die ID dieses Datensatzes angegeben werden. Search it wird dann auch nur den betroffenen Datensatz reindexieren.
 
-### Für Addons
+### Für AddOns
 
-Ein Addon arbeitet mit einer eigenen Datenbank-Tabelle, hier: `table`. Search it soll Inhalte dieses Addons auch automatisch reindexieren. Da das Addon selbst weiß, wann die Beispieldatenbank-Feld `field` reindexiert werden soll, kann die Methode `indexColumn` von diesem Addon aufgerufen werden:
+Ein AddOn arbeitet mit einer eigenen Datenbank-Tabelle, hier: `table`. Search it soll Inhalte dieses AddOns auch automatisch reindexieren. Da das AddOn selbst weiß, wann die Beispieldatenbank-Feld `field` reindexiert werden soll, kann die Methode `indexColumn` von diesem AddOn aufgerufen werden:
  
 ```
 $search_it = new search_it;

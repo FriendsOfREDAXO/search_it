@@ -13,6 +13,27 @@ if (rex_post('sendit', 'boolean')) {
 
     ]);
 
+
+    $changed = array_keys(array_merge(array_diff_assoc($posted_config,$this->getConfig()), array_diff_assoc($this->getConfig(),$posted_config)));
+    foreach ( array(
+                  'order',
+                  'selectors',
+                  'regex',
+                  'textile',
+                  'striptags',
+                  'processparent',
+              ) as $index ) {
+        if ( in_array($index, $changed) ){
+            echo rex_view::warning($this->i18n('search_it_settings_saved_warning')); break;
+        } elseif ( is_array($this->getConfig($index)) && is_array($posted_config[$index]) ) { // Der Konfig-Wert ist ein Array
+            if ( count(array_merge(
+                    array_diff_assoc($this->getConfig($index), $posted_config[$index]),
+                    array_diff_assoc($posted_config[$index], $this->getConfig($index)) )) > 0 ) {
+                echo rex_view::warning($this->i18n('search_it_settings_saved_warning')); break;
+            }
+        }
+    }
+
     // do it
     $this->setConfig($posted_config);
 
@@ -71,7 +92,7 @@ foreach (explode(',', $this->getConfig('order')) as $elem) {
                         'type' => 'text',
                         'id' => 'search_it_plaintext_regex',
                         'name' => 'search_it_plaintext[regex]',
-                        'label' => rex_i18n::rawMsg('search_it_plaintext_regex_label'),
+                        'label' => rex_i18n::Msg('search_it_plaintext_regex_label'),
                         'value' => !empty($this->getConfig('regex')) ? htmlspecialchars($this->getConfig('regex')) : ''
                     )
                 ), 'edit', true

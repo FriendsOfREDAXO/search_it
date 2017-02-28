@@ -1,6 +1,7 @@
 #Änderungen von search_it
 
   - PlugIn Permissions @DanielWeitenauer
+  - Fehlermeldung im SystemLog, wenn HTTP-GET Indexierung scheitert.
 
 ##Version 6.1.5 (2017-02-17)
   - Extensionpoint "SLICE_SHOW" ist wirklich nicht mehr nötig --> entfernt, thx @darwin26 

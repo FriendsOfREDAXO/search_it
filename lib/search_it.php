@@ -249,10 +249,12 @@ class search_it
                             $articleText = $response->getBody();
                         } else {
                             $articleText = '';
+                            rex_logger::factory()->info('Socket-Fehler bei der Indexierung per HTTP-GET von '.$scanurl);
                         }
 
                     } catch (rex_socket_exception $e) {
                         $articleText = '';
+                        rex_logger::factory()->info('Socket-Fehler bei der Indexierung per HTTP-GET von '.$scanurl);
                     }
 
                 } elseif ($_id != 0) {

@@ -1,6 +1,6 @@
 # Automatische Reindexierung 
 
-`Search it` greift auf folgende Extension Points zurück, um Änderungen an den Inhalten von Redaxo-Artikeln zu erfassen:
+`Search it` greift auf folgende Extension Points zurück, um Änderungen an den Inhalten von REDAXO-Artikeln zu erfassen:
 
 * `ART_DELETED`
 * `ART_META_UPDATED`

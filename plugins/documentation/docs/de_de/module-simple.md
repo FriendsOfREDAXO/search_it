@@ -70,7 +70,7 @@ if($request) { // Wenn ein Suchbegriff eingegeben wurde
 
             # dump($hit); // Zum Debuggen ausgeben.
             if($hit['type'] == 'article') { // Wenn der Treffer aus der Artikelsuche stammt 
-                $article = rex_article::get($hit['fid']); // Redaxo-Artikel-Objekt holen
+                $article = rex_article::get($hit['fid']); // REDAXO-Artikel-Objekt holen
                 echo '<li class="search_it-result search_it-article">
                           <p class="search_it-title">
                               <a href="'.$server.rex_getUrl($hit['fid'], $hit['clang'], array('search_highlighter' => $request)).'" title="'.$article->getName().'">'.$article->getName().'</a>
@@ -79,7 +79,7 @@ if($request) { // Wenn ein Suchbegriff eingegeben wurde
                           <p class="search_it-teaser">'.$hit['highlightedtext'].'</p>
                       </li>'; // Ausgabe des Suchtreffers
             } else {                                   
-                // Wenn der Treffer nicht aus Redaxo-Artikeln stammt, z.B., weil Medienpool oder Datenbankspalten
+                // Wenn der Treffer nicht aus REDAXO-Artikeln stammt, z.B., weil Medienpool oder Datenbankspalten
                 // indiziert wurden. Siehe erweiterte Beispiele für die Ausgabe. Oder: Indexierung auf Artikel beschränken.
                 echo '<p class="search_it-missing_type">Das Suchergebnis vom Typ <i class="search_it-type">'.$hit['type'].' </i> kann nicht dargestellt werden.</p>';
             }

@@ -47,10 +47,10 @@ Legt fest, wie Artikel indexiert werden.
 Option | Erläuterung
 ------ | ------
 Indexierung der Artikel über eine HTTP-GET-Anfrage | indexiert Artikel so, als wenn Sie über das Frontend abgerufen werden.
-Indexierung der Artikel über den Redaxo-Cache (ohne Template, nur der Artikel) | indexiert den Artikel so, wie er in __todo__ 
-Indexierung der Artikel über den Redaxo-Cache (mit Template, liefert das gleiche Ergebnis wie per HTTP-GET-Anfrage) | indexiert die vollständige Seite.
+Indexierung der Artikel über den REDAXO-Cache (ohne Template, nur der Artikel) | indexiert den Artikel so, wie er in __todo__ 
+Indexierung der Artikel über den REDAXO-Cache (mit Template, liefert das gleiche Ergebnis wie per HTTP-GET-Anfrage) | indexiert die vollständige Seite.
 Offline-Artikel indexieren | indexiert auch Artikel, die in der Struktur als `offline` markiert wurden.
-Extension Point `"OUTPUT_FILTER"` aufrufen | Ruft den OUTPUT_FILTER auf, bspw., wenn das SPROG-AddOn benutzt wurde und die Einstellung `Indexierung der Artikel` über den Redaxo-Cache erfolgt.
+Extension Point `"OUTPUT_FILTER"` aufrufen | Ruft den OUTPUT_FILTER auf, bspw., wenn das SPROG-AddOn benutzt wurde und die Einstellung `Indexierung der Artikel` über den REDAXO-Cache erfolgt.
 Artikel (ADD, EDIT, DELETE) automatisch (de)indexieren | indexiert automatisch neue Artikel, reindexiert bearbeitete Artikel und deindexiert Artikel, die gelöscht wurden.
 Reindexieren aller Spalten, wenn Tabellen mit YForm oder form bearbeitet werden | indexiert automatisch neue YForm-/ form-Datensätze.
 
@@ -150,7 +150,7 @@ CSS-Klasse | CSS-Klasse, die das `<span>`-Element tragen soll, bspw. `search_it-
 <a name="einstellungen-quelle"></a>
 ## Zusätzl. Datenquellen
 
-Hier werden Datenquellen für die Indexierung zusätzlich zu den Redaxo-Artikeln definiert, z. B. Datenbanktabellen, der Medienpool sowie externe Verzeichnisse.
+Hier werden Datenquellen für die Indexierung zusätzlich zu den REDAXO-Artikeln definiert, z. B. Datenbanktabellen, der Medienpool sowie externe Verzeichnisse.
 
 ### Datenbankspalten in die Suche einschließen
 
@@ -167,7 +167,7 @@ Option | Erläuterung
 Dateiendungen (frei lassen für beliebige Dateien) | Kommagetrennte Angabe von Dateien, die in der Medienpool-Indexierung, z. B. `txt,csv,pdf`
 `/media/`-Dateien indexieren | Gibt an, ob das Verzeichnis `/media/` indexiert werden soll.
 Verzeichnistiefe | Gibt an, bis zu welcher Tiefe Dateien in den ausgewählten Verzeichnissen indexiert werden sollen.
-Folgende Ordner in die Suche einschließen | Externe Ordner innerhalb der Redaxo-Installation werden indexiert.
+Folgende Ordner in die Suche einschließen | Externe Ordner innerhalb der REDAXO-Installation werden indexiert.
 Unterordner auswählen | 
 
 <a name="blacklist"></a>

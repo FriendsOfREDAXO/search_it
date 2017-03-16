@@ -123,7 +123,7 @@
 
 ##Version 0.7 (2010-10-06)
   - Name des AddOns in RexSearch geändert
-  - Ausgabe der schrittweisen Indexierung bei mehrsprachigen Redaxo-
+  - Ausgabe der schrittweisen Indexierung bei mehrsprachigen REDAXO-
     installationen verbessert
 
 ##Version 0.6.1 (2010-10-04)

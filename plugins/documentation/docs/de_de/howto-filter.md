@@ -9,7 +9,7 @@ Mögliche Szenarien für eine solche View sind:
 * Nur Produkte aus einer Produkt-Tabelle, die den status "online" haben
 * Suche in mehreren Datenbanktabellen, die über Relationen mit einander verbunden sind.
 
-> **Tipp:** Mit dem Redaxo-AddOn `Adminer` lassen sich die nachfolgenden Schritte direkt aus dem Redaxo-Backend erledigen, ohne sich in `PHPMyAdmin` oder ein anderes DBMS einzuloggen.
+> **Tipp:** Mit dem REDAXO-AddOn `Adminer` lassen sich die nachfolgenden Schritte direkt aus dem REDAXO-Backend erledigen, ohne sich in `PHPMyAdmin` oder ein anderes DBMS einzuloggen.
 
 ## Schritt für Schritt-Anleitung
 
@@ -48,7 +48,7 @@ Die `VIEW` `rex_media_excel_view` ist jetzt permanent eingerichtet und zugriffsb
 
 ** 3. Search it konfigurieren **
 
-In den `Search it`-Einstellungen des Redaxo-Backends unter `Zusätzliche Datenquellen` kann jetzt `rex_media_excel_view` als Datenquelle angegeben werden. Anschließend muss der Index erneuert werden und ggf. das Suchausgabe-Modul an die Datenbanktabelle angepasst werden, siehe:
+In den `Search it`-Einstellungen des REDAXO-Backends unter `Zusätzliche Datenquellen` kann jetzt `rex_media_excel_view` als Datenquelle angegeben werden. Anschließend muss der Index erneuert werden und ggf. das Suchausgabe-Modul an die Datenbanktabelle angepasst werden, siehe:
 
 * [Aufbau der Suchergebnisse](search_it-result.md)
 * [Erweiterte Suche](module-enhanced.md)

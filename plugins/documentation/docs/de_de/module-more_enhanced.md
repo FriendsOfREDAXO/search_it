@@ -1,6 +1,6 @@
 # Weitere RexSearch-Beispiel-Module
 
-> Hinweis: Der nachfolgende Modul-Code wurde noch nicht an Search it für Redaxo 5 angpasst.
+> Hinweis: Der nachfolgende Modul-Code wurde noch nicht an Search it für REDAXO 5 angpasst.
 
 ## Suche mit Pagination
 

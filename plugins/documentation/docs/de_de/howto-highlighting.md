@@ -18,4 +18,4 @@ if($hit['type'] == 'article') {
 
 Dadruch wird der Parameter search_highlighter an die Seite übergeben und kann dort ausgelesen werden.
 
-> Hinweis: Im Gegensatz zu RexSearch für Redaxo 4 wird der Begriff nur innerhalb des `<body>`-Tags hervorgehoben, sodass Metadaten nicht umformatiert werden.
+> Hinweis: Im Gegensatz zu RexSearch für REDAXO 4 wird der Begriff nur innerhalb des `<body>`-Tags hervorgehoben, sodass Metadaten nicht umformatiert werden.

@@ -99,7 +99,7 @@ if($request) { // Wenn ein Suchbegriff eingegeben wurde
                           </p>
                       </li>'; // Ausgabe des Suchtreffers
             } else {                                   
-                // Wenn der Treffer nicht aus Redaxo-Artikeln stammt, z.B., weil Medienpool oder Datenbankspalten
+                // Wenn der Treffer nicht aus REDAXO-Artikeln stammt, z.B., weil Medienpool oder Datenbankspalten
                 // indiziert wurden. Siehe erweiterte Beispiele für die Ausgabe. Oder: Indexierung auf Artikel beschränken.
                 echo '<p class="search_it-missing_type">Das Suchergebnis vom Typ <i class="search_it-type">'.$hit['type'].' </i> kann nicht dargestellt werden.</p>';
             }

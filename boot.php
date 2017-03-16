@@ -55,14 +55,15 @@
                 'SLICE_DELETED',
                 'SLICE_UPDATED',
             );
-            foreach($extensionPoints as $ep){
-                rex_extension::register($ep, 'search_it_handle_extensionpoint');
-            }
+
+            rex_extension::register($extensionPoints, 'search_it_handle_extensionpoint');
+
         }
 
         //set default Values on installation
         if (!$this->hasConfig()) {
             $this->setConfig('limit',array(0,10));
+            $this->setConfig('automaticindex',false);
         }
         rex_view::addJsFile( $this->getAssetsUrl('search_it.js') );
         rex_view::addCssFile( $this->getAssetsUrl('search_it.css') );

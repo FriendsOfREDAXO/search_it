@@ -6,5 +6,5 @@ Dieses AddOn erzeugt einfache Statistiken mit Grafiken.
 
 
 Die Dokumentation des Plugins findest du [im alten Wiki](http://www.redaxo.org/de/wiki/index.php?n=R4.RexSearch) .
-Solltest du Fragen oder Probleme haben, kannst du diese im [Redaxo-Forum](http://forum.redaxo.de/ftopic12965) stellen.
+Solltest du Fragen oder Probleme haben, kannst du diese im [REDAXO-Forum](http://forum.redaxo.de/ftopic12965) stellen.
 

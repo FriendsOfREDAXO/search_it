@@ -41,7 +41,7 @@
         $params = $_ep->getParams();
         $article_id = $params['article']->getArticleId();
 
-        $subject = '<!-- search it '.$article_id.' -->' . $_ep->getSubject() . '<!-- /search it '.$article_id.' -->';
+        $subject = '<!-- search_it '.$article_id.' -->' . $_ep->getSubject() . '<!-- /search_it '.$article_id.' -->';
         return $subject;
 
     });

@@ -282,7 +282,9 @@ class search_it
                         $articleText = $article_content->getArticleTemplate();
                     } else {
                         $articleText = '';
-                        preg_match_all('/<!--\s*search.?it\s*([0-9]*)[^>0-9]*-->(.*)<!--\s*\/search.?it\s*(\1)[^>0-9]*-->/s', $article_content->getArticleTemplate(), $matches, PREG_SET_ORDER);
+                        //preg_match_all('/<!--\s*search.?it\s*([0-9]*)[^>0-9]*-->(.*)<!--\s*\/search.?it\s*(\1)[^>0-9]*-->/s', $article_content->getArticleTemplate(), $matches, PREG_SET_ORDER);
+                        preg_match_all('/<!--\ssearch_it\s([0-9]*)\s?-->(.*)<!--\s\/search_it\s(\1)\s?-->/s', $article_content->getArticleTemplate(), $matches, PREG_SET_ORDER);
+
                         foreach ($matches as $match) {
                             if ( $match[1] == $_id || $match[1] == '' ) {
                                 $articleText .= ' ' . $match[2];

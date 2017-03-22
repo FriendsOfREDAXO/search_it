@@ -25,13 +25,13 @@ search_it_settings_textmode_both = Search in both (HTML and plain)
 
 search_it_settings_title_indexmode = Indexing
 search_it_settings_indexmode_label = Type
-search_it_settings_indexmode_viahttp = Indexing of articles using a HTTP-GET request
-search_it_settings_indexmode_viacache = Article contents (CACHE) : Indexing of articles without template
-search_it_settings_indexmode_viacachetpl = Complete pages (CACHE) : Indexing of complete articles with template
+search_it_settings_indexmode_viacache = Article contents
+search_it_settings_indexmode_viacachetpl = Complete Output (with template, navigation & footer)
+search_it_settings_indexmode_viahttp = HTTP-GET: indexing using a HTTP-GET request
 search_it_settings_indexoffline = Index offline articles
 search_it_settings_automaticindex_label = Index and deindex articles automatically (ADD, EDIT, DELETE)
 search_it_settings_reindex_cols_onforms_label = Reindex all columns, if tables are changed through YForm or form
-search_it_settings_ep_outputfilter_label = Execute extension point "OUTPUT_FILTER"
+
 
 search_it_settings_searchmode = MySQL search mode
 search_it_settings_searchmode_like = LIKE (finds subwords, but is slower)
@@ -98,7 +98,8 @@ search_it_generate_columns = reindex tables
 
 search_it_settings_fileext_header = File search
 search_it_settings_fileext_label = Extensions (i.e. 'txt,csv,pdf' <br />(leave empty for any files)
-search_it_settings_file_mediapool = Index mediapool
+search_it_settings_file_mediapool = Index media in mediapool
+search_it_settings_additional_folders_label = And / or choose other folders:
 search_it_settings_file_dirdepth_label = Directory depth
 search_it_settings_folders_label = Include following directories
 search_it_settings_folders_dirselect_label = Select Subdirectories of depth %DEPTH%

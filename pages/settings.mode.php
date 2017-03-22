@@ -11,7 +11,6 @@ if (rex_post('config-submit', 'boolean')) {
 
         ['indexmode', 'string'],
         ['indexoffline', 'bool'],
-        ['ep_outputfilter', 'bool'],
         ['automaticindex', 'bool'],
         ['reindex_cols_onforms', 'bool'],
 
@@ -23,7 +22,6 @@ if (rex_post('config-submit', 'boolean')) {
                   'similarwordsmode',
                   'indexmode',
                   'indexoffline',
-                  'ep_outputfilter',
               ) as $index ) {
         if ( in_array($index, $changed) ){
             echo rex_view::warning($this->i18n('search_it_settings_saved_warning')); break;
@@ -60,11 +58,6 @@ $content3[] = search_it_getSettingsFormSection(
             'label' => $this->i18n('search_it_settings_indexmode_label'),
             'options' => array(
                 array(
-                    'value' => '0',
-                    'name' => $this->i18n('search_it_settings_indexmode_viahttp'),
-                    'selected' => $this->getConfig('indexmode') == '0',
-                ),
-                array(
                     'value' => '1',
                     'name' => $this->i18n('search_it_settings_indexmode_viacache'),
                     'selected' => $this->getConfig('indexmode') == '1',
@@ -73,7 +66,12 @@ $content3[] = search_it_getSettingsFormSection(
                     'value' => '2',
                     'name' => $this->i18n('search_it_settings_indexmode_viacachetpl'),
                     'selected' => $this->getConfig('indexmode') == '2',
-                )
+                ),
+                array(
+                    'value' => '0',
+                    'name' => $this->i18n('search_it_settings_indexmode_viahttp'),
+                    'selected' => $this->getConfig('indexmode') == '0',
+                ),
             )
         ),
         array(
@@ -83,14 +81,6 @@ $content3[] = search_it_getSettingsFormSection(
             'label' => $this->i18n('search_it_settings_indexoffline'),
             'value' => '1',
             'checked' => $this->getConfig('indexoffline')
-        ),
-        array(
-            'type' => 'checkbox',
-            'id' => 'search_it_ep_outputfilter',
-            'name' => 'search_config[ep_outputfilter]',
-            'label' => $this->i18n('search_it_settings_ep_outputfilter_label'),
-            'value' => '1',
-            'checked' => $this->getConfig('ep_outputfilter')
         ),
         array(
             'type' => 'checkbox',

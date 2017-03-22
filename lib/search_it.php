@@ -187,13 +187,6 @@ class search_it
         } else {
             $langs = array(rex_clang::get($_clang));
         }
-        $actual_lang = rex_clang::getCurrentId();
-
-        // start Frontend mode
-        rex::setProperty('redaxo', false);
-        // setzen von rex_article::getCurrentId()
-        $actual_article = rex_addon::get('structure')->getProperty('article_id');
-        rex_addon::get('structure')->setProperty('article_id', $_id);
 
         $return = array();
         $keywords = array();
@@ -205,7 +198,7 @@ class search_it
                 continue;
             }
 
-            rex_clang::setCurrentId($langID);
+            //rex_clang::setCurrentId($langID);
             $delete = rex_sql::factory();
             $where = sprintf("ftable = '%s' AND fid = %d AND clang = %d", $this->tablePrefix . 'article', $_id, $langID);
 
@@ -259,8 +252,6 @@ class search_it
 
                 } elseif ($_id != 0) {
 
-                    $rex_article = new rex_article_content(intval($_id), $langID);
-
                     // nur für Fehlermeldungen
                     $article_content_file = rex_path::addonCache('structure', $_id . '.' . $langID . '.content');
                     if (!file_exists($article_content_file)) {
@@ -277,14 +268,25 @@ class search_it
                     }
 
                     // den eigentlichen Inhalt holen
+                    $article_content = new rex_article_content(intval($_id), $langID);
+
                     if ($this->indexWithTemplate) {
-                        $articleText = $rex_article->getArticleTemplate();
+                        $articleText = $article_content->getArticleTemplate();
                     } else {
-                        $articleText = $rex_article->getArticle();
+                        $articleText = '';
+                        //preg_match_all('/<!--\s*search.?it\s*([0-9]*)[^>0-9]*-->(.*)<!--\s*\/search.?it\s*(\1)[^>0-9]*-->/s', $article_content->getArticleTemplate(), $matches, PREG_SET_ORDER);
+                        preg_match_all('/<!--\ssearch_it\s([0-9]*)\s?-->(.*)<!--\s\/search_it\s(\1)\s?-->/s', $article_content->getArticleTemplate(), $matches, PREG_SET_ORDER);
+
+                        foreach ($matches as $match) {
+                            if ( $match[1] == $_id || $match[1] == '' ) {
+                                $articleText .= ' ' . $match[2];
+                            }
+                        }
                     }
-                    if (rex_addon::get('search_it')->getConfig('ep_outputfilter')) {
-                        $articleText = rex_extension::registerPoint(new rex_extension_point('OUTPUT_FILTER', $articleText, array('environment' => 'frontend', 'sendcharset' => false)));
-                    }
+
+                    // Output Filter anwenden
+                    $articleText = rex_extension::registerPoint(new rex_extension_point('OUTPUT_FILTER', $articleText, array('environment' => 'frontend', 'sendcharset' => false)));
+
 
                 }
 
@@ -331,11 +333,6 @@ class search_it
                 $return[$langID] = SEARCH_IT_ART_GENERATED;
             }
         }
-
-        // end Frontend-Mode
-        rex::setProperty('redaxo', true);
-        rex_addon::get('structure')->setProperty('article_id', $actual_article);
-        rex_clang::setCurrentId($actual_lang);
 
         $this->storeKeywords($keywords, false);
 
@@ -762,7 +759,7 @@ class search_it
             $_text = trim(strip_tags(preg_replace(array('~<(head|script).+?</(head|script)>~siu', $tags2nl, '~<[^>]+>~siu', '~[\n\r]+~siu', '~[\t ]+~siu'), array('', "\n", ' ', "\n", ' '), $_text)));
         }
 
-        return $_text;
+        return preg_replace('~(\s+\n){2,}~', "\r\n", $_text);
     }
 
     /**
@@ -1302,7 +1299,7 @@ class search_it
 
 
     /* search output */
-        /**
+    /**
      * Sets the surround-tags for found keywords.
      *
      * Expects either the start- and the end-tag

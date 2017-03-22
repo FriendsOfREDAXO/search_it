@@ -36,6 +36,16 @@
     if ( rex_addon::get('cronjob')->isAvailable() && !rex::isSafeMode() ) {
         rex_cronjob_manager::registerType('rex_cronjob_reindex');
     }
+
+    rex_extension::register('ART_CONTENT', function (rex_extension_point $_ep) {
+        $params = $_ep->getParams();
+        $article_id = $params['article']->getArticleId();
+
+        $subject = '<!-- search_it '.$article_id.' -->' . $_ep->getSubject() . '<!-- /search_it '.$article_id.' -->';
+        return $subject;
+
+    });
+
     if ( rex::isBackend() && rex::getUser() ) {
         // automatic indexing
         if ( rex_addon::get('search_it')->getConfig('automaticindex') == true ){
@@ -63,7 +73,6 @@
         //set default Values on installation
         if (!$this->hasConfig()) {
             $this->setConfig('limit',array(0,10));
-            $this->setConfig('automaticindex',false);
         }
         rex_view::addJsFile( $this->getAssetsUrl('search_it.js') );
         rex_view::addCssFile( $this->getAssetsUrl('search_it.css') );

@@ -25,13 +25,13 @@ search_it_settings_textmode_both = Durchsuche beides (HTML und Plain)
 
 search_it_settings_title_indexmode = Indexierung
 search_it_settings_indexmode_label = Art und Weise
-search_it_settings_indexmode_viahttp = HTTP-GET : Indexierung der Artikel über eine HTTP-GET-Anfrage
-search_it_settings_indexmode_viacache = Artikel-Inhalte (CACHE) : Indexierung der Artikel ohne Template
-search_it_settings_indexmode_viacachetpl = Komplette Seiten (CACHE) : Indexierung der Artikel mit Template
+search_it_settings_indexmode_viacache = Artikel-Inhalte
+search_it_settings_indexmode_viacachetpl = Komplette Ausgabe (mit Template, Navigation und Footer)
+search_it_settings_indexmode_viahttp = HTTP-GET: Indexierung über eine HTTP-GET-Anfrage
 search_it_settings_indexoffline = Offline-Artikel indexieren
 search_it_settings_automaticindex_label = Artikel (ADD, EDIT, DELETE) automatisch (de)indexieren
 search_it_settings_reindex_cols_onforms_label = Reindexieren aller Spalten, wenn Tabellen mit YForm oder form bearbeitet werden
-search_it_settings_ep_outputfilter_label = Extension Point "OUTPUT_FILTER" aufrufen
+
 
 search_it_settings_searchmode = MySQL-Suchmodus
 search_it_settings_searchmode_like = LIKE (findet auch Teilwörter, aber langsamer)
@@ -98,7 +98,8 @@ search_it_generate_columns = Tabellen neu-indexieren
 
 search_it_settings_fileext_header = Datei-Inhalte durchsuchen
 search_it_settings_fileext_label = Dateiendungen (z.B. <code>txt,csv,pdf</code>)<br />(frei lassen für beliebige Dateien)
-search_it_settings_file_mediapool = <code>/media/</code>-Dateien indexieren
+search_it_settings_file_mediapool = Medien im Medienpool indexieren
+search_it_settings_additional_folders_label = Und / Oder andere Ordner auswählen:
 search_it_settings_file_dirdepth_label = Verzeichnistiefe
 search_it_settings_folders_label = Folgende Ordner in die Suche einschließen
 search_it_settings_folders_dirselect_label = Unterordner der Tiefe %DEPTH% auswählen

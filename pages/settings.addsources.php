@@ -37,7 +37,7 @@ if (rex_post('config-submit', 'boolean')) {
         $posted_config['include'] = array();
     }
 
-    $changed = array_keys(array_merge(array_diff_assoc($posted_config,$this->getConfig()), array_diff_assoc($this->getConfig(),$posted_config)));
+    $changed = array_keys(array_merge(array_diff_assoc(array_map('serialize',$posted_config),array_map('serialize',$this->getConfig())), array_diff_assoc(array_map('serialize',$this->getConfig()),array_map('serialize',$posted_config))));
     foreach ( $posted_config as $index=>$val ) {
         if ( in_array($index, $changed) ){
             echo rex_view::warning($this->i18n('search_it_settings_saved_warning')); break;
@@ -141,12 +141,20 @@ $content3[] = search_it_getSettingsFormSection(
             'value' => !empty($this->getConfig('fileextensions')) ? htmlspecialchars(implode(',',$this->getConfig('fileextensions'))) : ''
         ),
         array(
+            'type' => 'directoutput',
+            'output' => '<div class="rex-form-row"></div>'
+        ),
+        array(
             'type' => 'checkbox',
             'id' => 'search_it_settings_file_mediapool',
             'name' => 'search_config[indexmediapool]',
             'label' => $this->i18n('search_it_settings_file_mediapool'),
             'value' => '1',
             'checked' => !empty($this->getConfig('indexmediapool'))
+        ),
+        array(
+            'type' => 'directoutput',
+            'output' => '<div class="rex-form-row"><br><label>'.$this->i18n('search_it_settings_additional_folders_label').'</label></div>'
         ),
         array(
             'type' => 'select',

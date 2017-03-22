@@ -141,12 +141,20 @@ $content3[] = search_it_getSettingsFormSection(
             'value' => !empty($this->getConfig('fileextensions')) ? htmlspecialchars(implode(',',$this->getConfig('fileextensions'))) : ''
         ),
         array(
+            'type' => 'directoutput',
+            'output' => '<div class="rex-form-row"></div>'
+        ),
+        array(
             'type' => 'checkbox',
             'id' => 'search_it_settings_file_mediapool',
             'name' => 'search_config[indexmediapool]',
             'label' => $this->i18n('search_it_settings_file_mediapool'),
             'value' => '1',
             'checked' => !empty($this->getConfig('indexmediapool'))
+        ),
+        array(
+            'type' => 'directoutput',
+            'output' => '<div class="rex-form-row"><br><label>'.$this->i18n('search_it_settings_additional_folders_label').'</label></div>'
         ),
         array(
             'type' => 'select',

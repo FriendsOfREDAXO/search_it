@@ -99,6 +99,7 @@ search_it_generate_columns = reindex tables
 search_it_settings_fileext_header = File search
 search_it_settings_fileext_label = Extensions (i.e. 'txt,csv,pdf' <br />(leave empty for any files)
 search_it_settings_file_mediapool = Index media in mediapool
+search_it_settings_additional_folders_label = And / or choose other folders:
 search_it_settings_file_dirdepth_label = Directory depth
 search_it_settings_folders_label = Include following directories
 search_it_settings_folders_dirselect_label = Select Subdirectories of depth %DEPTH%

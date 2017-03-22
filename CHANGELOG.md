@@ -8,6 +8,7 @@
   - Schrittweise Indexierung indexiert jetzt auch Medienpool Dateien #92 @skerbis
   - Notices entfernt beim Speichern von geänderten Einstellungen
   - Einstellung "Output Filter anwenden" entfernt ( wird jetzt immer angewendet )
+  - Darstellung der Einstellungen für Datei-Indexierung verbessert
 
 ##Version 6.1.5 (2017-02-17)
   - Extensionpoint "SLICE_SHOW" ist wirklich nicht mehr nötig --> entfernt, thx @darwin26 

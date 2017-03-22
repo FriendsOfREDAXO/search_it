@@ -1,5 +1,6 @@
 #Änderungen von search_it
 
+##Version 6.2.0 (2017-03-22)
   - PlugIn Permissions @DanielWeitenauer
   - Fehlermeldung im SystemLog, wenn HTTP-GET Indexierung scheitert.
   - Plaintext PlugIn: Änderung der Einstellungen muss Meldung zum Suchindex erneuern bringen #86

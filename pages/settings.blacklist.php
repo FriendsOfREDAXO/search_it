@@ -18,7 +18,7 @@ if (rex_post('config-submit', 'boolean')) {
     }
 
 
-    $changed = array_keys(array_merge(array_diff_assoc($posted_config,$this->getConfig()), array_diff_assoc($this->getConfig(),$posted_config)));
+    $changed = array_keys(array_merge(array_diff_assoc(array_map('serialize',$posted_config),array_map('serialize',$this->getConfig())), array_diff_assoc(array_map('serialize',$this->getConfig()),array_map('serialize',$posted_config))));
     foreach ( $posted_config as $index=>$val ) {
         if ( in_array($index, $changed) ){
             echo rex_view::warning($this->i18n('search_it_settings_saved_warning')); break;

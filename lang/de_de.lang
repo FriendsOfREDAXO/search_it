@@ -98,7 +98,7 @@ search_it_generate_columns = Tabellen neu-indexieren
 
 search_it_settings_fileext_header = Datei-Inhalte durchsuchen
 search_it_settings_fileext_label = Dateiendungen (z.B. <code>txt,csv,pdf</code>)<br />(frei lassen für beliebige Dateien)
-search_it_settings_file_mediapool = <code>/media/</code>-Dateien indexieren
+search_it_settings_file_mediapool = Medien im Medienpool indexieren
 search_it_settings_file_dirdepth_label = Verzeichnistiefe
 search_it_settings_folders_label = Folgende Ordner in die Suche einschließen
 search_it_settings_folders_dirselect_label = Unterordner der Tiefe %DEPTH% auswählen

@@ -79,7 +79,7 @@ if ( !empty(rex_get('do')) AND rex_get('do') == 'incremental') {
                     if(!in_array($fileext, $this->getConfig('fileextensions'))){ continue; }
                 }
                 #$js_output .= 'index("mediapool",new Array("'.urlencode($file['filename']).'","'.urlencode($file['file_id']).'","'.urlencode($file['category_id']).'"));';
-                $js_output .= 'indexArray.push(new Array("mediapool",new Array("'.urlencode($file['filename']).'","'.urlencode($file['id']).'","'.urlencode($file['category_id']).'")));';
+                $js_output .= 'indexArray.push(new Array("mediapool",new Array("'.urlencode('media/' .$file['filename']).'","'.urlencode($file['id']).'","'.urlencode($file['category_id']).'")));';
                 $globalcount++;
             }
         }

@@ -3,7 +3,10 @@
   - PlugIn Permissions @DanielWeitenauer
   - Fehlermeldung im SystemLog, wenn HTTP-GET Indexierung scheitert.
   - Plaintext PlugIn: Änderung der Einstellungen muss Meldung zum Suchindex erneuern bringen #86
-  - "Frontend mode" entfernt #93
+  - "Frontend mode" entfernt #93 @Web-Work24 , @skerbis , @others 
+  - Leerzeilen aus dem Standard-Plaintext entfernt
+  - Schrittweise Indexierung indexiert jetzt auch Medienpool Dateien #92 @skerbis
+  - Notices entfernt beim Speichern von geänderten Einstellungen
 
 ##Version 6.1.5 (2017-02-17)
   - Extensionpoint "SLICE_SHOW" ist wirklich nicht mehr nötig --> entfernt, thx @darwin26 

@@ -46,11 +46,10 @@ Legt fest, wie Artikel indexiert werden.
 
 Option | Erläuterung
 ------ | ------
+Indexierung der Artikel über den REDAXO-Cache (nur Artikel-Inhalte) | indexiert Artikel-Inhalte aus allen Spalten __todo__ 
+Indexierung der Artikel über den REDAXO-Cache (mit Template, Navigation & Footer) | indexiert die vollständige Seite.
 Indexierung der Artikel über eine HTTP-GET-Anfrage | indexiert Artikel so, als wenn Sie über das Frontend abgerufen werden.
-Indexierung der Artikel über den REDAXO-Cache (ohne Template, nur der Artikel) | indexiert den Artikel so, wie er in __todo__ 
-Indexierung der Artikel über den REDAXO-Cache (mit Template, liefert das gleiche Ergebnis wie per HTTP-GET-Anfrage) | indexiert die vollständige Seite.
 Offline-Artikel indexieren | indexiert auch Artikel, die in der Struktur als `offline` markiert wurden.
-Extension Point `"OUTPUT_FILTER"` aufrufen | Ruft den OUTPUT_FILTER auf, bspw., wenn das SPROG-AddOn benutzt wurde und die Einstellung `Indexierung der Artikel` über den REDAXO-Cache erfolgt.
 Artikel (ADD, EDIT, DELETE) automatisch (de)indexieren | indexiert automatisch neue Artikel, reindexiert bearbeitete Artikel und deindexiert Artikel, die gelöscht wurden.
 Reindexieren aller Spalten, wenn Tabellen mit YForm oder form bearbeitet werden | indexiert automatisch neue YForm-/ form-Datensätze.
 

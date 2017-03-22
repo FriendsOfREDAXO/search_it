@@ -187,14 +187,6 @@ class search_it
         } else {
             $langs = array(rex_clang::get($_clang));
         }
-        /*
-               $actual_lang = rex_clang::getCurrentId();
-
-              // start Frontend mode
-               rex::setProperty('redaxo', false);
-               // setzen von rex_article::getCurrentId()
-               $actual_article = rex_addon::get('structure')->getProperty('article_id');
-               rex_addon::get('structure')->setProperty('article_id', $_id);*/
 
         $return = array();
         $keywords = array();
@@ -292,10 +284,9 @@ class search_it
                         }
                     }
 
-                    // Output Filter anwenden?
-                    if (rex_addon::get('search_it')->getConfig('ep_outputfilter')) {
-                        $articleText = rex_extension::registerPoint(new rex_extension_point('OUTPUT_FILTER', $articleText, array('environment' => 'frontend', 'sendcharset' => false)));
-                    }
+                    // Output Filter anwenden
+                    $articleText = rex_extension::registerPoint(new rex_extension_point('OUTPUT_FILTER', $articleText, array('environment' => 'frontend', 'sendcharset' => false)));
+
 
                 }
 
@@ -342,11 +333,6 @@ class search_it
                 $return[$langID] = SEARCH_IT_ART_GENERATED;
             }
         }
-
-/*        // end Frontend-Mode
-        rex::setProperty('redaxo', true);
-        rex_addon::get('structure')->setProperty('article_id', $actual_article);
-        rex_clang::setCurrentId($actual_lang);*/
 
         $this->storeKeywords($keywords, false);
 
@@ -1313,7 +1299,7 @@ class search_it
 
 
     /* search output */
-        /**
+    /**
      * Sets the surround-tags for found keywords.
      *
      * Expects either the start- and the end-tag

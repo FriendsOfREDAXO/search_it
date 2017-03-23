@@ -38,20 +38,8 @@ Dies sind die Standard-Einstellungen für den Aufbau eines Suchindex und die Dur
 
 ### Indexierung
 
-Bei der Indexierung durchsucht Search it alle in den Einstellungen angegebenen Orte (Artikel, Datenbank, Medienpool) und erstellt einen Suchindex-Cache. 
+Bei der Indexierung durchsucht Search it alle in den Einstellungen angegebenen Orte (Artikel, Datenbank, Medienpool) und erstellt einen Suchindex. 
 
-#### Art und Weise
-
-Legt fest, wie Artikel indexiert werden.
-
-Option | Erläuterung
------- | ------
-Indexierung der Artikel über den REDAXO-Cache (nur Artikel-Inhalte) | indexiert Artikel-Inhalte aus allen Spalten __todo__ 
-Indexierung der Artikel über den REDAXO-Cache (mit Template, Navigation & Footer) | indexiert die vollständige Seite.
-Indexierung der Artikel über eine HTTP-GET-Anfrage | indexiert Artikel so, als wenn Sie über das Frontend abgerufen werden.
-Offline-Artikel indexieren | indexiert auch Artikel, die in der Struktur als `offline` markiert wurden.
-Artikel (ADD, EDIT, DELETE) automatisch (de)indexieren | indexiert automatisch neue Artikel, reindexiert bearbeitete Artikel und deindexiert Artikel, die gelöscht wurden.
-Reindexieren aller Spalten, wenn Tabellen mit YForm oder form bearbeitet werden | indexiert automatisch neue YForm-/ form-Datensätze.
 
 ### Suchmodi
 

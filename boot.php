@@ -37,15 +37,16 @@
         rex_cronjob_manager::registerType('rex_cronjob_reindex');
     }
 
-    rex_extension::register('ART_CONTENT', function (rex_extension_point $_ep) {
-        $params = $_ep->getParams();
-        $article_id = $params['article']->getArticleId();
+    if ( rex_request('search_it_build_index','string','') != '' ) {
+        rex_extension::register('ART_CONTENT', function (rex_extension_point $_ep) {
+            $params = $_ep->getParams();
+            $article_id = $params['article']->getArticleId();
+            if ( rex_request('search_it_build_index','string','') == 'redirect' ) { $article_id = ''; }
+            $subject = '<!-- search_it ' . $article_id . ' -->' . $_ep->getSubject() . '<!-- /search_it ' . $article_id . ' -->';
+            return $subject;
 
-        $subject = '<!-- search_it '.$article_id.' -->' . $_ep->getSubject() . '<!-- /search_it '.$article_id.' -->';
-        return $subject;
-
-    });
-
+        });
+    }
     if ( rex::isBackend() && rex::getUser() ) {
         // automatic indexing
         if ( rex_addon::get('search_it')->getConfig('automaticindex') == true ){

@@ -1,5 +1,9 @@
 #Änderungen von search_it
 
+##Version 6.3.0 (2017-03-23)
+  - Indexmodi alle entfernt. Es wird nur noch Frontend indexiert.
+  - die Tags werden nur noch bei der Indexierung eingefügt
+  
 ##Version 6.2.0 (2017-03-22)
   - PlugIn Permissions @DanielWeitenauer
   - Fehlermeldung im SystemLog, wenn HTTP-GET Indexierung scheitert.

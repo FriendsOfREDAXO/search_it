@@ -47,9 +47,6 @@ class search_it
     private $similarwordsPermanent = false;
     private $searchMode = 'like';
 
-    private $indexViaHTTP = false;
-    private $indexWithTemplate = false;
-
     private $surroundTags = array('<strong>', '</strong>');
     private $limit = array(0, 10);
     private $maxTeaserChars = 200;
@@ -79,10 +76,6 @@ class search_it
             $this->similarwords = (bool)$this->similarwordsMode;
             $this->similarwordsPermanent = rex_addon::get('search_it')->getConfig('similarwords_permanent');
             $this->setSearchMode(rex_addon::get('search_it')->getConfig('searchmode'));
-
-            $this->indexViaHTTP = intval(rex_addon::get('search_it')->getConfig('indexmode')) == 0;
-            $this->indexWithTemplate = intval(rex_addon::get('search_it')->getConfig('indexmode')) == 2;
-
 
             $this->setSurroundTags(rex_addon::get('search_it')->getConfig('surroundtags'));
             $this->setLimit(rex_addon::get('search_it')->getConfig('limit'));
@@ -222,18 +215,19 @@ class search_it
             // index article
             $article = rex_article::get(intval($_id), $langID);
 
-            if (is_object($article) AND ($article->isOnline() OR rex_addon::get('search_it')->getConfig('indexoffline'))) {
+            if (is_object($article) AND ($article->isOnline() OR rex_addon::get('search_it')->getConfig('indexoffline')) AND $_id != 0
+                AND ($_id != rex_article::getNotfoundArticleId() OR $_id == rex_article::getSiteStartArticleId())  ) {
 
-                if ($this->indexViaHTTP) {
 
-                    try {
-                        $scanurl = rtrim(rex::getServer(), "/") . '/' . str_replace(array('../', './'), '', rex_getUrl($_id, $langID));
+                 try {
+                        $scanurl = rtrim(rex::getServer(), "/") . '/' . str_replace(array('../', './'), '', rex_getUrl($_id, $langID,array('search_it_build_index'=>'do it, baby'),'&'));
                         $files_socket = rex_socket::factoryURL($scanurl);
                         $response = $files_socket->doGet();
 
                         $redircount = 0;
                         while ($response->isRedirection() && $redircount < 3) {
                             $scanurl = rtrim(rex::getServer(), "/") . '/' . str_replace(array('../', './'), '', $response->getHeader('location'));
+                            $scanurl .= (strpos($scanurl,'&') !== false ? '&' : '?').'search_it_build_index=redirect';
                             $files_socket = rex_socket::factoryURL($scanurl);
                             $response = $files_socket->doGet();
                             $redircount++;
@@ -248,47 +242,18 @@ class search_it
                     } catch (rex_socket_exception $e) {
                         $articleText = '';
                         rex_logger::factory()->info('Socket-Fehler bei der Indexierung per HTTP-GET von '.$scanurl);
+
                     }
 
-                } elseif ($_id != 0) {
 
-                    // nur für Fehlermeldungen
-                    $article_content_file = rex_path::addonCache('structure', $_id . '.' . $langID . '.content');
-                    if (!file_exists($article_content_file)) {
-                        $generated = rex_content_service::generateArticleContent($_id, $langID);
-                        if ($generated !== true) {
-                            $return[$v] = SEARCH_IT_ART_IDNOTFOUND;
-                            continue;
+                    // regex time
+                    preg_match_all('/<!--\ssearch_it\s([0-9]*)\s?-->(.*)<!--\s\/search_it\s(\1)\s?-->/s', $articleText, $matches, PREG_SET_ORDER);
+                    $articleText = '';
+                    foreach ($matches as $match) {
+                        if ( $match[1] == $_id || $match[1] == '' ) {
+                            $articleText .= ' ' . $match[2];
                         }
                     }
-
-                    if (file_exists($article_content_file) AND preg_match('~(header\s*\(\s*["\']\s*Location\s*:)|(rex_redirect\s*\()~isu', rex_file::get($article_content_file))) {
-                        $return[$v] = SEARCH_IT_ART_REDIRECT;
-                        continue;
-                    }
-
-                    // den eigentlichen Inhalt holen
-                    $article_content = new rex_article_content(intval($_id), $langID);
-
-                    if ($this->indexWithTemplate) {
-                        $articleText = $article_content->getArticleTemplate();
-                    } else {
-                        $articleText = '';
-                        //preg_match_all('/<!--\s*search.?it\s*([0-9]*)[^>0-9]*-->(.*)<!--\s*\/search.?it\s*(\1)[^>0-9]*-->/s', $article_content->getArticleTemplate(), $matches, PREG_SET_ORDER);
-                        preg_match_all('/<!--\ssearch_it\s([0-9]*)\s?-->(.*)<!--\s\/search_it\s(\1)\s?-->/s', $article_content->getArticleTemplate(), $matches, PREG_SET_ORDER);
-
-                        foreach ($matches as $match) {
-                            if ( $match[1] == $_id || $match[1] == '' ) {
-                                $articleText .= ' ' . $match[2];
-                            }
-                        }
-                    }
-
-                    // Output Filter anwenden
-                    $articleText = rex_extension::registerPoint(new rex_extension_point('OUTPUT_FILTER', $articleText, array('environment' => 'frontend', 'sendcharset' => false)));
-
-
-                }
 
 
                 $insert = rex_sql::factory();

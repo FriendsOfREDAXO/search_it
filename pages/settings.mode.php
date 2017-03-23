@@ -9,7 +9,6 @@ if (rex_post('config-submit', 'boolean')) {
         ['similarwords_permanent', 'bool'],
         ['searchmode', 'string'],
 
-        ['indexmode', 'string'],
         ['indexoffline', 'bool'],
         ['automaticindex', 'bool'],
         ['reindex_cols_onforms', 'bool'],
@@ -20,7 +19,6 @@ if (rex_post('config-submit', 'boolean')) {
     $changed = array_keys(array_merge(array_diff_assoc($posted_config,$this->getConfig()), array_diff_assoc($this->getConfig(),$posted_config)));
     foreach ( array(
                   'similarwordsmode',
-                  'indexmode',
                   'indexoffline',
               ) as $index ) {
         if ( in_array($index, $changed) ){
@@ -51,29 +49,6 @@ $content3[] = search_it_getSettingsFormSection(
     'search_it_index',
     $this->i18n('search_it_settings_title_indexmode'),
     array(
-        array(
-            'type' => 'select',
-            'id' => 'search_it_settings_indexmode',
-            'name' => 'search_config[indexmode]',
-            'label' => $this->i18n('search_it_settings_indexmode_label'),
-            'options' => array(
-                array(
-                    'value' => '1',
-                    'name' => $this->i18n('search_it_settings_indexmode_viacache'),
-                    'selected' => $this->getConfig('indexmode') == '1',
-                ),
-                array(
-                    'value' => '2',
-                    'name' => $this->i18n('search_it_settings_indexmode_viacachetpl'),
-                    'selected' => $this->getConfig('indexmode') == '2',
-                ),
-                array(
-                    'value' => '0',
-                    'name' => $this->i18n('search_it_settings_indexmode_viahttp'),
-                    'selected' => $this->getConfig('indexmode') == '0',
-                ),
-            )
-        ),
         array(
             'type' => 'checkbox',
             'id' => 'search_it_indexoffline',

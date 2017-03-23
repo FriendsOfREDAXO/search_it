@@ -24,10 +24,6 @@ search_it_settings_textmode_html = Durchsuche HTML-Quellcode
 search_it_settings_textmode_both = Durchsuche beides (HTML und Plain)
 
 search_it_settings_title_indexmode = Indexierung
-search_it_settings_indexmode_label = Art und Weise
-search_it_settings_indexmode_viacache = Artikel-Inhalte
-search_it_settings_indexmode_viacachetpl = Komplette Ausgabe (mit Template, Navigation und Footer)
-search_it_settings_indexmode_viahttp = HTTP-GET: Indexierung über eine HTTP-GET-Anfrage
 search_it_settings_indexoffline = Offline-Artikel indexieren
 search_it_settings_automaticindex_label = Artikel (ADD, EDIT, DELETE) automatisch (de)indexieren
 search_it_settings_reindex_cols_onforms_label = Reindexieren aller Spalten, wenn Tabellen mit YForm oder form bearbeitet werden

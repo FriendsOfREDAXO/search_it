@@ -221,6 +221,9 @@ class search_it
 
                  try {
                         $scanurl = rtrim(rex::getServer(), "/") . '/' . str_replace(array('../', './'), '', rex_getUrl($_id, $langID,array('search_it_build_index'=>'do it, baby'),'&'));
+                        if(rex_addon::get("yrewrite") && rex_addon::get("yrewrite")->isInstalled())
+                            $scanurl = rex_yrewrite::getFullUrlByArticleId($_id, $langID,array('search_it_build_index'=>'do it, baby'),'&');
+
                         $files_socket = rex_socket::factoryURL($scanurl);
                         $response = $files_socket->doGet();
 
@@ -232,6 +235,7 @@ class search_it
                             $response = $files_socket->doGet();
                             $redircount++;
                         }
+
                         if ($response->isOk()) {
                             $articleText = $response->getBody();
                         } else {
@@ -268,6 +272,8 @@ class search_it
                 $articleData['unchangedtext'] = $articleText;
                 $plaintext = $this->getPlaintext($articleText);
                 $articleData['plaintext'] = $plaintext;
+
+//                pr($articleData);
 
                 if (array_key_exists($this->tablePrefix . 'article', $this->includeColumns)) {
                     $additionalValues = array();

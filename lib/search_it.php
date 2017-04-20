@@ -235,7 +235,6 @@ class search_it
                             $response = $files_socket->doGet();
                             $redircount++;
                         }
-
                         if ($response->isOk()) {
                             $articleText = $response->getBody();
                         } else {
@@ -272,8 +271,6 @@ class search_it
                 $articleData['unchangedtext'] = $articleText;
                 $plaintext = $this->getPlaintext($articleText);
                 $articleData['plaintext'] = $plaintext;
-
-//                pr($articleData);
 
                 if (array_key_exists($this->tablePrefix . 'article', $this->includeColumns)) {
                     $additionalValues = array();

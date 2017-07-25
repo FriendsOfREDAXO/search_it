@@ -221,6 +221,9 @@ class search_it
 
                  try {
                         $scanurl = rtrim(rex::getServer(), "/") . '/' . str_replace(array('../', './'), '', rex_getUrl($_id, $langID,array('search_it_build_index'=>'do it, baby'),'&'));
+                        if(rex_addon::get("yrewrite") && rex_addon::get("yrewrite")->isAvailable())
+                            $scanurl = rex_yrewrite::getFullUrlByArticleId($_id, $langID,array('search_it_build_index'=>'do it, baby'),'&');
+
                         $files_socket = rex_socket::factoryURL($scanurl);
                         $response = $files_socket->doGet();
 

@@ -1,0 +1,14 @@
+search_it_plaintext_title = Plaintext
+search_it_plaintext = Configurações
+search_it_plaintext_description_title = Descrição
+search_it_plaintext_description = Elementos marcados com esse símbolo podem ser movidos com Drag & Drop, para modificar a ordem de execução.
+search_it_plaintext_selectors = Seletores CSS, ex: <br /><code>script,head,header,footer,div.donotsearch</code>
+search_it_plaintext_selectors_label = Todos os elementos que correspondam aos seletores serão excluídos do Plaintext.
+search_it_plaintext_regex = Expressões regulares. (separadas por linhas)
+search_it_plaintext_regex_label = Toda 1a. linha: Regex<br />Toda 2a. linha: Replacement<br /><br />Exemplo:<br /><code>'<h1>.+</h1>'</code><br /><code>' '</code>
+search_it_plaintext_striptags = Remover tags de HTML
+search_it_plaintext_striptags_label = Executa a função strip_tags().
+search_it_plaintext_textile = Analizar têxtil
+search_it_plaintext_textile_label = Executa a função rex_textile::parse().
+search_it_plaintext_processparent = Executar conversão de texto simples padrão.
+search_it_plaintext_processparent_label = Executa a conversão de texto simples padrão adicionalmente.

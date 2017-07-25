@@ -1,0 +1,39 @@
+search_it_stats_title = Estatísticas
+search_it_stats_plugin_title = Estatísticas
+search_it_stats_plugin_info = Estatísticas sobre buscas
+search_it_stats_truncate = Atenção! Deletár as estatísticas é uma ação irreversível.
+search_it_stats_truncate_button = Deletar estatísticas
+search_it_stats_truncate_done = Estatísticas deletada
+search_it_stats_truncate_confirm = Deseja realmente apagar todos os dados?
+
+search_it_stats_generalstats_title = Dados gerais
+search_it_stats_generalstats_005_datasetcount = Número de registros indexados:
+search_it_stats_generalstats_010_uniquedatasetcount = Número de conjuntos de dados únicos (por exemplo, artigos agrupados):
+search_it_stats_generalstats_020_averageresultcount = Número médio de conjuntos de resultados exibidos:
+search_it_stats_generalstats_030_searchescount = Quantidade de buscas realizadas:
+search_it_stats_generalstats_040_successfullsearchescount = Quantidade de buscas bem sucedidas:
+search_it_stats_generalstats_050_failedsearchescount = Quantidade de buscas mal sucedidas:
+search_it_stats_generalstats_060_uniquesearchterms = Quantidade de termos de busca únicos:
+search_it_stats_generalstats_070_keywordcount = Número de palavras-chave distintas armazenadas no índice de pesquisa:
+search_it_stats_generalstats_075_cachedsearchcount = Número de pesquisas em cache:
+search_it_stats_generalstats_080_searchindexdatalength = Tamanho do índice da tabela de índices (search_it_index):
+search_it_stats_generalstats_090_searchindexindexlength = Tamanho dos dados da tabela de índice (search_it_index):
+search_it_stats_generalstats_100_datalength = Tamanho dos índices de todos os It-tables:
+search_it_stats_generalstats_110_indexlength = Tamanho dos dados de todos os It-tables:
+
+search_it_stats_topsearchterms_titletitle = Principais termos de pesquisa
+search_it_stats_topsearchterms_title = Os {0} principais termos de pesquisa ({1} termos de pesquisa diferentes no total)
+search_it_stats_topsearchterms_none = Nenhum termo de pesquisa ainda.
+
+search_it_stats_general_title = Gráficos gerais
+search_it_stats_rate_success_failure = Pesquisas bem sucedidas / mal sucedidas {0} ({1} buscas executadas)
+search_it_stats_rate_success_failure_lblsuccess = Bem sucedido
+search_it_stats_rate_success_failure_lblmiss = Falhou
+search_it_stats_general_timestats = Contagem de buscas dos {0} últimos meses
+search_it_stats_general_timestats_count = Contagem de buscas
+search_it_stats_general_timestats_countcumu = Contagem acumulada
+
+search_it_stats_searchterm_timestats_titletitle = Histórico de pesquisa
+search_it_stats_searchterm_timestats_title = Visão geral para {0} durante os últimos {1} meses
+search_it_stats_searchterm_timestats_title0_all = todos os termos de pesquisa
+search_it_stats_searchterm_timestats_title0_single = {0}

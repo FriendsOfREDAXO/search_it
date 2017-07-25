@@ -1,0 +1,109 @@
+search_it_title = Buscar
+search_it_settings = Configurações
+search_it_generate = Manutenção
+search_it_readme = Readme
+
+search_it_info = Search AddOn
+search_it_infotext = Search AddOn
+search_it_reindex = Search it: reindex
+
+search_it_settings_mode = Index e Busca
+search_it_settings_result = Resultado da busca
+search_it_settings_addsources = Adicionar fontes dos dados
+search_it_settings_blacklist = Blacklist
+
+search_it_settings_logicalmode = Modo de busca lógica
+search_it_settings_logicalmode_and = Busca conjuntiva (E)
+search_it_settings_logicalmode_or = Busca disjuntiva (OU)
+
+search_it_settings_modi_header = Modos de pesquisa
+
+search_it_settings_textmode = Modo textual
+search_it_settings_textmode_plain = Buscar no texto (plain)
+search_it_settings_textmode_html = Buscar código fonte - HTML
+search_it_settings_textmode_both = Buscar em ambos (HTML e plain)
+
+search_it_settings_title_indexmode = Indexação
+search_it_settings_indexoffline = Indexar artigos offline
+search_it_settings_automaticindex_label = Indexar e de-indexar artigos automaticamente (ADD, EDIT, DELETE)
+search_it_settings_reindex_cols_onforms_label = Re-indexar todas as colunas se as tabelas foram modificadas com Yform ou form
+
+
+search_it_settings_searchmode = Modo de busca MySQL
+search_it_settings_searchmode_like = Like (também encontra palavras parciais, mas mais lento)
+search_it_settings_searchmode_match = MATCH AGAINST (Localiza apenas palavras inteiras, mais rápido)
+
+search_it_settings_highlight_header = Aparência de textos destacados
+search_it_settings_surroundtags_start = Start-Tag
+search_it_settings_surroundtags_end = End-Tag
+
+search_it_settings_limit = Quantidade máxima de resultados
+search_it_settings_maxteaserchars = Máximo de caracteres para Teaser
+search_it_settings_maxhighlightchars = Contagem máxima de caracteres em torno de textos destacados
+
+search_it_settings_highlight_label = Tipo de destaque
+search_it_settings_highlight_sentence = Desde o início da frase, em que pelo menos um dos termos apareça
+search_it_settings_highlight_paragraph = Desde o início do parágrafo em que pelo menos um dos termos apareça
+search_it_settings_highlight_surroundtext = Todos os termos encontrados são exibidos com as palavras circuladas
+search_it_settings_highlight_surroundtextsingle = Para cada termo de pesquisa encontrado é reproduzido com precisão uma passagem
+search_it_settings_highlight_teaser = Como Teaser, em que eventuais pesquisas são realçadas.
+search_it_settings_highlight_array = Como um arraz com todas as palavras e passagens
+search_it_settings_highlight_sample = Exemplo para pesquisa
+search_it_settings_search_highlighter = Buscar destaque
+search_it_settings_highlighterclass = Se você inserir aqui uma classe CSS, toda o termo de busca encontrado será envolto por um elemento <span> com essa classe, quando um resultado de pesquisa for clicado e exibe.
+
+search_it_settings_similarwords_label = Pesquisa por similiridade
+search_it_settings_similarwords_none = Desativar
+search_it_settings_similarwords_soundex = Soundex
+search_it_settings_similarwords_metaphone = Metaphone
+search_it_settings_similarwords_cologne = Kölner Phonetik (DE)
+search_it_settings_similarwords_all = Todos
+search_it_settings_similarwords_permanent = Realizar a busca por similiridade também quando os resultados estiverem disponíveis.
+
+search_it_settings_exclude = Excluir palavras, categorias e artigos da busca
+search_it_settings_exclude_blacklist = Palavras (separadas por vírgula)
+search_it_settings_exclude_categories = Categorias
+search_it_settings_exclude_articles = Artigos
+
+search_it_settings_include = Incluir base de dados de tabelas
+
+search_it_settings_submitbutton = Salvar configurações
+search_it_settings_saved = Configurações salvas
+search_it_settings_saved_warning = O índice de pesquisa precisa ser substituído.
+
+search_it_generate_actions_title = Ações
+search_it_generate_full = Gerar Index completo
+search_it_generate_full_text = A tabela de índice será descartada e reconstruída.
+search_it_generate_incremental = Criar Index gradualmente
+search_it_generate_incremental_text = Para problemas com o tempo máximo de execução de script  (max_execution_time), o índice pode ser criado gradualmente.
+search_it_generate_incremental_confirm = Começar a indexação progressiva?
+search_it_generate_delete_cache = Limpar cachê de busca
+search_it_generate_delete_cache_text = Se um re-indexação não é necessária, o cache também pode ser totalmente excluído.
+search_it_generate_cache_deleted = Cachê de busca foi apagado
+search_it_generate_delete_keywords = Esvaziar o Index de palavras-chave
+search_it_generate_delete_keywords_text = Apaga todas as palavras-chave que foram coletadas através de indexação ou solicitações de busca. Essas palavras-chave são utilizadas para a busca por similiridade, entre outras,  e não devem ser deletadas.
+search_it_generate_delete_keywords_confirm = Você realmente deseja deletar todas as palavras-chave?
+search_it_generate_keywords_deleted = Plavras-chave deletadas
+search_it_generate_inprogress = Gerando Index. Uma mensagem aparecerá ao término do processo.
+search_it_generate_done = Index criado
+search_it_generate_cancel = Index interrompido
+search_it_generate_duration = Tempo:
+search_it_generate_timeleft = Faltante:
+search_it_generate_articles = Re-indexar artigos
+search_it_generate_columns = Re-indexar tabelas
+
+search_it_settings_fileext_header = Arquivo de busva
+search_it_settings_fileext_label = Extensões (ex: 'txt,csv,pdf' <br />( deixar vazio para arquivos desejados)
+search_it_settings_file_mediapool = Meios de indexação no pool de mídia
+search_it_settings_additional_folders_label = E / ou selecionar outras pastas:
+search_it_settings_file_dirdepth_label = Tamanho do diretório
+search_it_settings_folders_label = Incluir os seguintes diretórios
+search_it_settings_folders_dirselect_label = Selecionar tamanho  %DEPTH% da subpasta
+
+search_it_settings_show_all = Exibir tudo
+search_it_settings_show_none = Esconder tudo
+
+search_it_ellipsis = ...
+
+search_it_cat_deleted = Todos os artigos estão incluídos no index de busca. Você tem que <a href="index.php?page=search_it/generate">reconstruir o index de busca</a>.
+

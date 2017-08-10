@@ -220,16 +220,16 @@ class search_it
 
 
                  try {
-                        $scanurl = rtrim(rex::getServer(), "/") . '/' . str_replace(array('../', './'), '', rex_getUrl($_id, $langID,array('search_it_build_index'=>'do it, baby'),'&'));
-                        if(rex_addon::get("yrewrite") && rex_addon::get("yrewrite")->isAvailable())
-                            $scanurl = rex_yrewrite::getFullUrlByArticleId($_id, $langID,array('search_it_build_index'=>'do it, baby'),'&');
-
+                        $scanurl = rtrim(rex::getServer(), "/") . '/' . ltrim(str_replace(array('../', './'), '', rex_getUrl($_id, $langID,array('search_it_build_index'=>'do it, baby'),'&')),"/");
+                        if(rex_addon::get("yrewrite") && rex_addon::get("yrewrite")->isAvailable()) {
+                            $scanurl = rex_yrewrite::getFullUrlByArticleId($_id, $langID, array('search_it_build_index' => 'do it, baby'), '&');
+                        }
                         $files_socket = rex_socket::factoryURL($scanurl);
                         $response = $files_socket->doGet();
 
                         $redircount = 0;
                         while ($response->isRedirection() && $redircount < 3) {
-                            $scanurl = rtrim(rex::getServer(), "/") . '/' . str_replace(array('../', './'), '', $response->getHeader('location'));
+                            $scanurl = rtrim(rex::getServer(), "/") . '/' . ltrim(str_replace(array('../', './'), '', $response->getHeader('location')),"/");
                             $scanurl .= (strpos($scanurl,'&') !== false ? '&' : '?').'search_it_build_index=redirect';
                             $files_socket = rex_socket::factoryURL($scanurl);
                             $response = $files_socket->doGet();

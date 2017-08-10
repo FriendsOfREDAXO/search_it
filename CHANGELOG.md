@@ -1,5 +1,8 @@
 #Änderungen von search_it
 
+  - doppelte slashes in scanurl entfernt #111 ( thx Gerry, @skerbis )
+  - yrewrite support added #105 (thx @palber ) 
+
 ##Version 6.3.0 (2017-03-23)
   - Indexmodi alle entfernt. Es wird nur noch Frontend indexiert.
   - die Tags werden nur noch bei der Indexierung eingefügt

@@ -229,8 +229,18 @@ class search_it
 
                         $redircount = 0;
                         while ($response->isRedirection() && $redircount < 3) {
-                            $scanurl = rtrim(rex::getServer(), "/") . '/' . ltrim(str_replace(array('../', './'), '', $response->getHeader('location')),"/");
+                            $scanurl = $response->getHeader('location');
+                            if(rex_addon::get("yrewrite") && rex_addon::get("yrewrite")->isAvailable()) {
+                                $host = rex_yrewrite::getHost();
+                            } else {
+                                $host = rex::getServer();
+                            }
+                            if (strpos($scanurl,'//') === false ) {
+                                $scanurl = rtrim($host, "/") . '/' . ltrim(str_replace(array('../', './'), '', $scanurl), "/");
+                            }
                             $scanurl .= (strpos($scanurl,'&') !== false ? '&' : '?').'search_it_build_index=redirect';
+                            //rex_logger::factory()->info('Redirect zu '.$scanurl);
+
                             $files_socket = rex_socket::factoryURL($scanurl);
                             $response = $files_socket->doGet();
                             $redircount++;

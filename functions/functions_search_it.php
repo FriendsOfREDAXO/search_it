@@ -715,7 +715,8 @@ function search_it_search_highlighter_output($_ep){
     $tags = array($beginn, $ende);
 
     preg_match('/<body[^>]*>(.*?)<\/body>/is', $subject, $matches);
-    $body = search_it_search_highlighter_getHighlightedText($matches[1], $suchbegriffe, $tags);
+
+    $body = search_it_search_highlighter_getHighlightedText($matches[0], $suchbegriffe, $tags);
     $subject = preg_replace('/<body[^>]*>(.*?)<\/body>/is',$body,$subject);
 
     return $subject;

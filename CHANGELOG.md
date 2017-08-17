@@ -1,5 +1,6 @@
 #Änderungen von search_it
 
+  - search_highlighter lieferte den <body> Tag nicht mit zurück #113 ( thx frood )
   - doppelte slashes in scanurl entfernt #111 ( thx Gerry, @skerbis )
   - yrewrite support added #105 (thx @palber ) 
 

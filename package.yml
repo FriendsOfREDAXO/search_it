@@ -20,6 +20,7 @@ page:
                          result: { title: 'translate:settings_result' }
                          addsources: { title: 'translate:settings_addsources' }
                          blacklist: { title: 'translate:settings_blacklist' }
+                         test: { title: 'translate:settings_test' }
 
 requires:
     redaxo: '^5.2.0'

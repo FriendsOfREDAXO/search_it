@@ -23,7 +23,7 @@ page:
                          test: { title: 'translate:settings_test' }
 
 requires:
-    redaxo: '^5.2.0'
+    redaxo: '^5.3.0'
 
 system_plugins:
     - documentation

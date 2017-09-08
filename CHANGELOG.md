@@ -1,6 +1,10 @@
 #Änderungen von search_it
 
-  - search_highlighter lieferte den <body> Tag nicht mit zurück #113 ( thx frood )
+##Version 6.3.1 (2017-09-08)
+  - Spalten Checkboxen nur noch in 2 Spalten #115 ( @tbaddade ) 
+  - css und js werden nur noch auf den eigenen Backendseiten geladen #118 ( @olien )
+  - extension point "YFORM_DATA_DELETED" wurde nicht beachtet
+  - search_highlighter lieferte den < body> Tag nicht mit zurück #113 ( thx frood )
   - doppelte slashes in scanurl entfernt #111 ( thx Gerry, @skerbis )
   - yrewrite support added #105 (thx @palber ) 
 

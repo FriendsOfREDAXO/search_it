@@ -357,7 +357,7 @@ function search_it_getSettingsFormSection($id = '', $title = '&nbsp;', $elements
                     $fragment = new rex_fragment();
                     $fragment->setVar('grouped', true);
                     $fragment->setVar('elements', $formUnterElements, false);
-                    $checkboxes .= '<div class="col-xs-3">'.$fragment->parse('core/form/checkbox.php').'</div>';
+                    $checkboxes .= '<div class="col-xs-6">'.$fragment->parse('core/form/checkbox.php').'</div>';
                 }
                 $n['label'] = '<label for="'.$element['id'].'">'.$element['label'].'</label>';
                 $n['field'] = '<div class="rex-form-col-a rex-form-text"><div class="form-group">'.$checkboxes.'</div></div>';
@@ -751,12 +751,24 @@ function search_it_reindex_cols($_ep){
     $includeColumns = is_array(rex_addon::get('search_it')->getConfig('include')) ? rex_addon::get('search_it')->getConfig('include') : array();
     $search_it = new search_it;
 
+    $didcol = false;
+    $did = false;
+    $tablename = '';
+    $wherecondition = false;
+
     if(!empty($_params['yform'])){
         $tablename = $_params['form']->params['main_table'];
         $wherecondition = $_params['form']->params['main_where'];
-    } else {
+    } else if ( !empty($_params['form'])) {
         $tablename = $_params['form']->getTableName();
         $wherecondition = $_params['form']->getWhereCondition();
+    } else if ( !empty($_params['table']) ) {
+        $tablename = $_params['table']->getTableName();
+        $didcol = 'id';
+        $did = $_params['data_id'];
+    } else {
+        rex_logger::factory()->info('keine Angabe welche Tabelle indexiert werden soll');
+        return false;
     }
 
     if(!array_key_exists($tablename, $includeColumns) OR !is_array($includeColumns[$tablename])) {
@@ -764,7 +776,7 @@ function search_it_reindex_cols($_ep){
     }
 
     foreach($includeColumns[$tablename] as $col) {
-        $search_it->indexColumn($tablename, $col, false, false, false, false, $wherecondition);
+        $search_it->indexColumn($tablename, $col, $didcol, $did, false, false, $wherecondition);
     }
 
     return true;

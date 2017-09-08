@@ -31,6 +31,7 @@
     if ( rex_addon::get('search_it')->getConfig('reindex_cols_onforms') == true ) {
         rex_extension::register('REX_FORM_SAVED', 'search_it_reindex_cols');
         rex_extension::register('REX_YFORM_SAVED', 'search_it_reindex_cols');
+        rex_extension::register('YFORM_DATA_DELETED','search_it_reindex_cols');
         rex_extension::register('REX_FORM_DELETED', 'search_it_reindex_cols');
     }
     if ( rex_addon::get('cronjob')->isAvailable() && !rex::isSafeMode() ) {
@@ -75,8 +76,11 @@
         if (!$this->hasConfig()) {
             $this->setConfig('limit',array(0,10));
         }
-        rex_view::addJsFile( $this->getAssetsUrl('search_it.js') );
-        rex_view::addCssFile( $this->getAssetsUrl('search_it.css') );
+        if ( strpos(rex_request('page','string',''),'search_it') !== false ) {
+            rex_view::addJsFile($this->getAssetsUrl('search_it.js'));
+            rex_view::addCssFile($this->getAssetsUrl('search_it.css'));
+        }
+
 	}
 
 

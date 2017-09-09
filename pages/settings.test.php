@@ -1,5 +1,5 @@
 <?php
-
+$content = '';
 $content2 = '';
 $formElements = [];
 
@@ -13,7 +13,7 @@ $content2[] = search_it_getSettingsFormSection(
             'name' => 'search_it-test[]',
             'label' => $this->i18n('search_it-test_mode'),
             'options' => [
-                ['value' => '0', 'name' => $this->i18n('search_it-test_mode-all')]//,
+                ['value' => '0', 'selected'=>'', 'name' => $this->i18n('search_it-test_mode-all')]//,
                 //['value' => 'article', 'name' => $this->i18n('search_it-test_mode-article')],
                 //['value' => 'db', 'name' => $this->i18n('search_it-test_mode-db')],
                 //['value' => 'media', 'name' => $this->i18n('search_it-test_mode-media')]

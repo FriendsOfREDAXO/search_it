@@ -1,5 +1,8 @@
 #Änderungen von search_it
 
+##Version 6.4.0 (2017-09-11)
+  - Test-Funktion im Backend @alexplusde
+
 ##Version 6.3.1 (2017-09-08)
   - Spalten Checkboxen nur noch in 2 Spalten #115 ( @tbaddade ) 
   - css und js werden nur noch auf den eigenen Backendseiten geladen #118 ( @olien )

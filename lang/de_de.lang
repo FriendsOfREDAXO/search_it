@@ -107,15 +107,20 @@ search_it_ellipsis = …
 
 search_it_cat_deleted = Alle Artikel der Kategorie sind noch im Suchindex enthalten. Sie müssen den <a href="index.php?page=search_it/generate">Suchindex erneuern</a>.
 
-search_it-testkeywords = Suchbegriff
-search_it_settings_test = Testsuche
-search_it_settings_test_legend = Einstellungen überprüfen und Suche testen
-search_it_settings_test-submit = Suchen
-search_it-test_mode = Suchmodus
-search_it_settings_test_notice = Suche ausgeführt.
-search_it_settings_test_hits = Treffer:
 
-search_it-test_mode-all = Artikel, Datenbank und Medienpool durchsuchen
-search_it-test_mode-db = Nur Datenbank
-search_it-test_mode-media = Nur Medienpool
-search_it-test_mode-article = Nur Artikel
+
+search_it_test = Testsuche
+search_it_test_keywords = Suchbegriff
+
+search_it_test_legend = Einstellungen überprüfen und Suche testen
+search_it_test_submit = Suchen
+search_it_test_mode = Suchmodus
+search_it_test_notice = Suche ausgeführt.
+search_it_test_hits = Treffer:
+
+search_it_test_result = Testsuchergebnis
+search_it_test_result_object = Testsuchergebnis-Objekt
+search_it_test_mode_all = Artikel, Datenbank und Medienpool durchsuchen
+search_it_test_mode_db = Nur Datenbank
+search_it_test_mode_media = Nur Medienpool
+search_it_test_mode_article = Nur Artikel

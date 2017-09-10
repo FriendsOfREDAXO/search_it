@@ -1,5 +1,5 @@
 package: search_it
-version: '6.3.1'
+version: '6.4.0'
 author: Friends Of REDAXO
 supportpage: https://github.com/FriendsOfREDAXO/search_it
 
@@ -20,8 +20,7 @@ page:
                          result: { title: 'translate:settings_result' }
                          addsources: { title: 'translate:settings_addsources' }
                          blacklist: { title: 'translate:settings_blacklist' }
-                         test: { title: 'translate:settings_test' }
-
+        test: { title: 'translate:test' }
 requires:
     redaxo: '^5.3.0'
 

@@ -107,3 +107,20 @@ search_it_ellipsis = ...
 
 search_it_cat_deleted = Todos os artigos estão incluídos no index de busca. Você tem que <a href="index.php?page=search_it/generate">reconstruir o index de busca</a>.
 
+
+
+search_it_test = Test search
+search_it_test_keywords = Search term
+
+search_it_test_legend = Check settinge and test search
+search_it_test_submit = Search
+search_it_test_mode = Searchmode
+search_it_test_notice = Search done.
+search_it_test_hits = Hits:
+
+search_it_test_result = Test search result
+search_it_test_result_object = Test search result object
+search_it_test_mode_all = Search articles, database and media pool
+search_it_test_mode_db = Database only
+search_it_test_mode_media = Only media pool
+search_it_test_mode_article = Only articles

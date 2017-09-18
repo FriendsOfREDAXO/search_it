@@ -32,7 +32,7 @@ $content2[] = search_it_getSettingsFormSection(
             'id' => 'search_it_test_keywords',
             'name' => 'search_it_test_keywords',
             'label' => $this->i18n('search_it_test_keywords'),
-            'value' => !empty(rex_post('searchit','string'))) ? htmlspecialchars(rex_post('searchit','string'),ENT_QUOTES, 'UTF-8') : ''
+            'value' => !empty(rex_post('searchit','string')) ? htmlspecialchars(rex_post('searchit','string'),ENT_QUOTES, 'UTF-8') : ''
         ),
         array(
             'type' => 'directoutput',

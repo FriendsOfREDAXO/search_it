@@ -1,6 +1,8 @@
 #Änderungen von search_it
 
-- im ersten Fall (Suchergebnisse als Paragraph darstellen) ist das Problem mit den diakritsichen Zeichen #106 gelöst
+##Version 6.4.1 (2017-09-18)
+ - drei Beispielmodule waren anfällig für XSS
+ - im ersten Fall (Suchergebnisse als Paragraph darstellen) ist das Problem mit den diakritsichen Zeichen #106 gelöst
 
 ##Version 6.4.0 (2017-09-11)
   - Test-Funktion im Backend @alexplusde

@@ -1413,6 +1413,8 @@ class search_it
                 for ($i = 0; $i < count($Apieces); $i++) {
                     if (preg_match('~(' . implode('|', $search) . ')~isu', $Apieces[$i])) {
                         break;
+                    } elseif (preg_match('~(' . implode('|', $search) . ')~isu', str_replace(['\'','"'],'',iconv("utf-8","ascii//TRANSLIT",$Apieces[$i])))) {
+                        break;
                     }
                 }
                 $return = '';
@@ -1519,9 +1521,9 @@ class search_it
 
             case 'teaser':
                 $search = array();
-                foreach ($this->searchArray as $keyword)
+                foreach ($this->searchArray as $keyword) {
                     $search[] = '~' . preg_quote($keyword['search'], '~') . '~isu';
-
+                }
                 return preg_replace($search, $this->surroundTags[0] . '$0' . $this->surroundTags[1], $this->getTeaserText($_text));
                 break;
         }
@@ -2102,10 +2104,12 @@ class search_it
 
         $return['hash'] = $this->cacheHash($this->searchString);
 
+
+        // and not test =1
         if ($this->similarwords AND $i) {
             $this->storeKeywords($this->searchArray);
         }
-
+        // and not test =1 ??? oder doch mit cache?
         if ($this->cache) {
             $this->cacheSearch(serialize($return), $indexIds);
         }

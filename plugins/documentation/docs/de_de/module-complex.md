@@ -170,7 +170,7 @@ Diese Beispielmodul benötigt die DB-Spalten id, name, art_description und art_k
                   $text = $hit['highlightedtext'];
                 }
             
-                $article = OOArticle::getArticleById($hit['fid']);
+                $article = rex_article::get($hit['fid']);
             
                 echo '<li>
             <h4><a href="'.($url = htmlspecialchars($article->getUrl())).'">'.$article->getName().'</a></h4>
@@ -181,7 +181,7 @@ Diese Beispielmodul benötigt die DB-Spalten id, name, art_description und art_k
             
               // Pagination
               if($result['count'] > SHOWMAX){
-                $self = OOArticle::getArticleById(REX_ARTICLE_ID);
+                $self = rex_article::get(REX_ARTICLE_ID);
                 echo '<ul class="pagination">';
                 for($i = 0; ($i*SHOWMAX) < $result['count']; $i++){
                   if(($i*SHOWMAX) == $start){
@@ -230,7 +230,7 @@ Dieses Beispielmodul erweitert das Paginationsmodul um eine Suche nach ähnliche
                   $text = $hit['highlightedtext'];
                 }
         
-                $article = OOArticle::getArticleById($hit['fid']);
+                $article = rex_article::get($hit['fid']);
         
                 echo '<li>
             <h4><a href="'.($url = htmlspecialchars($article->getUrl())).'">'.$article->getName().'</a></h4>
@@ -241,7 +241,7 @@ Dieses Beispielmodul erweitert das Paginationsmodul um eine Suche nach ähnliche
         
               // Pagination
               if($result['count'] > SHOWMAX){
-                $self = OOArticle::getArticleById(REX_ARTICLE_ID);
+                $self = rex_article::get(REX_ARTICLE_ID);
                 echo '<ul class="pagination">';
                 for($i = 0; ($i*SHOWMAX) < $result['count']; $i++){
                   if(($i*SHOWMAX) == $start){
@@ -294,7 +294,7 @@ Dieses Beispielmodul erweitert das Paginationsmodul und die Ähnlichkeitssuche u
                 if($hit['type'] == 'file' AND $hit['fileext'] == 'pdf'){
                   // PDF-Datei
                   $filename = explode('/', $hit['filename']);
-                  $pdf = OOMedia::getMediaByFileName($filename[count($filename)-1]);
+                  $pdf = rex_media::get($filename[count($filename)-1]);
         
                   echo '    <li class="pdf">
               <h4><a href="'.htmlspecialchars($pdf->getFullPath()).'">'.$pdf->getOrgFileName().'</a></h4>
@@ -303,7 +303,7 @@ Dieses Beispielmodul erweitert das Paginationsmodul und die Ähnlichkeitssuche u
             </li>';
                 } else {
                   // Artikel oder DB-Spalte aus der Artikel-Tabelle
-                  $article = OOArticle::getArticleById($hit['fid']);
+                  $article = rex_article::get($hit['fid']);
         
                   echo '    <li>
               <h4><a href="'.htmlspecialchars($article->getUrl()).'">'.$article->getName().'</a></h4>
@@ -316,7 +316,7 @@ Dieses Beispielmodul erweitert das Paginationsmodul und die Ähnlichkeitssuche u
         
               // Pagination
               if($result['count'] > SHOWMAX){
-                $self = OOArticle::getArticleById(REX_ARTICLE_ID);
+                $self = rex_article::get(REX_ARTICLE_ID);
                 echo '<ul class="pagination">';
                 for($i = 0; ($i*SHOWMAX) < $result['count']; $i++){
                   if(($i*SHOWMAX) == $start){
@@ -423,7 +423,7 @@ In dem Modul zur Präsentation der Suchergebnisse werden die entsprechenden Eins
         
                     // PDF-Datei
                     $filename = explode('/', $hit['filename']);
-                    $pdf = OOMedia::getMediaByFileName($filename[count($filename)-1]);
+                    $pdf = rex_media::get($filename[count($filename)-1]);
         
                     echo '    <li class="pdf">
               <h4><a href="'.htmlspecialchars($pdf->getFullPath()).'">'.$pdf->getOrgFileName().'</a></h4>
@@ -443,7 +443,7 @@ In dem Modul zur Präsentation der Suchergebnisse werden die entsprechenden Eins
                     }
         
                     // Artikel oder DB-Spalte aus der Artikel-Tabelle
-                    $article = OOArticle::getArticleById($hit['fid']);
+                    $article = rex_article::get($hit['fid']);
         
                     echo '    <li>
               <h4><a href="'.htmlspecialchars($article->getUrl()).'">'.$article->getName().'</a></h4>
@@ -458,7 +458,7 @@ In dem Modul zur Präsentation der Suchergebnisse werden die entsprechenden Eins
         
               // Pagination
               if($result['count'] > $showmax){
-                $self = OOArticle::getArticleById(REX_ARTICLE_ID);
+                $self = rex_article::get(REX_ARTICLE_ID);
                 echo '<ul class="pagination">';
                 for($i = 0; ($i*$showmax) < $result['count']; $i++){
                   if(($i*$showmax) == $start){

@@ -1,5 +1,7 @@
 #Änderungen von search_it
 
+- Notice: string als array thx @tbaddade
+
 ##Version 6.4.1 (2017-09-18)
  - drei Beispielmodule waren anfällig für XSS
  - im ersten Fall (Suchergebnisse als Paragraph darstellen) ist das Problem mit den diakritsichen Zeichen #106 gelöst

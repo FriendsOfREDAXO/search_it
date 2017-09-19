@@ -1,6 +1,6 @@
 <?php
 $content = '';
-$content2 = '';
+$content2 = [];
 $formElements = [];
 $dumpstr = '';
 

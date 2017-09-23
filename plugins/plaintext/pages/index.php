@@ -70,13 +70,13 @@ foreach (explode(',', $this->getConfig('order')) as $elem) {
         case 'selectors':
             $content[] =  search_it_getSettingsFormSection(
                 'search_it_plaintext_selectors_fieldset',
-                $this->i18n('search_it_plaintext_selectors'),
+                rex_i18n::rawMsg('search_it_plaintext_selectors'),
                 array(
                     array(
                         'type' => 'text',
                         'id' => 'search_it_plaintext_selectors',
                         'name' => 'search_it_plaintext[selectors]',
-                        'label' => $this->i18n('search_it_plaintext_selectors_label'),
+                        'label' => rex_i18n::msg('search_it_plaintext_selectors_label'),
                         'value' => !empty($this->getConfig('selectors')) ? htmlspecialchars($this->getConfig('selectors')) : ''
                     )
                 ), 'edit', true
@@ -92,7 +92,7 @@ foreach (explode(',', $this->getConfig('order')) as $elem) {
                         'type' => 'text',
                         'id' => 'search_it_plaintext_regex',
                         'name' => 'search_it_plaintext[regex]',
-                        'label' => rex_i18n::Msg('search_it_plaintext_regex_label'),
+                        'label' => rex_i18n::msg('search_it_plaintext_regex_label'),
                         'value' => !empty($this->getConfig('regex')) ? htmlspecialchars($this->getConfig('regex')) : ''
                     )
                 ), 'edit', true

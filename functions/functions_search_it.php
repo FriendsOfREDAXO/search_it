@@ -357,7 +357,7 @@ function search_it_getSettingsFormSection($id = '', $title = '&nbsp;', $elements
                     $fragment = new rex_fragment();
                     $fragment->setVar('grouped', true);
                     $fragment->setVar('elements', $formUnterElements, false);
-                    $checkboxes .= '<div class="col-xs-6">'.$fragment->parse('core/form/checkbox.php').'</div>';
+                    $checkboxes .= '<div class="col-xs-12">'.$fragment->parse('core/form/checkbox.php').'</div>';
                 }
                 $n['label'] = '<label for="'.$element['id'].'">'.$element['label'].'</label>';
                 $n['field'] = '<div class="rex-form-col-a rex-form-text"><div class="form-group">'.$checkboxes.'</div></div>';
@@ -404,7 +404,7 @@ function search_it_getSettingsFormSection($id = '', $title = '&nbsp;', $elements
     if ($ownsection) {
         $fragment = new rex_fragment();
         $fragment->setVar('class', $ownsection);
-        $fragment->setVar('title', $title);
+        $fragment->setVar('title', $title,false);
         $fragment->setVar('body', $return, false);
         if($collapse) {
             $fragment->setVar('collapse', true);

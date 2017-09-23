@@ -30,11 +30,17 @@ Dabei werden Artikel, Medien, Dateien, PDF-Inhalte und Datenbank-Felder in einer
 * Suchfeld-Modul / Suchfeld-Template hinzufügen [(Hilfe)](module-form.md)
 * Suchergebnis-Modul hinzufügen [(Hilfe)](module-simple.md)
 
+## Häufige Fehler
+
+* bleibt die Indextabelle leer könnte ein .htaccess Zugriffsschutz die Indexierung verhindern
+* bleibt die Indextabelle leer, ist eventuell ein "Minifier" im Einsatz, der HTML-Kommentare aus dem Quellcode entfernt.
+Die braucht `Search it` (damit werden die zu indexierenden Inhalte markiert). Man kann auf den URL-Parameter 'search_it_build_index' prüfen - wenn er gesetzt ist, ist es ein Aufruf von `Search it`
+
 ## Wo finde ich weitere Hilfe?
 
-Die aktuelle Search it-Version wird in [GitHub von tyrant88](https://github.com/friendsofredaxo/search_it) gepflegt. Dort können Fragen gestellt und Bugs gemeldet werden (Issues). Fragen können auch im [REDAXO-Forum](www.redaxo.org/de/forum/) oder im [REDAXO-Channel auf Slack](https://friendsofredaxo.slack.com/messages/redaxo/) gestellt werden.
+Die aktuelle Search it-Version wird in [FriendsOfREDAXO](https://github.com/friendsofredaxo/search_it) gepflegt. Dort können Fragen gestellt und Bugs gemeldet werden (Issues). Fragen können auch im [REDAXO-Forum](www.redaxo.org/de/forum/) oder im [REDAXO-Channel auf Slack](https://friendsofredaxo.slack.com/messages/redaxo/) gestellt werden.
 
-# Hinweis zur Installation
+## Hinweis zur Installation
 
 Die Installation erfolgt über den REDAXO 5 Installer, alternativ gibt es die aktuellste Beta-Version auf [GitHub](https://github.com/friendsofredaxo/search_it). 
 

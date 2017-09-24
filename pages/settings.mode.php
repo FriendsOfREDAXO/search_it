@@ -9,6 +9,9 @@ if (rex_post('config-submit', 'boolean')) {
         ['similarwords_permanent', 'bool'],
         ['searchmode', 'string'],
 
+        ['htaccess_user', 'string'],
+        ['htaccess_pass', 'string'],
+
         ['indexoffline', 'bool'],
         ['automaticindex', 'bool'],
         ['reindex_cols_onforms', 'bool'],
@@ -41,10 +44,10 @@ if (rex_post('config-submit', 'boolean')) {
 
 
 $content = '';
-$formElements = [];
+$content3 = [];
 
 
-$content3[] = search_it_getSettingsFormSection(
+$content = search_it_getSettingsFormSection(
     'search_it_index',
     $this->i18n('search_it_settings_title_indexmode'),
     array(
@@ -74,6 +77,41 @@ $content3[] = search_it_getSettingsFormSection(
         )
     ),'edit'
 );
+
+$content .= search_it_getSettingsFormSection(
+    'search_it_index',
+    $this->i18n('search_it_settings_http_authbasic'),
+    array(
+        array(
+            'type' => 'directoutput',
+            'output' => '<strong>'.$this->i18n('search_it_settings_http_auth_desc').'</strong>',
+            'where' => 'center'
+        ),
+        array(
+            'type' => 'string',
+            'id' => 'search_it_htaccess_user',
+            'name' => 'search_config[htaccess_user]',
+            'label' => $this->i18n('search_it_settings_htaccess_user'),
+            'value' => !empty($this->getConfig('htaccess_user')) ? htmlspecialchars($this->getConfig('htaccess_user')) : '',
+        ),
+        array(
+            'type' => 'string',
+            'id' => 'search_it_htaccess_pass',
+            'name' => 'search_config[htaccess_pass]',
+            'label' => $this->i18n('search_it_settings_htaccess_pass'),
+            'value' => !empty($this->getConfig('htaccess_pass')) ? htmlspecialchars($this->getConfig('htaccess_pass')) : '',
+        ),
+        /*array(
+            'type' => 'checkbox',
+            'id' => 'search_it_reindex_cols_onforms',
+            'name' => 'search_config[reindex_cols_onforms]',
+            'label' => $this->i18n('search_it_settings_reindex_cols_onforms_label'),
+            'value' => '1',
+            'checked' => $this->getConfig('reindex_cols_onforms')
+        )*/
+    ),'edit'
+);
+$content3[] = $content;
 
 $content3[] = search_it_getSettingsFormSection(
     'search_it_modi',

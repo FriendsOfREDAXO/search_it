@@ -16,6 +16,12 @@ switch($ajax) {
                         case SEARCH_IT_ART_EXCLUDED:
                             echo '<p class="text-primary">Article (ID=<strong>'.$_id.'</strong>,<strong>'.$langID.'</strong>) is excluded</p>';
                             break;
+                        case SEARCH_IT_ART_ERROR:
+                            echo '<p class="text-primary">Article (ID=<strong>'.$_id.'</strong>,<strong>'.$langID.'</strong>) Socket-Fehler bei der Indexierung per HTTP-GET</p>';
+                            break;
+                        case SEARCH_IT_ART_NOTOK:
+                            echo '<p class="text-primary">Article (ID=<strong>'.$_id.'</strong>,<strong>'.$langID.'</strong>) Response not ok bei der Indexierung per HTTP-GET</p>';
+                            break;
                         case SEARCH_IT_ART_IDNOTFOUND:
                             echo '<p class="text-info">Article (ID=<strong>'.$_id.'</strong>,<strong>'.$langID.'</strong>) not found</p>';
                             break;

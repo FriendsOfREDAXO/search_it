@@ -198,8 +198,12 @@ if ( !empty(rex_get('do')) AND rex_get('do') == 'incremental') {
 
             case 'full':
                 $index = new search_it();
-                $index->generateIndex();
-                echo rex_view::success($this->i18n('search_it_generate_done'));
+                $global_return = $index->generateIndex();
+                if ( $global_return < 4 ) {
+                    echo rex_view::success($this->i18n('search_it_generate_done'));
+                } else {
+                    echo rex_view::warning(rex_i18n::rawMsg('search_it_generate_error'));
+                }
                 break;
 
             case 'deletecache':

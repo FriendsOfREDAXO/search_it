@@ -225,6 +225,10 @@ class search_it
                             $scanurl = rex_yrewrite::getFullUrlByArticleId($_id, $langID, array('search_it_build_index' => 'do it, baby'), '&');
                         }
                         $files_socket = rex_socket::factoryURL($scanurl);
+                        /* check if we need to send an auth header for auth-basic secured redaxo setups */
+                        if(isset($_SERVER['PHP_AUTH_USER']) && isset($_SERVER['PHP_AUTH_PW']) && $_SERVER['PHP_AUTH_USER'] && $_SERVER['PHP_AUTH_PW']) {
+                            $files_socket->addHeader('Authorization', 'Basic ' . base64_encode($_SERVER['PHP_AUTH_USER'] . ':' . $_SERVER['PHP_AUTH_PW']));
+                        }
                         $response = $files_socket->doGet();
 
                         $redircount = 0;

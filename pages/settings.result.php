@@ -151,13 +151,9 @@ $content2[] = search_it_getSettingsFormSection(
     ),'edit'
 );
 
-
-
 $fragment = new rex_fragment();
 $fragment->setVar('content', $content2, false);
 $content .= $fragment->parse('core/page/grid.php');
-
-
 
 
 $formElements = [];

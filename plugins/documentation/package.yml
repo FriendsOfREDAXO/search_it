@@ -1,5 +1,5 @@
 package: search_it/documentation
-version: '6.4.1'
+version: '6.4.2'
 author: Friends Of REDAXO
 
 title: 'translate:search_it_documentation_title'

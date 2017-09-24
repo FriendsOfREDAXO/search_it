@@ -9,6 +9,7 @@
 	- [Klassen-Referenz](search_it-reference.md) (in Arbeit)
 - Plugins
 	- [Statistik](plugin-stats.md)
+	- [Plaintext](plugin-plaintext.md)
 - Beispiele
 	- [Such-Eingabe](module-form.md)
 	- [Einfache Suche](module-simple.md)
@@ -29,6 +30,6 @@
 
 **Credits**
 
-tyrant88 (Norbert Micheel)
 xong (Robert Rupf)  
+tyrant88 (Norbert Micheel)  
 alexplusde (Alexander Walther)  

@@ -43,13 +43,12 @@ if (rex_post('config-submit', 'boolean')) {
             echo rex_view::warning($this->i18n('search_it_settings_saved_warning')); break;
         } elseif ( is_array($this->getConfig($index)) && is_array($val) ) { // Der Konfig-Wert ist ein Array
             if ( count(array_merge(
-                array_diff_assoc($this->getConfig($index), $val),
-                array_diff_assoc($val, $this->getConfig($index)) )) > 0 ) {
+                array_diff_assoc(array_map('serialize',$this->getConfig($index)), array_map('serialize',$val)),
+                array_diff_assoc(array_map('serialize',$val), array_map('serialize',$this->getConfig($index))) )) > 0 ) {
                     echo rex_view::warning($this->i18n('search_it_settings_saved_warning')); break;
             }
         }
     }
-
 
     // do it
     $this->setConfig($posted_config);
@@ -92,7 +91,7 @@ foreach ( $sql_tables->showTables() as $table ) {
                     'size' => 20,
                     'options' => $options
                 )
-            ),'edit',true
+            ),'info',true
         ).'</div>';
 
     }

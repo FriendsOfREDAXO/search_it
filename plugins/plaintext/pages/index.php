@@ -14,7 +14,7 @@ if (rex_post('sendit', 'boolean')) {
     ]);
 
 
-    $changed = array_keys(array_merge(array_diff_assoc($posted_config,$this->getConfig()), array_diff_assoc($this->getConfig(),$posted_config)));
+    $changed = array_keys(array_merge(array_diff_assoc(array_map('serialize',$posted_config),array_map('serialize',$this->getConfig())), array_diff_assoc(array_map('serialize',$this->getConfig()),array_map('serialize',$posted_config))));
     foreach ( array(
                   'order',
                   'selectors',
@@ -27,8 +27,8 @@ if (rex_post('sendit', 'boolean')) {
             echo rex_view::warning($this->i18n('search_it_settings_saved_warning')); break;
         } elseif ( is_array($this->getConfig($index)) && is_array($posted_config[$index]) ) { // Der Konfig-Wert ist ein Array
             if ( count(array_merge(
-                    array_diff_assoc($this->getConfig($index), $posted_config[$index]),
-                    array_diff_assoc($posted_config[$index], $this->getConfig($index)) )) > 0 ) {
+                    array_diff_assoc(array_map('serialize',$this->getConfig($index)), array_map('serialize',$posted_config[$index])),
+                    array_diff_assoc(array_map('serialize',$posted_config[$index]), array_map('serialize',$this->getConfig($index))) )) > 0 ) {
                 echo rex_view::warning($this->i18n('search_it_settings_saved_warning')); break;
             }
         }

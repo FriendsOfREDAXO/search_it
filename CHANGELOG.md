@@ -1,5 +1,6 @@
 #Änderungen von search_it
 
+##Version 6.4.2 (2017-09-24)
 - Error: string als array thx @tbaddade
 - Verbesserung an der Doku
 - DB-Spalten werden alphabetisch sortiert, nur noch eine Spalte @tbaddade

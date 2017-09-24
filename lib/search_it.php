@@ -129,11 +129,15 @@ class search_it
 
 
         // index articles
+        $global_return = '';
         $art_sql = rex_sql::factory();
         $art_sql->setTable($this->tablePrefix . 'article');
         if ($art_sql->select('id,clang_id')) {
             foreach ($art_sql->getArray() as $art) {
-                $this->indexArticle($art['id'], $art['clang_id']);
+                $returns = $this->indexArticle($art['id'], $art['clang_id']);
+                foreach ( $returns as $return ) {
+                    if ($return > 3 ) { $global_return += $return; }
+                }
             }
         }
 
@@ -162,6 +166,8 @@ class search_it
                 $this->indexFile(substr($filename, 1));
             }
         }
+
+        return $global_return;
     }
 
     /**
@@ -224,10 +230,11 @@ class search_it
                         if(rex_addon::get("yrewrite") && rex_addon::get("yrewrite")->isAvailable()) {
                             $scanurl = rex_yrewrite::getFullUrlByArticleId($_id, $langID, array('search_it_build_index' => 'do it, baby'), '&');
                         }
+
                         $files_socket = rex_socket::factoryURL($scanurl);
                         /* check if we need to send an auth header for auth-basic secured redaxo setups */
                         if(isset($_SERVER['PHP_AUTH_USER']) && isset($_SERVER['PHP_AUTH_PW']) && $_SERVER['PHP_AUTH_USER'] && $_SERVER['PHP_AUTH_PW']) {
-                            $files_socket->addHeader('Authorization', 'Basic ' . base64_encode($_SERVER['PHP_AUTH_USER'] . ':' . $_SERVER['PHP_AUTH_PW']));
+                            $files_socket->addBasicAuthorization($_SERVER['PHP_AUTH_USER'], $_SERVER['PHP_AUTH_PW']);
                         }
                         $response = $files_socket->doGet();
 
@@ -246,6 +253,9 @@ class search_it
                             //rex_logger::factory()->info('Redirect zu '.$scanurl);
 
                             $files_socket = rex_socket::factoryURL($scanurl);
+                            if(isset($_SERVER['PHP_AUTH_USER']) && isset($_SERVER['PHP_AUTH_PW']) && $_SERVER['PHP_AUTH_USER'] && $_SERVER['PHP_AUTH_PW']) {
+                                $files_socket->addBasicAuthorization($_SERVER['PHP_AUTH_USER'], $_SERVER['PHP_AUTH_PW']);
+                            }
                             $response = $files_socket->doGet();
                             $redircount++;
                         }
@@ -253,24 +263,31 @@ class search_it
                             $articleText = $response->getBody();
                         } else {
                             $articleText = '';
-                            rex_logger::factory()->info('Socket-Fehler bei der Indexierung per HTTP-GET von '.$scanurl);
+                            if ( $response->getStatusCode() != '404' ) {
+                                rex_logger::factory()->info('Fehler bei der Indexierung per HTTP-GET von ' . $scanurl . '<br>' . $response->getStatusCode() . ' - ' . $response->getStatusMessage());
+                                $return[$v] = SEARCH_IT_ART_NOTOK;
+                            } else {
+                                $return[$v] = SEARCH_IT_ART_REDIRECT;
+                            }
+                            continue;
                         }
-
-                    } catch (rex_socket_exception $e) {
-                        $articleText = '';
-                        rex_logger::factory()->info('Socket-Fehler bei der Indexierung per HTTP-GET von '.$scanurl);
-
-                    }
-
-
-                    // regex time
-                    preg_match_all('/<!--\ssearch_it\s([0-9]*)\s?-->(.*)<!--\s\/search_it\s(\1)\s?-->/s', $articleText, $matches, PREG_SET_ORDER);
+                 } catch (rex_socket_exception $e) {
                     $articleText = '';
-                    foreach ($matches as $match) {
-                        if ( $match[1] == $_id || $match[1] == '' ) {
-                            $articleText .= ' ' . $match[2];
-                        }
+                    rex_logger::factory()->info('Socket-Fehler bei der Indexierung per HTTP-GET von '.$scanurl. '<br>' .$response->getStatusCode().' - '.$response->getStatusMessage());
+                    $return[$v] = SEARCH_IT_ART_ERROR;
+                    continue;
+
+                 }
+
+
+                // regex time
+                preg_match_all('/<!--\ssearch_it\s([0-9]*)\s?-->(.*)<!--\s\/search_it\s(\1)\s?-->/s', $articleText, $matches, PREG_SET_ORDER);
+                $articleText = '';
+                foreach ($matches as $match) {
+                    if ( $match[1] == $_id || $match[1] == '' ) {
+                        $articleText .= ' ' . $match[2];
                     }
+                }
 
 
                 $insert = rex_sql::factory();

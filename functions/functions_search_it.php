@@ -391,8 +391,16 @@ function search_it_getSettingsFormSection($id = '', $title = '&nbsp;', $elements
 
             // DIRECT OUTPUT
             case 'directoutput':
-                if ( isset($element['outputleft']) && $element['outputleft']!='') { $n['label'] = $element['outputleft']; }
-                $n['field'] = $element['output'];
+                if ( isset($element['where']) && $element['where']!='') {
+                    if ( $element['where'] == 'left') {
+                        $n['label'] = $element['output'];
+                    } else {
+                        $n['header'] = $element['output'];
+                    }
+                } else {
+                    $n['field'] = $element['output'];
+                }
+
             break;
         }
 

@@ -28,6 +28,10 @@ search_it_settings_indexoffline = Offline-Artikel indexieren
 search_it_settings_automaticindex_label = Artikel (ADD, EDIT, DELETE) automatisch (de)indexieren
 search_it_settings_reindex_cols_onforms_label = Reindexieren aller Spalten, wenn Tabellen mit YForm oder form bearbeitet werden
 
+search_it_settings_http_authbasic = HTTP Basic AUTH ( .htaccess Passwortschutz)
+search_it_settings_http_auth_desc = Wenn ein Zugriffsschutz die Website schützt, kann hier ein Login hinterlegt werden, um die Indexierung zu ermöglichen
+search_it_settings_htaccess_user = Username
+search_it_settings_htaccess_pass = Passwort
 
 search_it_settings_searchmode = MySQL-Suchmodus
 search_it_settings_searchmode_like = LIKE (findet auch Teilwörter, aber langsamer)
@@ -86,6 +90,7 @@ search_it_generate_delete_keywords_confirm = Wirklich alle Keywords löschen?
 search_it_generate_keywords_deleted = Alle Keywords wurden gelöscht
 search_it_generate_inprogress = Index wird erstellt. Es erscheint eine Nachricht, wenn der Index erstellt wurde.
 search_it_generate_done = Index wurde erstellt
+search_it_generate_error = Fehler bei der Indexierung <br> Details im <a href="/redaxo/index.php?page=system/log">REDAXO SystemLog</a>
 search_it_generate_cancel = Erstellung des Index abgebrochen
 search_it_generate_duration = Dauer: 
 search_it_generate_timeleft = Verbleibend: 

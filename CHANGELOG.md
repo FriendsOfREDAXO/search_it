@@ -1,5 +1,9 @@
 #Änderungen von search_it
 
+##Version 6.5.0 (2017-09-24)
+- Eingabe eines Basic Auth Login ermöglicht Indexierung trotz '.htaccess'-Schutz #100 ( thx @Hirbod )
+- Verbesserte Fehlermeldungen beim Indexieren per Backend
+
 ##Version 6.4.2 (2017-09-24)
 - Error: string als array thx @tbaddade
 - Verbesserung an der Doku

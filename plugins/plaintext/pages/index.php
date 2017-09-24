@@ -14,7 +14,7 @@ if (rex_post('sendit', 'boolean')) {
     ]);
 
 
-    $changed = array_keys(array_merge(array_diff_assoc($posted_config,$this->getConfig()), array_diff_assoc($this->getConfig(),$posted_config)));
+    $changed = array_keys(array_merge(array_diff_assoc(array_map('serialize',$posted_config),array_map('serialize',$this->getConfig())), array_diff_assoc(array_map('serialize',$this->getConfig()),array_map('serialize',$posted_config))));
     foreach ( array(
                   'order',
                   'selectors',
@@ -27,8 +27,8 @@ if (rex_post('sendit', 'boolean')) {
             echo rex_view::warning($this->i18n('search_it_settings_saved_warning')); break;
         } elseif ( is_array($this->getConfig($index)) && is_array($posted_config[$index]) ) { // Der Konfig-Wert ist ein Array
             if ( count(array_merge(
-                    array_diff_assoc($this->getConfig($index), $posted_config[$index]),
-                    array_diff_assoc($posted_config[$index], $this->getConfig($index)) )) > 0 ) {
+                    array_diff_assoc(array_map('serialize',$this->getConfig($index)), array_map('serialize',$posted_config[$index])),
+                    array_diff_assoc(array_map('serialize',$posted_config[$index]), array_map('serialize',$this->getConfig($index))) )) > 0 ) {
                 echo rex_view::warning($this->i18n('search_it_settings_saved_warning')); break;
             }
         }
@@ -70,13 +70,13 @@ foreach (explode(',', $this->getConfig('order')) as $elem) {
         case 'selectors':
             $content[] =  search_it_getSettingsFormSection(
                 'search_it_plaintext_selectors_fieldset',
-                $this->i18n('search_it_plaintext_selectors'),
+                rex_i18n::rawMsg('search_it_plaintext_selectors'),
                 array(
                     array(
                         'type' => 'text',
                         'id' => 'search_it_plaintext_selectors',
                         'name' => 'search_it_plaintext[selectors]',
-                        'label' => $this->i18n('search_it_plaintext_selectors_label'),
+                        'label' => rex_i18n::msg('search_it_plaintext_selectors_label'),
                         'value' => !empty($this->getConfig('selectors')) ? htmlspecialchars($this->getConfig('selectors')) : ''
                     )
                 ), 'edit', true
@@ -92,7 +92,7 @@ foreach (explode(',', $this->getConfig('order')) as $elem) {
                         'type' => 'text',
                         'id' => 'search_it_plaintext_regex',
                         'name' => 'search_it_plaintext[regex]',
-                        'label' => rex_i18n::Msg('search_it_plaintext_regex_label'),
+                        'label' => rex_i18n::msg('search_it_plaintext_regex_label'),
                         'value' => !empty($this->getConfig('regex')) ? htmlspecialchars($this->getConfig('regex')) : ''
                     )
                 ), 'edit', true

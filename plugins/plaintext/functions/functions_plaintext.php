@@ -38,7 +38,6 @@ function search_it_getPlaintext($_text,$_remove){
                             $odd = !$odd;
                         }
                     }
-
                     $_text = preg_replace($regex, $replacement, $_text);
                 }
                 break;

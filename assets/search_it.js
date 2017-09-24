@@ -17,6 +17,12 @@
                     active_tables = active_tables.add(jQuery('header',elem));
                 }
             });
+            jQuery.each(active_tables, function (i,elem) {
+                    var pe = jQuery(elem).parent();
+                    pe.removeClass('panel-info');
+                    pe.addClass('panel-edit');
+                }
+            );
             active_tables.click();
 
 

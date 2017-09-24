@@ -735,6 +735,7 @@ class search_it
         if ($process) {
             $tags2nl = '~</?(address|blockquote|center|del|dir|div|dl|fieldset|form|h1|h2|h3|h4|h5|h6|hr|ins|isindex|menu|noframes|noscript|ol|p|pre|table|ul)[^>]+>~siu';
             $_text = trim(strip_tags(preg_replace(array('~<(head|script).+?</(head|script)>~siu', $tags2nl, '~<[^>]+>~siu', '~[\n\r]+~siu', '~[\t ]+~siu'), array('', "\n", ' ', "\n", ' '), $_text)));
+            $_text = html_entity_decode($_text,ENT_QUOTES,'UTF-8');
         }
 
         return preg_replace('~(\s+\n){2,}~', "\r\n", $_text);
@@ -1748,7 +1749,7 @@ class search_it
         }
 
         // ask cache
-        if ($this->cache AND $this->isCached($this->searchString)) {
+        if (rex_request('search_it_test', 'string', '') == '' && $this->cache AND $this->isCached($this->searchString)) {
             $this->cachedArray['time'] = microtime(true) - $startTime;
 
             if ($this->similarwords AND $this->cachedArray['count'] > 0) {
@@ -1801,10 +1802,10 @@ class search_it
                 SELECT * FROM (%s) AS t
                 %s
                 ORDER BY count",
-                        implode(' UNION ', $simwordQuerys),
-                        $this->similarwordsPermanent ? '' : 'GROUP BY keyword, typedin'
-                    )
-                ) as $simword) {
+                    implode(' UNION ', $simwordQuerys),
+                    $this->similarwordsPermanent ? '' : 'GROUP BY keyword, typedin'
+                )
+            ) as $simword) {
                 //echo '<br><pre>'; var_dump($simword);echo '</pre>';
                 $return['simwords'][$simword['typedin']] = array(
                     'keyword' => $simword['keyword'],
@@ -1867,10 +1868,16 @@ class search_it
         foreach ($this->searchArray as $searchword) {
             $AWhere = array();
             $similarkeywords = '';
-            if ( $this->similarwords && !isset($return['simwords'][$searchword['search']])) { continue; }
-            if ( isset($return['simwords'][$searchword['search']]['keyword']) ) { $similarkeywords = $return['simwords'][$searchword['search']]['keyword']; }
+            if ($this->similarwords && !isset($return['simwords'][$searchword['search']])) {
+                continue;
+            }
+            if (isset($return['simwords'][$searchword['search']]['keyword'])) {
+                $similarkeywords = $return['simwords'][$searchword['search']]['keyword'];
+            }
             foreach ($this->searchArray as $keyword) {
-                if ( $keyword['search'] !== $searchword['search'] && !in_array( $keyword['search'], explode(' ', $similarkeywords)) ) { continue; }
+                if ($keyword['search'] !== $searchword['search'] && !in_array($keyword['search'], explode(' ', $similarkeywords))) {
+                    continue;
+                }
                 // build MATCH-Array
                 $match = sprintf("(( MATCH (`%s`) AGAINST (%s)) * %d)", implode('`,`', $searchColumns), $sql->escape($keyword['search']), $keyword['weight']);
                 if ($this->searchHtmlEntities) {
@@ -2105,15 +2112,17 @@ class search_it
         $return['hash'] = $this->cacheHash($this->searchString);
 
 
-        // and not test =1
-        if ($this->similarwords AND $i) {
-            $this->storeKeywords($this->searchArray);
-        }
-        // and not test =1 ??? oder doch mit cache?
-        if ($this->cache) {
-            $this->cacheSearch(serialize($return), $indexIds);
-        }
+        // no test? then store keywords and cache
+        if (rex_request('search_it_test', 'string', '') == '') {
 
+            if ($this->similarwords AND $i) {
+                $this->storeKeywords($this->searchArray);
+            }
+            // and not test =1 ??? oder doch mit cache?
+            if ($this->cache) {
+                $this->cacheSearch(serialize($return), $indexIds);
+            }
+        }
         // EP registrieren
         rex_extension::registerPoint(new rex_extension_point('SEARCH_IT_SEARCH_EXECUTED', $return));
 

@@ -43,13 +43,12 @@ if (rex_post('config-submit', 'boolean')) {
             echo rex_view::warning($this->i18n('search_it_settings_saved_warning')); break;
         } elseif ( is_array($this->getConfig($index)) && is_array($val) ) { // Der Konfig-Wert ist ein Array
             if ( count(array_merge(
-                array_diff_assoc($this->getConfig($index), $val),
-                array_diff_assoc($val, $this->getConfig($index)) )) > 0 ) {
+                array_diff_assoc(array_map('serialize',$this->getConfig($index)), array_map('serialize',$val)),
+                array_diff_assoc(array_map('serialize',$val), array_map('serialize',$this->getConfig($index))) )) > 0 ) {
                     echo rex_view::warning($this->i18n('search_it_settings_saved_warning')); break;
             }
         }
     }
-
 
     // do it
     $this->setConfig($posted_config);
@@ -69,8 +68,9 @@ $sql_tables = rex_sql::factory();
 foreach ( $sql_tables->showTables() as $table ) {
     if ( false === strpos($table, 'search_it') ) {
         $options = array();
-        $sql_columns = rex_sql::factory();
-        foreach ( $sql_tables->showColumns($table) as $column ) {
+        $sql_columns = $sql_tables->showColumns($table);
+        sort($sql_columns);
+        foreach ( $sql_columns as $column ) {
             $options[] = array(
                 'value' => htmlspecialchars($table . '`.`' . $column['name']),
                 'checked' => in_array($column['name'], (!empty($this->getConfig('include')[$table]) AND is_array($this->getConfig('include')[$table])) ? $this->getConfig('include')[$table] : array()),
@@ -91,7 +91,7 @@ foreach ( $sql_tables->showTables() as $table ) {
                     'size' => 20,
                     'options' => $options
                 )
-            ),'edit',true
+            ),'info',true
         ).'</div>';
 
     }

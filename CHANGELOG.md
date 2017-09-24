@@ -1,6 +1,12 @@
 #Änderungen von search_it
 
-- Notice: string als array thx @tbaddade
+##Version 6.4.2 (2017-09-24)
+- Error: string als array thx @tbaddade
+- Verbesserung an der Doku
+- DB-Spalten werden alphabetisch sortiert, nur noch eine Spalte @tbaddade
+- beim Erstellen des Standard-Plaintext werden HTML Entities decodiert, damit kein ; eine Trennung erzeugt
+    (Haupsächlich wegen &shy; vom Hypenator-PlugIn, #130, thx @greatif ) 
+- Test erzeugt keine Änderung bei Statistik und der Test wird auch nicht gecached #122 ( thx @greatif )
 
 ##Version 6.4.1 (2017-09-18)
  - drei Beispielmodule waren anfällig für XSS

@@ -1,3 +1,11 @@
+# Indexierung
+
+`Search it` erstellt den Index, in dem es die Artikel der Website im Frontend aufruft und den Artikelinhalt indexiert.
+D.h. im ersten Schritt werden nur im Frontend sichtbare Inhalte gefunden. Insbesondere werden also Passwort-geschützte Inhalte nicht im Index landen.
+
+Über die Auswahl von Datenbanktabellenspalten im Register "Zusätzl. Datenquellen" können auch nicht im Frontend sichtbare Inhalte indexiert werden.
+
+
 # Automatische Indexierung / Indexerneuerung
  
 Eine Automatisch De-(Indexierung) erfolgt im Moment mit folgenden Extension-Points:
@@ -10,7 +18,6 @@ ART_STATUS| Ein Artikel, der offline geschaltet wird, wird deindexiert, bei onli
 CAT_DELETED| Ausgabe einer Meldung, dass der Index erneuert werden muss.
 CAT_STATUS, CAT_ADDED| Eine Kategorie, die offline geschaltet wird, wird deindexiert, bei online indexiert.
 MEDIA_ADDED, MEDIA_UPDATED|Wenn ein Medium hinzugefügt wurde, werden alle ausgewählten DB-Spalten aus der Tabelle rex_file neu indexiert.
-SLICE_SHOW| Wird ein Artikel verändert (z. B. Inhalt geändert, Slice verschoben, etc...), wird er neu indexiert.
-SLICE_UPDATED|
+SLICE_ADDED, SLICE_DELETED, SLICE_UPDATED|Der Artikel wird neu indexiert
 
 __todo__: Extension Points aktualisieren

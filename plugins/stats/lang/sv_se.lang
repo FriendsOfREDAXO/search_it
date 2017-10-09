@@ -1,0 +1,39 @@
+search_it_stats_title = Statistik
+search_it_stats_plugin_title = Statistik
+search_it_stats_plugin_info = Statistik om söket
+search_it_stats_truncate = Obs! Radera statistiken kan inte ångras.
+search_it_stats_truncate_button = Radera statistiken
+search_it_stats_truncate_done = Statistiken raderades
+search_it_stats_truncate_confirm = Vill du verkligen radera all statistikdata?
+
+search_it_stats_generalstats_title = Allmän statistik
+search_it_stats_generalstats_005_datasetcount = Antal indexerade dataset:
+search_it_stats_generalstats_010_uniquedatasetcount = Antal unika dataset (t ex artiklar är grupperade ..):
+search_it_stats_generalstats_020_averageresultcount = Genomsnittligt antal visade resultat per sök:
+search_it_stats_generalstats_030_searchescount = Antal sök:
+search_it_stats_generalstats_040_successfullsearchescount = Antal framgångsrika sök:
+search_it_stats_generalstats_050_failedsearchescount = Antal misslyckade sök:
+search_it_stats_generalstats_060_uniquesearchterms = Antal unika sökord:
+search_it_stats_generalstats_070_keywordcount = Antal olika sökord som lagrats i sökindex:
+search_it_stats_generalstats_075_cachedsearchcount = Antal cachade sökningar:
+search_it_stats_generalstats_080_searchindexdatalength = Storleken av index i index-tabellen (search_it_index):
+search_it_stats_generalstats_090_searchindexindexlength = Storlek på data för index-tabellen (search_it_index):
+search_it_stats_generalstats_100_datalength = Storlek på indexen för alla Search it-tabeller:
+search_it_stats_generalstats_110_indexlength = Storlek på data för alla Search it-tabeller:
+
+search_it_stats_topsearchterms_titletitle = Top sökord
+search_it_stats_topsearchterms_title = De {0} mesta söktermerna ({1} olika söktermer totalt)
+search_it_stats_topsearchterms_none = Inga sökord än.
+
+search_it_stats_general_title = Allmän grafisk översikt
+search_it_stats_rate_success_failure = Framgångsrika / misslyckade sökningar {0} ({1} sökningar utförda)
+search_it_stats_rate_success_failure_lblsuccess = Framgångsrik
+search_it_stats_rate_success_failure_lblmiss = Misslyckad
+search_it_stats_general_timestats = Antal sök för {0} senaste månaderna
+search_it_stats_general_timestats_count = Antal sök
+search_it_stats_general_timestats_countcumu = Kumulerad antal
+
+search_it_stats_searchterm_timestats_titletitle = Sök över tid
+search_it_stats_searchterm_timestats_title = Översikt för {0} för {1} senaste månaderna
+search_it_stats_searchterm_timestats_title0_all = Alla sökord
+search_it_stats_searchterm_timestats_title0_single = {0}

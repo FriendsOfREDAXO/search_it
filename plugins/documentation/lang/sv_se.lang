@@ -1,0 +1,10 @@
+
+search_it_documentation_title = Dokumentation
+
+search_it_documentation_general_title = Allmänt
+search_it_documentation_plugins_title = Plugins
+search_it_documentation_modules_title = Sökmoduler
+
+search_it_documentation_filenotfound = Filen hittades inte. Innehållet finns inte (ännu). <br /> Vi är glada om du vill hjälpa till: <a href="https://github.com/yakamara/redaxo_yform_docs/tree/master/de_de" target="_blank"> https://github.com / yakamara / redaxo_yform_docs / träd / master / de_DE </a>
+search_it_documentation_navigation = Navigation
+search_it_documentation_content = Innehåll

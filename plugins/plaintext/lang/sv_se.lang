@@ -1,0 +1,14 @@
+search_it_plaintext_title = Plaintext
+search_it_plaintext = Inställningar
+search_it_plaintext_description_title = Beskrivning
+search_it_plaintext_description = Element som är markerade med denna symbol kan flyttas via Drag & Drop för att ändra ordningsföljden.
+search_it_plaintext_selectors = CSS-selectors, e.g.<br /><code>script,head,header,footer,div.donotsearch</code>
+search_it_plaintext_selectors_label = Alla matchande element kommer att tas bort från plaintext.
+search_it_plaintext_regex = Regelbundna uttryck (radavskiljda)
+search_it_plaintext_regex_label = Every 1. Line: Regex<br />Every 2. Line: Replacement<br /><br />Example:<br /><code>'<h1>.+</h1>'</code><br /><code>' '</code>
+search_it_plaintext_striptags = Ta bort HTML-taggar
+search_it_plaintext_striptags_label = Executes the strip_tags()-function.
+search_it_plaintext_textile = parse with textile
+search_it_plaintext_textile_label = Kör rex_textile::parse()-funktionen.
+search_it_plaintext_processparent = Kör  default plaintext conversion
+search_it_plaintext_processparent_label = Kör default plaintext conversion additionally

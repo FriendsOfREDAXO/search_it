@@ -1,0 +1,131 @@
+search_it_title = Search it
+search_it_settings = Inställningar
+search_it_generate = Underhåll
+search_it_readme = Readme
+
+search_it_info = Sök-AddOn
+search_it_infotext = Sök-AddOn
+search_it_reindex = Search it: reindex
+
+search_it_settings_mode = Index and sökläge
+search_it_settings_result = Sökresultat
+search_it_settings_addsources = Ytterligare datakällor
+search_it_settings_blacklist = Blacklist
+
+search_it_settings_logicalmode = Logisk sökläge
+search_it_settings_logicalmode_and = Conjunctive search (AND)
+search_it_settings_logicalmode_or = Disjunctive search (OR)
+
+search_it_settings_modi_header = Söklägen
+
+search_it_settings_textmode = Textmodus
+search_it_settings_textmode_plain = Sök igenom text (plain)
+search_it_settings_textmode_html = Sök igenom HTML-källkod
+search_it_settings_textmode_both = Sök igenom både och (HTML och plain)
+
+search_it_settings_title_indexmode = Indexering
+search_it_settings_indexoffline = Indexera offline artiklar
+search_it_settings_automaticindex_label = Indexera och deindexera artikel (ADD, EDIT, DELETE) automatisk
+search_it_settings_reindex_cols_onforms_label = Reindexera alla kolumner, om tabeller ändras via YForm eller form
+
+search_it_settings_http_authbasic = HTTP Basic AUTH ( .htaccess lösenordskydd)
+search_it_settings_http_auth_desc = Om webbplatsen skyddas mot åtkomst kan en inloggning sparas här för att aktivera indexering
+search_it_settings_htaccess_user = Användarnamn
+search_it_settings_htaccess_pass = Lösenord
+
+search_it_settings_searchmode = MySQL-sökläge
+search_it_settings_searchmode_like = LIKE (hittar del av ord, är långsammare)
+search_it_settings_searchmode_match = MATCH AGAINST (hittar bara kompletta ord, men är snabbare)
+
+search_it_settings_highlight_header = Utseende av markerad text
+search_it_settings_surroundtags_start = Start-tagg
+search_it_settings_surroundtags_end = Slut-tagg
+
+search_it_settings_limit = Maximal antal träffar
+search_it_settings_maxteaserchars = Maximal antal tecken till teasern
+search_it_settings_maxhighlightchars = Maximal antal tecken omkring markerade sökbegrepp
+
+search_it_settings_highlight_label = typ av markering
+search_it_settings_highlight_sentence = Börjar i början av meningen, som innehåller minst en hittad sökterm
+search_it_settings_highlight_paragraph = Börjar i början av stycket, som innehåller minst en hittad sökterm
+search_it_settings_highlight_surroundtext = Varje hittad text visas med de omgivande orden
+search_it_settings_highlight_surroundtextsingle = För varje sökord som hittas visas endast en text med de omgivande orden
+search_it_settings_highlight_teaser = Som teaser, i den eventuell förekommande söktermer markeras
+search_it_settings_highlight_array = Som array med varje text som hittats för varje sökterm
+search_it_settings_highlight_sample = Exempelresultat med sökord
+search_it_settings_search_highlighter = Search highlighter
+search_it_settings_highlighterclass = Om du namnger en CSS-klass här kommer varje sökord att vara omgivet av ett <span> -element med den här klassen när ett sökresultat klickas och visas.
+
+search_it_settings_similarwords_label = Likhetssökning
+search_it_settings_similarwords_none = Deaktivera
+search_it_settings_similarwords_soundex = Soundex
+search_it_settings_similarwords_metaphone = Metaphone (EN)
+search_it_settings_similarwords_cologne = Kölner Phonetik (DE)
+search_it_settings_similarwords_all = Alla
+search_it_settings_similarwords_permanent = Utför likhetssökning även om resultaten hittas.
+
+search_it_settings_exclude = Uteslutar ord, kategorier och artiklar från sökningen
+search_it_settings_exclude_blacklist = Ord (komma-separerade)
+search_it_settings_exclude_categories = Kategorier
+search_it_settings_exclude_articles = Artiklar
+
+search_it_settings_include = Inkludera databastabeller
+
+search_it_settings_submitbutton = Spara inställningar
+search_it_settings_saved = Inställningar sparades
+search_it_settings_saved_warning = Sökindexet måste byggas om.
+
+search_it_generate_actions_title = Aktioner
+search_it_generate_full = Skapa fullständigt index
+search_it_generate_full_text = Raderar och bygger om indextabellen.
+search_it_generate_incremental = Generera index inkrementellt
+search_it_generate_incremental_text = När du har problem med maximal körtid  (max_execution_time) kan indexet genereras stegvis.
+search_it_generate_incremental_confirm = Börja inkrementell indexering?
+search_it_generate_delete_cache = Rensa sökcachen
+search_it_generate_delete_cache_text = Om en nyindexering inte är nödvändig kan enbart cachen raderas.
+search_it_generate_cache_deleted = Sökcachen raderades.
+search_it_generate_delete_keywords = Tömma nyckelord-index
+search_it_generate_delete_keywords_text = Ta bort alla sökord som samlats in under indexeringsprocessen och/eller med sökningar. Dessa nyckelord är bl.a. nödvändiga för den likhetssökningen och bör inte raderas.
+search_it_generate_delete_keywords_confirm = Vill du verkligen ta bort alla nyckelord?
+search_it_generate_keywords_deleted = Nyckelorden raderades
+search_it_generate_inprogress = Generera index. Det kommer ett meddelande när processen är klar.
+search_it_generate_done = Index har genererats
+search_it_generate_error = Fel vid indexering <br> detaljer i <a href="/redaxo/index.php?page=system/log"> REDAXO SystemLog </a>
+search_it_generate_cancel = Generering av index har avbrutits
+search_it_generate_duration = Tid:
+search_it_generate_timeleft = Förblivande tid:
+search_it_generate_articles = Nyindexera artiklar
+search_it_generate_columns = Nyindexera tabeller
+
+search_it_settings_fileext_header = Genomsök filinnehåll
+search_it_settings_fileext_label = Filtillägg (t.ex. 'txt,csv,pdf' <br />(lämna tomma för alla filer)
+search_it_settings_file_mediapool = Indexera media i mediapoolen/filhanteraren
+search_it_settings_additional_folders_label = Och / eller välj andra mappar:
+search_it_settings_file_dirdepth_label = Katalogdjup
+search_it_settings_folders_label = Inkludera följande kataloger
+search_it_settings_folders_dirselect_label = Välj underkategorier av nivån %DEPTH%
+
+search_it_settings_show_all = Visa alla
+search_it_settings_show_none = Dölj alla
+
+search_it_ellipsis = ...
+
+search_it_cat_deleted = Alla artiklar av kategorien ingår fortfarande i sökindexet. Du måste <a href="index.php?page=search_it/generate"> bygga om sökindexet</a>.
+
+
+
+search_it_test = Testsök
+search_it_test_keywords = Sökbegrepp
+
+search_it_test_legend = Kontrollera inställningarna och testa söket
+search_it_test_submit = Sök
+search_it_test_mode = Sökmodus
+search_it_test_notice = Sök utförts
+search_it_test_hits = Träff:
+
+search_it_test_result = Testsökresultat
+search_it_test_result_object = Testsökobjekt
+search_it_test_mode_all = Genomsök artiklar, databas och media pool (filhanteraren)
+search_it_test_mode_db = Bara databasen
+search_it_test_mode_media = Bara media poolen (filhanteraren)
+search_it_test_mode_article = Bara artiklar

@@ -1,10 +1,10 @@
-#Änderungen von search_it
+# Änderungen von search_it
 
-##Version 6.5.0 (2017-09-24)
+## Version 6.5.0 (2017-09-24)
 - Eingabe eines Basic Auth Login ermöglicht Indexierung trotz '.htaccess'-Schutz #100 ( thx @Hirbod )
 - Verbesserte Fehlermeldungen beim Indexieren per Backend
 
-##Version 6.4.2 (2017-09-24)
+## Version 6.4.2 (2017-09-24)
 - Error: string als array thx @tbaddade
 - Verbesserung an der Doku
 - DB-Spalten werden alphabetisch sortiert, nur noch eine Spalte @tbaddade
@@ -12,14 +12,14 @@
     (Haupsächlich wegen &shy; vom Hypenator-PlugIn, #130, thx @greatif ) 
 - Test erzeugt keine Änderung bei Statistik und der Test wird auch nicht gecached #122 ( thx @greatif )
 
-##Version 6.4.1 (2017-09-18)
+## Version 6.4.1 (2017-09-18)
  - drei Beispielmodule waren anfällig für XSS
  - im ersten Fall (Suchergebnisse als Paragraph darstellen) ist das Problem mit den diakritsichen Zeichen #106 gelöst
 
-##Version 6.4.0 (2017-09-11)
+## Version 6.4.0 (2017-09-11)
   - Test-Funktion im Backend @alexplusde
 
-##Version 6.3.1 (2017-09-08)
+## Version 6.3.1 (2017-09-08)
   - Spalten Checkboxen nur noch in 2 Spalten #115 ( @tbaddade ) 
   - css und js werden nur noch auf den eigenen Backendseiten geladen #118 ( @olien )
   - extension point "YFORM_DATA_DELETED" wurde nicht beachtet
@@ -27,11 +27,11 @@
   - doppelte slashes in scanurl entfernt #111 ( thx Gerry, @skerbis )
   - yrewrite support added #105 (thx @palber ) 
 
-##Version 6.3.0 (2017-03-23)
+## Version 6.3.0 (2017-03-23)
   - Indexmodi alle entfernt. Es wird nur noch Frontend indexiert.
   - die Tags werden nur noch bei der Indexierung eingefügt
   
-##Version 6.2.0 (2017-03-22)
+## Version 6.2.0 (2017-03-22)
   - PlugIn Permissions @DanielWeitenauer
   - Fehlermeldung im SystemLog, wenn HTTP-GET Indexierung scheitert.
   - Plaintext PlugIn: Änderung der Einstellungen muss Meldung zum Suchindex erneuern bringen #86
@@ -42,28 +42,28 @@
   - Einstellung "Output Filter anwenden" entfernt ( wird jetzt immer angewendet )
   - Darstellung der Einstellungen für Datei-Indexierung verbessert
 
-##Version 6.1.5 (2017-02-17)
+## Version 6.1.5 (2017-02-17)
   - Extensionpoint "SLICE_SHOW" ist wirklich nicht mehr nötig --> entfernt, thx @darwin26 
   - issue #77 Der Search-Highlighter zeichnet auch im <title> Tag aus,  thx@DanielWeitenauer
   - issue #76 Maximale Trefferanzahl prüfen, thx @DanielWeitenauer
   - Fixes am "frontend mode" @skerbis
 
-##Version 6.1.4 (2017-01-10)
+## Version 6.1.4 (2017-01-10)
   - PHP 7.1 Anpassung dont [] a ""
 
-##Version 6.1.3 (2016-12-27)
+## Version 6.1.3 (2016-12-27)
   - Ähnlichkeitssuche bei konjunktiver Suche (AND) jetzt korrekt implementiert
   - Hinweis dass der Suchindex erneuert werden muss, wenn Ähnlichkeitssuche eingeschaltet wird
 
-##Version 6.1.2 (2016-11-21)
+## Version 6.1.2 (2016-11-21)
   - beim Löschen von Tabellen wird jetzt `TRUNCATE` benutzt, damit die autoincrementwerte zurückgesetzt werden @Flo
   - update.php löscht die alten Plugins "search_highlighter" und "reindex" aus den 5er Versionen 
 
-##Version 6.1.1 (2016-11-17)
+## Version 6.1.1 (2016-11-17)
   - neue Funktion `searchInCategoryTree`, die die Suche auf alle Unterkategorien einer Kategorie beschränkt ( nützlich bei multi-domain sites ) Auf Anregung von @alex_wenz, thx
   - Bezeichnungen im Backend geändert (hoffentlich verbessert)
   
-##Version 6.1.0 (2016-11-16)
+## Version 6.1.0 (2016-11-16)
   - neuer alter "Frontend mode" als Fix für #66
   - "indiziern" -> "indexieren"
   - PHP Zugriffslevel gesetzt private/public/protected 
@@ -72,33 +72,33 @@
   - Backend-Message "Suchindex muss erneuert werden" wird jetzt auch bei geänderten Werten angezeigt, die ein array sind.
   - diverse ungenutze Variablen entfernt (indexUnknownFileExtensions, indexMissingFileExtensions)
 
-##Version 6.0.1 (2016-11-05)
+## Version 6.0.1 (2016-11-05)
   - Fehler beim Indexieren per HTTP und Verwendung von YRewrite behoben
   - statt `file_get_contents` wird jetzt `rex_socket` verwendet
 
-##Version 6.0.0 (2016-10-21)
+## Version 6.0.0 (2016-10-21)
   - Fehler beim Indexieren von PDFs behoben, Einstellungen umgestellt 
   
-##Version 6.0.0-rc1 (2016-10-10)
+## Version 6.0.0-rc1 (2016-10-10)
   - Re-indizierung jetzt per cronjob möglich 
 
-##Version 5.9.1 (2016-09-24)
+## Version 5.9.1 (2016-09-24)
   - Methode cologne_phon() durch soundex_ger() ersetzt (wegen Lizenz, jetzt BSD) 
   
-##Version 5.9.0 (2016-09-24)
+## Version 5.9.0 (2016-09-24)
   - Plugin Search Highlighter und Reindex in das AddOn eingebaut
 
-##Version 5.8.2 (2016-09-18)
+## Version 5.8.2 (2016-09-18)
   - Viele Bugs beseitigt
   - Verbesserte Doku (wie yform-docs)
 
-##Version 5.8.1 (2016-09-02)
+## Version 5.8.1 (2016-09-02)
   - Dokumentation als plugin
 
-##Version 5.8.0 (2016-09-01)
+## Version 5.8.0 (2016-09-01)
   - Frontend-Mode ausgebaut
 
-##Version 5.7.9 (2016-08-31)
+## Version 5.7.9 (2016-08-31)
   - Portierung auf R5
   - Umbenennung von **"RexSearch"** in **"Search it"**
   - die sql->escape Methode umgibt das Ergebnis mit single Quotes, was alle SQL Abfragen fehlerhaft machte.
@@ -109,41 +109,41 @@
   - in "function indexArticle" musste die neue clang-Objektstruktur beachtet werden
   - den re-index-Link im Backend beim Artikelmenu kann man so nicht mehr setzen, weil der EXTENSIONPOINT so nicht mehr existiert
 
-##Version 0.7.9 (2011)
+## Version 0.7.9 (2011)
   - Speicherung von indexierten Spalten bei der Indexierung von Artikeln
   - Verbesserung der getHighlightedText-Methode: Textpassagen kommen nicht mehr
     doppelt vor
 
-##Version 0.7.8 (2011-06-29)
+## Version 0.7.8 (2011-06-29)
   - Plaintext-Plugin um die Möglichkeit erweitert, mit Textile zu parsen
 
-##Version 0.7.7 (2011-06-08)
+## Version 0.7.7 (2011-06-08)
   - Bug bei der automatischen Indexierung behoben
 
-##Version 0.7.6 (2011-06-01)
+## Version 0.7.6 (2011-06-01)
   - Methode cologne_phone() von Fehlern behoben (z. B. ungültige Arrayindexzugriffe)
   - XSS-Bug im Stats-Plugin beheben
   - Löschen des Suchindex bei der schrittweisen Indexierung erst nach dem OK-Klick
   - Meldung, wenn bei der schrittweisen Indexierung keine Datensätze indexiert werden können/müssen (http://www.redaxo.org/de/forum/post92638.html#p92638)
   - jedes Vorkommen der Konstante SEARCH_IT_FILE_XPDFERR_PDFPERM zu SEARCH_IT_FILE_XPDFERR_PERM geändert
 
-##Version 0.7.5 (2011-03-30)
+## Version 0.7.5 (2011-03-30)
   - Fehler bei der Indexierung und Suche innerhalb von Datenbankspalten
     behoben
   - Sprachabhängigkeit bei der Ähnlichkeitssuche berücksichtigt
   - Indexierung der Keywords verbessert
   - Plugin "Search Highlighter"
 
-##Version 0.7.4 (2010-12-05)
+## Version 0.7.4 (2010-12-05)
   - Nach jeder automatischen (Neu-)Indexierung wird nun der Suchcache
     gelöscht
 
-##Version 0.7.3 (2010-11-26)
+## Version 0.7.3 (2010-11-26)
   - Fremd-ID (fid) in der Suchindextabelle für Werte aus der Artikel-
     tabelle ist wieder die Artikel-ID
     -> Bug bei der Gruppierung von Suchergebnissen behoben
 
-##Version 0.7.2 (2010-11-12)
+## Version 0.7.2 (2010-11-12)
   - Bug bei Indexierung von Medienpooldateien behoben (Kategorie-ID wurde
     nicht übergeben)
   - JS-Nachfrage, ob schrittweise Indexierung wirklich gestartet werden
@@ -155,23 +155,23 @@
   - Bug bei der Auflistung der Verzeichnisse auf der Einstellungsseite
     behoben
 
-##Version 0.7.1 (2010-10-20)
+## Version 0.7.1 (2010-10-20)
   - Neue Methode: RexSearch::getMinFID()
   - Bug bei Ermittlung der minimalen FID behoben
 
-##Version 0.7 (2010-10-06)
+## Version 0.7 (2010-10-06)
   - Name des AddOns in RexSearch geändert
   - Ausgabe der schrittweisen Indexierung bei mehrsprachigen REDAXO-
     installationen verbessert
 
-##Version 0.6.1 (2010-10-04)
+## Version 0.6.1 (2010-10-04)
   - Datenbankfeld "values" hinzugfügt,
     indexierte Spalten einer Datenbanktabelle werden in dieses Feld
     ein getragen und stehen bei der Ausgabe der Suchergebnisse zur
     Verfügung
   - automatische Indexierung optimiert (rexsearch_handle_extensionpoint)
 
-##Version 0.6 (2010-09-16)
+## Version 0.6 (2010-09-16)
   - Datenbankfeld "fid" vom Typ INT zum Typ VARCHAR(255) geändert
   - DEFAULT CHARSET der DB-Tabellen in "utf8" geändert
   - Funktionen json_encode und json_decode für PHP < 5.2 hinzugefügt
@@ -188,7 +188,7 @@
   - JS-Nachfrage, ob schrittweise Indexierung wirklich gestartet werden
     soll, hinzugefügt
     
-##Version 0.5.4 (2010-09-14)
+## Version 0.5.4 (2010-09-14)
   - Möglichkeit, bei der Indexierung von Artikelinhalten
     den Extension Point "OUTPUT_FILTER" aufzurufen, implementiert
     (http://forum.redaxo.de/sutra84454.html#84454)

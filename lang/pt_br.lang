@@ -97,6 +97,23 @@ search_it_generate_timeleft = Faltante:
 search_it_generate_articles = Re-indexar artigos
 search_it_generate_columns = Re-indexar tabelas
 
+search_it_generate_article_excluded = not indexed, article was excluded
+search_it_generate_article_done = indexed
+search_it_generate_article_redirect = not indexed, is redirect
+search_it_generate_article_http_error = not indexed, HTTP error
+search_it_generate_article_socket_error = not indexed, Socket error
+search_it_generate_article_id_not_found = not indexed, no article with this ID
+search_it_generate_col_done = ( {0} column(s) indexed )
+search_it_generate_col_error = not indexed, Error
+search_it_generate_media_done = indexed
+search_it_generate_media_forbidden_extension = has a forbidden filename extension.
+search_it_generate_media_doesnt_exist = Media doesnt exist
+search_it_generate_media_error_pdf = XPDF-error: Error opening a PDF file
+search_it_generate_media_error_pdf2 = Other PDF Error
+search_it_generate_media_error_output = XPDF-error: Error opening an output file
+search_it_generate_media_error_permissions = XPDF-error: Error related to PDF permissions
+search_it_generate_media_empty = Media is empty or could not be extracted
+
 search_it_settings_fileext_header = Arquivo de busva
 search_it_settings_fileext_label = Extensões (ex: 'txt,csv,pdf' <br />( deixar vazio para arquivos desejados)
 search_it_settings_file_mediapool = Meios de indexação no pool de mídia

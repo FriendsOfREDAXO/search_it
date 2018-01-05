@@ -1,5 +1,9 @@
 # Änderungen von search_it
 
+## Version 6.5.1 (2018-01-05)
+- Schutz des Passwortfeldes im Backend (thx @tbaddade)
+- Überarbeitung/Übersetzungen der Meldungen bei schrittweiser Indexierung ( #137 ) 
+
 ## Version 6.5.0 (2017-09-24)
 - Eingabe eines Basic Auth Login ermöglicht Indexierung trotz '.htaccess'-Schutz #100 ( thx @Hirbod )
 - Verbesserte Fehlermeldungen beim Indexieren per Backend

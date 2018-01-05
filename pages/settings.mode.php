@@ -95,7 +95,7 @@ $content .= search_it_getSettingsFormSection(
             'value' => !empty($this->getConfig('htaccess_user')) ? htmlspecialchars($this->getConfig('htaccess_user')) : '',
         ),
         array(
-            'type' => 'string',
+            'type' => 'password',
             'id' => 'search_it_htaccess_pass',
             'name' => 'search_config[htaccess_pass]',
             'label' => $this->i18n('search_it_settings_htaccess_pass'),

@@ -192,6 +192,7 @@ class search_it
         foreach ($langs as $lang) {
             $langID = $lang->getId();
             $v = $lang->getName();
+            $v = $langID;
             if (in_array($_id, $this->excludeIDs)) {
                 $return[$v] = SEARCH_IT_ART_EXCLUDED;
                 continue;

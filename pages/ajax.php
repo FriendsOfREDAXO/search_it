@@ -14,23 +14,29 @@ switch($ajax) {
                 foreach($search_it->indexArticle($_id = intval(rex_get('id'))) as $langID => $article){
                     switch($article){
                         case SEARCH_IT_ART_EXCLUDED:
-                            echo '<p class="text-primary">Article (ID=<strong>'.$_id.'</strong>,<strong>'.$langID.'</strong>) is excluded</p>';
+                            echo '<p class="text-primary"><em>"'.htmlspecialchars(rex_article::get($_id, $langID)->getValue('name')).'"</em> 
+                                (ID=<strong>'.$_id.'</strong>,<strong>'.$langID.'</strong>) '.$this->i18n('search_it_generate_article_excluded').'</p>';
                             break;
                         case SEARCH_IT_ART_ERROR:
-                            echo '<p class="text-primary">Article (ID=<strong>'.$_id.'</strong>,<strong>'.$langID.'</strong>) Socket-Fehler bei der Indexierung per HTTP-GET</p>';
+                            echo '<p class="text-primary"><em>"'.htmlspecialchars(rex_article::get($_id, $langID)->getValue('name')).'"</em> 
+                                (ID=<strong>'.$_id.'</strong>,<strong>'.$langID.'</strong>) '.$this->i18n('search_it_generate_article_socket_error').'</p>';
                             break;
                         case SEARCH_IT_ART_NOTOK:
-                            echo '<p class="text-primary">Article (ID=<strong>'.$_id.'</strong>,<strong>'.$langID.'</strong>) Response not ok bei der Indexierung per HTTP-GET</p>';
+                            echo '<p class="text-primary"><em>"'.htmlspecialchars(rex_article::get($_id, $langID)->getValue('name')).'"</em> 
+                                (ID=<strong>'.$_id.'</strong>,<strong>'.$langID.'</strong>) '.$this->i18n('search_it_generate_article_http_error').'</p>';
                             break;
                         case SEARCH_IT_ART_IDNOTFOUND:
-                            echo '<p class="text-info">Article (ID=<strong>'.$_id.'</strong>,<strong>'.$langID.'</strong>) not found</p>';
+                            echo '<p class="text-info">
+                                (ID=<strong>'.$_id.'</strong>,<strong>'.$langID.'</strong>) '.$this->i18n('search_it_generate_article_id_not_found').'</p>';
                             break;
                         case SEARCH_IT_ART_REDIRECT:
-                            echo '<p class="text-primary">Article (ID=<strong>'.$_id.'</strong>,<strong>'.$langID.'</strong>) is excluded because of a redirect</p>';
+                            echo '<p class="text-primary"><em>"'.htmlspecialchars(rex_article::get($_id, $langID)->getValue('name')).'"</em> 
+                                (ID=<strong>'.$_id.'</strong>,<strong>'.$langID.'</strong>) '.$this->i18n('search_it_generate_article_redirect').'</p>';
                             break;
                         case SEARCH_IT_ART_GENERATED:
-                            $article = new rex_article_content($_id, $langID);
-                            echo '<p class="text-warning">Done: Article <em>"'.htmlspecialchars($article->getValue('name')).'"</em> (ID=<strong>'.$_id.'</strong>,<strong>'.rex_clang::get($langID)->getName().'</strong>)</p>';
+                            //$article2 = new rex_article_content($_id, $langID);
+                            echo '<p class="text-warning"><em>"'.htmlspecialchars(rex_article::get($_id, $langID)->getValue('name')).'"</em> 
+                                (ID=<strong>'.$_id.'</strong>,<strong>'.rex_clang::get($langID)->getName().'</strong>) '.$this->i18n('search_it_generate_article_done').'</p>';
                             break;
                     }
                 }
@@ -38,9 +44,9 @@ switch($ajax) {
 
             case 'col':
                 if(false !== ($count = $search_it->indexColumn(rex_get('t'), rex_get('c'), false, false, rex_get('s'), rex_get('w')))) {
-                    echo '<p class="text-warning">Done: <em>`' . rex_get('t') . '`.`' . rex_get('c') . '` (' . rex_get('s') . ' - ' . (rex_get('s') + rex_get('w')) . ')</em> (<strong>' . $count . '</strong> row(s) indexed)</p>';
+                    echo '<p class="text-warning"><em>`' . rex_get('t') . '`.`' . rex_get('c') . '` (' . rex_get('s') . ' - ' . (rex_get('s') + rex_get('w')) . ')</em> '. $this->i18n('search_it_generate_col_done',$count) . '</p>';
                 } else {
-                    echo '<p class="text-info">Error: <em>`' . rex_get('t') . '`.`' . rex_get('c') . '`</em> not found</p>';
+                    echo '<p class="text-info">Error: <em>`' . rex_get('t') . '`.`' . rex_get('c') . '`</em>'. $this->i18n('search_it_generate_col_error',$count) . '</p>';
                 }
                 break;
 
@@ -56,41 +62,41 @@ switch($ajax) {
 
                 switch($return){
                     case SEARCH_IT_FILE_FORBIDDEN_EXTENSION:
-                        echo '<p class="text-info">File'.$additionalOutput.' <strong>"'.htmlspecialchars(rex_get('name')).'"</strong> has a forbidden filename extension.</p>';
+                        echo '<p class="text-info">'.$additionalOutput.' <strong>"'.htmlspecialchars(rex_get('name')).'"</strong> '. $this->i18n('search_it_generate_media_forbidden_extension',$count) . '</p>';
                         break;
 
                     case SEARCH_IT_FILE_NOEXIST:
-                        echo '<p class="text-info">File'.$additionalOutput.' <strong>"'.htmlspecialchars(rex_get('name')).'"</strong> does not exist.</p>';
+                        echo '<p class="text-info">'.$additionalOutput.' <strong>"'.htmlspecialchars(rex_get('name')).'"</strong> '. $this->i18n('search_it_generate_media_doesnt_exist') . '</p>';
                         break;
 
                     case SEARCH_IT_FILE_XPDFERR_OPENSRC:
-                        echo '<p class="text-info">XPDF-error: Error opening a PDF file. File'.$additionalOutput.': <strong>"'.htmlspecialchars(rex_get('name')).'"</strong>.</p>';
+                        echo '<p class="text-info">'.$additionalOutput.': <strong>"'.htmlspecialchars(rex_get('name')).'"</strong> '. $this->i18n('search_it_generate_media_error_pdf') . '</p>';
                         break;
 
                     case SEARCH_IT_FILE_XPDFERR_OPENDEST:
-                        echo '<p class="text-info">XPDF-error: Error opening an output file. File'.$additionalOutput.': <strong>"'.htmlspecialchars(rex_get('name')).'"</strong>.</p>';
+                        echo '<p class="text-info">'.$additionalOutput.': <strong>"'.htmlspecialchars(rex_get('name')).'"</strong> '. $this->i18n('search_it_generate_media_error_output') . '</p>';
                         break;
 
                     case SEARCH_IT_FILE_XPDFERR_PERM:
-                        echo '<p class="text-error">XPDF-error: Error related to PDF permissions. File'.$additionalOutput.': <strong>"'.htmlspecialchars(rex_get('name')).'"</strong>.</p>';
+                        echo '<p class="text-error">'.$additionalOutput.': <strong>"'.htmlspecialchars(rex_get('name')).'"</strong> '. $this->i18n('search_it_generate_media_error_permissions') . '</p>';
                         break;
 
                     case SEARCH_IT_FILE_XPDFERR_OTHER:
-                        echo '<p class="text-error">XPDF-error: Other error. File'.$additionalOutput.': <strong>"'.htmlspecialchars(rex_get('name')).'"</strong>.</p>';
+                        echo '<p class="text-error">'.$additionalOutput.': <strong>"'.htmlspecialchars(rex_get('name')).'"</strong> '. $this->i18n('search_it_generate_media_error_pdf2') . '</p>';
                         break;
 
                     case SEARCH_IT_FILE_EMPTY:
-                        echo '<p class="text-error">File'.$additionalOutput.' <strong>"'.htmlspecialchars(rex_get('name')).'"</strong> is empty or could not be extracted.</p>';
+                        echo '<p class="text-error">'.$additionalOutput.' <strong>"'.htmlspecialchars(rex_get('name')).'"</strong> '. $this->i18n('search_it_generate_media_empty') . '</p>';
                         break;
 
                     case SEARCH_IT_FILE_GENERATED:
-                        echo '<p class="text-info">Done: File'.$additionalOutput.' <strong>"'.htmlspecialchars(rex_get('name')).'"</strong>';
+                        echo '<p class="text-info">'.$additionalOutput.' <strong>"'.htmlspecialchars(rex_get('name')).'"</strong> '. $this->i18n('search_it_generate_media_done') .'</p>';
                         break;
                 }
                 break;
 
             default:
-                echo '<p class="alert-error">Error: <em>Wrong request parameters!</em></p>';
+                echo '<p class="alert-error">'. $this->i18n('search_it_generate_error') .'</p>';
         }
         break;
 

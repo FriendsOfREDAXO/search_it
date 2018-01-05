@@ -316,6 +316,12 @@ function search_it_getSettingsFormSection($id = '', $title = '&nbsp;', $elements
                 $n['field'] = '<input type="text" name="'.$element['name'].'" class="form-control" id="'.$element['id'].'" value="'.$element['value'].'" />';
             break;
 
+            // STRING
+            case 'password':
+                $n['label'] = '<label for="'.$element['id'].'">'.$element['label'].'</label>';
+                $n['field'] = '<input type="password" name="'.$element['name'].'" class="form-control" id="'.$element['id'].'" value="'.$element['value'].'" />';
+                break;
+
             // TEXT
             case 'text':
                 $n['label'] = '<label for="'.$element['id'].'">'.$element['label'].'</label>';

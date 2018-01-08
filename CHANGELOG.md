@@ -1,5 +1,8 @@
 # Änderungen von search_it
 
+## Version 6.5.2 (2018-01-08)
+- Einige Meldungen im Backend enthielten nach Update auf REX 5.5 HTML Code ( thx helpy (Forum), #142 )
+
 ## Version 6.5.1 (2018-01-05)
 - Schutz des Passwortfeldes im Backend (thx @tbaddade)
 - Überarbeitung/Übersetzungen der Meldungen bei schrittweiser Indexierung ( #137 ) 

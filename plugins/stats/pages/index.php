@@ -131,7 +131,7 @@ foreach (array(10, 20, 50, 100, 200, 500, 1000) as $option) {
     $selectMaxTopSearchitems .= '<option value="' . $option . '"' . (max(intval($this->getConfig('maxtopsearchitems')),10) == $option ? ' selected="selected"' : '') . '>' . $option . '</option>';
 }
 $selectMaxTopSearchitems .= '</select>';
-$pre = $this->i18n('search_it_stats_topsearchterms_title', $selectMaxTopSearchitems, $stats->getSearchtermCount());
+$pre = rex_i18n::rawMsg('search_it_stats_topsearchterms_title', $selectMaxTopSearchitems, $stats->getSearchtermCount());
 $pre2 = '<div class="btn-group" role="group"><span class="search_it-stats-all btn btn-default">alle</span> <span class="search_it-stats-success btn btn-success">erfolgreich</span> <span class="search_it-stats-fail btn btn-danger">fehlgeschlagen</span></div>';
 
 
@@ -183,7 +183,7 @@ foreach (array(6, 9, 12, 15, 18, 21, 24) as $option) {
 }
 $searchtermselectmonthcount .= '</select>';
 
-$pre = $this->i18n('search_it_stats_searchterm_timestats_title', $topsearchtermselect, $searchtermselectmonthcount);
+$pre = rex_i18n::rawMsg('search_it_stats_searchterm_timestats_title', $topsearchtermselect, $searchtermselectmonthcount);
 $rest = '<img src="index.php?page=search_it/stats&amp;func=image&amp;image=searchterm_timestats&amp;term='
     . htmlspecialchars(urlencode($this->getConfig('searchtermselect') == 'all' ? 'all' : $this->getConfig('searchtermselect')))
     . '&amp;monthcount=' . intval($this->getConfig('searchtermselectmonthcount')) . '"  alt="'

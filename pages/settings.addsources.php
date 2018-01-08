@@ -137,7 +137,7 @@ $content3[] = search_it_getSettingsFormSection(
             'type' => 'string',
             'id' => 'search_it_settings_fileext_label',
             'name' => 'search_config[fileextensions]',
-            'label' => $this->i18n('search_it_settings_fileext_label'),
+            'label' => rex_i18n::rawMsg('search_it_settings_fileext_label'),
             'value' => !empty($this->getConfig('fileextensions')) ? htmlspecialchars(implode(',',$this->getConfig('fileextensions'))) : ''
         ),
         array(

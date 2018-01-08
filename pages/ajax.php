@@ -96,7 +96,7 @@ switch($ajax) {
                 break;
 
             default:
-                echo '<p class="alert-error">'. $this->i18n('search_it_generate_error') .'</p>';
+                echo '<p class="alert-error">'. rex_i18n::rawMsg('search_it_generate_error') .'</p>';
         }
         break;
 

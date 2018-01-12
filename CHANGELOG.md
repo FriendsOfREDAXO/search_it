@@ -1,5 +1,9 @@
 # Änderungen von search_it
 
+- Fehler SEARCH_IT_ART_IDNOTFOUND wurde gar nicht mehr ausgegeben
+- Eine eigene Meldung für 404 und Endlos-Redirect
+- Code für Meldungen verbessert / bei den Fehlern wurde nicht die Sparache angezeigt
+
 ## Version 6.5.2 (2018-01-08)
 - Einige Meldungen im Backend enthielten nach Update auf REX 5.5 HTML Code ( thx helpy (Forum), #142 )
 

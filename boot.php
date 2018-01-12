@@ -6,6 +6,7 @@
         define('SEARCH_IT_ART_REDIRECT',3);
         define('SEARCH_IT_ART_ERROR',4);
         define('SEARCH_IT_ART_NOTOK',5);
+        define('SEARCH_IT_ART_404',6);
 
         define('SEARCH_IT_FILE_NOEXIST',0);
         define('SEARCH_IT_FILE_XPDFERR_OPENSRC',1);

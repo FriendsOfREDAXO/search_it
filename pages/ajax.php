@@ -12,31 +12,31 @@ switch($ajax) {
         switch(rex_get('type')){
             case 'art':
                 foreach($search_it->indexArticle($_id = intval(rex_get('id'))) as $langID => $article){
+
+                    $msgtext = !is_null(rex_article::get($_id, $langID)) ? '<em>"'.htmlspecialchars(rex_article::get($_id, $langID)->getValue('name')).'"</em>' : '';
+                    $msgtext .= '(ID=<strong>'.$_id.'</strong>,<strong>'.rex_clang::get($langID)->getName().'</strong>) ';
+
                     switch($article){
-                        case SEARCH_IT_ART_EXCLUDED:
-                            echo '<p class="text-primary"><em>"'.htmlspecialchars(rex_article::get($_id, $langID)->getValue('name')).'"</em> 
-                                (ID=<strong>'.$_id.'</strong>,<strong>'.$langID.'</strong>) '.$this->i18n('search_it_generate_article_excluded').'</p>';
-                            break;
                         case SEARCH_IT_ART_ERROR:
-                            echo '<p class="text-primary"><em>"'.htmlspecialchars(rex_article::get($_id, $langID)->getValue('name')).'"</em> 
-                                (ID=<strong>'.$_id.'</strong>,<strong>'.$langID.'</strong>) '.$this->i18n('search_it_generate_article_socket_error').'</p>';
+                            echo '<p class="text-primary">'. $msgtext . $this->i18n('search_it_generate_article_socket_error').'</p>';
+                            break;
+                        case SEARCH_IT_ART_EXCLUDED:
+                            echo '<p class="text-primary">'. $msgtext . $this->i18n('search_it_generate_article_excluded').'</p>';
+                            break;
+                        case SEARCH_IT_ART_404:
+                            echo '<p class="text-primary">'. $msgtext . $this->i18n('search_it_generate_article_404_error').'</p>';
                             break;
                         case SEARCH_IT_ART_NOTOK:
-                            echo '<p class="text-primary"><em>"'.htmlspecialchars(rex_article::get($_id, $langID)->getValue('name')).'"</em> 
-                                (ID=<strong>'.$_id.'</strong>,<strong>'.$langID.'</strong>) '.$this->i18n('search_it_generate_article_http_error').'</p>';
+                            echo '<p class="text-primary">'. $msgtext . $this->i18n('search_it_generate_article_http_error').'</p>';
                             break;
                         case SEARCH_IT_ART_IDNOTFOUND:
-                            echo '<p class="text-info">
-                                (ID=<strong>'.$_id.'</strong>,<strong>'.$langID.'</strong>) '.$this->i18n('search_it_generate_article_id_not_found').'</p>';
+                            echo '<p class="text-info">'   . $msgtext . $this->i18n('search_it_generate_article_id_not_found').'</p>';
                             break;
                         case SEARCH_IT_ART_REDIRECT:
-                            echo '<p class="text-primary"><em>"'.htmlspecialchars(rex_article::get($_id, $langID)->getValue('name')).'"</em> 
-                                (ID=<strong>'.$_id.'</strong>,<strong>'.$langID.'</strong>) '.$this->i18n('search_it_generate_article_redirect').'</p>';
+                            echo '<p class="text-primary">'. $msgtext . $this->i18n('search_it_generate_article_redirect').'</p>';
                             break;
                         case SEARCH_IT_ART_GENERATED:
-                            //$article2 = new rex_article_content($_id, $langID);
-                            echo '<p class="text-warning"><em>"'.htmlspecialchars(rex_article::get($_id, $langID)->getValue('name')).'"</em> 
-                                (ID=<strong>'.$_id.'</strong>,<strong>'.rex_clang::get($langID)->getName().'</strong>) '.$this->i18n('search_it_generate_article_done').'</p>';
+                            echo '<p class="text-success">'. $msgtext . $this->i18n('search_it_generate_article_done').'</p>';
                             break;
                     }
                 }

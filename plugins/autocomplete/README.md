@@ -30,7 +30,7 @@ Verwendung auf eigene Gefahr.
 
 ## Autor
 
-**Mantage** - Ronny Kemmereit / Pascal Schuchmann
+**Manétage** - Ronny Kemmereit / Pascal Schuchmann
 * http://www.manetage.de
 
 **Friends Of REDAXO**

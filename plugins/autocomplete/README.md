@@ -1,4 +1,4 @@
-#Installation vom Autocomplete
+# Installation vom Autocomplete
 
 Das Plugin stellt das "Suggest"-Script für die Autovervollständigung bei der Suche im Frontend zur Verfügung und generiert einen Code welcher im Template eingebunden werden muss.
 

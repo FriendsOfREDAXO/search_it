@@ -6,7 +6,6 @@
     if ( rex::isBackend() ) {
 
         rex_view::addCssFile($this->getAssetsUrl('jquery.suggest.css'));
-        rex_view::addJsFile($this->getAssetsUrl('autocomplete.php'));
         rex_view::addJsFile($this->getAssetsUrl('jquery.suggest.js'));
 
         if (!$this->hasConfig()) {

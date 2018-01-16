@@ -124,7 +124,19 @@ echo $content;
 
 
 $code = file_get_contents($this->getPath('code/template.php'));
+$code = '
+<link rel="stylesheet" type="text/css" href="/'. substr(rex_url::pluginAssets('search_it', 'autocomplete','jquery.suggest.js'),3).'" media="screen" />
+<script type="text/javascript" src="/'. substr(rex_url::pluginAssets('search_it', 'autocomplete','jquery.suggest.js'),3).'"></script>
 
+<script type="text/javascript">
+  jQuery(document).ready(function() {
+    jQuery(function() {
+      jQuery(".search_it-form input[name=search]").suggest("index.php?rex-api-call=autocompleteHandler&rnd=" + Math.random()###AUTOSUBMIT###);
+    });
+  });  
+</script>
+
+';
 
 $plugin = rex_plugin::get('search_it','autocomplete');
 $autoSubmitForm= $plugin->getConfig('autoSubmitForm');
@@ -142,6 +154,8 @@ if(substr(rex::getServer(), -1) == '/')
   $serverHost = substr(rex::getServer(), 0, -1);
 
 $code = str_replace('###AUTOSUBMIT###', $autoSubmit, $code);
+
+
 
 $content = '<div class="rexx-code"><code><pre>' . highlight_string($code, true)  . '</pre></code></div>';
 

@@ -4,13 +4,7 @@
 <script type="text/javascript">
   jQuery(document).ready(function() {
     jQuery(function() {
-      jQuery(".search_it-form input[name=search]").suggest("###SERVER###<?php echo rex_getUrl('###HANDLEID###', rex_clang::getCurrentId());?>?rnd=" + Math.random(), {
-        onSelect: function(event, ui) {
-          $('.search_it-form').submit();
-          return false;
-        }
-      });
-      
+      jQuery(".search_it-form input[name=search]").suggest("index.php?rex-api-call=autocompleteHandler&rnd=" + Math.random()###AUTOSUBMIT###);      
     });
-  });
+  });  
 </script>

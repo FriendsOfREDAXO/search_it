@@ -99,10 +99,11 @@ search_it_generate_columns = Nyindexera tabeller
 
 search_it_generate_article_excluded = not indexed, article was excluded
 search_it_generate_article_done = indexed
-search_it_generate_article_redirect = not indexed, is redirect
+search_it_generate_article_redirect = not indexed, too many redirects
 search_it_generate_article_http_error = not indexed, HTTP error
+search_it_generate_article_404_error = not indexed, HTTP 404 error
 search_it_generate_article_socket_error = not indexed, Socket error
-search_it_generate_article_id_not_found = not indexed, no article with this ID
+search_it_generate_article_id_not_found = not indexed, no article with this ID in this language
 search_it_generate_col_done = ( {0} column(s) indexed )
 search_it_generate_col_error = not indexed, Error
 search_it_generate_media_done = indexed

@@ -191,10 +191,9 @@ class search_it
         $keywords = array();
         foreach ($langs as $lang) {
             $langID = $lang->getId();
-            $v = $lang->getName();
-            $v = $langID;
+
             if (in_array($_id, $this->excludeIDs)) {
-                $return[$v] = SEARCH_IT_ART_EXCLUDED;
+                $return[$langID] = SEARCH_IT_ART_EXCLUDED;
                 continue;
             }
 
@@ -221,6 +220,10 @@ class search_it
 
             // index article
             $article = rex_article::get(intval($_id), $langID);
+            if ( is_null($article)) {
+                $return[$langID] = SEARCH_IT_ART_IDNOTFOUND;
+                continue;
+            }
 
             if (is_object($article) AND ($article->isOnline() OR rex_addon::get('search_it')->getConfig('indexoffline')) AND $_id != 0
                 AND ($_id != rex_article::getNotfoundArticleId() OR $_id == rex_article::getSiteStartArticleId())  ) {
@@ -263,18 +266,20 @@ class search_it
                             $articleText = $response->getBody();
                         } else {
                             $articleText = '';
-                            if ( $response->getStatusCode() != '404' ) {
+                            if ( $response->isRedirection() ) {
+                                $return[$langID] = SEARCH_IT_ART_REDIRECT;
+                            } else if ( $response->getStatusCode() != '404' ) {
                                 rex_logger::factory()->info('Fehler bei der Indexierung per HTTP-GET von ' . $scanurl . '<br>' . $response->getStatusCode() . ' - ' . $response->getStatusMessage());
-                                $return[$v] = SEARCH_IT_ART_NOTOK;
+                                $return[$langID] = SEARCH_IT_ART_NOTOK;
                             } else {
-                                $return[$v] = SEARCH_IT_ART_REDIRECT;
+                                $return[$langID] = SEARCH_IT_ART_404;
                             }
                             continue;
                         }
                  } catch (rex_socket_exception $e) {
                     $articleText = '';
                     rex_logger::factory()->info('Socket-Fehler bei der Indexierung per HTTP-GET von '.$scanurl. '<br>' .$response->getStatusCode().' - '.$response->getStatusMessage());
-                    $return[$v] = SEARCH_IT_ART_ERROR;
+                    $return[$langID] = SEARCH_IT_ART_ERROR;
                     continue;
 
                  }
@@ -615,7 +620,7 @@ class search_it
                     $tempFile = tempnam(rex_path::cache() . 'addons/mediapool/', 'search_it');
                     $encoding = 'UTF-8';
                     //echo 'pdftotext ' . escapeshellarg(rex_path::base($_filename)) . ' ' . escapeshellarg($tempFile) . ' -enc ' . $encoding;
-                    exec('pdftotext ' . escapeshellarg(rex_path::base($_filename)) . ' ' . escapeshellarg($tempFile) . ' -enc ' . $encoding, $dummy, $return);
+                    exec('pdftotext  -enc ' . $encoding.' '. escapeshellarg(rex_path::base($_filename)) . ' ' . escapeshellarg($tempFile) , $dummy, $return);
 
                     if ($return > 0) {
                         if ($return == 1) {

@@ -1,5 +1,12 @@
 # Änderungen von search_it
 
+## Version 6.6.0 (2018-01-17)
+- Aufruf von pdftotext geändert, damit er auf mehr Servern funktioniert thx @helpy
+- Autocomplete als neues Plugin thx! ! ! @rkemmere ! ! !
+- Fehler SEARCH_IT_ART_IDNOTFOUND wurde gar nicht mehr ausgegeben
+- Eine eigene Meldung für 404 und Endlos-Redirect
+- Code für Meldungen verbessert / bei den Fehlern wurde nicht die Sparache angezeigt
+
 ## Version 6.5.2 (2018-01-08)
 - Einige Meldungen im Backend enthielten nach Update auf REX 5.5 HTML Code ( thx helpy (Forum), #142 )
 

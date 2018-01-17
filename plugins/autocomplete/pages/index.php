@@ -128,7 +128,7 @@ $code = '<link rel="stylesheet" type="text/css" href="/'. substr(rex_url::plugin
 <script type="text/javascript">
   jQuery(document).ready(function() {
     jQuery(function() {
-      jQuery(".search_it-form input[name=search]").suggest("index.php?rex-api-call=autocompleteHandler&rnd=" + Math.random()###AUTOSUBMIT###);      
+      jQuery(".search_it-form input[name=search]").suggest("index.php?rex-api-call=search_it_autocomplete_getSimilarWords&rnd=" + Math.random()###AUTOSUBMIT###);      
     });
   });  
 </script>';

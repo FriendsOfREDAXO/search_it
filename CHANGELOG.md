@@ -1,6 +1,6 @@
 # Änderungen von search_it
 
-## Version 6.6.0 (2018-01-17)
+## Version 6.6.1 (2018-01-17)
 - Aufruf von pdftotext geändert, damit er auf mehr Servern funktioniert thx @helpy
 - Autocomplete als neues Plugin thx! ! ! @rkemmere ! ! !
 - Fehler SEARCH_IT_ART_IDNOTFOUND wurde gar nicht mehr ausgegeben

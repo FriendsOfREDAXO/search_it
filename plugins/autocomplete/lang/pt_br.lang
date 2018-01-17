@@ -1,0 +1,21 @@
+search_it_autocomplete_title = Autocomplete
+search_it_autocomplete_plugin_title = Autocomplete
+search_it_autocomplete_plugin_info = Autocomplete para Search it
+
+search_it_autocomplete_config = Configurações
+search_it_autocomplete_config_saved = Configurações salvas.
+search_it_autocomplete_config_save = Salvar configurações
+
+search_it_autocomplete_config_modus = Modo de emissão
+search_it_autocomplete_config_maxSuggestion = Número máximo de visitas
+search_it_autocomplete_config_similarwords_label = Número máximo de visitas
+search_it_autocomplete_config_similarwords_none = Desativar
+search_it_autocomplete_config_similarwords_soundex = Soundex (Geral)
+search_it_autocomplete_config_similarwords_metaphone = Metaphone (EN)
+search_it_autocomplete_config_similarwords_cologne = Fonética de Colônia (DE)
+search_it_autocomplete_config_similarwords_all = Tudo
+
+search_it_autocomplete_config_autoSubmitForm = Auto Submit Form
+
+search_it_autocomplete_config_install = Instalação
+search_it_autocomplete_config_codesnippet = Código gerado para Template

@@ -1,0 +1,21 @@
+search_it_autocomplete_title = Autocomplete
+search_it_autocomplete_plugin_title = Autocomplete
+search_it_autocomplete_plugin_info = Autocomplete for Search it
+
+search_it_autocomplete_config = Configuration
+search_it_autocomplete_config_saved = Settings saved.
+search_it_autocomplete_config_save = Save settings
+
+search_it_autocomplete_config_modus = Output mode
+search_it_autocomplete_config_maxSuggestion = Maximum number of hits
+search_it_autocomplete_config_similarwords_label = Similarity search
+search_it_autocomplete_config_similarwords_none = Deactivate
+search_it_autocomplete_config_similarwords_soundex = Soundex (General)
+search_it_autocomplete_config_similarwords_metaphone = Metaphone (EN)
+search_it_autocomplete_config_similarwords_cologne = Cologne Phonetics (DE)
+search_it_autocomplete_config_similarwords_all = All
+
+search_it_autocomplete_config_autoSubmitForm = Auto Submit Form
+
+search_it_autocomplete_config_install = Installation
+search_it_autocomplete_config_codesnippet = Generated code for insert in template

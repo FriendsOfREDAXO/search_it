@@ -123,12 +123,12 @@ $content = $fragment->parse('core/page/section.php');
 echo $content;
 
 
-$code = '<link rel="stylesheet" type="text/css" href="/'. substr(rex_url::pluginAssets('search_it', 'autocomplete','jquery.suggest.js'),3).'" media="screen" />
+$code = '<link rel="stylesheet" type="text/css" href="/'. substr(rex_url::pluginAssets('search_it', 'autocomplete','jquery.suggest.css'),3).'" media="screen" />
 <script type="text/javascript" src="/'. substr(rex_url::pluginAssets('search_it', 'autocomplete','jquery.suggest.js'),3).'"></script>          
 <script type="text/javascript">
   jQuery(document).ready(function() {
     jQuery(function() {
-      jQuery(".search_it-form input[name=search]").suggest("index.php?rex-api-call=autocompleteHandler&rnd=" + Math.random()###AUTOSUBMIT###);      
+      jQuery(".search_it-form input[name=search]").suggest("index.php?rex-api-call=search_it_autocomplete_getSimilarWords&rnd=" + Math.random()###AUTOSUBMIT###);      
     });
   });  
 </script>';

@@ -1,11 +1,12 @@
-# Installation vom Autocomplete
+# Installation Autocomplete
 
-Das Plugin stellt das "Suggest"-Script für die Autovervollständigung bei der Suche im Frontend zur Verfügung und generiert einen Code welcher im Template eingebunden werden muss.
+Das Plugin stellt das "Suggest"-jQuery-PlugIn für die Autovervollständigung bei der Suche im Frontend zur Verfügung und generiert einen Code welcher im Template eingebunden werden muss.
 
 ## Requirements
 
 * Installiertes jQuery im Frontend 
-
+* Funktionierendes Suchformular, das die HTML-Klasse "search_it-form", 
+sowie ein HTML-Eingabefeld für die Suche mit dem Namen "search". 
 
 ## Installation
 
@@ -14,7 +15,7 @@ Das Plugin stellt das "Suggest"-Script für die Autovervollständigung bei der S
 3. Konfiguration im Plugin vornehmen und speichern
 4. Den generierten Code für das Template herauskopieren und in das Template, welches für das Suchfeld verwendet wird, vor dem schließenden `</body>` Tag hinzufügen
 5. Sollte das Suchfeld überall verwendet werden, beispielsweise im Kopf der Seite, muss der generierte Code in das entsprechende Template hinzugefügt werden
-6. Optional: CSS und JS Datei können auch per Minify eingebunden werden 
+6. Optional: CSS und JS Datei in den eigenen Frontend_prozess einbauen ( z.B. per Minify oder im Bimmelbam ) 
 
 
 ## Lizenz

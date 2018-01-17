@@ -1,5 +1,7 @@
 # Änderungen von search_it
 
+- Aufruf von pdftotext geändert, damit er auf mehr Servern funktioniert thx @helpy
+- Autocomplete als neues Plugin thx! ! ! @rkemmere ! ! !
 - Fehler SEARCH_IT_ART_IDNOTFOUND wurde gar nicht mehr ausgegeben
 - Eine eigene Meldung für 404 und Endlos-Redirect
 - Code für Meldungen verbessert / bei den Fehlern wurde nicht die Sparache angezeigt

@@ -620,7 +620,7 @@ class search_it
                     $tempFile = tempnam(rex_path::cache() . 'addons/mediapool/', 'search_it');
                     $encoding = 'UTF-8';
                     //echo 'pdftotext ' . escapeshellarg(rex_path::base($_filename)) . ' ' . escapeshellarg($tempFile) . ' -enc ' . $encoding;
-                    exec('pdftotext ' . escapeshellarg(rex_path::base($_filename)) . ' ' . escapeshellarg($tempFile) . ' -enc ' . $encoding, $dummy, $return);
+                    exec('pdftotext  -enc ' . $encoding.' '. escapeshellarg(rex_path::base($_filename)) . ' ' . escapeshellarg($tempFile) , $dummy, $return);
 
                     if ($return > 0) {
                         if ($return == 1) {

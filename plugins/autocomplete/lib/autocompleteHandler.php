@@ -1,6 +1,6 @@
 <?php 
 
-class rex_api_autocompleteHandler extends rex_api_function {
+class rex_api_search_it_autocomplete_getSimilarWords extends rex_api_function {
 
     protected $published = true;
 
@@ -9,8 +9,8 @@ class rex_api_autocompleteHandler extends rex_api_function {
       error_reporting(0);
       header("Content-Type: text/html; charset=utf-8");
       
-      $q = rex_request('search', 'string', false);
-      
+      $q = rex_request('q', 'string', false);
+
       //modus für die ausgabe
       $plugin = rex_plugin::get('search_it','autocomplete');
       

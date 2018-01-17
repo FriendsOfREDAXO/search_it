@@ -1,5 +1,8 @@
 # Änderungen von search_it
 
+## Version 6.6.2 (2018-01-17)
+- Bugfix css Datei
+
 ## Version 6.6.1 (2018-01-17)
 - Aufruf von pdftotext geändert, damit er auf mehr Servern funktioniert thx @helpy
 - Autocomplete als neues Plugin thx! ! ! @rkemmere ! ! !

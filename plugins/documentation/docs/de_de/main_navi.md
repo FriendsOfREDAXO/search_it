@@ -10,6 +10,7 @@
 - Plugins
 	- [Statistik](plugin-stats.md)
 	- [Plaintext](plugin-plaintext.md)
+	- [Autocomplete](plugin-autocomplete.md)
 - Beispiele
 	- [Such-Eingabe](module-form.md)
 	- [Einfache Suche](module-simple.md)

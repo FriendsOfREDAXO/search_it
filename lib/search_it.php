@@ -1905,7 +1905,16 @@ class search_it
                     continue;
                 }
                 // build MATCH-Array
-                $match = sprintf("(( MATCH (`%s`) AGAINST (%s)) * %d)", implode('`,`', $searchColumns), $sql->escape($keyword['search']), $keyword['weight']);
+                if ($this->searchMode == 'match') {
+                    $match = sprintf("(( MATCH (`%s`) AGAINST (%s)) * %d)", implode('`,`', $searchColumns), $sql->escape($keyword['search']), $keyword['weight']);
+                } else {
+                    $match = sprintf("(( (`%s` LIKE '%%%s%%')) * %d)", implode('`,`', $searchColumns), substr($sql->escape($keyword['search']), 1, -1), $keyword['weight']);
+                }
+                if ($this->searchHtmlEntities && $this->searchMode == 'match') {
+                    $match .= ' + ' . sprintf("(( MATCH (`%s`) AGAINST (%s)) * %d)", implode('`,`', $searchColumns), $sql->escape(htmlentities($keyword['search'], ENT_COMPAT, 'UTF-8')), $keyword['weight']);
+                } elseif ($this->searchHtmlEntities) {
+                    $match .= ' + ' . sprintf("(( `%s` LIKE '%%%s%%') * %d)", implode('`,`', $searchColumns), substr($sql->escape(htmlentities($keyword['search'], ENT_COMPAT, 'UTF-8')), 1, -1), $keyword['weight']);
+                }$match = sprintf("(( MATCH (`%s`) AGAINST (%s)) * %d)", implode('`,`', $searchColumns), $sql->escape($keyword['search']), $keyword['weight']);
                 if ($this->searchHtmlEntities) {
                     $match .= ' + ' . sprintf("(( MATCH (`%s`) AGAINST (%s)) * %d)", implode('`,`', $searchColumns), $sql->escape(htmlentities($keyword['search'], ENT_COMPAT, 'UTF-8')), $keyword['weight']);
                 }

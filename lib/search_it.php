@@ -1915,9 +1915,6 @@ class search_it
                 } elseif ($this->searchHtmlEntities) {
                     $match .= ' + ' . sprintf("(( `%s` LIKE '%%%s%%') * %d)", implode('`,`', $searchColumns), substr($sql->escape(htmlentities($keyword['search'], ENT_COMPAT, 'UTF-8')), 1, -1), $keyword['weight']);
                 }$match = sprintf("(( MATCH (`%s`) AGAINST (%s)) * %d)", implode('`,`', $searchColumns), $sql->escape($keyword['search']), $keyword['weight']);
-                if ($this->searchHtmlEntities) {
-                    $match .= ' + ' . sprintf("(( MATCH (`%s`) AGAINST (%s)) * %d)", implode('`,`', $searchColumns), $sql->escape(htmlentities($keyword['search'], ENT_COMPAT, 'UTF-8')), $keyword['weight']);
-                }
                 $Amatch[] = $match;
 
                 // build WHERE-Array

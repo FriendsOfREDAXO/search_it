@@ -235,7 +235,7 @@ class search_it
                             $scanurl = rex_yrewrite::getFullUrlByArticleId($_id, $langID, array('search_it_build_index' => 'do it, baby'), '&');
                         }
 
-                        $files_socket = rex_socket::factoryURL($scanurl);
+                        $files_socket = rex_socket::factoryURL('dsf#öäö'.$scanurl);
                         if (rex_addon::get('search_it')->getConfig('htaccess_user') != '' && rex_addon::get('search_it')->getConfig('htaccess_pass') != '') {
                             $files_socket->addBasicAuthorization(rex_addon::get('search_it')->getConfig('htaccess_user'),rex_addon::get('search_it')->getConfig('htaccess_pass'));
                         }
@@ -276,9 +276,10 @@ class search_it
                             }
                             continue;
                         }
+
                  } catch (rex_socket_exception $e) {
                     $articleText = '';
-                    rex_logger::factory()->info('Socket-Fehler bei der Indexierung per HTTP-GET von '.$scanurl. '<br>' .$response->getStatusCode().' - '.$response->getStatusMessage());
+                    rex_logger::factory()->info('Socket-Fehler bei der Indexierung per HTTP-GET von '.$scanurl. '<br>' .$e->getMessage() );
                     $return[$langID] = SEARCH_IT_ART_ERROR;
                     continue;
 

@@ -1,5 +1,7 @@
 # Änderungen von search_it
 
+- Fehler in Fehlermeldung bzgl Socketfehler 
+
 ## Version 6.6.2 (2018-01-17)
 - Bugfix css Datei
 

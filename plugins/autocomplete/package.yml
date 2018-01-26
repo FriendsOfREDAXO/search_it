@@ -1,5 +1,5 @@
 package: search_it/autocomplete
-version: '1.0'
+version: '6.6.2'
 author: Manétage
 
 title: 'translate:search_it_autocomplete_plugin_title'

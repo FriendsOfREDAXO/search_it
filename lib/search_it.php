@@ -235,7 +235,7 @@ class search_it
                             $scanurl = rex_yrewrite::getFullUrlByArticleId($_id, $langID, array('search_it_build_index' => 'do it, baby'), '&');
                         }
 
-                        $files_socket = rex_socket::factoryURL('dsf#öäö'.$scanurl);
+                        $files_socket = rex_socket::factoryURL($scanurl);
                         if (rex_addon::get('search_it')->getConfig('htaccess_user') != '' && rex_addon::get('search_it')->getConfig('htaccess_pass') != '') {
                             $files_socket->addBasicAuthorization(rex_addon::get('search_it')->getConfig('htaccess_user'),rex_addon::get('search_it')->getConfig('htaccess_pass'));
                         }

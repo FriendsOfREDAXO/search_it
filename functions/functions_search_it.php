@@ -759,6 +759,9 @@ function search_it_search_highlighter_getHighlightedText($_subject, $_searchStri
 
 // ex reindex plugin
 function search_it_reindex_cols($_ep){
+    if ($_ep->getSubject() instanceof Exception) {
+        return $_ep->getSubject();
+    }
 
     $_params = $_ep->getParams();
 

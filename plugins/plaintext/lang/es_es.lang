@@ -1,0 +1,14 @@
+search_it_plaintext_title = Texto sin formato
+search_it_plaintext = Ajustes
+search_it_plaintext_description_title = Descripción
+search_it_plaintext_description = Los elementos con este símbolo se pueden arrastrar y soltar para influir en el orden de procesamiento.
+search_it_plaintext_selectors = Selectores de CSS, p. <Código> guión, cabeza, encabezado, pie de página, div.donotsearch </ code>
+search_it_plaintext_selectors_label = Todos los elementos que coinciden con los selectores se eliminan del texto sin formato.
+search_it_plaintext_regex = Expresiones regulares (línea por línea separadas)
+search_it_plaintext_regex_label = Cada 1ra línea: Regex<br/>Cada 2da línea: Reemplazo<br/><br/>Ejemplo:<br/><code>~<h1>.+</h1>~</code><br/><code>xyz</code>
+search_it_plaintext_striptags = Eliminar etiquetas HTML
+search_it_plaintext_striptags_label = Aplica la función strip_tags () al texto sin formato.
+search_it_plaintext_textile = Parse textil
+search_it_plaintext_textile_label = Ejecuta la función rex_textile::parse().
+search_it_plaintext_processparent = Realizar conversión estándar de texto plano
+search_it_plaintext_processparent_label = Además, ejecuta la conversión de texto sin formato de Buscarlo.

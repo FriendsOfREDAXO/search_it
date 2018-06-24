@@ -1,0 +1,149 @@
+search_it_title = Búscalo
+search_it_settings = Ajustes
+search_it_generate = Mantenimiento
+search_it_readme = Léame
+
+search_it_info = Buscar complemento
+search_it_infotext = Buscar complemento
+search_it_reindex = Búscalo: Reindex
+
+search_it_settings_mode = Índice y modo de búsqueda
+search_it_settings_result = Resultados de la búsqueda
+search_it_settings_addsources = Agregar. fuentes de datos
+search_it_settings_blacklist = Lista negra
+
+search_it_settings_logicalmode = Modo de búsqueda lógica
+search_it_settings_logicalmode_and = Búsqueda Conjunta (Y)
+search_it_settings_logicalmode_or = Búsqueda disyuntiva (OR)
+
+search_it_settings_modi_header = Modos de búsqueda
+
+search_it_settings_textmode = Modo texto
+search_it_settings_textmode_plain = Texto de búsqueda (normal)
+search_it_settings_textmode_html = Buscar código fuente HTML
+search_it_settings_textmode_both = Buscar ambos (HTML y normal)
+
+search_it_settings_title_indexmode = Indexación
+search_it_settings_indexoffline = Artículo sin conexión de índice
+search_it_settings_automaticindex_label = Automáticamente indexar artículos (AGREGAR, EDITAR, ELIMINAR)
+search_it_settings_reindex_cols_onforms_label = Reindexar todas las columnas al editar tablas con YForm o formulario
+
+search_it_settings_http_authbasic = HTTP Basic AUTH (protección de contraseñas .htaccess)
+search_it_settings_http_auth_desc = Si una protección de acceso protege el sitio web, se puede almacenar un inicio de sesión aquí para permitir la indexación
+search_it_settings_htaccess_user = Nombre de usuario
+search_it_settings_htaccess_pass = Contraseña
+
+search_it_settings_searchmode = Modo de búsqueda de MySQL
+search_it_settings_searchmode_like = LIKE (también encuentra subwords, pero más lento)
+search_it_settings_searchmode_match = MATCH AGAINST (encuentra solo palabras completas, más rápido)
+
+search_it_settings_highlight_header = Aspecto del texto resaltado
+search_it_settings_surroundtags_start = Etiqueta de inicio
+search_it_settings_surroundtags_end = Etiqueta final
+
+search_it_settings_limit = Número máximo de visitas
+search_it_settings_maxteaserchars = Número máximo de caracteres para los teasers
+search_it_settings_maxhighlightchars = Número máximo de caracteres alrededor de los términos de búsqueda destacados
+
+search_it_settings_highlight_label = Tipo destacado
+search_it_settings_highlight_sentence = Desde el comienzo de la oración, en la que aparece al menos uno de los términos de búsqueda
+search_it_settings_highlight_paragraph = Desde el comienzo del párrafo, en el que aparece al menos uno de los términos de búsqueda
+search_it_settings_highlight_surroundtext = Todos los términos de búsqueda encontrados se muestran con las palabras que los rodean
+search_it_settings_highlight_surroundtextsingle = Para cada término de búsqueda encontrado, se reproduce exactamente un pasaje de texto
+search_it_settings_highlight_teaser = Como un avance en el que se resaltan los términos de búsqueda
+search_it_settings_highlight_array = Como una matriz con todos los términos de búsqueda y pasajes de texto
+search_it_settings_highlight_sample = Muestra de salida con entrada de búsqueda
+search_it_settings_search_highlighter = Resaltador de búsqueda
+search_it_settings_highlighterclass = Si especifica una clase de CSS aquí, se colocará un elemento <span> con esta clase alrededor de todos los términos de búsqueda encontrados cuando se haga clic y se muestre un resultado de búsqueda.
+
+search_it_settings_similarwords_label = Búsqueda de similitud
+search_it_settings_similarwords_none = Desactivar
+search_it_settings_similarwords_soundex = Soundex (General)
+search_it_settings_similarwords_metaphone = Metafonos
+search_it_settings_similarwords_cologne = Fonética de Colonia (DE)
+search_it_settings_similarwords_all = Todos
+search_it_settings_similarwords_permanent = Realice la búsqueda de similitud incluso si los resultados están disponibles.
+
+search_it_settings_exclude = Excluir palabras, categorías y artículos de la búsqueda
+search_it_settings_exclude_blacklist = Palabras (separadas por comas)
+search_it_settings_exclude_categories = Categorías
+search_it_settings_exclude_articles = Artículo
+
+search_it_settings_include = Incluir columnas de base de datos en la búsqueda
+
+search_it_settings_submitbutton = Guardar configuraciones
+search_it_settings_saved = La configuración se ha guardado
+search_it_settings_saved_warning = El índice de búsqueda necesita ser renovado.
+
+search_it_generate_actions_title = Acciones
+search_it_generate_full = Completa el índice
+search_it_generate_full_text = La tabla de índice se elimina y se reconstruye.
+search_it_generate_incremental = Crear índice paso a paso
+search_it_generate_incremental_text = Para los problemas con el tiempo de ejecución máximo del script (max_execution_time), el índice se puede crear paso a paso.
+search_it_generate_incremental_confirm = Comience la indexación gradual?
+search_it_generate_delete_cache = Eliminar caché de búsqueda
+search_it_generate_delete_cache_text = Si no es necesario reindexar, solo se puede eliminar el caché.
+search_it_generate_cache_deleted = La memoria caché de búsqueda ha sido eliminada
+search_it_generate_delete_keywords = Índice de palabras clave vacías
+search_it_generate_delete_keywords_text = Elimina todas las palabras clave recopiladas durante la indexación o mediante consultas de búsqueda. Estas palabras clave se utilizan, entre otras cosas, para la búsqueda de similitud y no se deben eliminar.
+search_it_generate_delete_keywords_confirm = ¿Realmente borras todas las palabras clave?
+search_it_generate_keywords_deleted = Todas las palabras clave han sido eliminadas
+search_it_generate_inprogress = El índice es creado. Aparece un mensaje cuando se crea el índice.
+search_it_generate_done = El índice fue creado
+search_it_generate_error = Error de indexación<br>Detalles en <a href="/redaxo/index.php?page=system/log">REDAXO SystemLog</a>
+search_it_generate_cancel = Creación del índice cancelado
+search_it_generate_duration = Duración:
+search_it_generate_timeleft = Restante:
+search_it_generate_articles = Re-indexar artículos
+search_it_generate_columns = Re-index tables
+
+search_it_generate_article_excluded = No indexado, el artículo fue excluido
+search_it_generate_article_done = indexado
+search_it_generate_article_redirect = no indexado, demasiados redireccionamientos
+search_it_generate_article_http_error = no indexado, error de HTTP
+search_it_generate_article_404_error = no indexado, error HTTP 404
+search_it_generate_article_socket_error = no indexado, error de socket
+search_it_generate_article_id_not_found = no indexado, no hay artículo con esta ID en este idioma
+search_it_generate_col_done = ({0} columna (s) indexadas)
+search_it_generate_col_error = no indexado, error
+search_it_generate_media_done = indexado
+search_it_generate_media_forbidden_extension = extensión de archivo prohibida
+search_it_generate_media_doesnt_exist = El medio no existe
+search_it_generate_media_error_pdf = XPDF-error: Error al abrir un archivo PDF
+search_it_generate_media_error_pdf2 = Otro error de PDF
+search_it_generate_media_error_output = Error de XPDF: error al abrir un archivo de salida
+search_it_generate_media_error_permissions = Error de XPDF: faltan los derechos de PDF
+search_it_generate_media_empty = El medio está vacío o no se pudo extraer contenido
+
+search_it_settings_fileext_header = Buscar contenido de archivos
+search_it_settings_fileext_label = Extensiones de archivos (por ejemplo, <code>txt, csv, pdf</code>)<br/> (déjelo en blanco para cualquier archivo)
+search_it_settings_file_mediapool = Índice de medios en el grupo de medios
+search_it_settings_additional_folders_label = Y / o seleccione otras carpetas:
+search_it_settings_file_dirdepth_label = Directorio de profundidad
+search_it_settings_folders_label = Incluye las siguientes carpetas en la búsqueda
+search_it_settings_folders_dirselect_label = Seleccione la subcarpeta de profundidad% DEPTH%
+
+search_it_settings_show_all = Todo abierto
+search_it_settings_show_none = Todo doblado
+
+search_it_ellipsis = ...
+
+search_it_cat_deleted = Todos los artículos en la categoría todavía están incluidos en el índice de búsqueda. Debe renovar el <a href="index.php?page=search_it/generate">índice de búsqueda</a>.
+
+
+
+search_it_test = Búsqueda de prueba
+search_it_test_keywords = Palabra clave
+
+search_it_test_legend = Verificar configuración y búsqueda de prueba
+search_it_test_submit = Búsqueda
+search_it_test_mode = Modo de búsqueda
+search_it_test_notice = Búsqueda realizada.
+search_it_test_hits = Hits:
+
+search_it_test_result = Resultado de la prueba
+search_it_test_result_object = Prueba objeto de resultado
+search_it_test_mode_all = Artículo de búsqueda, base de datos y grupo de medios
+search_it_test_mode_db = Solo base de datos
+search_it_test_mode_media = Solo grupo de medios
+search_it_test_mode_article = Solo artículos

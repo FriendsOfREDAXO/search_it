@@ -1,0 +1,10 @@
+
+search_it_documentation_title = Documentación
+
+search_it_documentation_general_title = En general
+search_it_documentation_plugins_title = Plugins
+search_it_documentation_modules_title = Módulo de búsqueda
+
+search_it_documentation_filenotfound = Archivo no fue encontrado. El contenido no existe (aún).<br/>Nos complace ayudarlo: <a href="https://github.com/yakamara/redaxo_yform_docs/tree/master/en_en" target="_blank">https://github.com/yakamara/redaxo_yform_docs/tree/master/de_de</a>
+search_it_documentation_navigation = Navegación
+search_it_documentation_content = Contenido

@@ -266,13 +266,15 @@ class search_it
                             $articleText = $response->getBody();
                         } else {
                             $articleText = '';
+                            !is_null($response) ? $response_text = $response->getStatusCode() . ' - ' . $response->getStatusMessage() : $response_text = '';
                             if ( $response->isRedirection() ) {
                                 $return[$langID] = SEARCH_IT_ART_REDIRECT;
-                            } else if ( $response->getStatusCode() != '404' ) {
-                                rex_logger::factory()->info('Fehler bei der Indexierung per HTTP-GET von ' . $scanurl . '<br>' . $response->getStatusCode() . ' - ' . $response->getStatusMessage());
-                                $return[$langID] = SEARCH_IT_ART_NOTOK;
-                            } else {
+                            } else if ( $response->getStatusCode() == '404' ) {
                                 $return[$langID] = SEARCH_IT_ART_404;
+                                rex_logger::factory()->info('Fehler bei der Indexierung per HTTP-GET von ' . $scanurl . '<br>' . $response_text );
+                            } else {
+                                rex_logger::factory()->info('Fehler bei der Indexierung per HTTP-GET von ' . $scanurl . '<br>' . $response_text );
+                                $return[$langID] = SEARCH_IT_ART_NOTOK;
                             }
                             continue;
                         }

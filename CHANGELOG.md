@@ -1,5 +1,6 @@
 # Änderungen von search_it
 
+## Version 6.6.3 (2018-06-25)
 - Fehler in Fehlermeldung bzgl Socketfehler
 - Versionsnummer Autocomplete Plugin
 

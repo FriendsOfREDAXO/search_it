@@ -26,6 +26,7 @@
 	- [Highlighting](howto-highlighting.md)
 	- [Auf Kategorien beschränken](howto-categories.md)
 	- [Paginierung](howto-pagination.md) (in Arbeit)
+	- [Multidomain mit YRewrite](howto-multidomainyrewrite.md)
 
 ---
 

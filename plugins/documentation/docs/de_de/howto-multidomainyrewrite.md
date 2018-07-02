@@ -6,6 +6,6 @@ Mit YRewrite können verschiedene Domains in einem System vereint werden. Search
 
 ```
 $search_it = new search_it()
-$search_it->searchInCategoryTree([Mountpoint der Domain]);
+$search_it->searchInCategoryTree(rex_yrewrite::getCurrentDomain()->getMountId());
 $search_it->search([Suchbegriff]);
 ```

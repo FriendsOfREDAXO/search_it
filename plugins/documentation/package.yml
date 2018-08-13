@@ -10,4 +10,4 @@ page:
     title: 'translate:search_it_documentation_title'
     pjax: false
     icon: rex-icon fa-book
-
+    itemclass: pull-right

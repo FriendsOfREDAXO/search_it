@@ -35,7 +35,7 @@ Dabei werden Artikel, Medien, Dateien, PDF-Inhalte und Datenbank-Felder in einer
 * bleibt die Indextabelle leer könnte ein .htaccess Zugriffsschutz die Indexierung verhindern
 * bleibt die Indextabelle leer, ist eventuell ein "Minifier" im Einsatz, der HTML-Kommentare aus dem Quellcode entfernt.
 Die braucht `Search it` (damit werden die zu indexierenden Inhalte markiert). Man kann auf den URL-Parameter 'search_it_build_index' prüfen, z.B. durch `rex_request('search_it_build_index', 'int', false)` - wenn er gesetzt ist, ist es ein Aufruf von `Search it`
-* Ist das Addon `YRewrite` installiert und aktiviert, müssen SSL-Domains dort immer mit Protokoll (`https://`) eingetragen werden.
+* Ist das Addon `YRewrite` installiert und aktiviert, wird empfohlen, SSL-Domains dort immer mit Protokoll (`https://`) einzutragen.
 
 ## Wo finde ich weitere Hilfe?
 

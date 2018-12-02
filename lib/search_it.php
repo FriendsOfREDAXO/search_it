@@ -293,7 +293,8 @@ class search_it
                 $articleText = '';
                 foreach ($matches as $match) {
                     if ( $match[1] == $_id || $match[1] == '' ) {
-                        $articleText .= ' ' . $match[2];
+                        // eventuell in diesem enthaltene weitere tags entfernen
+                        $articleText .= ' ' . preg_replace('/<!--\s\/?search_it\s[^(-->)]*\s?-->/s','', $match[2]);
                     }
                 }
 

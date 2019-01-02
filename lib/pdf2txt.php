@@ -250,14 +250,12 @@ class pdf2txt
         // replace octal character codes
         $text = preg_replace_callback(
             '~\\\\([0-8]{3})~',
-            create_function(
-                '$matches',
-                ' if(octdec($matches[1]) > 32)  
-            return utf8_encode(chr(octdec($matches[1])));
-          else
-            return "";
-        '
-            ),
+            function($matches ) {
+                if (octdec($matches[1]) > 32)
+                    return utf8_encode(chr(octdec($matches[1])));
+                else
+                    return "";
+            },
             $return
         );
 

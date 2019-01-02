@@ -1,5 +1,9 @@
 # Änderungen von search_it
 
+- pdf2txt fix for PHP 7.2 @olien
+- fix verschachtelte search it tags
+- Doku @thielpeter, @alexplusde
+
 ## Version 6.6.3 (2018-06-25)
 - Fehler in Fehlermeldung bzgl Socketfehler
 - Versionsnummer Autocomplete Plugin

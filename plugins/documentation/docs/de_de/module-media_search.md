@@ -56,7 +56,7 @@ if($request) {
         } 
         echo '</ul>';
     } else if(!$result['count']) { 
-        echo '<p class="search_it-zero">Die Suche nach <i class="search_it-request">'. htmlspecialchars($request, ENT_QUOTES, "UTF-8").' </i> ergab keine Treffer.</p>';
+        echo '<p class="search_it-zero">Die Suche nach <i class="search_it-request">'. rex_escape($request, ENT_QUOTES, "UTF-8").' </i> ergab keine Treffer.</p>';
     }
 } 
     ?>
@@ -106,7 +106,7 @@ if($request) { // Wenn ein Suchbegriff eingegeben wurde
         } // foreach($result['hits'] as $hit) END
         echo '</ul>';
     } else if(!$result['count']) { // Wenn keine Ergebnisse vorhanden sind.... 
-        echo '<p class="search_it-zero">Die Suche nach <i class="search_it-request">'.htmlspecialchars($request, ENT_QUOTES, "UTF-8").' </i> ergab keine Treffer.</p>';
+        echo '<p class="search_it-zero">Die Suche nach <i class="search_it-request">'.rex_escape($request, ENT_QUOTES, "UTF-8").' </i> ergab keine Treffer.</p>';
     }
 } // if($request) END
     ?>

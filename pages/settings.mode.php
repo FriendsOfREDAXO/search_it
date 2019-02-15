@@ -92,14 +92,14 @@ $content .= search_it_getSettingsFormSection(
             'id' => 'search_it_htaccess_user',
             'name' => 'search_config[htaccess_user]',
             'label' => $this->i18n('search_it_settings_htaccess_user'),
-            'value' => !empty($this->getConfig('htaccess_user')) ? htmlspecialchars($this->getConfig('htaccess_user')) : '',
+            'value' => !empty($this->getConfig('htaccess_user')) ? rex_escape($this->getConfig('htaccess_user')) : '',
         ),
         array(
             'type' => 'password',
             'id' => 'search_it_htaccess_pass',
             'name' => 'search_config[htaccess_pass]',
             'label' => $this->i18n('search_it_settings_htaccess_pass'),
-            'value' => !empty($this->getConfig('htaccess_pass')) ? htmlspecialchars($this->getConfig('htaccess_pass')) : '',
+            'value' => !empty($this->getConfig('htaccess_pass')) ? rex_escape($this->getConfig('htaccess_pass')) : '',
         ),
         /*array(
             'type' => 'checkbox',

@@ -13,6 +13,9 @@ Redistributions of files must retain the above copyright notice.
 
 Edited by Robert Rupf: Added the remove-method, which allows to remove nodes in 
 the same way you can find them.
+
+Edited by Norbert Micheel: adapted the regex pattern for pcre2 PHP 7.3 in function parse_selector
+
 *******************************************************************************/
 
 define('HDOM_TYPE_ELEMENT', 1);
@@ -386,7 +389,9 @@ class simple_html_dom_node {
 
     /*protected*/ function parse_selector($selector_string) {
         // pattern of CSS selectors, modified from mootools
-        $pattern = "/([\w-:\*]*)(?:\#([\w-]+)|\.([\w-]+))?(?:\[@?(!?[\w-]+)(?:([!*^$]?=)[\"']?(.*?)[\"']?)?\])?([\/, ]+)/is";
+        //$pattern = "/([\w-:\*]*)(?:\#([\w-]+)|\.([\w-]+))?(?:\[@?(!?[\w-]+)(?:([!*^$]?=)[\"']?(.*?)[\"']?)?\])?([\/, ]+)/is";
+        // tyrant88: fix for PHP 7.3
+        $pattern = "/([\w\-\:\*]*)(?:\#([\w\-]+)|\.([\w\-]+))?(?:\[@?(!?[\w\-]+)(?:([!*^$]?=)[\"']?(.*?)[\"']?)?\])?([\/, ]+)/is";
         preg_match_all($pattern, trim($selector_string).' ', $matches, PREG_SET_ORDER);
         $selectors = array();
         $result = array();

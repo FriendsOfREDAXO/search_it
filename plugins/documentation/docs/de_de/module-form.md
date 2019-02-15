@@ -14,7 +14,7 @@ Dieses Formular kann bspw. in den `<header>` eines Website-Templates eingebunden
             <input type="hidden" name="article_id" value="<?php echo $article_id; ?>" />
             <input type="hidden" name="clang" value="<?php echo rex_clang::getCurrentId(); ?>" />
             <label for="search">{{ Suchbegriff }}</label>
-            <input type="text" name="search" value="<?php if(!empty(rex_request('search','string'))) { echo htmlspecialchars(rex_request('search','string')); } ?>" placeholder="{{ Suchbegriff eingeben }}" />
+            <input type="text" name="search" value="<?php if(!empty(rex_request('search','string'))) { echo rex_escape(rex_request('search','string')); } ?>" placeholder="{{ Suchbegriff eingeben }}" />
             <input class="search_it-button" type="submit" value="{{ Suchen }}" />
         </div>
     </fieldset>

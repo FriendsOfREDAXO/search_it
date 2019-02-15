@@ -57,7 +57,7 @@ $content[] = search_it_getSettingsFormSection(
         array(
             'type' => 'hidden',
             'name' => 'search_it_plaintext[order]',
-            'value' => !empty($this->getConfig('order')) ? htmlspecialchars($this->getConfig('order')) : ''
+            'value' => !empty($this->getConfig('order')) ? rex_escape($this->getConfig('order')) : ''
         )
     ), false, false
 );
@@ -77,7 +77,7 @@ foreach (explode(',', $this->getConfig('order')) as $elem) {
                         'id' => 'search_it_plaintext_selectors',
                         'name' => 'search_it_plaintext[selectors]',
                         'label' => rex_i18n::msg('search_it_plaintext_selectors_label'),
-                        'value' => !empty($this->getConfig('selectors')) ? htmlspecialchars($this->getConfig('selectors')) : ''
+                        'value' => !empty($this->getConfig('selectors')) ? rex_escape($this->getConfig('selectors')) : ''
                     )
                 ), 'edit', true
             );
@@ -93,7 +93,7 @@ foreach (explode(',', $this->getConfig('order')) as $elem) {
                         'id' => 'search_it_plaintext_regex',
                         'name' => 'search_it_plaintext[regex]',
                         'label' => rex_i18n::msg('search_it_plaintext_regex_label'),
-                        'value' => !empty($this->getConfig('regex')) ? htmlspecialchars($this->getConfig('regex')) : ''
+                        'value' => !empty($this->getConfig('regex')) ? rex_escape($this->getConfig('regex')) : ''
                     )
                 ), 'edit', true
             );

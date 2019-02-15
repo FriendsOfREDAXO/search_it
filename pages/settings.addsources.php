@@ -72,7 +72,7 @@ foreach ( $sql_tables->showTables() as $table ) {
         sort($sql_columns);
         foreach ( $sql_columns as $column ) {
             $options[] = array(
-                'value' => htmlspecialchars($table . '`.`' . $column['name']),
+                'value' => rex_escape($table . '`.`' . $column['name']),
                 'checked' => in_array($column['name'], (!empty($this->getConfig('include')[$table]) AND is_array($this->getConfig('include')[$table])) ? $this->getConfig('include')[$table] : array()),
                 'name' =>  $column['name'],
                 'id' => $table . '.' . $column['name']
@@ -138,7 +138,7 @@ $content3[] = search_it_getSettingsFormSection(
             'id' => 'search_it_settings_fileext_label',
             'name' => 'search_config[fileextensions]',
             'label' => rex_i18n::rawMsg('search_it_settings_fileext_label'),
-            'value' => !empty($this->getConfig('fileextensions')) ? htmlspecialchars(implode(',',$this->getConfig('fileextensions'))) : ''
+            'value' => !empty($this->getConfig('fileextensions')) ? rex_escape(implode(',',$this->getConfig('fileextensions'))) : ''
         ),
         array(
             'type' => 'directoutput',

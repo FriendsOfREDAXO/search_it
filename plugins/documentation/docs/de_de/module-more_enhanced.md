@@ -45,7 +45,7 @@ Diese Beispielmodul benötigt die DB-Spalten id, name, art_description und art_k
                 $article = rex_article::get($hit['fid']);
             
                 echo '<li>
-            <h4><a href="'.($url = htmlspecialchars($article->getUrl())).'">'.$article->getName().'</a></h4>
+            <h4><a href="'.($url = rex_escape($article->getUrl())).'">'.$article->getName().'</a></h4>
               <p class="highlightedtext">'.$text.'</p>
               <p class="url">'.rex::getServer().rex_getUrl($hit['fid'], $hit['clang']).'</p></li>';
               }
@@ -106,7 +106,7 @@ Dieses Beispielmodul erweitert das Paginationsmodul um eine Suche nach ähnliche
                 $article = rex_article::get($hit['fid']);
         
                 echo '<li>
-            <h4><a href="'.($url = htmlspecialchars($article->getUrl())).'">'.$article->getName().'</a></h4>
+            <h4><a href="'.($url = rex_escape($article->getUrl())).'">'.$article->getName().'</a></h4>
               <p class="highlightedtext">'.$text.'</p>
               <p class="url">'.rex::getServer().rex_getUrl($hit['fid'], $hit['clang']).'</p></li>';
               }
@@ -171,7 +171,7 @@ Dieses Beispielmodul erweitert das Paginationsmodul und die Ähnlichkeitssuche u
                   $pdf = rex_media::get($filename[count($filename)-1]);
         
                   echo '    <li class="pdf">
-              <h4><a href="'.htmlspecialchars($pdf->getFullPath()).'">'.$pdf->getOrgFileName().'</a></h4>
+              <h4><a href="'.rex_escape($pdf->getFullPath()).'">'.$pdf->getOrgFileName().'</a></h4>
               <p class="highlightedtext">'.$text.'</p>
               <p class="url">'.rex::getServer().'files/'.$pdf->getOrgFileName().'</p>
             </li>';
@@ -180,7 +180,7 @@ Dieses Beispielmodul erweitert das Paginationsmodul und die Ähnlichkeitssuche u
                   $article = rex_article::get($hit['fid']);
         
                   echo '    <li>
-              <h4><a href="'.htmlspecialchars($article->getUrl()).'">'.$article->getName().'</a></h4>
+              <h4><a href="'.rex_escape($article->getUrl()).'">'.$article->getName().'</a></h4>
               <p class="highlightedtext">'.$text.'</p>
               <p class="url">'.rex::getServer().rex_getUrl($hit['fid'], $hit['clang']).'</p>
             </li>';
@@ -230,7 +230,7 @@ Wichtig: Dieses Modul ist nur für Search it ab Version 0.5.
             <input type="hidden" name="clang" value="REX_CLANG_ID" />
         
             <p><label for="searchterm">Suchbegriff:</label>
-            <input type="text" id="searchterm" name="searchterm" value="<?php echo htmlspecialchars(rex_request('searchterm', 'string', '')); ?>" /></p>
+            <input type="text" id="searchterm" name="searchterm" value="<?php echo rex_escape(rex_request('searchterm', 'string', '')); ?>" /></p>
         
             <p><label for="logicalmode">Suchmodus:</label>
             <select id="logicalmode" name="logicalmode">
@@ -301,7 +301,7 @@ In dem Modul zur Präsentation der Suchergebnisse werden die entsprechenden Eins
                     $pdf = rex_media::get($filename[count($filename)-1]);
         
                     echo '    <li class="pdf">
-              <h4><a href="'.htmlspecialchars($pdf->getFullPath()).'">'.$pdf->getOrgFileName().'</a></h4>
+              <h4><a href="'.rex_escape($pdf->getFullPath()).'">'.$pdf->getOrgFileName().'</a></h4>
               <p class="highlightedtext">'.$text.'</p>
               <p class="url">'.rex::getServer().'files/'.$pdf->getOrgFileName().'</p>
             </li>';
@@ -321,7 +321,7 @@ In dem Modul zur Präsentation der Suchergebnisse werden die entsprechenden Eins
                     $article = rex_article::get($hit['fid']);
         
                     echo '    <li>
-              <h4><a href="'.htmlspecialchars($article->getUrl()).'">'.$article->getName().'</a></h4>
+              <h4><a href="'.rex_escape($article->getUrl()).'">'.$article->getName().'</a></h4>
               <p class="highlightedtext">'.$text.'</p>
               <p class="url">'.rex::getServer().rex_getUrl($hit['fid'], $hit['clang']).'</p>
             </li>';

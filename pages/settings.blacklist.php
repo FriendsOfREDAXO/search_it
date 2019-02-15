@@ -71,7 +71,7 @@ $content2[] = search_it_getSettingsFormSection(
             'id' => 'search_it_settings_exclude_blacklist',
             'name' => 'search_config[blacklist]',
             'label' => $this->i18n('search_it_settings_exclude_blacklist'),
-            'value' => !empty($this->getConfig('blacklist')) ? htmlspecialchars(implode(',',$this->getConfig('blacklist'))) : ''
+            'value' => !empty($this->getConfig('blacklist')) ? rex_escape(implode(',',$this->getConfig('blacklist'))) : ''
         ),
         array(
             'type' => 'multipleselect',

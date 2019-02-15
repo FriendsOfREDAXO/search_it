@@ -55,14 +55,14 @@ $content2a = search_it_getSettingsFormSection(
             'id' => 'search_it_surroundtags_start',
             'name' => 'search_config[surroundtags][0]',
             'label' => $this->i18n('search_it_settings_surroundtags_start'),
-            'value' => isset($this->getConfig('surroundtags')[0]) ? htmlspecialchars($this->getConfig('surroundtags')[0]) : ''
+            'value' => isset($this->getConfig('surroundtags')[0]) ? rex_escape($this->getConfig('surroundtags')[0]) : ''
         ),
         array(
             'type' => 'string',
             'id' => 'search_it_surroundtags_end',
             'name' => 'search_config[surroundtags][1]',
             'label' => $this->i18n('search_it_settings_surroundtags_end'),
-            'value' => isset($this->getConfig('surroundtags')[1]) ? htmlspecialchars($this->getConfig('surroundtags')[1]) : ''
+            'value' => isset($this->getConfig('surroundtags')[1]) ? rex_escape($this->getConfig('surroundtags')[1]) : ''
         ),
         array(
             'type' => 'hidden',

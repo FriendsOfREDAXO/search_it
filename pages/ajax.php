@@ -13,7 +13,7 @@ switch($ajax) {
             case 'art':
                 foreach($search_it->indexArticle($_id = intval(rex_get('id'))) as $langID => $article){
 
-                    $msgtext = !is_null(rex_article::get($_id, $langID)) ? '<em>"'.htmlspecialchars(rex_article::get($_id, $langID)->getValue('name')).'"</em>' : '';
+                    $msgtext = !is_null(rex_article::get($_id, $langID)) ? '<em>"'.rex_escape(rex_article::get($_id, $langID)->getValue('name')).'"</em>' : '';
                     $msgtext .= '(ID=<strong>'.$_id.'</strong>,<strong>'.rex_clang::get($langID)->getName().'</strong>) ';
 
                     switch($article){
@@ -62,35 +62,35 @@ switch($ajax) {
 
                 switch($return){
                     case SEARCH_IT_FILE_FORBIDDEN_EXTENSION:
-                        echo '<p class="text-info">'.$additionalOutput.' <strong>"'.htmlspecialchars(rex_get('name')).'"</strong> '. $this->i18n('search_it_generate_media_forbidden_extension',$count) . '</p>';
+                        echo '<p class="text-info">'.$additionalOutput.' <strong>"'.rex_escape(rex_get('name')).'"</strong> '. $this->i18n('search_it_generate_media_forbidden_extension',$count) . '</p>';
                         break;
 
                     case SEARCH_IT_FILE_NOEXIST:
-                        echo '<p class="text-info">'.$additionalOutput.' <strong>"'.htmlspecialchars(rex_get('name')).'"</strong> '. $this->i18n('search_it_generate_media_doesnt_exist') . '</p>';
+                        echo '<p class="text-info">'.$additionalOutput.' <strong>"'.rex_escape(rex_get('name')).'"</strong> '. $this->i18n('search_it_generate_media_doesnt_exist') . '</p>';
                         break;
 
                     case SEARCH_IT_FILE_XPDFERR_OPENSRC:
-                        echo '<p class="text-info">'.$additionalOutput.': <strong>"'.htmlspecialchars(rex_get('name')).'"</strong> '. $this->i18n('search_it_generate_media_error_pdf') . '</p>';
+                        echo '<p class="text-info">'.$additionalOutput.': <strong>"'.rex_escape(rex_get('name')).'"</strong> '. $this->i18n('search_it_generate_media_error_pdf') . '</p>';
                         break;
 
                     case SEARCH_IT_FILE_XPDFERR_OPENDEST:
-                        echo '<p class="text-info">'.$additionalOutput.': <strong>"'.htmlspecialchars(rex_get('name')).'"</strong> '. $this->i18n('search_it_generate_media_error_output') . '</p>';
+                        echo '<p class="text-info">'.$additionalOutput.': <strong>"'.rex_escape(rex_get('name')).'"</strong> '. $this->i18n('search_it_generate_media_error_output') . '</p>';
                         break;
 
                     case SEARCH_IT_FILE_XPDFERR_PERM:
-                        echo '<p class="text-error">'.$additionalOutput.': <strong>"'.htmlspecialchars(rex_get('name')).'"</strong> '. $this->i18n('search_it_generate_media_error_permissions') . '</p>';
+                        echo '<p class="text-error">'.$additionalOutput.': <strong>"'.rex_escape(rex_get('name')).'"</strong> '. $this->i18n('search_it_generate_media_error_permissions') . '</p>';
                         break;
 
                     case SEARCH_IT_FILE_XPDFERR_OTHER:
-                        echo '<p class="text-error">'.$additionalOutput.': <strong>"'.htmlspecialchars(rex_get('name')).'"</strong> '. $this->i18n('search_it_generate_media_error_pdf2') . '</p>';
+                        echo '<p class="text-error">'.$additionalOutput.': <strong>"'.rex_escape(rex_get('name')).'"</strong> '. $this->i18n('search_it_generate_media_error_pdf2') . '</p>';
                         break;
 
                     case SEARCH_IT_FILE_EMPTY:
-                        echo '<p class="text-error">'.$additionalOutput.' <strong>"'.htmlspecialchars(rex_get('name')).'"</strong> '. $this->i18n('search_it_generate_media_empty') . '</p>';
+                        echo '<p class="text-error">'.$additionalOutput.' <strong>"'.rex_escape(rex_get('name')).'"</strong> '. $this->i18n('search_it_generate_media_empty') . '</p>';
                         break;
 
                     case SEARCH_IT_FILE_GENERATED:
-                        echo '<p class="text-info">'.$additionalOutput.' <strong>"'.htmlspecialchars(rex_get('name')).'"</strong> '. $this->i18n('search_it_generate_media_done') .'</p>';
+                        echo '<p class="text-info">'.$additionalOutput.' <strong>"'.rex_escape(rex_get('name')).'"</strong> '. $this->i18n('search_it_generate_media_done') .'</p>';
                         break;
                 }
                 break;

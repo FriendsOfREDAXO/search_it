@@ -754,7 +754,7 @@ function search_it_search_highlighter_getHighlightedText($_subject, $_searchStri
         $searchterms[] = preg_quote($word, '~');
     }
 
-    return preg_replace('~(?<!\<)(' . implode('|', $searchterms) . ')(?![^<]*\>)~ims', $_tags[0] . '$1' . $_tags[1], $_subject);
+    return preg_replace('~(?<!\<|="[^"]|=")(' . implode('|', $searchterms) . ')(?![^<]*\>)~ims', $_tags[0] . '$1' . $_tags[1], $_subject);
 }
 
 // ex reindex plugin

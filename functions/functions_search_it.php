@@ -262,9 +262,11 @@ function search_it_handle_extensionpoint($_ep){
         break;
 
         case 'MEDIA_ADDED':
+        case 'MEDIA_DELETED':
             foreach( $includeColumns as $table => $columnArray){
                 if($table == rex::getTable('media')){
-                    foreach($columnArray as $column) {$tex[] = $table.$column;
+                    foreach($columnArray as $column) {
+                        // extension point liefert nicht die id des neuen/entfernten Mediums
                         $search_it->indexColumn($table, $column);
                     }
                 }
@@ -787,7 +789,7 @@ function search_it_reindex_cols($_ep){
         rex_logger::factory()->info('keine Angabe welche Tabelle indexiert werden soll');
         return false;
     }
-
+    dump($_ep);
     if(!array_key_exists($tablename, $includeColumns) OR !is_array($includeColumns[$tablename])) {
         return true;
     }

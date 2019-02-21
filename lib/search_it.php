@@ -393,35 +393,37 @@ class search_it
      *
      * @return mixed
      */
-    public function indexColumn($_table, $_column, $_idcol = false, $_id = false, $_start = false, $_count = false, $_where = false)
+    public function indexColumn($_table, $_column, $_idcol = false, $_id = false, $_start = false, $_count = false, $_wherecondition = false)
     {
         $delete = rex_sql::factory();
+        $delete->setTable($this->tablePrefix . 'search_it_index');
 
         $where = sprintf(" `ftable` = '%s' AND `fcolumn` = '%s' AND `texttype` = 'db_column'", $_table, $_column);
         //lus: reaktiviert damit einzeln gelöscht werden kann
         if (is_string($_idcol) AND ($_id !== false)) {
             $where .= sprintf(' AND fid = %d', $_id);
+
+        } elseif (is_numeric($_start) AND is_numeric($_count)) {
+            $where .= ' LIMIT ' . $_start . ',' . $_count;
         }
+        $delete->setWhere($where);
+
+        $cache = clone $delete;
 
         // delete from cache
-        $select = rex_sql::factory();
-        $select->setTable($this->tablePrefix . 'search_it_index');
-        $select->setWhere($where);
         $indexIds = array();
-        if ($select->select('id')) {
-            foreach ($select->getArray() as $result) {
+        if ($cache->select('id')) {
+            foreach ($cache->getArray() as $result) {
                 $indexIds[] = $result['id'];
             }
             $this->deleteCache($indexIds);
         }
 
-        // delete old data + lus: immer alle löschen
-        if ($_start === 0 || $_start === false || (is_string($_idcol) AND ($_id !== false))) {
-            $delete->setTable($this->tablePrefix . 'search_it_index');
-            $delete->setWhere($where);
-            $delete->delete();
-        }
+        // delete from index
+        $delete->delete();
 
+
+        // NEW
         $sql = rex_sql::factory();
 
         // get primary key column(s)
@@ -433,20 +435,15 @@ class search_it
         // index column
         $sql->flushValues();
         $sql->setTable($_table);
+
         $where = '1 ';
         if (is_string($_idcol) AND $_id) {
             $where .= sprintf(' AND (%s = %d)', $_idcol, $_id);
-        }
-        if (!empty($_where) AND is_string($_where)) {
-            // lus: sorry,muss ale neu schreiben, weil ich oben alle lösche
-            //$where .= ' AND (' . $_where . ')';
-        }
-
-        if (is_numeric($_start) AND is_numeric($_count)) {
+        } elseif (is_numeric($_start) AND is_numeric($_count)) {
             $where .= ' LIMIT ' . $_start . ',' . $_count;
         }
-
         $sql->setWhere($where);
+
         $count = false;
         if ($sql->select('*')) {
 
@@ -485,7 +482,8 @@ class search_it
                     }
 
                     if (is_null($indexData['fid'])) {
-                        $indexData['fid'] = $this->getMinFID();
+                        // keine id Spalte und keine primär schlüssel auch die views landen hier
+                        $indexData['fid'] = $this->getMaxFID($_table);
                     }
                     if (array_key_exists('parent_id', $row)) {
                         $indexData['catid'] = $row['parent_id'];
@@ -543,9 +541,6 @@ class search_it
 
             $this->storeKeywords($keywords, false);
 
-
-        } else {
-            return false;
         }
 
         return $count;
@@ -815,6 +810,14 @@ class search_it
         return ($minfid < 0) ? --$minfid : -1;
     }
 
+    private static function getMaxFID($_table)
+    {
+        $maxfid_sql = rex_sql::factory();
+        $maxfid_result = $maxfid_sql->getArray('SELECT MIN(CONVERT(fid, SIGNED)) as maxfid FROM `' . rex::getTable('search_it_index') . '` WHERE ftable = "'.$_table.'" ');
+        $maxfid = intval($maxfid_result[0]['maxfid']);
+
+        return ($maxfid > 0) ? ++$maxfid : 1;
+    }
     /**
      * Deletes the complete search index.
      *

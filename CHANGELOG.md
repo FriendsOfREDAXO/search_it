@@ -1,5 +1,6 @@
 # Änderungen von search_it
-
+- preg changes for PHP 7.3 @rolandsee
+- rex_escape statt htmlspecialchars
 - pdf2txt fix for PHP 7.2 @olien
 - fix verschachtelte search it tags
 - Doku @thielpeter, @alexplusde

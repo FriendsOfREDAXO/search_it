@@ -1,4 +1,7 @@
 # Änderungen von search_it
+
+## Version 6.6.4 (2019-02-25)
+- Reindexierung überarbeitet, zusätzlicher EP "MEDIA_DELETED"
 - preg changes for PHP 7.3 @rolandsee
 - rex_escape statt htmlspecialchars
 - pdf2txt fix for PHP 7.2 @olien

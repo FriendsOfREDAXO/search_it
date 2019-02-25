@@ -813,7 +813,7 @@ class search_it
     private static function getMaxFID($_table)
     {
         $maxfid_sql = rex_sql::factory();
-        $maxfid_result = $maxfid_sql->getArray('SELECT MIN(CONVERT(fid, SIGNED)) as maxfid FROM `' . rex::getTable('search_it_index') . '` WHERE ftable = "'.$_table.'" ');
+        $maxfid_result = $maxfid_sql->getArray('SELECT MAX(CONVERT(fid, SIGNED)) as maxfid FROM `' . rex::getTable('search_it_index') . '` WHERE ftable = "'.$_table.'" ');
         $maxfid = intval($maxfid_result[0]['maxfid']);
 
         return ($maxfid > 0) ? ++$maxfid : 1;

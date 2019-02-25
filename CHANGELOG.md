@@ -2,8 +2,9 @@
 
 ## Version 6.6.4 (2019-02-25)
 - Reindexierung überarbeitet, zusätzlicher EP "MEDIA_DELETED"
-- preg changes for PHP 7.3 @rolandsee
+- highlighter fix #186 thx @alexwenz
 - rex_escape statt htmlspecialchars
+- Versuch fix PHP 7.3 @rolandsee
 - pdf2txt fix for PHP 7.2 @olien
 - fix verschachtelte search it tags
 - Doku @thielpeter, @alexplusde

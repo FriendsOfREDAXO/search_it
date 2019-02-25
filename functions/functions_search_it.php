@@ -2,21 +2,21 @@
 
 function search_it_getArticles($cats = false) {
     $si = rex_addon::get('search_it');
-  
+
     $whereCats = array();
     if(is_array($cats)){
         foreach($cats as $catID) {
             $whereCats[] = "path LIKE '%|" . $catID . "|%'";
         }
     }
-  
+
     $return = array();
     $query = 'SELECT id,name,path FROM '.rex::getTable('article').' WHERE 1';
     if( !$si->getConfig('indexoffline') ) {
-      $query .= ' AND status = 1';
+        $query .= ' AND status = 1';
     }
     if(!empty($whereCats)) {
-      $query .= ' AND (' . implode(' OR ', $whereCats) . ' OR (id IN (' . implode(',', $cats) . ')))';
+        $query .= ' AND (' . implode(' OR ', $whereCats) . ' OR (id IN (' . implode(',', $cats) . ')))';
     }
     $query .= ' GROUP BY id ORDER BY id';
 
@@ -30,17 +30,17 @@ function search_it_getArticles($cats = false) {
 
 function search_it_getCategories($_ignoreoffline = true, $_onlyIDs = false, $_cats = false) {
     $si = rex_addon::get('search_it');
-  
+
     $return = array();
 
     if(!empty($_cats)){
         $whereCats = array();
         $sqlCats = array();
         if(is_array($_cats)){
-          foreach($_cats as $catID){
-            $whereCats[] = "path LIKE '%|".intval($catID)."|%'";
-            $sqlCats[] = intval($catID);
-          }
+            foreach($_cats as $catID){
+                $whereCats[] = "path LIKE '%|".intval($catID)."|%'";
+                $sqlCats[] = intval($catID);
+            }
         }
 
         $return = array();
@@ -56,9 +56,9 @@ function search_it_getCategories($_ignoreoffline = true, $_onlyIDs = false, $_ca
         $sql = rex_sql::factory();
         foreach($sql->getArray($query) as $cat){
             if($_onlyIDs) {
-              $return[] = $cat['id'];
+                $return[] = $cat['id'];
             } else {
-              $return[$cat['id']] = $cat['catname'];
+                $return[$cat['id']] = $cat['catname'];
             }
         }
 
@@ -105,7 +105,7 @@ function search_it_getDirs($_startDir = '', $_getSubdirs = false){
     if(!$_getSubdirs) {
         return $dirs;
     }
-  
+
     $return = array();
     while(!empty($dirs)){
         $dir = array_shift($dirs);
@@ -115,9 +115,9 @@ function search_it_getDirs($_startDir = '', $_getSubdirs = false){
             $return[$_SERVER['DOCUMENT_ROOT'].$dir] = utf8_encode($dir);
             $subdirs = array();
             foreach(array_diff(scandir($_SERVER['DOCUMENT_ROOT'].$dir), array( '.', '..' )) as $subdir) {
-              if (@is_dir($_SERVER['DOCUMENT_ROOT'] . $dir . '/' . $subdir)) {
-                  $subdirs[] = $dir . '/' . $subdir;
-              }
+                if (@is_dir($_SERVER['DOCUMENT_ROOT'] . $dir . '/' . $subdir)) {
+                    $subdirs[] = $dir . '/' . $subdir;
+                }
             }
             array_splice($dirs, 0, 0, $subdirs);
         }
@@ -128,21 +128,21 @@ function search_it_getDirs($_startDir = '', $_getSubdirs = false){
 
 function search_it_getFiles($_startDir = '', $_fileexts = array(), $_getSubdirs = false){
     $si = rex_addon::get('search_it');
-  
+
     $return = array();
     $fileextPattern='';
 
     if(!empty($_fileexts)) {
-      $fileextPattern = '~\.(' . implode('|', $_fileexts) . ')$~is';
+        $fileextPattern = '~\.(' . implode('|', $_fileexts) . ')$~is';
     } else {
-      $fileextPattern = '~\.([^.]+)$~is';
+        $fileextPattern = '~\.([^.]+)$~is';
     }
 
     $startDepth = substr_count($_startDir, '/');
     if(@is_dir($_SERVER['DOCUMENT_ROOT'].$_startDir)) {
-      $dirs2 = array_diff(scandir($_SERVER['DOCUMENT_ROOT'] . $_startDir), array('.', '..'));
+        $dirs2 = array_diff(scandir($_SERVER['DOCUMENT_ROOT'] . $_startDir), array('.', '..'));
     } else {
-      return array();
+        return array();
     }
     $dirs = array();
     foreach($dirs2 as $k => $dir){
@@ -152,11 +152,11 @@ function search_it_getFiles($_startDir = '', $_fileexts = array(), $_getSubdirs 
             $return[] = utf8_encode($_startDir . '/' . $dir);
         }
     }
-  
+
     if(!$_getSubdirs) {
         return $return;
     }
-  
+
     while(!empty($dirs)){
         $dir = array_shift($dirs);
 
@@ -164,19 +164,19 @@ function search_it_getFiles($_startDir = '', $_fileexts = array(), $_getSubdirs 
         if(@is_dir($_SERVER['DOCUMENT_ROOT'].$dir) AND $depth <= $si->getConfig('dirdepth')){
             $subdirs = array();
             foreach(array_diff(scandir($_SERVER['DOCUMENT_ROOT'].$dir), array( '.', '..' )) as $subdir) {
-              if (@is_dir($_SERVER['DOCUMENT_ROOT'] . $dir . '/' . $subdir)) {
-                  $subdirs[] = $dir . '/' . $subdir;
-              } elseif (preg_match($fileextPattern, $subdir)) {
-                  $return[] =  $dir . '/' . $subdir;
-              }
+                if (@is_dir($_SERVER['DOCUMENT_ROOT'] . $dir . '/' . $subdir)) {
+                    $subdirs[] = $dir . '/' . $subdir;
+                } elseif (preg_match($fileextPattern, $subdir)) {
+                    $return[] =  $dir . '/' . $subdir;
+                }
             }
             array_splice($dirs, 0, 0, $subdirs);
         } elseif(preg_match($fileextPattern, $subdir)) {
             $return[] = $dir;
         }
     }
-  
-  return $return;
+
+    return $return;
 }
 
 
@@ -193,7 +193,7 @@ function search_it_handle_extensionpoint($_ep){
         // delete article from index
         case 'ART_DELETED':
             $search_it->unindexArticle($_params['id']);
-        break;
+            break;
 
         // update meta-infos for article
         case 'ART_META_UPDATED':
@@ -206,7 +206,7 @@ function search_it_handle_extensionpoint($_ep){
                     }
                 }
             }
-        break;
+            break;
 
         // exclude (if offline) or index (if online) article
         case 'ART_STATUS':
@@ -223,12 +223,12 @@ function search_it_handle_extensionpoint($_ep){
                     }
                 }
             }
-        break;
+            break;
 
 
         case 'CAT_DELETED':
             //echo rex_view::warning(rex_i18n::rawMsg('search_it_cat_deleted'));
-        break;
+            break;
 
         case 'CAT_STATUS':
             if( $_params['status'] || $si->getConfig('indexoffline') ){
@@ -248,7 +248,7 @@ function search_it_handle_extensionpoint($_ep){
                     }
                 }
             }
-        break;
+            break;
 
         case 'CAT_ADDED':
         case 'CAT_UPDATED':
@@ -259,7 +259,7 @@ function search_it_handle_extensionpoint($_ep){
                     }
                 }
             }
-        break;
+            break;
 
         case 'MEDIA_ADDED':
         case 'MEDIA_DELETED':
@@ -271,7 +271,7 @@ function search_it_handle_extensionpoint($_ep){
                     }
                 }
             }
-        break;
+            break;
 
         case 'MEDIA_UPDATED':
             foreach( $includeColumns as $table => $columnArray){
@@ -281,13 +281,13 @@ function search_it_handle_extensionpoint($_ep){
                     }
                 }
             }
-        break;
+            break;
 
         case 'SLICE_UPDATED':
         case 'SLICE_DELETED':
         case 'SLICE_ADDED':
             $search_it->indexArticle($_params['article_id'],$_params['clang']);
-        break;
+            break;
 
 
     }
@@ -310,13 +310,13 @@ function search_it_getSettingsFormSection($id = '', $title = '&nbsp;', $elements
             case 'hidden':
                 $n['label'] = '';
                 $n['field'] = '<input type="hidden" name="'.$element['name'].'" value="'.$element['value'].'" />';
-            break;
+                break;
 
             // STRING
             case 'string':
                 $n['label'] = '<label for="'.$element['id'].'">'.$element['label'].'</label>';
                 $n['field'] = '<input type="text" name="'.$element['name'].'" class="form-control" id="'.$element['id'].'" value="'.$element['value'].'" />';
-            break;
+                break;
 
             // STRING
             case 'password':
@@ -328,34 +328,34 @@ function search_it_getSettingsFormSection($id = '', $title = '&nbsp;', $elements
             case 'text':
                 $n['label'] = '<label for="'.$element['id'].'">'.$element['label'].'</label>';
                 $n['field'] = '<textarea name="'.$element['name'].'" class="form-control" id="'.$element['id'].'" rows="10" cols="20">'.$element['value'].'</textarea>';
-            break;
+                break;
 
             // SELECT
             case 'select':
                 $options = '';
                 foreach($element['options'] as $option){
-                  $options .= '<option value="'.$option['value'].'"'.($option['selected'] ? ' selected="selected"' : '').'>'.$option['name'].'</option>';
+                    $options .= '<option value="'.$option['value'].'"'.($option['selected'] ? ' selected="selected"' : '').'>'.$option['name'].'</option>';
                 }
                 $n['label'] = '<label for="'.$element['id'].'">'.$element['label'].'</label>';
                 $n['field'] = '<select class="form-control" id="'.$element['id'].'" size="1" name="'.$element['name'].'">'.$options.'</select>';
-            break;
+                break;
 
             // MULTIPLE SELECT
             case 'multipleselect':
                 $options = '';
                 foreach($element['options'] as $option){
-                  $id = !empty($option['id'])?' id="'.$option['id'].'"':'';
-                  $options .= '<option'.$id.' value="'.$option['value'].'"'.($option['selected'] ? ' selected="selected"' : '').'>'.$option['name'].'</option>';
+                    $id = !empty($option['id'])?' id="'.$option['id'].'"':'';
+                    $options .= '<option'.$id.' value="'.$option['value'].'"'.($option['selected'] ? ' selected="selected"' : '').'>'.$option['name'].'</option>';
                 }
                 $n['label']='<label for="'.$element['id'].'">'.$element['label'].'</label>';
                 $n['field'] = '<select id="'.$element['id'].'" class="form-control" name="'.$element['name'].'" multiple="multiple" size="'.$element['size'].'"'.(!empty($element['disabled'])?' disabled="disabled"':'').'>'.$options.'</select>';
-            break;
+                break;
 
             // MULTIPLE CHECKBOXES
             case 'multiplecheckboxes':
                 $checkboxes = '';
                 foreach($element['options'] as $option){
-                  //$checkboxes .= '<div class="checkbox col-xs-3"><input type="checkbox" id="'.$option['id'].'" name="'.$element['name'].'" value="'.$option['value'].'" '.($option['checked'] ? ' checked="checked"' : '').' /> <label for="'.$option['id'].'">'.$option['name'].'</label></div>';
+                    //$checkboxes .= '<div class="checkbox col-xs-3"><input type="checkbox" id="'.$option['id'].'" name="'.$element['name'].'" value="'.$option['value'].'" '.($option['checked'] ? ' checked="checked"' : '').' /> <label for="'.$option['id'].'">'.$option['name'].'</label></div>';
                     $formUnterElements = [];
                     $un = [];
                     $un['label'] = '<label for="'.$option['id'].'">'.$option['name'].'</label>';
@@ -369,7 +369,7 @@ function search_it_getSettingsFormSection($id = '', $title = '&nbsp;', $elements
                 }
                 $n['label'] = '<label for="'.$element['id'].'">'.$element['label'].'</label>';
                 $n['field'] = '<div class="rex-form-col-a rex-form-text"><div class="form-group">'.$checkboxes.'</div></div>';
-            break;
+                break;
 
 
             // RADIO
@@ -381,7 +381,7 @@ function search_it_getSettingsFormSection($id = '', $title = '&nbsp;', $elements
                     $n['field'] = '<input type="radio" name="'.$element['name'].'" value="'.$option['value'].'" class="rex-form-radio" id="'.$option['id'].'"'.($option['checked'] ? ' checked="checked"' : '').' />';
                     $formElements[] = $n;
                 }
-            break;
+                break;
 
             // CHECKBOX
             case 'checkbox':
@@ -395,7 +395,7 @@ function search_it_getSettingsFormSection($id = '', $title = '&nbsp;', $elements
                 $fragmentun->setVar('elements', $formUnterElements, false);
                 $n['field'] = $fragmentun->parse('core/form/checkbox.php');
 
-            break;
+                break;
 
             // DIRECT OUTPUT
             case 'directoutput':
@@ -409,7 +409,7 @@ function search_it_getSettingsFormSection($id = '', $title = '&nbsp;', $elements
                     $n['field'] = $element['output'];
                 }
 
-            break;
+                break;
         }
 
         $formElements[] = $n;
@@ -434,11 +434,11 @@ function search_it_getSettingsFormSection($id = '', $title = '&nbsp;', $elements
 
 function search_it_config_unserialize($_str){
     $conf = unserialize($_str);
-  
+
     if(strpos($_str, '\\"') === false) {
         return $conf;
     }
-  
+
     $return = array();
     if(is_array($conf)){
         foreach(unserialize($_str) as $k => $v){
@@ -466,7 +466,7 @@ function search_it_config_unserialize($_str){
             }
         }
     }
-  
+
     return $return;
 }
 
@@ -726,7 +726,7 @@ function search_it_search_highlighter_output($_ep){
     $suchbegriffe = rex_request('search_highlighter', 'string', '');
 
     $si = rex_addon::get('search_it');
-    $beginn = '<span class="' . $si->getConfig('highlighterclass').'">';
+    $beginn = '<span class=\'' . $si->getConfig('highlighterclass').'\'>';
     $ende = '</span>';
     $tags = array($beginn, $ende);
 
@@ -756,7 +756,17 @@ function search_it_search_highlighter_getHighlightedText($_subject, $_searchStri
         $searchterms[] = preg_quote($word, '~');
     }
 
-    return preg_replace('~(?<!\<)(' . implode('|', $searchterms) . ')(?![^<]*\>)~ims', $_tags[0] . '$1' . $_tags[1], $_subject);
+    $hidemask = '7341fqtb99';
+    $all = preg_replace_callback('~<[^<]*?(?:=\'[^\']*?|="[^"]*?)(' . implode('|', $searchterms) . ')[^"\']*?(?:"|\')~',
+        function ($match){
+            $hidemask = '7341fqtb99';
+            return str_replace($match[1],$hidemask.$match[1],$match[0]);
+        } ,
+        $_subject);
+
+    $all = preg_replace('~(?<!<|'.$hidemask.')(' . implode('|', $searchterms) . ')(?![^<]*\>)~ims', $_tags[0] . '$1' . $_tags[1], $all);
+    $all = str_replace($hidemask,'',$all);
+    return $all;
 }
 
 // ex reindex plugin

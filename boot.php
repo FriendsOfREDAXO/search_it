@@ -66,6 +66,7 @@
                 'CAT_UPDATED',
                 'MEDIA_ADDED',
                 'MEDIA_UPDATED',
+                'MEDIA_DELETED',
                 'SLICE_ADDED',
                 'SLICE_DELETED',
                 'SLICE_UPDATED',

@@ -1,5 +1,7 @@
 # Änderungen von search_it
-
+- highlighter fix #186 thx @alexwenz
+- rex_escape statt htmlspecialchars
+- Versuch fix PHP 7.3 @rolandsee
 - pdf2txt fix for PHP 7.2 @olien
 - fix verschachtelte search it tags
 - Doku @thielpeter, @alexplusde

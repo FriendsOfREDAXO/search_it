@@ -262,9 +262,11 @@ function search_it_handle_extensionpoint($_ep){
             break;
 
         case 'MEDIA_ADDED':
+        case 'MEDIA_DELETED':
             foreach( $includeColumns as $table => $columnArray){
                 if($table == rex::getTable('media')){
-                    foreach($columnArray as $column) {$tex[] = $table.$column;
+                    foreach($columnArray as $column) {
+                        // extension point liefert nicht die id des neuen/entfernten Mediums
                         $search_it->indexColumn($table, $column);
                     }
                 }

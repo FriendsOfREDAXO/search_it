@@ -1,4 +1,7 @@
 # Änderungen von search_it
+
+## Version 6.6.4 (2019-02-25)
+- Reindexierung überarbeitet, zusätzlicher EP "MEDIA_DELETED"
 - highlighter fix #186 thx @alexwenz
 - rex_escape statt htmlspecialchars
 - Versuch fix PHP 7.3 @rolandsee

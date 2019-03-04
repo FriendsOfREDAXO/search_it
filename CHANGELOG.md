@@ -1,5 +1,8 @@
 # Änderungen von search_it
 
+- Fix schrittweise Indexierung
+- Fix Testsuche @Pixeldaniel
+
 ## Version 6.6.4 (2019-02-25)
 - Reindexierung überarbeitet, zusätzlicher EP "MEDIA_DELETED"
 - highlighter fix #186 thx @alexwenz

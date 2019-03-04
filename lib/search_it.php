@@ -399,12 +399,8 @@ class search_it
         $delete->setTable($this->tablePrefix . 'search_it_index');
 
         $where = sprintf(" `ftable` = '%s' AND `fcolumn` = '%s' AND `texttype` = 'db_column'", $_table, $_column);
-        //lus: reaktiviert damit einzeln gelöscht werden kann
         if (is_string($_idcol) AND ($_id !== false)) {
             $where .= sprintf(' AND fid = %d', $_id);
-
-        } elseif (is_numeric($_start) AND is_numeric($_count)) {
-            $where .= ' LIMIT ' . $_start . ',' . $_count;
         }
         $delete->setWhere($where);
 

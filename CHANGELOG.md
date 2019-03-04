@@ -1,7 +1,8 @@
 # Änderungen von search_it
 
+## Version 6.6.5 (2019-03-04)
 - Fix schrittweise Indexierung
-- Fix Testsuche @Pixeldaniel
+- Fix Testsuche #192 @Pixeldaniel 
 
 ## Version 6.6.4 (2019-02-25)
 - Reindexierung überarbeitet, zusätzlicher EP "MEDIA_DELETED"

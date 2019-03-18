@@ -1,5 +1,5 @@
 # Änderungen von search_it
-- Fix für Docker setup @schuer
+- Fix für Docker setup @schuer gfdfgfdgfd
 
 ## Version 6.6.5 (2019-03-04)
 - Fix schrittweise Indexierung

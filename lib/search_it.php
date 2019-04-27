@@ -132,7 +132,7 @@ class search_it
         $global_return = 0;
         $art_sql = rex_sql::factory();
         $art_sql->setTable($this->tablePrefix . 'article');
-        if ($art_sql->select('id,clang_id')) 
+        if ($art_sql->select('id,clang_id')) {
             foreach ($art_sql->getArray() as $art) {
                 $returns = $this->indexArticle($art['id'], $art['clang_id']);
                 foreach ( $returns as $return ) {

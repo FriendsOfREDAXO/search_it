@@ -129,7 +129,7 @@ class search_it
 
 
         // index articles
-        $global_return = '';
+        $global_return = 0;
         $art_sql = rex_sql::factory();
         $art_sql->setTable($this->tablePrefix . 'article');
         if ($art_sql->select('id,clang_id')) {

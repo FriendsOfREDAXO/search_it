@@ -1,4 +1,6 @@
 # Änderungen von search_it
+- Fix EP CAT_STATUS deindexiert nicht Kategorie-Startartikel #202 thx @alexwenz
+- Fixed "non-numeric value encountered" warning #198 thx @staabm
 
 ## Version 6.6.5 (2019-03-04)
 - Fix schrittweise Indexierung

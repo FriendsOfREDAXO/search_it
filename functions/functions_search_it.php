@@ -236,6 +236,7 @@ function search_it_handle_extensionpoint($_ep){
                     $search_it->indexArticle($art_id, $_params['clang']);
                 }
             } else {
+                $search_it->unindexArticle($_params['id'], $_params['clang']); // der Kategorie-Artikel ist schon offline gesetzt, und wird von _getArticles nicht mehr geholt
                 foreach( search_it_getArticles(array($_params['id'])) as $art_id => $art_name ) {
                     $search_it->unindexArticle($art_id, $_params['clang']);
                 }

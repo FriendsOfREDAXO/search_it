@@ -416,7 +416,7 @@ class search_it
         }
 
         // delete from index
-            $delete->delete();
+        if ( $_start === false || $_start == 0 ) { $delete->delete(); }
 
 
         // NEW

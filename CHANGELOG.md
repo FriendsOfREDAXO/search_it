@@ -1,4 +1,6 @@
 # Änderungen von search_it
+- Verbesserte, übersetzte Fehlermeldungen, korrekte Verwendung des jeweiligen Protokolls bei Weiterleitungen
+- FIX: DB Suchindex unvollständig bei schrittweiser Indexierung #208 thx @dtpop
 - Fix EP CAT_STATUS deindexiert nicht Kategorie-Startartikel #202 thx @alexwenz
 - Fixed "non-numeric value encountered" warning #198 thx @staabm
 

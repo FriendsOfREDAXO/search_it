@@ -1,4 +1,5 @@
 # Änderungen von search_it
+## Version 6.6.6 (2019-08-14)
 - Verbesserte, übersetzte Fehlermeldungen, korrekte Verwendung des jeweiligen Protokolls bei Weiterleitungen
 - FIX: DB Suchindex unvollständig bei schrittweiser Indexierung #208 thx @dtpop
 - Fix EP CAT_STATUS deindexiert nicht Kategorie-Startartikel #202 thx @alexwenz

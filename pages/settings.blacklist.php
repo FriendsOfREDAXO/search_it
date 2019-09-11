@@ -47,7 +47,7 @@ $formElements = [];
 
 
 $categories = array();
-foreach(search_it_getCategories() as $id => $name){
+foreach(search_it_getCategories(false) as $id => $name){
   $categories[] = array(
       'value' => $id,
       'selected' => !empty($this->getConfig('exclude_category_ids')) AND is_array($this->getConfig('exclude_category_ids')) AND in_array($id,$this->getConfig('exclude_category_ids')),

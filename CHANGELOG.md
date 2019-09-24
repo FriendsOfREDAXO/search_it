@@ -1,5 +1,6 @@
 # Änderungen von search_it
 
+- u.U. nichts indexiert, wenn REX_ARTICLE[] mehrfach verwendet wurde #138 thx @IngoWinter
 - In Blacklist sind auch offline Kategorien auswählbar #215 thx @skerbis
 
 ## Version 6.6.6 (2019-08-14)

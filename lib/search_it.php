@@ -293,7 +293,7 @@ class search_it
 
 
                 // regex time
-                preg_match_all('/<!--\ssearch_it\s([0-9]*)\s?-->(.*)<!--\s\/search_it\s(\1)\s?-->/s', $articleText, $matches, PREG_SET_ORDER);
+                preg_match_all('/<!--\ssearch_it\s([0-9]*)\s?-->(.*)<!--\s\/search_it\s(\1)\s?-->/sU', $articleText, $matches, PREG_SET_ORDER);
                 $articleText = '';
                 foreach ($matches as $match) {
                     if ( $match[1] == $_id || $match[1] == '' ) {

@@ -12,6 +12,7 @@
             $this->setConfig(array(
                 'modus' => 'keywords',
                 'maxSuggestion' => '10',
+                'similarwordsmode' => '0',
                 'autoSubmitForm' => 1
             ));
         }

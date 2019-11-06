@@ -323,7 +323,7 @@ class search_it
                     $select->setWhere('id = ' . $_id . ' AND clang_id = ' . $langID);
                     $select->select('`' . implode('`,`', $this->includeColumns[$this->tablePrefix . 'article']) . '`');
                     foreach ($this->includeColumns[$this->tablePrefix . 'article'] as $col) {
-                        $additionalValues[$col] = $select->getValue($col);
+                        if ( $select->hasValue($col) ) { $additionalValues[$col] = $select->getValue($col); }
                     }
 
                     $articleData['values'] = serialize($additionalValues);
@@ -399,6 +399,16 @@ class search_it
      */
     public function indexColumn($_table, $_column, $_idcol = false, $_id = false, $_start = false, $_count = false, $_wherecondition = false)
     {
+        $sqltest = rex_sql_table::get($_table);
+        if ( !$sqltest->exists() ) {
+            rex_logger::factory()->log( 'Warning', rex_i18n::rawMsg('search_it_generate_table_not_exists', $_table));
+            return false;
+        } else {
+            if (!$sqltest->hasColumn($_column) ) {
+                rex_logger::factory()->log( 'Warning', rex_i18n::rawMsg('search_it_generate_col_not_exists', $_column, $_table));
+                return false;
+            }
+        }
         $delete = rex_sql::factory();
         $delete->setTable($this->tablePrefix . 'search_it_index');
 
@@ -497,7 +507,7 @@ class search_it
                     }
                     $additionalValues = array();
                     foreach ($this->includeColumns[$_table] as $col) {
-                        $additionalValues[$col] = $row[$col];
+                        if ( isset($row[$col]) ) { $additionalValues[$col] = $row[$col]; }
                     }
                     $indexData['values'] = serialize($additionalValues);
 

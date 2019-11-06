@@ -1,5 +1,7 @@
 # Änderungen von search_it
 
+- wird eine Tabelle oder Spalte gelöscht, die in "zusätzliche Datenquelle" angegeben ist und neuindexiert -> woops #222 thx @alexplusde
+- autocomplete: keine Voreinstellung für 'similarwordsmode' erzeugte Fehler #219 thx @danielellm
 - u.U. nichts indexiert, wenn REX_ARTICLE[] mehrfach verwendet wurde #138 thx @IngoWinter
 - In Blacklist sind auch offline Kategorien auswählbar #215 thx @skerbis
 

@@ -47,7 +47,7 @@ class search_it
     private $similarwordsPermanent = false;
     private $searchMode = 'like';
 
-    private $surroundTags = array('<strong>', '</strong>');
+    private $surroundTags = array('<mark>', '</mark>');
     private $limit = array(0, 10);
     private $maxTeaserChars = 200;
     private $maxHighlightedTextChars = 100;

@@ -13,7 +13,7 @@ switch($ajax) {
             case 'art':
                 foreach($search_it->indexArticle($_id = intval(rex_get('id'))) as $langID => $article){
 
-                    $msgtext = !is_null(rex_article::get($_id, $langID)) ? '<em>"'.rex_escape(rex_article::get($_id, $langID)->getValue('name')).'"</em>' : '';
+                    $msgtext = !is_null(rex_article::get($_id, $langID)) ? '<em><a target="_blank" href="'.rex_getUrl($_id, $langID).'">'. rex_escape(rex_article::get($_id, $langID)->getValue('name')).'</a></em> ' : '';
                     $msgtext .= '(ID=<strong>'.$_id.'</strong>,<strong>'.rex_clang::get($langID)->getName().'</strong>) ';
 
                     switch($article){

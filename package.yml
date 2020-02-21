@@ -23,6 +23,7 @@ page:
         test: { title: 'translate:test', icon: rex-icon fa-flask }
 requires:
     redaxo: '^5.5.0'
+    php: '^7'
 
 system_plugins:
     - documentation

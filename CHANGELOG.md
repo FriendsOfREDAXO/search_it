@@ -1,5 +1,7 @@
 # Änderungen von search_it
 
+- bei schrittweiser Indexierung sind die Artikel in der Ausgabe verlinkt
+- minimale PHP Version ergänzt @staabm
 - install.sql -> install.php
 - wird eine Tabelle oder Spalte gelöscht, die in "zusätzliche Datenquelle" angegeben ist und neuindexiert -> woops #222 thx @alexplusde
 - autocomplete: keine Voreinstellung für 'similarwordsmode' erzeugte Fehler #219 thx @danielellm
@@ -14,7 +16,7 @@
 
 ## Version 6.6.5 (2019-03-04)
 - Fix schrittweise Indexierung
-- Fix Testsuche #192 @Pixeldaniel 
+- Fix Testsuche #192 @Pixeldaniel
 
 ## Version 6.6.4 (2019-02-25)
 - Reindexierung überarbeitet, zusätzlicher EP "MEDIA_DELETED"
@@ -44,7 +46,7 @@
 
 ## Version 6.5.1 (2018-01-05)
 - Schutz des Passwortfeldes im Backend (thx @tbaddade)
-- Überarbeitung/Übersetzungen der Meldungen bei schrittweiser Indexierung ( #137 ) 
+- Überarbeitung/Übersetzungen der Meldungen bei schrittweiser Indexierung ( #137 )
 
 ## Version 6.5.0 (2017-09-24)
 - Eingabe eines Basic Auth Login ermöglicht Indexierung trotz '.htaccess'-Schutz #100 ( thx @Hirbod )
@@ -55,7 +57,7 @@
 - Verbesserung an der Doku
 - DB-Spalten werden alphabetisch sortiert, nur noch eine Spalte @tbaddade
 - beim Erstellen des Standard-Plaintext werden HTML Entities decodiert, damit kein ; eine Trennung erzeugt
-    (Haupsächlich wegen &shy; vom Hypenator-PlugIn, #130, thx @greatif ) 
+    (Haupsächlich wegen &shy; vom Hypenator-PlugIn, #130, thx @greatif )
 - Test erzeugt keine Änderung bei Statistik und der Test wird auch nicht gecached #122 ( thx @greatif )
 
 ## Version 6.4.1 (2017-09-18)
@@ -66,22 +68,22 @@
   - Test-Funktion im Backend @alexplusde
 
 ## Version 6.3.1 (2017-09-08)
-  - Spalten Checkboxen nur noch in 2 Spalten #115 ( @tbaddade ) 
+  - Spalten Checkboxen nur noch in 2 Spalten #115 ( @tbaddade )
   - css und js werden nur noch auf den eigenen Backendseiten geladen #118 ( @olien )
   - extension point "YFORM_DATA_DELETED" wurde nicht beachtet
   - search_highlighter lieferte den < body> Tag nicht mit zurück #113 ( thx frood )
   - doppelte slashes in scanurl entfernt #111 ( thx Gerry, @skerbis )
-  - yrewrite support added #105 (thx @palber ) 
+  - yrewrite support added #105 (thx @palber )
 
 ## Version 6.3.0 (2017-03-23)
   - Indexmodi alle entfernt. Es wird nur noch Frontend indexiert.
   - die Tags werden nur noch bei der Indexierung eingefügt
-  
+
 ## Version 6.2.0 (2017-03-22)
   - PlugIn Permissions @DanielWeitenauer
   - Fehlermeldung im SystemLog, wenn HTTP-GET Indexierung scheitert.
   - Plaintext PlugIn: Änderung der Einstellungen muss Meldung zum Suchindex erneuern bringen #86
-  - "Frontend mode" entfernt #93 @Web-Work24 , @skerbis , @others 
+  - "Frontend mode" entfernt #93 @Web-Work24 , @skerbis , @others
   - Leerzeilen aus dem Standard-Plaintext entfernt
   - Schrittweise Indexierung indexiert jetzt auch Medienpool Dateien #92 @skerbis
   - Notices entfernt beim Speichern von geänderten Einstellungen
@@ -89,7 +91,7 @@
   - Darstellung der Einstellungen für Datei-Indexierung verbessert
 
 ## Version 6.1.5 (2017-02-17)
-  - Extensionpoint "SLICE_SHOW" ist wirklich nicht mehr nötig --> entfernt, thx @darwin26 
+  - Extensionpoint "SLICE_SHOW" ist wirklich nicht mehr nötig --> entfernt, thx @darwin26
   - issue #77 Der Search-Highlighter zeichnet auch im <title> Tag aus,  thx@DanielWeitenauer
   - issue #76 Maximale Trefferanzahl prüfen, thx @DanielWeitenauer
   - Fixes am "frontend mode" @skerbis
@@ -103,16 +105,16 @@
 
 ## Version 6.1.2 (2016-11-21)
   - beim Löschen von Tabellen wird jetzt `TRUNCATE` benutzt, damit die autoincrementwerte zurückgesetzt werden @Flo
-  - update.php löscht die alten Plugins "search_highlighter" und "reindex" aus den 5er Versionen 
+  - update.php löscht die alten Plugins "search_highlighter" und "reindex" aus den 5er Versionen
 
 ## Version 6.1.1 (2016-11-17)
   - neue Funktion `searchInCategoryTree`, die die Suche auf alle Unterkategorien einer Kategorie beschränkt ( nützlich bei multi-domain sites ) Auf Anregung von @alex_wenz, thx
   - Bezeichnungen im Backend geändert (hoffentlich verbessert)
-  
+
 ## Version 6.1.0 (2016-11-16)
   - neuer alter "Frontend mode" als Fix für #66
   - "indiziern" -> "indexieren"
-  - PHP Zugriffslevel gesetzt private/public/protected 
+  - PHP Zugriffslevel gesetzt private/public/protected
   - **ACHTUNG**: Funktion `doSearchArticles()` deprecated, wird in nächster Version entfernt, bitte `setSearchAllArticlesAnyway()` nutzen
   - Funktion `excludeArticle()` umbenannt in `unindexArticle()`
   - Backend-Message "Suchindex muss erneuert werden" wird jetzt auch bei geänderten Werten angezeigt, die ein array sind.
@@ -123,14 +125,14 @@
   - statt `file_get_contents` wird jetzt `rex_socket` verwendet
 
 ## Version 6.0.0 (2016-10-21)
-  - Fehler beim Indexieren von PDFs behoben, Einstellungen umgestellt 
-  
+  - Fehler beim Indexieren von PDFs behoben, Einstellungen umgestellt
+
 ## Version 6.0.0-rc1 (2016-10-10)
-  - Re-indizierung jetzt per cronjob möglich 
+  - Re-indizierung jetzt per cronjob möglich
 
 ## Version 5.9.1 (2016-09-24)
-  - Methode cologne_phon() durch soundex_ger() ersetzt (wegen Lizenz, jetzt BSD) 
-  
+  - Methode cologne_phon() durch soundex_ger() ersetzt (wegen Lizenz, jetzt BSD)
+
 ## Version 5.9.0 (2016-09-24)
   - Plugin Search Highlighter und Reindex in das AddOn eingebaut
 
@@ -148,7 +150,7 @@
   - Portierung auf R5
   - Umbenennung von **"RexSearch"** in **"Search it"**
   - die sql->escape Methode umgibt das Ergebnis mit single Quotes, was alle SQL Abfragen fehlerhaft machte.
-  - "Frontend-Mode" und "outputfilter anwenden" ging so nicht - rex::setProperty('redaxo') 
+  - "Frontend-Mode" und "outputfilter anwenden" ging so nicht - rex::setProperty('redaxo')
   haben dann aber geholfen.
   - Beim indexieren per HTTP musste ich "rex_url::init(new rex_path_default_provider('/', 'redaxo', true))" verwenden
   - PDF2TXT funzt nicht
@@ -233,13 +235,13 @@
     (ohne Datenverlust)
   - JS-Nachfrage, ob schrittweise Indexierung wirklich gestartet werden
     soll, hinzugefügt
-    
+
 ## Version 0.5.4 (2010-09-14)
   - Möglichkeit, bei der Indexierung von Artikelinhalten
     den Extension Point "OUTPUT_FILTER" aufzurufen, implementiert
     (http://forum.redaxo.de/sutra84454.html#84454)
 
-    
+
 
 
 

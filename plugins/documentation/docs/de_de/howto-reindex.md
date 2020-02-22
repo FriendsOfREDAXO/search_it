@@ -25,6 +25,21 @@
 
 Die Klasse `search_it` bietet allerdings die Methode `indexColumn` an. Über diese Methode können Datenbankspalten neu oder wieder indexiert werden. Müssen die Datenbankspalten nur zu einem bestimmten Datensatz indexiert werden, kann außerdem die ID dieses Datensatzes angegeben werden. Search it wird dann auch nur den betroffenen Datensatz reindexieren.
 
+### Alle reindexieren
+
+```php
+
+    $search_it = new search_it;
+    
+    $includeColumns = is_array(rex_addon::get('search_it')->getConfig('include')) ? rex_addon::get('search_it')->getConfig('include') : array();
+
+    foreach( $includeColumns as $table => $columnArray ){
+        foreach( $columnArray as $column ){
+            $search_it->indexColumn($table, $column);
+        }
+    }
+```
+
 ### Für AddOns
 
 Ein AddOn arbeitet mit einer eigenen Datenbank-Tabelle, hier: `table`. Search it soll Inhalte dieses AddOns auch automatisch reindexieren. Da das AddOn selbst weiß, wann die Beispieldatenbank-Feld `field` reindexiert werden soll, kann die Methode `indexColumn` von diesem AddOn aufgerufen werden:
@@ -32,7 +47,7 @@ Ein AddOn arbeitet mit einer eigenen Datenbank-Tabelle, hier: `table`. Search it
 ```
 $search_it = new search_it;
 $search_it->indexColumn('table', 'field'[, 'id'[, $datensatz_id]]);
-``` 
+```
  
 Die Methode `indexColumn` benötigt daher folgende Parameter:
 *    Die Namen der Datenbanktabelle (hier: `table`) und

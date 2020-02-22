@@ -5,6 +5,7 @@ D.h. im ersten Schritt werden nur im Frontend sichtbare Inhalte gefunden. Insbes
 
 Über die Auswahl von Datenbanktabellenspalten im Register "Zusätzl. Datenquellen" können auch nicht im Frontend sichtbare Inhalte indexiert werden.
 
+> **Hinweis:** Voraussetzung für die Artikelindexierung ist, dass die Artikel im Frontend erreichbar sind und bspw. nicht durch Addons oder aus anderen Gründen der Aufruf der Seite für nicht eingeloggte Nutzer blockiert wird. Addons wie bspw. `maintenance` oder ein ungültiges SSL-Zertifikat können die Indexierung blockieren.
 
 # Automatische Indexierung / Indexerneuerung
  
@@ -19,5 +20,3 @@ CAT_DELETED| Ausgabe einer Meldung, dass der Index erneuert werden muss.
 CAT_STATUS, CAT_ADDED| Eine Kategorie, die offline geschaltet wird, wird deindexiert, bei online indexiert.
 MEDIA_ADDED, MEDIA_UPDATED|Wenn ein Medium hinzugefügt wurde, werden alle ausgewählten DB-Spalten aus der Tabelle rex_file neu indexiert.
 SLICE_ADDED, SLICE_DELETED, SLICE_UPDATED|Der Artikel wird neu indexiert
-
-__todo__: Extension Points aktualisieren

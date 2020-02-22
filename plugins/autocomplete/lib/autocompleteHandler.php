@@ -80,7 +80,7 @@ class rex_api_search_it_autocomplete_getSimilarWords extends rex_api_function {
 
             $sql = sprintf("
               SELECT keyword FROM `%s` WHERE ( keyword LIKE '%s' ) AND (clang = %s OR clang = %s) GROUP BY keyword ORDER BY count ",
-              rex::getTempPrefix.'search_it_keywords',
+              rex::getTempPrefix().'search_it_keywords',
               $q.'%',
               '-1',
               rex_clang::getCurrentId()
@@ -92,7 +92,7 @@ class rex_api_search_it_autocomplete_getSimilarWords extends rex_api_function {
 
             $sql = sprintf("
               SELECT keyword FROM `%s` WHERE ( keyword LIKE '%s' OR soundex = '%s'  ) AND (clang = %s OR clang = %s) GROUP BY keyword ORDER BY count ",
-              rex::getTempPrefix.'search_it_keywords',
+              rex::getTempPrefix().'search_it_keywords',
               $q.'%',
               soundex($q),
               '-1',
@@ -106,7 +106,7 @@ class rex_api_search_it_autocomplete_getSimilarWords extends rex_api_function {
 
             $sql = sprintf("
               SELECT keyword FROM `%s` WHERE ( keyword LIKE '%s' OR metaphone = '%s'  ) AND (clang = %s OR clang = %s) GROUP BY keyword ORDER BY count ",
-              rex::getTempPrefix.'search_it_keywords',
+              rex::getTempPrefix().'search_it_keywords',
               $q.'%',
               metaphone($q),
               '-1',
@@ -120,7 +120,7 @@ class rex_api_search_it_autocomplete_getSimilarWords extends rex_api_function {
 
             $sql = sprintf("
               SELECT keyword FROM `%s` WHERE ( keyword LIKE '%s' OR colognephone = '%s'  ) AND (clang = %s OR clang = %s) GROUP BY keyword ORDER BY count ",
-              rex::getTempPrefix.'search_it_keywords',
+              rex::getTempPrefix().'search_it_keywords',
               $q.'%',
               soundex_ger($q),
               '-1',
@@ -134,7 +134,7 @@ class rex_api_search_it_autocomplete_getSimilarWords extends rex_api_function {
 
             $sql = sprintf("
               SELECT keyword FROM `%s` WHERE ( keyword LIKE '%s' OR soundex = '%s' OR metaphone = '%s' OR colognephone = '%s') AND (clang = %s OR clang = %s) GROUP BY keyword ORDER BY count ",
-              rex::getTempPrefix.'search_it_keywords',
+              rex::getTempPrefix().'search_it_keywords',
               $q.'%',
               soundex($q),
               metaphone($q),

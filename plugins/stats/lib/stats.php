@@ -10,7 +10,7 @@ class search_it_stats{
 
     function flushSQL(){
         $this->sql->flushValues();
-        $this->sql->setTable(rex::getTablePrefix().'search_it_stats_searchterms');
+        $this->sql->setTable(rex::getTempPrefix(). 'search_it_stats_searchterms');
     }
 
     function insert($_searchterm, $_resultcount, $_time = false){
@@ -32,18 +32,18 @@ class search_it_stats{
     }
 
     function truncate(){
-        $this->sql->setQuery('TRUNCATE ' . rex::getTablePrefix().'search_it_stats_searchterms');
+        $this->sql->setQuery('TRUNCATE ' . rex::getTempPrefix(). 'search_it_stats_searchterms');
     }
 
     function getTopSearchterms($_count, $_getonly = 0){
         $this->flushSQL();
 
         if (empty($_getonly)){
-            $query = 'SELECT term, COUNT(*) as count, 1 as success FROM `' . rex::getTablePrefix().'search_it_stats_searchterms' . '` WHERE resultcount > 0 GROUP BY term
+            $query = 'SELECT term, COUNT(*) as count, 1 as success FROM `' . rex::getTempPrefix. 'search_it_stats_searchterms' . '` WHERE resultcount > 0 GROUP BY term
                       UNION
-                      SELECT term, COUNT(*) as count, 0 as success FROM `' . rex::getTablePrefix().'search_it_stats_searchterms' . '` WHERE resultcount <= 0 GROUP BY term';
+                      SELECT term, COUNT(*) as count, 0 as success FROM `' . rex::getTempPrefix(). 'search_it_stats_searchterms' . '` WHERE resultcount <= 0 GROUP BY term';
         } else {
-            $query = 'SELECT term, COUNT(*) as count, ' . ($_getonly == 1 ? 1 : 0) . ' as success FROM `' . rex::getTablePrefix().'search_it_stats_searchterms' . '` WHERE resultcount ' . ($_getonly == 1 ? '>' : '<=') . ' 0 GROUP BY term';
+            $query = 'SELECT term, COUNT(*) as count, ' . ($_getonly == 1 ? 1 : 0) . ' as success FROM `' . rex::getTempPrefix(). 'search_it_stats_searchterms' . '` WHERE resultcount ' . ($_getonly == 1 ? '>' : '<=') . ' 0 GROUP BY term';
             // getonly = 1: only successful searchterms
             // getonly = 2: only failed searchterms
         }
@@ -156,16 +156,16 @@ class search_it_stats{
     function createTestData(){
         $this->flushSQL();
         $str = '
-Wir bieten Ihnen leckeres Essen, frische Steinofenpizza, verschiedene Pastavariationen und frische Salate für die ganze Familie, 
-Drinks in geselliger Runde oder an unserer Bar, einen gemütlichen Biergarten, Fremdenzimmer zu fairen Preisen und ab sofort auch 
-Pizza auf Bestellung (zum selber Abholen, kein Lieferservice). Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam 
-nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo 
+Wir bieten Ihnen leckeres Essen, frische Steinofenpizza, verschiedene Pastavariationen und frische Salate für die ganze Familie,
+Drinks in geselliger Runde oder an unserer Bar, einen gemütlichen Biergarten, Fremdenzimmer zu fairen Preisen und ab sofort auch
+Pizza auf Bestellung (zum selber Abholen, kein Lieferservice). Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam
+nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo
 dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet,
-consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. 
+consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.
 At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor
 sit amet. Werde kostenlos Mitglied in der party.de-Community! Hier treffen sich in erster Linie Feierleute, die gleichgesinnte kennenlernen
 wollen, neue Freundschaften schliessen möchten und sich oftmals auch im realen Leben verabreden. Klick hier, um Mitglied zu werden.
-Die Zwitter kommen: PC-Monitore im Breitbildformat sind angesagt, darunter immer öfter Modelle mit integriertem TV-Empfänger. Sie 
+Die Zwitter kommen: PC-Monitore im Breitbildformat sind angesagt, darunter immer öfter Modelle mit integriertem TV-Empfänger. Sie
 sind die erste Wahl für alle, die nur Platz für ein Gerät haben oder am Schreibtisch auch mal fernsehen möchten. test hat vier Kombi-
 geräte mit zwölf reinen PC-Bildschirmen verglichen. Probleme gabs nur im Detail.';
 

@@ -10,7 +10,7 @@ class search_it_stats{
 
     function flushSQL(){
         $this->sql->flushValues();
-        $this->sql->setTable(rex::getTempPrefix(). 'search_it_stats_searchterms');
+        $this->sql->setTable(rex::getTablePrefix().rex::getTempPrefix(). 'search_it_stats_searchterms');
     }
 
     function insert($_searchterm, $_resultcount, $_time = false){

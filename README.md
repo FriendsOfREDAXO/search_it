@@ -35,7 +35,7 @@ Bei der Installation werden fünf Datenbanktabellen angelegt:
 * `rex_temp_search_it_cache` und `rex_temp_search_it_cacheindex_ids` für den Suchcache
 * `rex_temp_search_it_stats_searchterms` für die Statistik
 
-Die Tabellen werden nicht in die Datenbacnk-Sicherung des backup-Addons miteinbezogen.
+Die Tabellen werden nicht in die Datenbank-Sicherung des backup-Addons miteinbezogen.
 
 ## First Steps
 

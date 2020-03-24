@@ -20,7 +20,7 @@ Dabei werden Artikel, Medien, Dateien, PDF-Inhalte und Datenbank-Felder in einer
 
 > Hinweis: Die Plugins `Reindex` und `Search Highlighter` aus `RexSearch für REDAXO 4` wurden in `Seach it` integriert.
 
-## First Steps
+## Erste Schritte
 
 * Installation des aktuellen Release über GitHub oder den REDAXO-Installer
 * `Search it`-AddOn und Plugins aktivieren

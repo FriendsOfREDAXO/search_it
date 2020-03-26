@@ -8,9 +8,8 @@ Dabei werden Artikel, Medien, Dateien, PDF-Inhalte und Datenbank-Felder in einer
 
 ## Systemvoraussetzungen
 
-* `PHP >= 5.5`
-* `MySQL >= 5.1`
-* `REDAXO >= 5.2`
+* `PHP ^7`
+* `REDAXO >= 5.5.0`
 
 ## Plugins
 

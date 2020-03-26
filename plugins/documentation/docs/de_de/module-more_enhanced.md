@@ -57,7 +57,7 @@ Für umfangreiche Webauftritte kann eine Pagination für die Suchergebnisse sinn
 
 ## Ähnlichkeitssuche
 
-Dieses Beispielmodul erweitert das Paginationsmodul um eine Suche nach ähnlichen Wörtern. Wichtig ist dabei, dass die Ähnlichkeitssuche im Backend aktiviert ist.
+Dieses Beispielmodul erweitert eine Suche um die Suche nach ähnlichen Wörtern. Wichtig ist dabei, dass die Ähnlichkeitssuche im Backend aktiviert ist.
 ```
 <?php
 $request = rex_request('search', 'string', false);

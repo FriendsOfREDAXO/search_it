@@ -17,7 +17,7 @@
 	- [Erweiterte Suche](module-enhanced.md)
 	- [Mediensuche](module-media_search.md)
 	- [Komplexe Suche](module-complex.md) (in Arbeit)
-	- [Weitere Beispiele](module-more_enhanced.md) (in Arbeit)
+	- [Weitere Beispiele](module-more_enhanced.md)
 - FAQ
 	- [Tipps zur Konfiguration](howto-setup.md)
 	- [Sprachabhängige Suche](howto-languages.md)
@@ -25,7 +25,7 @@
 	- [Ähnlichkeitssuche](howto-simsearch.md) (in Arbeit)
 	- [Highlighting](howto-highlighting.md)
 	- [Auf Kategorien beschränken](howto-categories.md)
-	- [Paginierung](howto-pagination.md) (in Arbeit)
+	- [Paginierung](howto-pagination.md)
 	- [Multidomain mit YRewrite](howto-multidomainyrewrite.md)
 
 ---

@@ -22,7 +22,7 @@
 	- [Tipps zur Konfiguration](howto-setup.md)
 	- [Sprachabhängige Suche](howto-languages.md)
 	- [De- und Reindexierung](howto-reindex.md) (in Arbeit)
-	- [Ähnlichkeitssuche](howto-simsearch.md) (in Arbeit)
+	- [Ähnlichkeitssuche](howto-simsearch.md)
 	- [Highlighting](howto-highlighting.md)
 	- [Auf Kategorien beschränken](howto-categories.md)
 	- [Paginierung](howto-pagination.md)

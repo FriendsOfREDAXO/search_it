@@ -41,11 +41,16 @@ if($request) {
             if(($hit['type'] == 'db_column' AND $hit['table'] == rex::getTablePrefix().'article') || ($hit['type'] == 'article'))
             {
                 $article = rex_article::get($hit['fid']); 
+				$hit_server = $server;
+				if(rex_addon::get('yrewrite')->isAvailable()) {
+					$hit_domain = rex_yrewrite::getDomainByArticleId($hit['fid'], $hit['clang']);
+					$hit_server = rtrim($hit_domain->getUrl(), "/");
+				}
                 echo '<li class="search_it-result search_it-article">
                           <p class="search_it-title">
-                              <a href="'.$server.$article->getUrl().'" title="'.$article->getName().'">'.$article->getName().'</a>
+                              <a href="'.$hit_server.$article->getUrl().'" title="'.$article->getName().'">'.$article->getName().'</a>
                           </p>
-                          <p class="search_it-url">'.$server.rex_getUrl($hit['fid'], $hit['clang'], array()).'</p>
+                          <p class="search_it-url">'.$hit_server.rex_getUrl($hit['fid'], $hit['clang'], []).'</p>
                           <p class="search_it-teaser">'.$text.'</p>
                       </li>'; 
             } else {                                   
@@ -93,11 +98,19 @@ if($request) { // Wenn ein Suchbegriff eingegeben wurde
             if(($hit['type'] == 'db_column' AND $hit['table'] == rex::getTablePrefix().'article') || ($hit['type'] == 'article'))
             {
                 $article = rex_article::get($hit['fid']); // REDAXO-Artikel-Objekt holen
+
+				// falls YRewrite genutzt wird
+				$hit_server = $server;
+				if(rex_addon::get('yrewrite')->isAvailable()) {
+					$hit_domain = rex_yrewrite::getDomainByArticleId($hit['fid'], $hit['clang']);
+					$hit_server = rtrim($hit_domain->getUrl(), "/");
+				}
+
                 echo '<li class="search_it-result search_it-article">
                           <p class="search_it-title">
-                              <a href="'.$server.$article->getUrl().'" title="'.$article->getName().'">'.$article->getName().'</a>
+                              <a href="'.$hit_server.$article->getUrl().'" title="'.$article->getName().'">'.$article->getName().'</a>
                           </p>
-                          <p class="search_it-url">'.$server.rex_getUrl($hit['fid'], $hit['clang'], array()).'</p>
+                          <p class="search_it-url">'.$hit_server.rex_getUrl($hit['fid'], $hit['clang'], []).'</p>
                           <p class="search_it-teaser">'.$text.'</p>
                       </li>'; // Ausgabe des Suchtreffers
             } else {                                   

@@ -11,6 +11,7 @@ Search it basiert auf [RexSearch (Xong) für REDAXO 4](https://github.com/xong/r
 * `PHP >= 5.5`
 * `MySQL >= 5.1`
 * `REDAXO >= 5.3`
+* `pdftotext` [optional für das Durchsuchen von pdf-Inhalten, [Link](https://www.xpdfreader.com/pdftotext-man.html)]
 
 ## Plugins
 

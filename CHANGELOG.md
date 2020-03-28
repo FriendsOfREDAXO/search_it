@@ -1,5 +1,6 @@
 # Änderungen von search_it
 
+- URLs aus dem URL Addon (>= 2.0) können indexiert werden.
 - bei schrittweiser Indexierung sind die Artikel in der Ausgabe verlinkt
 - minimale PHP Version ergänzt @staabm
 - install.sql -> install.php

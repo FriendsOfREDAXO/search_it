@@ -35,7 +35,7 @@ class rex_api_search_it_autocomplete_getSimilarWords extends rex_api_function {
 
           if($result['count'] > 0)
           {
-            $ids = array();
+            $ids = [];
 
             foreach($result['hits'] as $hit) {
 

@@ -7,8 +7,8 @@ require_once $curDir . '/phplot/phplot.php';
 
 
 // fetch data
-$bardata = array();
-$cumulateddata = array();
+$bardata = [];
+$cumulateddata = [];
 $statCounts = $stats->getCount();
 
 $max = 1;

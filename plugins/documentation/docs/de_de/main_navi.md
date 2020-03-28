@@ -17,6 +17,7 @@
 	- [Erweiterte Suche](module-enhanced.md)
 	- [Mediensuche](module-media_search.md)
 	- [Komplexe Suche](module-complex.md) (in Arbeit)
+	- [URL Addon (>=2.0) Suche](module-url.md)
 	- [Weitere Beispiele](module-more_enhanced.md)
 - FAQ
 	- [Tipps zur Konfiguration](howto-setup.md)

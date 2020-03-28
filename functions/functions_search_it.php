@@ -3,14 +3,14 @@
 function search_it_getArticles($cats = false) {
     $si = rex_addon::get('search_it');
 
-    $whereCats = array();
+    $whereCats = [];
     if(is_array($cats)){
         foreach($cats as $catID) {
             $whereCats[] = "path LIKE '%|" . $catID . "|%'";
         }
     }
 
-    $return = array();
+    $return = [];
     $query = 'SELECT id,name,path FROM '.rex::getTable('article').' WHERE 1';
     if( !$si->getConfig('indexoffline') ) {
         $query .= ' AND status = 1';
@@ -31,11 +31,11 @@ function search_it_getArticles($cats = false) {
 function search_it_getCategories($_ignoreoffline = true, $_onlyIDs = false, $_cats = false) {
     $si = rex_addon::get('search_it');
 
-    $return = array();
+    $return = [];
 
     if(!empty($_cats)){
-        $whereCats = array();
-        $sqlCats = array();
+        $whereCats = [];
+        $sqlCats = [];
         if(is_array($_cats)){
             foreach($_cats as $catID){
                 $whereCats[] = "path LIKE '%|".intval($catID)."|%'";
@@ -43,7 +43,7 @@ function search_it_getCategories($_ignoreoffline = true, $_onlyIDs = false, $_ca
             }
         }
 
-        $return = array();
+        $return = [];
         $query = 'SELECT id,catname,path FROM '.rex::getTable('article').' WHERE startarticle = 1';
         if( !$si->getConfig('indexoffline') AND $_ignoreoffline ) {
             $query .= ' AND status = 1';
@@ -94,9 +94,9 @@ function search_it_getDirs($_startDir = '', $_getSubdirs = false){
     if (@is_dir($_SERVER['DOCUMENT_ROOT'] . $_startDir)){
         $dirs2 = array_diff(scandir($_SERVER['DOCUMENT_ROOT'] . $_startDir), array('.', '..'));
     } else {
-        return array();
+        return [];
     }
-    $dirs = array();
+    $dirs = [];
     foreach ($dirs2 as $k => $dir){
         if (@is_dir($_SERVER['DOCUMENT_ROOT'] . $_startDir . '/' . $dir)) {
             $dirs[$_SERVER['DOCUMENT_ROOT'] . $_startDir . '/' . $dir] = utf8_encode($_startDir . '/' . $dir);
@@ -106,14 +106,14 @@ function search_it_getDirs($_startDir = '', $_getSubdirs = false){
         return $dirs;
     }
 
-    $return = array();
+    $return = [];
     while(!empty($dirs)){
         $dir = array_shift($dirs);
 
         $depth = substr_count($dir, '/') - $startDepth;
         if(@is_dir($_SERVER['DOCUMENT_ROOT'].$dir) AND $depth <= $si->getConfig('dirdepth')){
             $return[$_SERVER['DOCUMENT_ROOT'].$dir] = utf8_encode($dir);
-            $subdirs = array();
+            $subdirs = [];
             foreach(array_diff(scandir($_SERVER['DOCUMENT_ROOT'].$dir), array( '.', '..' )) as $subdir) {
                 if (@is_dir($_SERVER['DOCUMENT_ROOT'] . $dir . '/' . $subdir)) {
                     $subdirs[] = $dir . '/' . $subdir;
@@ -126,10 +126,10 @@ function search_it_getDirs($_startDir = '', $_getSubdirs = false){
     return $return;
 }
 
-function search_it_getFiles($_startDir = '', $_fileexts = array(), $_getSubdirs = false){
+function search_it_getFiles($_startDir = '', $_fileexts = [], $_getSubdirs = false){
     $si = rex_addon::get('search_it');
 
-    $return = array();
+    $return = [];
     $fileextPattern='';
 
     if(!empty($_fileexts)) {
@@ -142,9 +142,9 @@ function search_it_getFiles($_startDir = '', $_fileexts = array(), $_getSubdirs 
     if(@is_dir($_SERVER['DOCUMENT_ROOT'].$_startDir)) {
         $dirs2 = array_diff(scandir($_SERVER['DOCUMENT_ROOT'] . $_startDir), array('.', '..'));
     } else {
-        return array();
+        return [];
     }
-    $dirs = array();
+    $dirs = [];
     foreach($dirs2 as $k => $dir){
         if(@is_dir($_SERVER['DOCUMENT_ROOT'].$_startDir.'/'.$dir)) {
             $dirs[$_SERVER['DOCUMENT_ROOT'] . $_startDir . '/' . $dir] = $_startDir . '/' . $dir;
@@ -162,7 +162,7 @@ function search_it_getFiles($_startDir = '', $_fileexts = array(), $_getSubdirs 
 
         $depth = substr_count($dir, '/') - $startDepth;
         if(@is_dir($_SERVER['DOCUMENT_ROOT'].$dir) AND $depth <= $si->getConfig('dirdepth')){
-            $subdirs = array();
+            $subdirs = [];
             foreach(array_diff(scandir($_SERVER['DOCUMENT_ROOT'].$dir), array( '.', '..' )) as $subdir) {
                 if (@is_dir($_SERVER['DOCUMENT_ROOT'] . $dir . '/' . $subdir)) {
                     $subdirs[] = $dir . '/' . $subdir;
@@ -186,7 +186,7 @@ function search_it_handle_extensionpoint($_ep){
 
     $_params = $_ep->getParams();
     $_subject = $_ep->getSubject();
-    $includeColumns = is_array(rex_addon::get('search_it')->getConfig('include')) ? rex_addon::get('search_it')->getConfig('include') : array();
+    $includeColumns = is_array(rex_addon::get('search_it')->getConfig('include')) ? rex_addon::get('search_it')->getConfig('include') : [];
     $search_it = new search_it();
 
     switch($_ep->getName()){
@@ -297,14 +297,19 @@ function search_it_handle_extensionpoint($_ep){
     $search_it->deleteCache();
 }
 
-function search_it_getSettingsFormSection($id = '', $title = '&nbsp;', $elements = array(), $ownsection = 'info', $collapse = false ){
+function search_it_getSettingsFormSection($id = '', $title = '&nbsp;', $elements = [], $ownsection = 'info', $collapse = false ) {
 
     $return = '<fieldset id="'.$id.'">';
     $formElements = [];
     $fragment = new rex_fragment();
 
-    foreach($elements as $element){
-        $n = array();
+    foreach($elements as $element) {
+		if(count($element) == 0) {
+			// Skip empty elements
+			continue;
+		}
+		
+        $n = [];
 
         switch($element['type']){
             // HIDDEN
@@ -440,17 +445,17 @@ function search_it_config_unserialize($_str){
         return $conf;
     }
 
-    $return = array();
+    $return = [];
     if(is_array($conf)){
         foreach(unserialize($_str) as $k => $v){
             if(is_array($v)){
-                $return[$k] = array();
+                $return[$k] = [];
                 foreach($v as $k2 => $v2) {
                     if (is_array($v2)) {
-                        $return[$k][$k2] = array();
+                        $return[$k][$k2] = [];
                         foreach ($v2 as $k3 => $v3) {
                             if (is_array($v3)) {
-                                $return[$k][$k2][$k3] = array();
+                                $return[$k][$k2][$k3] = [];
                                 foreach ($v3 as $k4 => $v4) {
                                     $return[$k][$k2][$k3][$k4] = stripslashes($v4);
                                 }
@@ -704,7 +709,7 @@ function soundex_ger($word)
     //echo "<br>code2: <b>" . $code . "</b><br />";
     // entfernen aller Codes "0" ausser am Anfang
     $codelen      = strlen($code);
-    $num          = array();
+    $num          = [];
     $num          = str_split($code);
     $phoneticcode = $num[0];
 
@@ -743,7 +748,7 @@ function search_it_search_highlighter_output($_ep){
 function search_it_search_highlighter_getHighlightedText($_subject, $_searchString, $_tags){
     preg_match_all('~(?:(\+*)"([^"]*)")|(?:(\+*)(\S+))~is', $_searchString, $matches, PREG_SET_ORDER);
 
-    $searchterms = array();
+    $searchterms = [];
     foreach ($matches as $match) {
         if (count($match) == 5) {
             // words without double quotes (foo)
@@ -778,7 +783,7 @@ function search_it_reindex_cols($_ep){
 
     $_params = $_ep->getParams();
 
-    $includeColumns = is_array(rex_addon::get('search_it')->getConfig('include')) ? rex_addon::get('search_it')->getConfig('include') : array();
+    $includeColumns = is_array(rex_addon::get('search_it')->getConfig('include')) ? rex_addon::get('search_it')->getConfig('include') : [];
     $search_it = new search_it;
 
     $didcol = false;

@@ -10,7 +10,7 @@ class rex_cronjob_reindex extends rex_cronjob
             //$message = $this->getParam('action').':'."\n";
 
             $search_it = new search_it();
-            $includeColumns = is_array(rex_addon::get('search_it')->getConfig('include')) ? rex_addon::get('search_it')->getConfig('include') : array();
+            $includeColumns = is_array(rex_addon::get('search_it')->getConfig('include')) ? rex_addon::get('search_it')->getConfig('include') : [];
             switch ($this->getParam('action')){
                 case 2:
                     // Spalten neu indexieren

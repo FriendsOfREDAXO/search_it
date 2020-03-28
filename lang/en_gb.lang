@@ -27,6 +27,7 @@ search_it_settings_title_indexmode = Indexing
 search_it_settings_indexoffline = Index offline articles
 search_it_settings_automaticindex_label = Index and deindex articles automatically (ADD, EDIT, DELETE)
 search_it_settings_reindex_cols_onforms_label = Reindex all columns, if tables are changed through YForm or form
+search_it_settings_index_url_addon_label = Index URL addon (version >=2) URLs
 
 search_it_settings_http_authbasic = HTTP Basic AUTH ( .htaccess protection)
 search_it_settings_http_auth_desc = If the website i s protected through HTTP Basic Auth, you can put a valid login here, in order to allow indexing
@@ -116,6 +117,7 @@ search_it_generate_media_error_pdf2 = Other PDF Error
 search_it_generate_media_error_output = XPDF-error: Error opening an output file
 search_it_generate_media_error_permissions = XPDF-error: Error related to PDF permissions
 search_it_generate_media_empty = Media is empty or could not be extracted
+search_it_generate_url_excluded = not indexed, url was excluded
 
 search_it_settings_fileext_header = File search
 search_it_settings_fileext_label = Extensions (i.e. 'txt,csv,pdf' <br />(leave empty for any files)

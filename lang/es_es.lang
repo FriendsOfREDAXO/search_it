@@ -27,6 +27,7 @@ search_it_settings_title_indexmode = Indexación
 search_it_settings_indexoffline = Artículo sin conexión de índice
 search_it_settings_automaticindex_label = Automáticamente indexar artículos (AGREGAR, EDITAR, ELIMINAR)
 search_it_settings_reindex_cols_onforms_label = Reindexar todas las columnas al editar tablas con YForm o formulario
+search_it_settings_index_url_addon_label = Index URL addon (version >=2) URLs
 
 search_it_settings_http_authbasic = HTTP Basic AUTH (protección de contraseñas .htaccess)
 search_it_settings_http_auth_desc = Si una protección de acceso protege el sitio web, se puede almacenar un inicio de sesión aquí para permitir la indexación
@@ -116,6 +117,7 @@ search_it_generate_media_error_pdf2 = Otro error de PDF
 search_it_generate_media_error_output = Error de XPDF: error al abrir un archivo de salida
 search_it_generate_media_error_permissions = Error de XPDF: faltan los derechos de PDF
 search_it_generate_media_empty = El medio está vacío o no se pudo extraer contenido
+search_it_generate_article_excluded = No indexado, el url fue excluido
 
 search_it_settings_fileext_header = Buscar contenido de archivos
 search_it_settings_fileext_label = Extensiones de archivos (por ejemplo, <code>txt, csv, pdf</code>)<br/> (déjelo en blanco para cualquier archivo)

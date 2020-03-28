@@ -53,7 +53,7 @@ class search_it_stats{
         );
 
         if (empty($return)) {
-            $return = array();
+            $return = [];
         }
 
         return $return;
@@ -80,12 +80,12 @@ class search_it_stats{
         $this->sql->setWhere('1 GROUP BY y, m ORDER BY y DESC, m DESC LIMIT ' . $_count);
         $this->sql->select('COUNT( * ) AS count, YEAR(`time`) AS y, MONTH(`time`) AS m');
 
-        $tmp = array();
+        $tmp = [];
         foreach ($this->sql->getArray() as $month) {
             $tmp[intval($month['y']) . '-' . intval($month['m'])] = $month;
         }
 
-        $return = array();
+        $return = [];
         $y = intval(date('Y'));
         for ($i = intval(date('n')) - 1, $k = 0; $k < $_count; $i = ($i + 11) % 12, $k++) {
             if (array_key_exists($y . '-' . ($i + 1), $tmp)) {
@@ -121,12 +121,12 @@ class search_it_stats{
         $this->sql->setWhere(sprintf('%s GROUP BY y, m ORDER BY y DESC, m DESC LIMIT %d', $where, $_count));
         $this->sql->select('COUNT( * ) AS count, YEAR(`time`) AS y, MONTH(`time`) AS m');
 
-        $tmp = array();
+        $tmp = [];
         foreach ($this->sql->getArray() as $month) {
             $tmp[intval($month['y']) . '-' . intval($month['m'])] = $month;
         }
 
-        $return = array();
+        $return = [];
         $y = intval(date('Y'));
         for ($i = intval(date('n')) - 1, $k = 0; $k < $_count; $i = ($i + 11) % 12, $k++) {
             if (array_key_exists($y . '-' . ($i + 1), $tmp)) {

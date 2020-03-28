@@ -9,7 +9,7 @@ require_once 'prune_labels.php';
 function test($count, $maxlabels)
 {
     # Make an array of count records, like PHPlot uses, with labels:
-    $data = array();
+    $data = [];
     for ($i = 0; $i < $count; $i++) {
         $data[] = array("Row $i", $i, 100, 200, 300);
     }

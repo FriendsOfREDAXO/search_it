@@ -89,11 +89,11 @@ function str_get_dom($str, $lowercase=true) {
 class simple_html_dom_node {
     /*public*/ var $nodetype = HDOM_TYPE_TEXT;
     /*public*/ var $tag = 'text';
-    /*public*/ var $attr = array();
-    /*public*/ var $children = array();
-    /*public*/ var $nodes = array();
+    /*public*/ var $attr = [];
+    /*public*/ var $children = [];
+    /*public*/ var $nodes = [];
     /*public*/ var $parent = null;
-    /*public*/ var $_ = array();
+    /*public*/ var $_ = [];
     /*private*/ var $dom = null;
 
     function __construct($dom) {
@@ -266,19 +266,19 @@ class simple_html_dom_node {
     // find elements by css selector
     function find($selector, $idx=null) {
         $selectors = $this->parse_selector($selector);
-        if (($count=count($selectors))===0) return array();
-        $found_keys = array();
+        if (($count=count($selectors))===0) return [];
+        $found_keys = [];
 
         // find each selector
         for ($c=0; $c<$count; ++$c) {
-            if (($levle=count($selectors[0]))===0) return array();
-            if (!isset($this->_[HDOM_INFO_BEGIN])) return array();
+            if (($levle=count($selectors[0]))===0) return [];
+            if (!isset($this->_[HDOM_INFO_BEGIN])) return [];
 
             $head = array($this->_[HDOM_INFO_BEGIN]=>1);
 
             // handle descendant selectors, no recursive!
             for ($l=0; $l<$levle; ++$l) {
-                $ret = array();
+                $ret = [];
                 foreach($head as $k=>$v) {
                     $n = ($k===-1) ? $this->dom->root : $this->dom->nodes[$k];
                     $n->seek($selectors[$c][$l], $ret);
@@ -295,7 +295,7 @@ class simple_html_dom_node {
         // sort keys
         ksort($found_keys);
 
-        $found = array();
+        $found = [];
         foreach($found_keys as $k=>$v)
             $found[] = $this->dom->nodes[$k];
 
@@ -393,8 +393,8 @@ class simple_html_dom_node {
         // tyrant88: fix for PHP 7.3
         $pattern = "/([\w\-\:\*]*)(?:\#([\w\-]+)|\.([\w\-]+))?(?:\[@?(!?[\w\-]+)(?:([!*^$]?=)[\"']?(.*?)[\"']?)?\])?([\/, ]+)/is";
         preg_match_all($pattern, trim($selector_string).' ', $matches, PREG_SET_ORDER);
-        $selectors = array();
-        $result = array();
+        $selectors = [];
+        $result = [];
         //print_r($matches);
 
         foreach ($matches as $m) {
@@ -418,7 +418,7 @@ class simple_html_dom_node {
             $result[] = array($tag, $key, $val, $exp, $no_key);
             if (trim($m[7])===',') {
                 $selectors[] = $result;
-                $result = array();
+                $result = [];
             }
         }
         if (count($result)>0)
@@ -488,19 +488,19 @@ class simple_html_dom_node {
   // remove elements by css selector
   function remove($selector) {
     $selectors = $this->parse_selector($selector);
-    if (($count=count($selectors))===0) return array();
-    $found_keys = array();
+    if (($count=count($selectors))===0) return [];
+    $found_keys = [];
 
     // find each selector
     for ($c=0; $c<$count; ++$c) {
-        if (($levle=count($selectors[0]))===0) return array();
-        if (!isset($this->_[HDOM_INFO_BEGIN])) return array();
+        if (($levle=count($selectors[0]))===0) return [];
+        if (!isset($this->_[HDOM_INFO_BEGIN])) return [];
 
         $head = array($this->_[HDOM_INFO_BEGIN]=>1);
 
         // handle descendant selectors, no recursive!
         for ($l=0; $l<$levle; ++$l) {
-            $ret = array();
+            $ret = [];
             foreach($head as $k=>$v) {
                 $n = ($k===-1) ? $this->dom->root : $this->dom->nodes[$k];
                 $n->seek($selectors[$c][$l], $ret);
@@ -517,7 +517,7 @@ class simple_html_dom_node {
     // sort keys
     ksort($found_keys);
 
-    $found = array();
+    $found = [];
     foreach($found_keys as $k=>$v)
       $this->dom->nodes[$k]->outertext = '';
   }
@@ -527,7 +527,7 @@ class simple_html_dom_node {
 // -----------------------------------------------------------------------------
 class simple_html_dom {
     /*public*/ var $root = null;
-    /*public*/ var $nodes = array();
+    /*public*/ var $nodes = [];
     /*public*/ var $callback = null;
     /*public*/ var $lowercase = false;
     /*protected*/ var $pos;
@@ -536,7 +536,7 @@ class simple_html_dom {
     /*protected*/ var $size;
     /*protected*/ var $cursor;
     /*protected*/ var $parent;
-    /*protected*/ var $noise = array();
+    /*protected*/ var $noise = [];
     /*protected*/ var $token_blank = " \t\r\n";
     /*protected*/ var $token_equal = ' =/>';
     /*protected*/ var $token_slash = " />\r\n\t";
@@ -643,8 +643,8 @@ class simple_html_dom {
         $this->doc = $str;
         $this->pos = 0;
         $this->cursor = 1;
-        $this->noise = array();
-        $this->nodes = array();
+        $this->noise = [];
+        $this->nodes = [];
         $this->lowercase = $lowercase;
         $this->root = new simple_html_dom_node($this);
         $this->root->tag = 'root';
@@ -820,7 +820,7 @@ class simple_html_dom {
             if($this->doc[$this->pos-1]=='<') {
                 $node->nodetype = HDOM_TYPE_TEXT;
                 $node->tag = 'text';
-                $node->attr = array();
+                $node->attr = [];
                 $node->_[HDOM_INFO_END] = 0;
                 $node->_[HDOM_INFO_TEXT] = substr($this->doc, $begin_tag_pos, $this->pos-$begin_tag_pos-1);
                 $this->pos -= 2;

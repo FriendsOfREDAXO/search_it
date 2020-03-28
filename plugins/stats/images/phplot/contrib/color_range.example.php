@@ -10,7 +10,7 @@ $bars_per_group = 10;
 $x_values = 4;
 
 mt_srand(1);
-$data = array();
+$data = [];
 for ($i = 0; $i < $x_values; $i++) {
     $row = array($i);
     for ($j = 0; $j < $bars_per_group; $j++) $row[] = mt_rand(0, 100);

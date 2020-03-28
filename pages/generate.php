@@ -1,14 +1,14 @@
 <?php
 
 function search_it_getArticleIds($cats = false) {
-    $whereCats = array();
+    $whereCats = [];
     if(is_array($cats)){
         foreach($cats as $catID) {
             $whereCats[] = "path LIKE '%|" . $catID . "|%'";
         }
     }
 
-    $return = array();
+    $return = [];
     $query = 'SELECT id FROM '.rex::getTable('article');
     if( !rex_addon::get('search_it')->getConfig('indexoffline') ) {
         $query .= ' WHERE status = 1';
@@ -42,12 +42,25 @@ if ( !empty(rex_get('do')) AND rex_get('do') == 'incremental') {
 
     $js_output = '';
     $globalcount = 0;
-    foreach(search_it_getArticleIds() as $id) {
+
+	foreach(search_it_getArticleIds() as $id) {
         #$js_output .= 'index("art",'.$id.');';
         $js_output .= 'indexArray.push(new Array("art",'.$id.'));';
         $globalcount++;
     }
-  
+
+	// index url 2 addon URLs
+	if(rex_addon::get('search_it')->getConfig('index_url_addon') && rex_addon::get('url')->isAvailable() && rex_version::compare(\rex_addon::get('url')->getVersion(), '1.5', '>=')) {
+		$url_sql = rex_sql::factory();
+		$url_sql->setTable(rex::getTablePrefix() . 'url_generator_url');
+		if ($url_sql->select('id')) {
+			foreach ($url_sql->getArray() as $url) {
+		        $js_output .= 'indexArray.push(new Array("url",'. $url['id'] .'));';
+				$globalcount++;
+			}
+		}
+	}
+ 
     if(!empty($this->getConfig('include')) AND is_array($this->getConfig('include'))) {
         foreach($this->getConfig('include') as $table=>$columnArray) {
             $sql = rex_sql::factory();
@@ -87,7 +100,7 @@ if ( !empty(rex_get('do')) AND rex_get('do') == 'incremental') {
 
     if(!empty($this->getConfig('indexfolders')) AND is_array($this->getConfig('indexfolders'))) {
         foreach($this->getConfig('indexfolders') as $dir) {
-            foreach(search_it_getFiles($dir, !empty($this->getConfig('fileextensions')) ? $this->getConfig('fileextensions') :array(), true) as $filename) {
+            foreach(search_it_getFiles($dir, !empty($this->getConfig('fileextensions')) ? $this->getConfig('fileextensions') :[], true) as $filename) {
                 if(!empty($this->getConfig('fileextensions'))) {
                   // extract file-extension
                   $filenameArray = explode('.', $filename);
@@ -117,13 +130,15 @@ if ( !empty(rex_get('do')) AND rex_get('do') == 'incremental') {
 
         function index(type,data){
             var url;
-            if(type == 'art') {
+            if(type === 'art') {
                 url = 'index.php?page=search_it&ajax=generate&do=incremental&type=art&id=' + data;
-            } else if(type == 'col') {
+            } else if(type === 'url') {
+                url = 'index.php?page=search_it&ajax=generate&do=incremental&type=url&id=' + data;
+            } else if(type === 'col') {
                 url = 'index.php?page=search_it&ajax=generate&do=incremental&type=col&t=' + data[0] + '&c=' + data[1] + '&s=' + data[2] + '&w=' + data[3];
-            } else if(type == 'file') {
+            } else if(type === 'file') {
                 url = 'index.php?page=search_it&ajax=generate&do=incremental&type=file&name=' + data;
-            } else if(type == 'mediapool') {
+            } else if(type === 'mediapool') {
                 url = 'index.php?page=search_it&ajax=generate&do=incremental&type=mediapool&name=' + data[0] + '&file_id=' + data[1] + '&category_id=' + data[2];
             }
   
@@ -138,13 +153,13 @@ if ( !empty(rex_get('do')) AND rex_get('do') == 'incremental') {
                 h = Math.floor(durationSeconds / 3600);
                 m = Math.floor((durationSeconds - (h * 3600)) / 60);
                 s = (durationSeconds - h * 3600 - m * 60) % 60;
-                duration = ((''+h).length == 1 ? '0' : '') + h + ':' + ((''+m).length == 1 ? '0' : '') + m + ':' + ((''+s).length == 1 ? '0' : '') + s;
+                duration = ((''+h).length === 1 ? '0' : '') + h + ':' + ((''+m).length === 1 ? '0' : '') + m + ':' + ((''+s).length === 1 ? '0' : '') + s;
 
                 average = Math.floor(currentDuration / globalcount * (<?php echo $globalcount; ?> - globalcount) / 1000);
                 h = Math.floor(average / 3600);
                 m = Math.floor((average - (h * 3600)) / 60);
                 s = (average - h * 3600 - m * 60) % 60;
-                timeleft = ((''+h).length == 1 ? '0' : '') + h + ':' + ((''+m).length == 1 ? '0' : '') + m + ':' + ((''+s).length == 1 ? '0' : '') + s;
+                timeleft = ((''+h).length === 1 ? '0' : '') + h + ':' + ((''+m).length === 1 ? '0' : '') + m + ':' + ((''+s).length === 1 ? '0' : '') + s;
 
                 jQuery('#search_it_generate_progressbar')
                     .css('background-position',(Math.floor(quotient * maxProgressbarWidth) - 5000) + 'px 0')
@@ -153,7 +168,7 @@ if ( !empty(rex_get('do')) AND rex_get('do') == 'incremental') {
                           ' <span class="timeleft"><?php echo $this->i18n('search_it_generate_timeleft'); ?>' + timeleft + '<'+'/span>' +
                           ' <span class="percentage">' + Math.floor(quotient * 100) + '%<'+'/span>');
 
-                if(globalcount == <?php echo $globalcount; ?>){
+                if(globalcount === <?php echo $globalcount; ?>){
                     jQuery('#search_it_generate_inprogress').hide();
                     jQuery('#search_it_generate_done').show();
                     jQuery('#search_it_generate_log').addClass('index-done');
@@ -220,7 +235,6 @@ if ( !empty(rex_get('do')) AND rex_get('do') == 'incremental') {
         }
     }
 
-
     $content = '<p>'.$this->i18n('search_it_generate_full_text').'</p>';
     $content .= '<p><a class="btn btn-primary" href="index.php?page=search_it/generate&amp;do=full" class="rex-button">' . $this->i18n('search_it_generate_full') . '</a></p><br />';
     $content .= '<p>'.$this->i18n('search_it_generate_incremental_text').'</p>';
@@ -230,12 +244,10 @@ if ( !empty(rex_get('do')) AND rex_get('do') == 'incremental') {
     $content .= '<p>'.$this->i18n('search_it_generate_delete_keywords_text').'</p>';
     $content .= '<p><a onclick="return confirm(\''.$this->i18n('search_it_generate_delete_keywords_confirm').'\');" class="btn btn-primary" href="index.php?page=search_it/generate&amp;do=deletekeywords" class="rex-button">' . $this->i18n('search_it_generate_delete_keywords') . '</a><br /><br /></p>';
 
-    $content = rex_extension::registerPoint(new rex_extension_point('SEARCH_IT_PAGE_MAINTENANCE',$content));
-
+    $content = rex_extension::registerPoint(new rex_extension_point('SEARCH_IT_PAGE_MAINTENANCE', $content));
 
     $fragment = new rex_fragment();
     $fragment->setVar('title', $this->i18n('search_it_generate_actions_title'), false);
     $fragment->setVar('body', $content , false);
     echo $fragment->parse('core/page/section.php');
-
 }

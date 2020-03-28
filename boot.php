@@ -8,6 +8,13 @@
         define('SEARCH_IT_ART_NOTOK',5);
         define('SEARCH_IT_ART_404',6);
 
+        define('SEARCH_IT_URL_EXCLUDED',0);
+        define('SEARCH_IT_URL_GENERATED',2);
+        define('SEARCH_IT_URL_REDIRECT',3);
+        define('SEARCH_IT_URL_ERROR',4);
+        define('SEARCH_IT_URL_NOTOK',5);
+        define('SEARCH_IT_URL_404',6);
+
         define('SEARCH_IT_FILE_NOEXIST',0);
         define('SEARCH_IT_FILE_XPDFERR_OPENSRC',1);
         define('SEARCH_IT_FILE_XPDFERR_OPENDEST',2);

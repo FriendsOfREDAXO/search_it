@@ -8,7 +8,7 @@ require_once 'phplot.php';
 require_once 'prune_labels.php';
 
 $base = mktime(12, 0, 0, 1, 1, 2000);
-$data = array();
+$data = [];
 for ($i = 0; $i < 250; $i++) {
     $data[] = array(86400 * $i + $base, $i, $i * 0.20);
 }

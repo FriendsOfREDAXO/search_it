@@ -27,6 +27,7 @@ search_it_settings_title_indexmode = Indexering
 search_it_settings_indexoffline = Indexera offline artiklar
 search_it_settings_automaticindex_label = Indexera och deindexera artikel (ADD, EDIT, DELETE) automatisk
 search_it_settings_reindex_cols_onforms_label = Reindexera alla kolumner, om tabeller ändras via YForm eller form
+search_it_settings_index_url_addon_label = Index URL addon (version >=2) URLs
 
 search_it_settings_http_authbasic = HTTP Basic AUTH ( .htaccess lösenordskydd)
 search_it_settings_http_auth_desc = Om webbplatsen skyddas mot åtkomst kan en inloggning sparas här för att aktivera indexering
@@ -116,6 +117,7 @@ search_it_generate_media_error_pdf2 = Other PDF Error
 search_it_generate_media_error_output = XPDF-error: Error opening an output file
 search_it_generate_media_error_permissions = XPDF-error: Error related to PDF permissions
 search_it_generate_media_empty = Media is empty or could not be extracted
+search_it_generate_url_excluded = not indexed, url was excluded
 
 search_it_settings_fileext_header = Genomsök filinnehåll
 search_it_settings_fileext_label = Filtillägg (t.ex. 'txt,csv,pdf' <br />(lämna tomma för alla filer)

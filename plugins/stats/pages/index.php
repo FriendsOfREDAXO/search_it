@@ -36,7 +36,7 @@ if (!empty($func)) {
 
 }
 
-$content = array();
+$content = [];
 
 $content[] = search_it_getSettingsFormSection(
     'search_it_stats_description',

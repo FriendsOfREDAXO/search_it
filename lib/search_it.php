@@ -146,7 +146,7 @@ class search_it
 		// index url 2 addon URLs
 		if(rex_addon::get('search_it')->getConfig('index_url_addon') && rex_addon::get('url')->isAvailable() && rex_version::compare(\rex_addon::get('url')->getVersion(), '1.5', '>=')) {
 			$url_sql = rex_sql::factory();
-			$url_sql->setTable($this->tablePrefix . 'url_generator_url');
+			$url_sql->setTable($this->tablePrefix . \rex::getTempPrefix() . 'url_generator_url');
 			if ($url_sql->select('id, article_id, clang_id, profile_id, data_id')) {
 				foreach ($url_sql->getArray() as $url) {
 					$returns = $this->indexUrl($url['id'], $url['article_id'], $url['clang_id'], $url['profile_id'], $url['data_id']);
@@ -385,7 +385,7 @@ class search_it
         $keywords = [];
 
 		$delete = rex_sql::factory();
-		$where = "ftable = '". $this->tablePrefix . "url_generator_url' AND fid = ". $id ." AND clang = ". $clang_id;
+		$where = "ftable = '". $this->tablePrefix . \rex::getTempPrefix() . "url_generator_url' AND fid = ". $id ." AND clang = ". $clang_id;
 		// delete from cache
 		$select = rex_sql::factory();
 		$select->setTable($this->tempTablePrefix . 'search_it_index');
@@ -487,7 +487,7 @@ class search_it
 			$articleData = [];
 
 			$articleData['texttype'] = 'url';
-			$articleData['ftable'] = $this->tablePrefix . 'url_generator_url';
+			$articleData['ftable'] = $this->tablePrefix . \rex::getTempPrefix() . 'url_generator_url';
 			$articleData['fcolumn'] = NULL;
 			$articleData['clang'] = $clang_id;
 			$articleData['fid'] = intval($id);
@@ -496,13 +496,13 @@ class search_it
 			$plaintext = $this->getPlaintext($articleText);
 			$articleData['plaintext'] = $plaintext;
 
-			if (array_key_exists($this->tablePrefix . 'url_generator_url', $this->includeColumns)) {
+			if (array_key_exists($this->tablePrefix . \rex::getTempPrefix() . 'url_generator_url', $this->includeColumns)) {
 				$additionalValues = [];
 				$select->flushValues();
-				$select->setTable($this->tablePrefix . 'url_generator_url');
+				$select->setTable($this->tablePrefix . \rex::getTempPrefix() . 'url_generator_url');
 				$select->setWhere('id = ' . $id . ' AND clang_id = ' . $clang_id);
-				$select->select('`' . implode('`,`', $this->includeColumns[$this->tablePrefix . 'url_generator_url']) . '`');
-				foreach ($this->includeColumns[$this->tablePrefix . 'url_generator_url'] as $col) {
+				$select->select('`' . implode('`,`', $this->includeColumns[$this->tablePrefix . \rex::getTempPrefix() . 'url_generator_url']) . '`');
+				foreach ($this->includeColumns[$this->tablePrefix . \rex::getTempPrefix() . 'url_generator_url'] as $col) {
 					if ( $select->hasValue($col) ) { $additionalValues[$col] = $select->getValue($col); }
 				}
 

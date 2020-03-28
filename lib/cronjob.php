@@ -32,7 +32,7 @@ class rex_cronjob_reindex extends rex_cronjob
                     }
                     break;
 
-                case 3:
+                case 4:
                     // URLs neu indexieren
 					if(rex_addon::get('search_it')->getConfig('index_url_addon') && rex_addon::get('url')->isAvailable() && rex_version::compare(\rex_addon::get('url')->getVersion(), '1.5', '>=')) {
 						$url_sql = rex_sql::factory();

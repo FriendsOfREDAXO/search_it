@@ -8,9 +8,8 @@ Search it basiert auf [RexSearch (Xong) für REDAXO 4](https://github.com/xong/r
 
 ## Systemvoraussetzungen
 
-* `PHP >= 5.5`
-* `MySQL >= 5.1`
-* `REDAXO >= 5.3`
+* `PHP ^7`
+* `REDAXO >= 5.10`
 
 ## Plugins
 

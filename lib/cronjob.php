@@ -32,6 +32,19 @@ class rex_cronjob_reindex extends rex_cronjob
                     }
                     break;
 
+                case 3:
+                    // URLs neu indexieren
+					if(rex_addon::get('search_it')->getConfig('index_url_addon') && rex_addon::get('url')->isAvailable() && rex_version::compare(\rex_addon::get('url')->getVersion(), '1.5', '>=')) {
+						$url_sql = rex_sql::factory();
+						$url_sql->setTable($this->tablePrefix . \rex::getTempPrefix() . 'url_generator_url');
+						if ($url_sql->select('id, article_id, clang_id, profile_id, data_id')) {
+							foreach ($url_sql->getArray() as $url) {
+								$search_it->indexUrl($url['id'], $url['article_id'], $url['clang_id'], $url['profile_id'], $url['data_id']);
+							}
+						}
+					}
+                    break;
+
                 case 1:
                 default:
                     $search_it->generateIndex();
@@ -58,7 +71,8 @@ class rex_cronjob_reindex extends rex_cronjob
                 'options' => [
                     1 => rex_i18n::msg('search_it_generate_full'),
                     2 => rex_i18n::msg('search_it_generate_columns'),
-                    3 => rex_i18n::msg('search_it_generate_articles')],
+                    3 => rex_i18n::msg('search_it_generate_articles'),
+                    4 => rex_i18n::msg('search_it_generate_urls')],
                 'default' => '1',
                 'notice' => rex_i18n::msg('search_it_generate_actions_title'),
             ],

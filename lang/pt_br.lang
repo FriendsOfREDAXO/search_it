@@ -97,6 +97,7 @@ search_it_generate_duration = Tempo:
 search_it_generate_timeleft = Faltante:
 search_it_generate_articles = Re-indexar artigos
 search_it_generate_columns = Re-indexar tabelas
+search_it_generate_urls = reindex url addon urls
 
 search_it_generate_article_excluded = not indexed, article was excluded
 search_it_generate_article_done = indexed

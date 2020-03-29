@@ -130,7 +130,7 @@ class search_it
         $this->deleteIndex();
         $this->deleteCache();
 
-        // index articles
+		// index articles
         $global_return = 0;
         $art_sql = rex_sql::factory();
         $art_sql->setTable($this->tablePrefix . 'article');
@@ -140,7 +140,7 @@ class search_it
                 foreach ( $returns as $return ) {
                     if ($return > 3 ) { $global_return += $return; }
                 }
-            }
+			}
         }
 
 		// index url 2 addon URLs
@@ -414,12 +414,16 @@ class search_it
 				$server = rtrim(rex::getServer(), "/");
 				$search_it_build_index = "do-it";
 				if(rex_addon::get('yrewrite')->isAvailable()) {
-					$hit_domain = rex_yrewrite::getDomainByArticleId($hit['fid'], $hit['clang']);
+					$hit_domain = rex_yrewrite::getDomainByArticleId($article_id, $clang_id);
 					$server = rtrim($hit_domain->getUrl(), "/");
 					$search_it_build_index = "do-it-with-yrewrite";
 				}
 
-				$scanurl = $server .'/'. ltrim(str_replace(['../', './'], '', rex_getUrl($article_id, $clang_id, [$url_profile->getNamespace() => $data_id, 'search_it_build_index' => $search_it_build_index],'&')),"/");
+				$scanurl = rex_getUrl($article_id, $clang_id, [$url_profile->getNamespace() => $data_id, 'search_it_build_index' => $search_it_build_index],'&');
+				if(strpos($scanurl, 'http') === false) {
+					// URL addon multidomain site return server name in url
+					$scanurl = $server .'/'. ltrim(str_replace(['../', './'], '', $scanurl),"/");
+				}
 
 				$files_socket = rex_socket::factoryURL($scanurl);
 				if (rex_addon::get('search_it')->getConfig('htaccess_user') != '' && rex_addon::get('search_it')->getConfig('htaccess_pass') != '') {

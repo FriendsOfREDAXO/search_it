@@ -36,7 +36,7 @@ class rex_cronjob_reindex extends rex_cronjob
                     // URLs neu indexieren
 					if(rex_addon::get('search_it')->getConfig('index_url_addon') && rex_addon::get('url')->isAvailable() && rex_version::compare(\rex_addon::get('url')->getVersion(), '1.5', '>=')) {
 						$url_sql = rex_sql::factory();
-						$url_sql->setTable($this->tablePrefix . \rex::getTempPrefix() . 'url_generator_url');
+						$url_sql->setTable(\rex::getTablePrefix() . \rex::getTempPrefix() . 'url_generator_url');
 						if ($url_sql->select('id, article_id, clang_id, profile_id, data_id')) {
 							foreach ($url_sql->getArray() as $url) {
 								$search_it->indexUrl($url['id'], $url['article_id'], $url['clang_id'], $url['profile_id'], $url['data_id']);

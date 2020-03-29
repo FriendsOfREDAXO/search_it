@@ -1006,7 +1006,8 @@ class search_it
 
         return ($maxfid > 0) ? ++$maxfid : 1;
     }
-    /**
+
+	/**
      * Deletes the complete search index.
      *
      */
@@ -1016,6 +1017,24 @@ class search_it
 		$delete->setQuery('TRUNCATE '. $this->tempTablePrefix .'search_it_index');
 
         $this->deleteCache();
+    }
+
+	/**
+     * Deletes the search index for given type
+     * @param string $texttype Index text type
+     */
+    public function deleteIndexForType($texttype)
+    {
+        $sql = rex_sql::factory();
+		$query = 'SELECT id FROM '. $this->tempTablePrefix .'search_it_index WHERE texttype = "'. $texttype .'";';
+		$deleteIds = [];
+        foreach ($sql->getArray($query) as $cacheId) {
+			$deleteIds[] = $cacheId['id'];
+		}
+		// Delete index
+		$sql->setQuery('DELETE FROM '. $this->tempTablePrefix .'search_it_index WHERE texttype = "'. $texttype .'"');
+		// Delete cache
+		$this->deleteCache($deleteIds);
     }
 
     /**

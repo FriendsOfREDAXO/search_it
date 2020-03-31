@@ -32,7 +32,7 @@ class search_it_stats{
     }
 
     function truncate(){
-        $this->sql->setQuery('TRUNCATE ' . rex::getTempPrefix(). 'search_it_stats_searchterms');
+        $this->sql->setQuery('TRUNCATE ' . rex::getTablePrefix().rex::getTempPrefix(). 'search_it_stats_searchterms');
     }
 
     function getTopSearchterms($_count, $_getonly = 0){

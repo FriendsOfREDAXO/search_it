@@ -41,10 +41,10 @@ switch($ajax) {
                     }
                 }
                 break;
-			
+
             case 'url':
 				$url_sql = rex_sql::factory();
-				$url_sql->setTable(rex::getTablePrefix() . \Url\UrlManagerSql::TABLE_NAME);
+				$url_sql->setTable(search_it_getUrlAddOnTableName());
 				$url_sql->setWhere("id = ". rex_get('id'));
 				if ($url_sql->select('id, article_id, clang_id, profile_id, data_id, seo, url')) {
 					if($url_sql->getValue('id') > 0) {
@@ -79,7 +79,7 @@ switch($ajax) {
 					}
 				}
                 break;
-			
+
             case 'col':
                 if(false !== ($count = $search_it->indexColumn(rex_get('t'), rex_get('c'), false, false, rex_get('s'), rex_get('w')))) {
                     echo '<p class="text-warning"><em>`' . rex_get('t') . '`.`' . rex_get('c') . '` (' . rex_get('s') . ' - ' . (rex_get('s') + rex_get('w')) . ')</em> '. $this->i18n('search_it_generate_col_done',$count) . '</p>';

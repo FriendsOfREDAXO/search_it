@@ -11,22 +11,22 @@ $request = rex_request('search', 'string', false);
 
 if($request) { // Wenn ein Suchbegriff eingegeben wurde
 	$server = rtrim(rex::getServer(), "/");
-	
+
 	print '<section class="search_it-hits">';
-	
+
 	// Init search and execute
     $search_it = new search_it();
     $result = $search_it->search($request);
 
 	echo '<h2 class="search_it-headline">Suchergebnisse</h2>';
 	if($result['count']) {
-		
-		echo '<ul class="search_it-results">';                           
+
+		echo '<ul class="search_it-results">';
         foreach($result['hits'] as $hit) {
             if($hit['type'] == 'url') {
 				// url hits
 				$url_sql = rex_sql::factory();
-				$url_sql->setTable(rex::getTablePrefix() . \Url\UrlManagerSql::TABLE_NAME);
+				$url_sql->setTable(search_it_getUrlAddOnTableName());
 				$url_sql->setWhere("id = ". $hit['fid']);
 				if ($url_sql->select('article_id, clang_id, profile_id, data_id, seo')) {
 					$url_info = json_decode($url_sql->getValue('seo'), true);

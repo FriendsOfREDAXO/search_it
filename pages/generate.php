@@ -52,7 +52,7 @@ if ( !empty(rex_get('do')) AND rex_get('do') == 'incremental') {
 	// index url 2 addon URLs
 	if(search_it_isUrlAddOnAvailable()) {
 		$url_sql = rex_sql::factory();
-		$url_sql->setTable(rex::getTablePrefix() . \Url\Profile::TABLE_NAME);
+		$url_sql->setTable(rex::getTablePrefix() . \Url\UrlManagerSql::TABLE_NAME);
 		if ($url_sql->select('id')) {
 			foreach ($url_sql->getArray() as $url) {
 		        $js_output .= 'indexArray.push(new Array("url",'. $url['id'] .'));';

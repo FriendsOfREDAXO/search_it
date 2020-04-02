@@ -26,7 +26,7 @@ if($request) { // Wenn ein Suchbegriff eingegeben wurde
             if($hit['type'] == 'url') {
 				// url hits
 				$url_sql = rex_sql::factory();
-				$url_sql->setTable(rex::getTablePrefix() . \Url\Profile::TABLE_NAME);
+				$url_sql->setTable(rex::getTablePrefix() . \Url\UrlManagerSql::TABLE_NAME);
 				$url_sql->setWhere("id = ". $hit['fid']);
 				if ($url_sql->select('article_id, clang_id, profile_id, data_id, seo')) {
 					$url_info = json_decode($url_sql->getValue('seo'), true);

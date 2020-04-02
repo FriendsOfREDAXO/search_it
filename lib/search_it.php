@@ -146,7 +146,7 @@ class search_it
 		// index url 2 addon URLs
 		if(search_it_isUrlAddOnAvailable()) {
 			$url_sql = rex_sql::factory();
-			$url_sql->setTable($this->tablePrefix . \Url\Profile::TABLE_NAME);
+			$url_sql->setTable($this->tablePrefix . \Url\UrlManagerSql::TABLE_NAME);
 			if ($url_sql->select('id, article_id, clang_id, profile_id, data_id')) {
 				foreach ($url_sql->getArray() as $url) {
 					$returns = $this->indexUrl($url['id'], $url['article_id'], $url['clang_id'], $url['profile_id'], $url['data_id']);
@@ -385,7 +385,7 @@ class search_it
         $keywords = [];
 
 		$delete = rex_sql::factory();
-		$where = "ftable = '". $this->tablePrefix . \Url\Profile::TABLE_NAME ."' AND fid = ". $id ." AND clang = ". $clang_id;
+		$where = "ftable = '". $this->tablePrefix . \Url\UrlManagerSql::TABLE_NAME ."' AND fid = ". $id ." AND clang = ". $clang_id;
 		// delete from cache
 		$select = rex_sql::factory();
 		$select->setTable($this->tempTablePrefix . 'search_it_index');
@@ -491,7 +491,7 @@ class search_it
 			$articleData = [];
 
 			$articleData['texttype'] = 'url';
-			$articleData['ftable'] = $this->tablePrefix . \Url\Profile::TABLE_NAME;
+			$articleData['ftable'] = $this->tablePrefix . \Url\UrlManagerSql::TABLE_NAME;
 			$articleData['fcolumn'] = NULL;
 			$articleData['clang'] = $clang_id;
 			$articleData['fid'] = intval($id);
@@ -500,13 +500,13 @@ class search_it
 			$plaintext = $this->getPlaintext($articleText);
 			$articleData['plaintext'] = $plaintext;
 
-			if (array_key_exists($this->tablePrefix . \Url\Profile::TABLE_NAME, $this->includeColumns)) {
+			if (array_key_exists($this->tablePrefix . \Url\UrlManagerSql::TABLE_NAME, $this->includeColumns)) {
 				$additionalValues = [];
 				$select->flushValues();
-				$select->setTable($this->tablePrefix . \Url\Profile::TABLE_NAME);
+				$select->setTable($this->tablePrefix . \Url\UrlManagerSql::TABLE_NAME);
 				$select->setWhere('id = ' . $id . ' AND clang_id = ' . $clang_id);
-				$select->select('`' . implode('`,`', $this->includeColumns[$this->tablePrefix . \Url\Profile::TABLE_NAME]) . '`');
-				foreach ($this->includeColumns[$this->tablePrefix . \Url\Profile::TABLE_NAME] as $col) {
+				$select->select('`' . implode('`,`', $this->includeColumns[$this->tablePrefix . \Url\UrlManagerSql::TABLE_NAME]) . '`');
+				foreach ($this->includeColumns[$this->tablePrefix . \Url\UrlManagerSql::TABLE_NAME] as $col) {
 					if ( $select->hasValue($col) ) { $additionalValues[$col] = $select->getValue($col); }
 				}
 

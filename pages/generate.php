@@ -50,7 +50,7 @@ if ( !empty(rex_get('do')) AND rex_get('do') == 'incremental') {
     }
 
 	// index url 2 addon URLs
-	if(search_it_isUrlAddOnAvailable()) {
+	if(rex_addon::get('search_it')->getConfig('index_url_addon') && search_it_isUrlAddOnAvailable()) {
 		$url_sql = rex_sql::factory();
 		$url_sql->setTable(rex::getTablePrefix() . \Url\UrlManagerSql::TABLE_NAME);
 		if ($url_sql->select('id')) {

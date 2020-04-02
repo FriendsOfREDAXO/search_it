@@ -144,7 +144,7 @@ class search_it
         }
 
 		// index url 2 addon URLs
-		if(search_it_isUrlAddOnAvailable()) {
+		if(rex_addon::get('search_it')->getConfig('index_url_addon') && search_it_isUrlAddOnAvailable()) {
 			$url_sql = rex_sql::factory();
 			$url_sql->setTable($this->tablePrefix . \Url\UrlManagerSql::TABLE_NAME);
 			if ($url_sql->select('id, article_id, clang_id, profile_id, data_id')) {
@@ -1359,12 +1359,10 @@ class search_it
                     $this->errormessages = sprintf('Column %d has no correct sort order (ASC or DESC). Descending (DESC) sort order is assumed', $i);
                     $dir2upper = 'DESC';
                 }
-
                 $this->order[$col2upper] = $dir2upper;
                 $this->hashMe .= $col2upper . $dir2upper;
             }
         }
-
         return true;
     }
 
@@ -2171,7 +2169,7 @@ class search_it
             $AwhereToSearch[] = "(fid IN (" . implode(',', $this->searchInIDs['articles']) . "))";
         }
 
-		if(search_it_isUrlAddOnAvailable()) {
+		if(rex_addon::get('search_it')->getConfig('index_url_addon') && search_it_isUrlAddOnAvailable()) {
 			if (array_key_exists('url', $this->searchInIDs) AND count($this->searchInIDs['url'])) {
 				$AwhereToSearch[] = "texttype = 'url'";
 				$AwhereToSearch[] = "(fid IN (" . implode(',', $this->searchInIDs['url']) . "))";
@@ -2279,7 +2277,8 @@ class search_it
                 $this->limit[0], $this->limit[1]
             );
         }
-        //echo '<pre>'.$query.'</pre>';die();
+print $query;
+exit;
         //echo '<pre>'.implode(",\n",$selectFields).'</pre>';
         try {
             $sqlResult = $sql->getArray($query);

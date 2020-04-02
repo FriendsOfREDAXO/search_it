@@ -1362,6 +1362,7 @@ class search_it
                     $dir2upper = 'DESC';
                 }
                 $this->order[$col2upper] = $dir2upper;
+				$this->order = array_reverse($this->order, TRUE);
                 $this->hashMe .= $col2upper . $dir2upper;
             }
         }

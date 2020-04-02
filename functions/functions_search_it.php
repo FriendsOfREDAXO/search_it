@@ -776,10 +776,20 @@ function search_it_search_highlighter_getHighlightedText($_subject, $_searchStri
 }
 
 /**
+ * Prüft ob das URL Addon in der kompatiblen Version verfügbar ist.
+ * @return bool
+ */
+function search_it_isUrlAddOnAvailable() {
+	return (/*rex_addon::get('search_it')->getConfig('index_url_addon') &&*/ rex_addon::get('url')->isAvailable() && rex_string::versionCompare(\rex_addon::get('url')->getVersion(), '1.5', '>='));
+}
+
+
+/**
  * Ermittelt den Namen der Tabelle des URL Addons
  * @return string
  */
 function search_it_getUrlAddOnTableName() {
+
     if (search_it_isUrlAddOnAvailable()) {
 
         $tableName = null;

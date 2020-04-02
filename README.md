@@ -9,7 +9,7 @@ Search it basiert auf [RexSearch (Xong) für REDAXO 4](https://github.com/xong/r
 ## Systemvoraussetzungen
 
 * `PHP ^7`
-* `REDAXO >= 5.10`
+* `REDAXO >= 5.5
 
 ## Plugins
 

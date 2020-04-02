@@ -146,7 +146,7 @@ class search_it
 		// index url 2 addon URLs
 		if(search_it_isUrlAddOnAvailable()) {
 			$url_sql = rex_sql::factory();
-			$url_sql->setTable($this->tempTablePrefix . 'url_generator_url');
+			$url_sql->setTable($this->tablePrefix . \Url\Profile::TABLE_NAME);
 			if ($url_sql->select('id, article_id, clang_id, profile_id, data_id')) {
 				foreach ($url_sql->getArray() as $url) {
 					$returns = $this->indexUrl($url['id'], $url['article_id'], $url['clang_id'], $url['profile_id'], $url['data_id']);
@@ -371,7 +371,7 @@ class search_it
     /**
      * Indexes a certain url from url Addon.
      *
-     * @param int $id url_generate_url table id
+     * @param int $id url_generator_url table id
      * @param int $article_id redaxo article id 
      * @param int $profile_id url addon profile id
      * @param int $data_id url addon profile id
@@ -385,7 +385,7 @@ class search_it
         $keywords = [];
 
 		$delete = rex_sql::factory();
-		$where = "ftable = '". $this->tempTablePrefix . "url_generator_url' AND fid = ". $id ." AND clang = ". $clang_id;
+		$where = "ftable = '". $this->tablePrefix . \Url\Profile::TABLE_NAME ."' AND fid = ". $id ." AND clang = ". $clang_id;
 		// delete from cache
 		$select = rex_sql::factory();
 		$select->setTable($this->tempTablePrefix . 'search_it_index');
@@ -491,7 +491,7 @@ class search_it
 			$articleData = [];
 
 			$articleData['texttype'] = 'url';
-			$articleData['ftable'] = $this->tempTablePrefix . 'url_generator_url';
+			$articleData['ftable'] = $this->tablePrefix . \Url\Profile::TABLE_NAME;
 			$articleData['fcolumn'] = NULL;
 			$articleData['clang'] = $clang_id;
 			$articleData['fid'] = intval($id);
@@ -500,13 +500,13 @@ class search_it
 			$plaintext = $this->getPlaintext($articleText);
 			$articleData['plaintext'] = $plaintext;
 
-			if (array_key_exists($this->tempTablePrefix . 'url_generator_url', $this->includeColumns)) {
+			if (array_key_exists($this->tablePrefix . \Url\Profile::TABLE_NAME, $this->includeColumns)) {
 				$additionalValues = [];
 				$select->flushValues();
-				$select->setTable($this->tempTablePrefix . 'url_generator_url');
+				$select->setTable($this->tablePrefix . \Url\Profile::TABLE_NAME);
 				$select->setWhere('id = ' . $id . ' AND clang_id = ' . $clang_id);
-				$select->select('`' . implode('`,`', $this->includeColumns[$this->tempTablePrefix . 'url_generator_url']) . '`');
-				foreach ($this->includeColumns[$this->tempTablePrefix . 'url_generator_url'] as $col) {
+				$select->select('`' . implode('`,`', $this->includeColumns[$this->tablePrefix . \Url\Profile::TABLE_NAME]) . '`');
+				foreach ($this->includeColumns[$this->tablePrefix . \Url\Profile::TABLE_NAME] as $col) {
 					if ( $select->hasValue($col) ) { $additionalValues[$col] = $select->getValue($col); }
 				}
 

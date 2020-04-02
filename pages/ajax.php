@@ -44,7 +44,7 @@ switch($ajax) {
 			
             case 'url':
 				$url_sql = rex_sql::factory();
-				$url_sql->setTable(rex::getTablePrefix() . \rex::getTempPrefix() . 'url_generator_url');
+				$url_sql->setTable(rex::getTablePrefix() . \Url\Profile::TABLE_NAME);
 				$url_sql->setWhere("id = ". rex_get('id'));
 				if ($url_sql->select('id, article_id, clang_id, profile_id, data_id, seo, url')) {
 					if($url_sql->getValue('id') > 0) {

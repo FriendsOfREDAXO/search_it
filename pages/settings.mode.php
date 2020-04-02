@@ -49,7 +49,7 @@ $content3 = [];
 
 // URL Addon Checkbox
 $url_checkbox = [];
-if(rex_addon::get('url')->isAvailable() && rex_version::compare(\rex_addon::get('url')->getVersion(), '1.5', '>=')) {
+if(search_it_isUrlAddOnAvailable()) {
 	$url_checkbox = [
             'type' => 'checkbox',
             'id' => 'search_it_index_url_addon',

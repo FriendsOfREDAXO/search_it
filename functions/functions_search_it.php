@@ -308,7 +308,7 @@ function search_it_getSettingsFormSection($id = '', $title = '&nbsp;', $elements
 			// Skip empty elements
 			continue;
 		}
-		
+
         $n = [];
 
         switch($element['type']){
@@ -780,7 +780,33 @@ function search_it_search_highlighter_getHighlightedText($_subject, $_searchStri
  * @return bool
  */
 function search_it_isUrlAddOnAvailable() {
-	return (rex_addon::get('search_it')->getConfig('index_url_addon') && rex_addon::get('url')->isAvailable() && rex_string::versionCompare(\rex_addon::get('url')->getVersion(), '1.5', '>='));
+	return (/*rex_addon::get('search_it')->getConfig('index_url_addon') &&*/ rex_addon::get('url')->isAvailable() && rex_string::versionCompare(\rex_addon::get('url')->getVersion(), '1.5', '>='));
+}
+
+
+/**
+ * Ermittelt den Namen der Tabelle des URL Addons
+ * @return string
+ */
+function search_it_getUrlAddOnTableName() {
+
+    if (search_it_isUrlAddOnAvailable()) {
+
+        $tableName = null;
+
+        $sql = rex_sql::factory();
+        $allTables = $sql->getTables();
+
+        foreach( $allTables as $oneTable ) {
+            if ( strpos($oneTable, \Url\UrlManagerSql::TABLE_NAME) !== false ) {
+                $tableName = $oneTable;
+                break;
+            }
+        }
+
+        return $tableName;
+    }
+
 }
 
 // ex reindex plugin

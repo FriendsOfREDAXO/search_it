@@ -52,7 +52,7 @@ if ( !empty(rex_get('do')) AND rex_get('do') == 'incremental') {
 	// index url 2 addon URLs
 	if(search_it_isUrlAddOnAvailable()) {
 		$url_sql = rex_sql::factory();
-		$url_sql->setTable(rex::getTablePrefix() . \Url\UrlManagerSql::TABLE_NAME);
+		$url_sql->setTable(search_it_getUrlAddOnTableName());
 		if ($url_sql->select('id')) {
 			foreach ($url_sql->getArray() as $url) {
 		        $js_output .= 'indexArray.push(new Array("url",'. $url['id'] .'));';
@@ -60,7 +60,7 @@ if ( !empty(rex_get('do')) AND rex_get('do') == 'incremental') {
 			}
 		}
 	}
- 
+
     if(!empty($this->getConfig('include')) AND is_array($this->getConfig('include'))) {
         foreach($this->getConfig('include') as $table=>$columnArray) {
             $sql = rex_sql::factory();
@@ -77,7 +77,7 @@ if ( !empty(rex_get('do')) AND rex_get('do') == 'incremental') {
             }
         }
     }
-  
+
     if(!empty($this->getConfig('indexmediapool')) AND intval($this->getConfig('indexmediapool'))) {
         $mediaSQL = rex_sql::factory();
         $mediaSQL->setTable(rex::getTable('media'));
@@ -141,7 +141,7 @@ if ( !empty(rex_get('do')) AND rex_get('do') == 'incremental') {
             } else if(type === 'mediapool') {
                 url = 'index.php?page=search_it&ajax=generate&do=incremental&type=mediapool&name=' + data[0] + '&file_id=' + data[1] + '&category_id=' + data[2];
             }
-  
+
             jQuery.get(url,{},function(data){
                 jQuery('#search_it_generate_log').prepend(data);
                 globalcount++;

@@ -22,6 +22,7 @@ class search_it
     private $ellipsis;
     private $tablePrefix;
     private $tempTablePrefix;
+    private $urlAddOnTableName;
     private $significantCharacterCount = 3;
     private $stopwords = [];
     private $errormessages = '';
@@ -107,6 +108,7 @@ class search_it
         $this->setClang($_clang);
         $this->tablePrefix = rex::getTablePrefix();
         $this->tempTablePrefix = rex::getTablePrefix().rex::getTempPrefix();
+        $this->urlAddOnTableName = search_it_getUrlAddOnTableName();
 
         $this->ellipsis = rex_i18n::msg('search_it_ellipsis');
 
@@ -146,7 +148,7 @@ class search_it
 		// index url 2 addon URLs
 		if(search_it_isUrlAddOnAvailable()) {
 			$url_sql = rex_sql::factory();
-			$url_sql->setTable($this->tablePrefix . \Url\UrlManagerSql::TABLE_NAME);
+			$url_sql->setTable($this->urlAddOnTableName);
 			if ($url_sql->select('id, article_id, clang_id, profile_id, data_id')) {
 				foreach ($url_sql->getArray() as $url) {
 					$returns = $this->indexUrl($url['id'], $url['article_id'], $url['clang_id'], $url['profile_id'], $url['data_id']);
@@ -372,10 +374,10 @@ class search_it
      * Indexes a certain url from url Addon.
      *
      * @param int $id url_generator_url table id
-     * @param int $article_id redaxo article id 
+     * @param int $article_id redaxo article id
      * @param int $profile_id url addon profile id
      * @param int $data_id url addon profile id
-     * @param int $clang_id redaxo clang id 
+     * @param int $clang_id redaxo clang id
      *
      * @return int
      */
@@ -385,7 +387,7 @@ class search_it
         $keywords = [];
 
 		$delete = rex_sql::factory();
-		$where = "ftable = '". $this->tablePrefix . \Url\UrlManagerSql::TABLE_NAME ."' AND fid = ". $id ." AND clang = ". $clang_id;
+		$where = "ftable = '". $this->urlAddOnTableName ."' AND fid = ". $id ." AND clang = ". $clang_id;
 		// delete from cache
 		$select = rex_sql::factory();
 		$select->setTable($this->tempTablePrefix . 'search_it_index');
@@ -491,7 +493,7 @@ class search_it
 			$articleData = [];
 
 			$articleData['texttype'] = 'url';
-			$articleData['ftable'] = $this->tablePrefix . \Url\UrlManagerSql::TABLE_NAME;
+			$articleData['ftable'] = $this->urlAddOnTableName;
 			$articleData['fcolumn'] = NULL;
 			$articleData['clang'] = $clang_id;
 			$articleData['fid'] = intval($id);
@@ -500,13 +502,13 @@ class search_it
 			$plaintext = $this->getPlaintext($articleText);
 			$articleData['plaintext'] = $plaintext;
 
-			if (array_key_exists($this->tablePrefix . \Url\UrlManagerSql::TABLE_NAME, $this->includeColumns)) {
+			if (array_key_exists($this->urlAddOnTableName, $this->includeColumns)) {
 				$additionalValues = [];
 				$select->flushValues();
-				$select->setTable($this->tablePrefix . \Url\UrlManagerSql::TABLE_NAME);
+				$select->setTable($this->urlAddOnTableName);
 				$select->setWhere('id = ' . $id . ' AND clang_id = ' . $clang_id);
-				$select->select('`' . implode('`,`', $this->includeColumns[$this->tablePrefix . \Url\UrlManagerSql::TABLE_NAME]) . '`');
-				foreach ($this->includeColumns[$this->tablePrefix . \Url\UrlManagerSql::TABLE_NAME] as $col) {
+				$select->select('`' . implode('`,`', $this->includeColumns[$this->urlAddOnTableName]) . '`');
+				foreach ($this->includeColumns[$this->urlAddOnTableName] as $col) {
 					if ( $select->hasValue($col) ) { $additionalValues[$col] = $select->getValue($col); }
 				}
 
@@ -532,7 +534,7 @@ class search_it
 
         return $return;
     }
-	
+
 	/**
      * Excludes an article from the index.
      *

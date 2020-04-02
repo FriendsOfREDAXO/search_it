@@ -1339,10 +1339,12 @@ class search_it
      * and the direction (DESC or ASC) as value (e.g.: array['COLUMN'] = 'ASC').
      *
      * @param array $_order
+	 * @param bool $reverse_order add new order criteria and then reverse order array
+	 * so that last element of $_order array will be first in mysql ORDER clause
      *
      * @return bool
      */
-    public function setOrder($_order)
+    public function setOrder($_order, $reverse_order = false)
     {
         if (!is_array($_order)) {
             $this->errormessages = 'Wrong parameter. Expecting an array';
@@ -1362,7 +1364,10 @@ class search_it
                     $dir2upper = 'DESC';
                 }
                 $this->order[$col2upper] = $dir2upper;
-				$this->order = array_reverse($this->order, TRUE);
+				//	Put new order first
+				if($reverse_order) {
+					$this->order = array_reverse($this->order, TRUE);
+				}
                 $this->hashMe .= $col2upper . $dir2upper;
             }
         }
@@ -2280,8 +2285,6 @@ class search_it
                 $this->limit[0], $this->limit[1]
             );
         }
-print $query;
-exit;
         //echo '<pre>'.implode(",\n",$selectFields).'</pre>';
         try {
             $sqlResult = $sql->getArray($query);

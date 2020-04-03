@@ -1339,12 +1339,11 @@ class search_it
      * and the direction (DESC or ASC) as value (e.g.: array['COLUMN'] = 'ASC').
      *
      * @param array $_order
-	 * @param bool $reverse_order add new order criteria and then reverse order array
-	 * so that last element of $_order array will be first in mysql ORDER clause
+	 * @param bool $put_first put new order criteria(s) first in order clause
      *
      * @return bool
      */
-    public function setOrder($_order, $reverse_order = false)
+    public function setOrder($_order, $put_first = false)
     {
         if (!is_array($_order)) {
             $this->errormessages = 'Wrong parameter. Expecting an array';
@@ -1363,11 +1362,7 @@ class search_it
                     $this->errormessages = sprintf('Column %d has no correct sort order (ASC or DESC). Descending (DESC) sort order is assumed', $i);
                     $dir2upper = 'DESC';
                 }
-                $this->order[$col2upper] = $dir2upper;
-				//	Put new order first
-				if($reverse_order) {
-					$this->order = array_reverse($this->order, TRUE);
-				}
+				$this->order = $put_first ? array_merge([$col => $dir2upper], $this->order) : array_merge($this->order, [$col => $dir2upper]);
                 $this->hashMe .= $col2upper . $dir2upper;
             }
         }

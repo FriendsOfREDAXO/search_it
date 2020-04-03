@@ -783,7 +783,6 @@ function search_it_isUrlAddOnAvailable() {
 	return ( rex_addon::get('url')->isAvailable() && rex_string::versionCompare(\rex_addon::get('url')->getVersion(), '1.5', '>='));
 }
 
-
 /**
  * Ermittelt den Namen der Tabelle des URL Addons
  * @return string
@@ -807,7 +806,6 @@ function search_it_getUrlAddOnTableName() {
         return $tableName;
     }
 }
-
 
 // ex reindex plugin
 function search_it_reindex_cols($_ep){

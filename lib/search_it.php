@@ -2280,6 +2280,7 @@ class search_it
                 $this->limit[0], $this->limit[1]
             );
         }
+        //echo '<pre>'.$query.'</pre>';die();
         //echo '<pre>'.implode(",\n",$selectFields).'</pre>';
         try {
             $sqlResult = $sql->getArray($query);

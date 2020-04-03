@@ -47,7 +47,7 @@ MIT Lizenz, siehe [LICENSE.md](https://github.com/FriendsOfREDAXO/search_it/blob
 http://www.redaxo.org  
 https://github.com/FriendsOfREDAXO  
 **Projekt-Lead**  
-[Norbert Micheel](https://github.com/IngoWinter)
+[Norbert Micheel](https://github.com/tyrant88)
 
 ## Credits
 Search it basiert auf: [RexSearch (Xong) für REDAXO 4](https://github.com/xong/rexsearch)  

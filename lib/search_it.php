@@ -1349,7 +1349,9 @@ class search_it
             $this->errormessages = 'Wrong parameter. Expecting an array';
             return false;
         }
-
+        if ($put_first) {
+            $_order = array_reverse($_order, TRUE);
+        }
         $i = 0;
         $dir2upper = '';
         $col2upper = '';

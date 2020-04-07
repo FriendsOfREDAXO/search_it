@@ -4,12 +4,11 @@ Search it ist ein REDAXO 5-AddOn für eine Volltextsuche im Frontend.
 
 Dabei werden Artikel, Medien, Dateien, PDF-Inhalte und Datenbank-Felder in einer DB-Tabelle des AddOns gespeichert und ausgewertet. Suchanfragen können außerdem in einer Cache-Tabelle gespeichert werden. Das spart Serverrechenleistung und führt zur schnelleren Anzeige von Suchergebnissen.
 
-Search it basiert auf [RexSearch (Xong) für REDAXO 4](https://github.com/xong/rexsearch/).
-
 ## Systemvoraussetzungen
 
-* `PHP ^7`
-* `REDAXO >= 5.5
+* `PHP >= 7.0`
+* `REDAXO >= 5.5`
+* `pdftotext` [optional für das Durchsuchen von pdf-Inhalten, [Link](https://www.xpdfreader.com/pdftotext-man.html)]
 
 ## Plugins
 
@@ -22,7 +21,7 @@ Search it basiert auf [RexSearch (Xong) für REDAXO 4](https://github.com/xong/r
 ## Wo finde ich weitere Hilfe?
 
 Search it verfügt über ein umfangreiches Dokumentations-Plugin im Backend, das auch Beispiel Module für die Suche enthält.
-Fragen können auch im [REDAXO-Forum](www.redaxo.org/de/forum/) oder im [REDAXO-Channel auf Slack](https://friendsofredaxo.slack.com/messages/redaxo/) gestellt werden.
+Fragen können auch im [REDAXO-Channel auf Slack](https://friendsofredaxo.slack.com/messages/redaxo/) gestellt werden.
 
 # Installation
 
@@ -39,3 +38,20 @@ Die Tabellen werden nicht in die Datenbank-Sicherung des backup-Addons miteinbez
 ## First Steps
 
 Nach der Installation sollten zunächst die Einstellungen vorgenommen werden und anschließend der Index vollständig generiert werden.
+
+## Lizenz
+MIT Lizenz, siehe [LICENSE.md](https://github.com/FriendsOfREDAXO/search_it/blob/master/LICENSE.md)  
+
+## Autor
+**Friends Of REDAXO**  
+http://www.redaxo.org  
+https://github.com/FriendsOfREDAXO  
+**Projekt-Lead**  
+[Norbert Micheel](https://github.com/tyrant88)
+
+## Credits
+Search it basiert auf: [RexSearch (Xong) für REDAXO 4](https://github.com/xong/rexsearch)  
+[Norbert Micheel](https://github.com/tyrant88/) Portierung für R5 und aktiven Entwicklung
+[Alexander Walther](https://github.com/skerbis) Dokumentation und Hilfe  
+[Tobias Krais](https://github.com/tobiaskrais) URL Addon (>= 2.0) Support
+[und weitere Entwickler...](https://github.com/FriendsOfREDAXO/search_it/graphs/contributors)

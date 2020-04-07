@@ -3,7 +3,7 @@
 - Search it
 	- [Einführung](search_it-intro.md)
 	- [Features](search_it-features.md)
-	- [Einstellungen](search_it-settings.md) (in Arbeit)
+	- [Einstellungen](search_it-settings.md)
 	- [Indexierung](search_it-index.md)
 	- [Aufbau der Suchergebnisse](search_it-result.md)
 	- [Klassen-Referenz](search_it-reference.md)
@@ -17,10 +17,11 @@
 	- [Einfache Artikelsuche](module-simple.md)
 	- [Mediensuche / DB Suche](module-media_search.md)
 	- [URL Addon (>=2.0) Suche](module-url.md)
+
 - FAQ
 	- [Tipps zur Konfiguration](howto-setup.md)
 	- [Sprachabhängige Suche](howto-languages.md)
-	- [De- und Reindexierung](howto-reindex.md) (in Arbeit)
+	- [De- und Reindexierung](howto-reindex.md)
 	- [Ähnlichkeitssuche](howto-simsearch.md)
 	- [Highlighting](howto-highlighting.md)
 	- [Auf Kategorien beschränken](howto-categories.md)

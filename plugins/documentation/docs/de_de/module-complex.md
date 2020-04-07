@@ -1,4 +1,4 @@
-#Einsatz
+# Komplexe Suche
 
 Es wird hier ein komplettes Beispielmodule gezeigt. Das Modul erwartet den REQUEST-Parameter (also über GET oder POST) search_it.
 

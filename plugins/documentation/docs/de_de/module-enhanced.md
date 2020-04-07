@@ -1,13 +1,22 @@
-# Einfache Artikel-Suchergebnisse
+# Artikel-Suchergebnisse einschließlich Metadaten
 
-Dieses Suchergebnis-Modul nimmt einen Suchbegriff mittels GET/POST-Parameter `search` entgegen und gibt gefundene Artikel aus. Es werden keine im Backend gesetzten `Search it`-Einstellungen überschrieben.
+Dieses Suchmodul bezieht weitere DB-Spalten in die Suche ein, z.B. den Artikel-Name und das SEO-Description-Feld des YRewrite-AddOns. 
+
+## Search it Einstellungen
+
+In den `Search it`-Einstellungen müssen als Quelle folgende Datenbank-Spalten indexiert werden:
+
+* `rex_article.name`
+* `rex_article.yrewrite_description`
+
+Außerdem sollte das maximale Trefferlimit auf 20 gestellt werden.
 
 ## Modulausgabe (ohne Erläuterungen)
 
 ```
 <section class="search_it-modul">
-    <p class="search_it-demotitle">[search_it] Suchergebnisse - Einfaches Beispielmodul</p>
-    <?php
+<p class="search_it-demotitle">[search_it] Suchergebnisse - Erweitertes Beispielmodul</p>
+<?php
 $server = rtrim(rex::getServer(),"/"); 
 $request = rex_request('search', 'string', false); 
 
@@ -22,9 +31,16 @@ if($request) {
         echo '<ul class="search_it-results">';                           
         foreach($result['hits'] as $hit) { 
 
-            # dump($hit); 
-            if($hit['type'] == 'article') { 
-                $article = rex_article::get($hit['fid']);
+            # dump($hit);
+            if($hit['type'] == 'db_column' AND $hit['table'] == rex::getTablePrefix().'article'){
+                $text = $hit['article_teaser'];
+            } else {
+                $text = $hit['highlightedtext'];
+            }
+
+            if(($hit['type'] == 'db_column' AND $hit['table'] == rex::getTablePrefix().'article') || ($hit['type'] == 'article'))
+            {
+                $article = rex_article::get($hit['fid']); 
 				$hit_server = $server;
 				if(rex_addon::get('yrewrite')->isAvailable()) {
 					$hit_domain = rex_yrewrite::getDomainByArticleId($hit['fid'], $hit['clang']);
@@ -32,21 +48,20 @@ if($request) {
 				}
                 echo '<li class="search_it-result search_it-article">
                           <p class="search_it-title">
-                              <a href="'.$hit_server.rex_getUrl($hit['fid'], $hit['clang'], array('search_highlighter' => $request)).'" title="'.$article->getName().'">'.$article->getName().'</a>
+                              <a href="'.$hit_server.$article->getUrl().'" title="'.$article->getName().'">'.$article->getName().'</a>
                           </p>
-                          <p class="search_it-url">'.$hit_server.rex_getUrl($hit['fid'], $hit['clang']).'</p>
-                          <p class="search_it-teaser">'.$hit['highlightedtext'].'</p>
+                          <p class="search_it-url">'.$hit_server.rex_getUrl($hit['fid'], $hit['clang'], []).'</p>
+                          <p class="search_it-teaser">'.$text.'</p>
                       </li>'; 
             } else {                                   
                 
                 
                 echo '<p class="search_it-missing_type">Das Suchergebnis vom Typ <i class="search_it-type">'.$hit['type'].' </i> kann nicht dargestellt werden.</p>';
             }
-
         } 
         echo '</ul>';
     } else if(!$result['count']) { 
-        echo '<p class="search_it-zero">Die Suche nach <i class="search_it-request">'.rex_escape($request).' </i> ergab keine Treffer.</p>';
+        echo '<p class="search_it-zero">Die Suche nach <i class="search_it-request">'. rex_escape($request).' </i> ergab keine Treffer.</p>';
     }
 } 
     ?>
@@ -57,9 +72,9 @@ if($request) {
 
 ```
 <section class="search_it-modul">
-    <p class="search_it-demotitle">[search_it] Suchergebnisse - Einfaches Beispielmodul</p>
-    <?php
-$server = rtrim(rex::getServer(),"/"); // Aktuelle Website-Adresse ohne Slash am Ende;
+<p class="search_it-demotitle">[search_it] Suchergebnisse - Erweitertes Beispielmodul</p>
+<?php
+$server = rtrim(rex::getServer(),"/"); // Aktuelle Website-Adresse ohne Slash am Ende
 $request = rex_request('search', 'string', false); // GET/POST-Anfrage: Casting als String
 
 if($request) { // Wenn ein Suchbegriff eingegeben wurde
@@ -71,10 +86,17 @@ if($request) { // Wenn ein Suchbegriff eingegeben wurde
         echo '<h2 class="search_it-headline">{{ Suchergebnisse }}</h2>'; // Sprog-AddOn zur Übersetzung benutzen
 
         echo '<ul class="search_it-results">';                           
-        foreach($result['hits'] as $hit) { // Jeder Treffer in $hit
+        foreach($result['hits'] as $hit) { // Jeder Treffer ein $hit
 
             # dump($hit); // Zum Debuggen ausgeben.
-            if($hit['type'] == 'article') { // Wenn der Treffer aus der Artikelsuche stammt 
+            if($hit['type'] == 'db_column' AND $hit['table'] == rex::getTablePrefix().'article'){
+                $text = $hit['article_teaser'];
+            } else {
+                $text = $hit['highlightedtext'];
+            }
+
+            if(($hit['type'] == 'db_column' AND $hit['table'] == rex::getTablePrefix().'article') || ($hit['type'] == 'article'))
+            {
                 $article = rex_article::get($hit['fid']); // REDAXO-Artikel-Objekt holen
 
 				// falls YRewrite genutzt wird
@@ -86,21 +108,20 @@ if($request) { // Wenn ein Suchbegriff eingegeben wurde
 
                 echo '<li class="search_it-result search_it-article">
                           <p class="search_it-title">
-                              <a href="'.$hit_server.rex_getUrl($hit['fid'], $hit['clang'], array('search_highlighter' => $request)).'" title="'.$article->getName().'">'.$article->getName().'</a>
+                              <a href="'.$hit_server.$article->getUrl().'" title="'.$article->getName().'">'.$article->getName().'</a>
                           </p>
-                          <p class="search_it-url">'.$hit_server.rex_getUrl($hit['fid'], $hit['clang']).'</p>
-                          <p class="search_it-teaser">'.$hit['highlightedtext'].'</p>
+                          <p class="search_it-url">'.$hit_server.rex_getUrl($hit['fid'], $hit['clang'], []).'</p>
+                          <p class="search_it-teaser">'.$text.'</p>
                       </li>'; // Ausgabe des Suchtreffers
             } else {                                   
                 // Wenn der Treffer nicht aus REDAXO-Artikeln stammt, z.B., weil Medienpool oder Datenbankspalten
                 // indiziert wurden. Siehe erweiterte Beispiele für die Ausgabe. Oder: Indexierung auf Artikel beschränken.
                 echo '<p class="search_it-missing_type">Das Suchergebnis vom Typ <i class="search_it-type">'.$hit['type'].' </i> kann nicht dargestellt werden.</p>';
             }
-
         } // foreach($result['hits'] as $hit) END
         echo '</ul>';
     } else if(!$result['count']) { // Wenn keine Ergebnisse vorhanden sind.... 
-        echo '<p class="search_it-zero">Die Suche nach <i class="search_it-request">'.rex_escape($request).' </i> ergab keine Treffer.</p>';
+        echo '<p class="search_it-zero">Die Suche nach <i class="search_it-request">'. rex_escape($request).' </i> ergab keine Treffer.</p>';
     }
 } // if($request) END
     ?>

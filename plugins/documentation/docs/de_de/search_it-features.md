@@ -18,7 +18,6 @@
 * zwei verschieden Arten, um den Suchindex zu erneuern (wenn es Probleme mit der max_execution_time gibt)
 * für Entwickler interessant: über die Methoden der search_it-Klasse kann die Suche verfeinert bzw. für mehrere Module unterschiedlich angepasst werden, außerdem ist z. B. eine Pagination von Suchergebnissen möglich
 * Angabe von Kategorien, Artikeln und DB-Spalten, in denen gesucht werden soll
-* URLs des url Addons können indiziert werden
 * Durchsuchen von beliebigen Ordnern mit beliebigen Dateien möglich
 * einfache Konfiguration im Backend
 * einstellbar, wer das AddOn konfigurieren darf  

@@ -12,12 +12,14 @@
 	- [Plaintext](plugin-plaintext.md)
 	- [Autocomplete](plugin-autocomplete.md)
 - Beispiele
-	- [Komplettes Beispielmodul](module-complex.md)
 	- [Such-Eingabe](module-form.md)
-	- [Einfache Artikelsuche](module-simple.md)
-	- [Mediensuche / DB Suche](module-media_search.md)
+	- [Einfache Suche](module-simple.md)
+	- [Erweiterte Suche](module-enhanced.md)
+	- [Mediensuche](module-media_search.md)
+	- [Komplexe Suche](module-complex.md)
 	- [URL Addon (>=2.0) Suche](module-url.md)
 
+	- [Weitere Beispiele](module-more_enhanced.md)
 - FAQ
 	- [Tipps zur Konfiguration](howto-setup.md)
 	- [Sprachabhängige Suche](howto-languages.md)

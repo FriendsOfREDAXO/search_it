@@ -47,7 +47,7 @@ Die aktuelle Search it-Version wird in [FriendsOfREDAXO](https://github.com/frie
 Die Installation erfolgt über den REDAXO 5 Installer, alternativ gibt es die aktuellste Beta-Version auf [GitHub](https://github.com/friendsofredaxo/search_it). 
 
 Bei der Installation werden fünf Datenbanktabellen angelegt: 
-* `rex_tmp_search_it_index` für die Indexierung von Artikeln und DB-Spalten
-* `rex_tmp_search_it_keywords` für die Ähnlichkeitssuche
-* `rex_tmp_search_it_cache` und `rex_tmp_search_it_cacheindex_ids` für den Suchcache
-* `rex_tmp_search_it_stats_searchterms` für die Statistik
+* `rex_search_it_index` für die Indexierung von Artikeln und DB-Spalten
+* `rex_search_it_keywords` für die Ähnlichkeitssuche
+* `rex_search_it_cache` und `rex_search_it_cacheindex_ids` für den Suchcache
+* `rex_search_it_stats_searchterms` für die Statistik

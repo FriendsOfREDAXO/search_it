@@ -14,8 +14,6 @@ Sollte eine Suche keine Ergebnisse liefern, füllt Search it das Result-Array mi
 
 ```
 <?php
-$article_id = rex_article::getCurrentId();
-$article = rex_article::get($article_id);
 $request = rex_request('search', 'string', false);
 
 if($request) { // Wenn ein Suchbegriff eingegeben wurde
@@ -23,29 +21,26 @@ if($request) { // Wenn ein Suchbegriff eingegeben wurde
 	
 	print '<section class="search_it-hits">';
 	
-	// Suche initialisieren (nur Artikel in der aktuellen Sprache)
-    $search_it = new search_it(rex_clang::getCurrentId());
-	// Suche ausführen
+	// Init search and execute
+    $search_it = new search_it();
     $result = $search_it->search($request);
 
 	echo '<h2 class="search_it-headline">Suchergebnisse</h2>';
+	if($result['count'] == 0 && count($result['simwords']) > 0){
+		// Ähnlichkeitssuche ausgeben
+		$newsearchString = $result['simwordsnewsearch'];
+		$result_simwords = $search_it->search($newsearchString);
+		if($result_simwords['count'] > 0){
+			echo '<p>Meinten Sie <strong>'. $newsearchString .'</strong>?</p>';
+		}
+	}
+
 	if($result['count']) {
- 		// Suchergebnisse ausgeben
+		// Ausgabe der Treffer
     }
 	else if(!$result['count']) {
-		echo '<p class="search_it-zero">Es wurden keine Suchergebnisse gefunden.</p>';
-
-		$activate_similarity_search = "REX_VALUE[2]" == 'true' ? TRUE : FALSE;
-		// Ähnlichkeitssuche
-		if($activate_similarity_search && rex_config::get('search_it', 'similarwordsmode', 0) > 0 && count($result['simwords']) > 0){
-			$newsearchString = $result['simwordsnewsearch'];
-			$result_simwords = $search_it->search($newsearchString);
-			if($result_simwords['count'] > 0){
-				echo '<p>Ähnliche Suche mit Treffern: "<strong><a href="'. $article->getUrl(['search' => $newsearchString]) .'">'. $newsearchString .'</a></strong>"</p>';
-			}
-		}
+		echo '<p class="search_it-zero">{{ d2u_helper_module_14_search_results_none }}</p>';
 	}
 	print "</section>";
 }
-?>
 ```

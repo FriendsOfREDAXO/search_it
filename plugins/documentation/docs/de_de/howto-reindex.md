@@ -21,6 +21,8 @@
 
 `Search it` fügt ein eigenes Cronjob-Profil hinzu, das sich im Cronjob-AddOn zeitgesteuert ausführen lässt. Um ihn zu nutzen muss ein neuer CronJob hinzugefügt werden und im Feld "Typ" der Wert "Search it: Reindexieren
 
+Da Suchergebnisse vom Typ URL nicht automatisch reindiziert werden empfiehlt sich hier im besonderen einen CronJob zu installieren, der diesen Teil des Indexes automatisch erneuert.
+
 ## Reindexierung von Datenbank-Feldern
 
 Die Klasse `search_it` bietet allerdings die Methode `indexColumn` an. Über diese Methode können Datenbankspalten neu oder wieder indexiert werden. Müssen die Datenbankspalten nur zu einem bestimmten Datensatz indexiert werden, kann außerdem die ID dieses Datensatzes angegeben werden. Search it wird dann auch nur den betroffenen Datensatz reindexieren.

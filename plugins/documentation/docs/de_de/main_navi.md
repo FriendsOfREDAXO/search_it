@@ -6,19 +6,17 @@
 	- [Einstellungen](search_it-settings.md) (in Arbeit)
 	- [Indexierung](search_it-index.md)
 	- [Aufbau der Suchergebnisse](search_it-result.md)
-	- [Klassen-Referenz](search_it-reference.md) (in Arbeit)
+	- [Klassen-Referenz](search_it-reference.md)
 - Plugins
 	- [Statistik](plugin-stats.md)
 	- [Plaintext](plugin-plaintext.md)
 	- [Autocomplete](plugin-autocomplete.md)
 - Beispiele
+	- [Komplettes Beispielmodul](module-complex.md)
 	- [Such-Eingabe](module-form.md)
-	- [Einfache Suche](module-simple.md)
-	- [Erweiterte Suche](module-enhanced.md)
-	- [Mediensuche](module-media_search.md)
-	- [Komplexe Suche](module-complex.md) (in Arbeit)
+	- [Einfache Artikelsuche](module-simple.md)
+	- [Mediensuche / DB Suche](module-media_search.md)
 	- [URL Addon (>=2.0) Suche](module-url.md)
-	- [Weitere Beispiele](module-more_enhanced.md)
 - FAQ
 	- [Tipps zur Konfiguration](howto-setup.md)
 	- [Sprachabhängige Suche](howto-languages.md)

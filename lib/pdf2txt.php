@@ -86,7 +86,7 @@ class pdf2txt
         // the following code ignores the keyword "stream" and "endstream" if they are in a string
         $isStream = false;
         $stream = '';
-        $streams = array();
+        $streams = [];
         $openBracketCount = 0;
         $encodedStream = false;
         foreach (preg_split('~(<<\s*/.*?>>\s*stream\s*)|(\s*endstream\s*)|(\()|(\))~ism', $this->data, -1, PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_NO_EMPTY) as $k => $part) {
@@ -132,7 +132,7 @@ class pdf2txt
             }
         }
 
-        $textObjects = array();
+        $textObjects = [];
         foreach ($streams as $k => $stream) {
             // uncompress the stream
             if (false === $uncompressed = @gzuncompress($stream))

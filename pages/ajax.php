@@ -42,6 +42,44 @@ switch($ajax) {
                 }
                 break;
 
+            case 'url':
+				$url_sql = rex_sql::factory();
+				$url_sql->setTable(search_it_getUrlAddOnTableName());
+				$url_sql->setWhere("id = ". rex_get('id'));
+				if ($url_sql->select('id, article_id, clang_id, profile_id, data_id, seo, url')) {
+					if($url_sql->getValue('id') > 0) {
+						foreach($search_it->indexUrl($url_sql->getValue('id'), $url_sql->getValue('article_id'), $url_sql->getValue('clang_id'), $url_sql->getValue('profile_id'), $url_sql->getValue('data_id')) as $langID => $url) {
+							$url_info = json_decode($url_sql->getValue('seo'), true);
+							$msgtext = '<em><a target="_blank" href="'. $url_sql->getValue('url') .'">'. rex_escape($url_info["title"]).'</a></em> (URL ID=<strong>'. $url_sql->getValue('id') .'</strong>) ';
+
+							switch($url){
+								case SEARCH_IT_URL_ERROR:
+									echo '<p class="text-primary">'. $msgtext . $this->i18n('search_it_generate_article_socket_error').'</p>';
+									break;
+								case SEARCH_IT_URL_EXCLUDED:
+									echo '<p class="text-primary">'. $msgtext . $this->i18n('search_it_generate_url_excluded').'</p>';
+									break;
+								case SEARCH_IT_URL_404:
+									echo '<p class="text-primary">'. $msgtext . $this->i18n('search_it_generate_article_404_error').'</p>';
+									break;
+								case SEARCH_IT_URL_NOTOK:
+									echo '<p class="text-primary">'. $msgtext . $this->i18n('search_it_generate_article_http_error').'</p>';
+									break;
+								case SEARCH_IT_ART_IDNOTFOUND:
+									echo '<p class="text-info">'   . $msgtext . $this->i18n('search_it_generate_article_id_not_found').'</p>';
+									break;
+								case SEARCH_IT_URL_REDIRECT:
+									echo '<p class="text-primary">'. $msgtext . $this->i18n('search_it_generate_article_redirect').'</p>';
+									break;
+								case SEARCH_IT_URL_GENERATED:
+									echo '<p class="text-success">'. $msgtext . $this->i18n('search_it_generate_article_done').'</p>';
+									break;
+							}
+						}
+					}
+				}
+                break;
+
             case 'col':
                 if(false !== ($count = $search_it->indexColumn(rex_get('t'), rex_get('c'), false, false, rex_get('s'), rex_get('w')))) {
                     echo '<p class="text-warning"><em>`' . rex_get('t') . '`.`' . rex_get('c') . '` (' . rex_get('s') . ' - ' . (rex_get('s') + rex_get('w')) . ')</em> '. $this->i18n('search_it_generate_col_done',$count) . '</p>';
@@ -126,7 +164,7 @@ EOT;
         $str = stripslashes(rex_request('startdirs','string','[]'));
 
         $startdirs = explode('","', substr($str, 2, -2));
-        $dirs = array();
+        $dirs = [];
         if(!empty($startdirs)){
 
             if(is_array($startdirs)){

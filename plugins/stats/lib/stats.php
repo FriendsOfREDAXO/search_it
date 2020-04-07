@@ -32,16 +32,16 @@ class search_it_stats{
     }
 
     function truncate(){
-        $this->sql->setQuery('TRUNCATE ' . rex::getTempPrefix(). 'search_it_stats_searchterms');
+        $this->sql->setQuery('TRUNCATE ' . rex::getTablePrefix().rex::getTempPrefix(). 'search_it_stats_searchterms');
     }
 
     function getTopSearchterms($_count, $_getonly = 0){
         $this->flushSQL();
 
         if (empty($_getonly)){
-            $query = 'SELECT term, COUNT(*) as count, 1 as success FROM `' . rex::getTempPrefix. 'search_it_stats_searchterms' . '` WHERE resultcount > 0 GROUP BY term
+            $query = 'SELECT term, COUNT(*) as count, 1 as success FROM `' . rex::getTablePrefix().rex::getTempPrefix(). 'search_it_stats_searchterms' . '` WHERE resultcount > 0 GROUP BY term
                       UNION
-                      SELECT term, COUNT(*) as count, 0 as success FROM `' . rex::getTempPrefix(). 'search_it_stats_searchterms' . '` WHERE resultcount <= 0 GROUP BY term';
+                      SELECT term, COUNT(*) as count, 0 as success FROM `' . rex::getTablePrefix().rex::getTempPrefix(). 'search_it_stats_searchterms' . '` WHERE resultcount <= 0 GROUP BY term';
         } else {
             $query = 'SELECT term, COUNT(*) as count, ' . ($_getonly == 1 ? 1 : 0) . ' as success FROM `' . rex::getTempPrefix(). 'search_it_stats_searchterms' . '` WHERE resultcount ' . ($_getonly == 1 ? '>' : '<=') . ' 0 GROUP BY term';
             // getonly = 1: only successful searchterms
@@ -53,7 +53,7 @@ class search_it_stats{
         );
 
         if (empty($return)) {
-            $return = array();
+            $return = [];
         }
 
         return $return;
@@ -80,12 +80,12 @@ class search_it_stats{
         $this->sql->setWhere('1 GROUP BY y, m ORDER BY y DESC, m DESC LIMIT ' . $_count);
         $this->sql->select('COUNT( * ) AS count, YEAR(`time`) AS y, MONTH(`time`) AS m');
 
-        $tmp = array();
+        $tmp = [];
         foreach ($this->sql->getArray() as $month) {
             $tmp[intval($month['y']) . '-' . intval($month['m'])] = $month;
         }
 
-        $return = array();
+        $return = [];
         $y = intval(date('Y'));
         for ($i = intval(date('n')) - 1, $k = 0; $k < $_count; $i = ($i + 11) % 12, $k++) {
             if (array_key_exists($y . '-' . ($i + 1), $tmp)) {
@@ -121,12 +121,12 @@ class search_it_stats{
         $this->sql->setWhere(sprintf('%s GROUP BY y, m ORDER BY y DESC, m DESC LIMIT %d', $where, $_count));
         $this->sql->select('COUNT( * ) AS count, YEAR(`time`) AS y, MONTH(`time`) AS m');
 
-        $tmp = array();
+        $tmp = [];
         foreach ($this->sql->getArray() as $month) {
             $tmp[intval($month['y']) . '-' . intval($month['m'])] = $month;
         }
 
-        $return = array();
+        $return = [];
         $y = intval(date('Y'));
         for ($i = intval(date('n')) - 1, $k = 0; $k < $_count; $i = ($i + 11) % 12, $k++) {
             if (array_key_exists($y . '-' . ($i + 1), $tmp)) {

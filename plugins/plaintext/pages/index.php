@@ -43,7 +43,7 @@ if (rex_post('sendit', 'boolean')) {
 }
 
 
-$content = array();
+$content = [];
 
 
 $content[] = search_it_getSettingsFormSection(

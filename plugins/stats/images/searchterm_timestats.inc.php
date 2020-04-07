@@ -16,8 +16,8 @@ $curDir = __DIR__;
 require_once $curDir . '/phplot/phplot.php';
 
 // fetch data
-$bardata = array();
-$cumulateddata = array();
+$bardata = [];
+$cumulateddata = [];
 
 $max = 1;
 foreach ( $stats->getTimestats($term, $this->getConfig('searchtermselectmonthcount')) as $month) {

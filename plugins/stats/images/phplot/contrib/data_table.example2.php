@@ -4,7 +4,7 @@
 require_once 'phplot.php';
 require_once 'data_table.php';
 
-$data = array();
+$data = [];
 for ($i = 0; $i < 20; $i++)
   $data[] = array('', $i, 2 * $i, $i * $i);
 

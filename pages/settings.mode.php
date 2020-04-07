@@ -15,6 +15,7 @@ if (rex_post('config-submit', 'boolean')) {
         ['indexoffline', 'bool'],
         ['automaticindex', 'bool'],
         ['reindex_cols_onforms', 'bool'],
+        ['index_url_addon', 'bool'],
 
     ]);
 
@@ -46,36 +47,49 @@ if (rex_post('config-submit', 'boolean')) {
 $content = '';
 $content3 = [];
 
+// URL Addon Checkbox
+$url_checkbox = [];
+if(search_it_isUrlAddOnAvailable()) {
+	$url_checkbox = [
+            'type' => 'checkbox',
+            'id' => 'search_it_index_url_addon',
+            'name' => 'search_config[index_url_addon]',
+            'label' => $this->i18n('search_it_settings_index_url_addon_label'),
+            'value' => '1',
+            'checked' => $this->getConfig('index_url_addon')
+        ];
+}
 
 $content = search_it_getSettingsFormSection(
     'search_it_index',
     $this->i18n('search_it_settings_title_indexmode'),
-    array(
-        array(
+    [
+        [
             'type' => 'checkbox',
             'id' => 'search_it_indexoffline',
             'name' => 'search_config[indexoffline]',
             'label' => $this->i18n('search_it_settings_indexoffline'),
             'value' => '1',
             'checked' => $this->getConfig('indexoffline')
-        ),
-        array(
+        ],
+        [
             'type' => 'checkbox',
             'id' => 'search_it_automaticindex',
             'name' => 'search_config[automaticindex]',
             'label' => $this->i18n('search_it_settings_automaticindex_label'),
             'value' => '1',
             'checked' => $this->getConfig('automaticindex')
-        ),
-        array(
+        ],
+        [
             'type' => 'checkbox',
             'id' => 'search_it_reindex_cols_onforms',
             'name' => 'search_config[reindex_cols_onforms]',
             'label' => $this->i18n('search_it_settings_reindex_cols_onforms_label'),
             'value' => '1',
             'checked' => $this->getConfig('reindex_cols_onforms')
-        )
-    ),'edit'
+        ],
+		$url_checkbox
+    ],'edit'
 );
 
 $content .= search_it_getSettingsFormSection(

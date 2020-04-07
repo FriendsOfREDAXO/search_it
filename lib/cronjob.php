@@ -10,7 +10,7 @@ class rex_cronjob_reindex extends rex_cronjob
             //$message = $this->getParam('action').':'."\n";
 
             $search_it = new search_it();
-            $includeColumns = is_array(rex_addon::get('search_it')->getConfig('include')) ? rex_addon::get('search_it')->getConfig('include') : array();
+            $includeColumns = is_array(rex_addon::get('search_it')->getConfig('include')) ? rex_addon::get('search_it')->getConfig('include') : [];
             switch ($this->getParam('action')){
                 case 2:
                     // Spalten neu indexieren
@@ -30,6 +30,21 @@ class rex_cronjob_reindex extends rex_cronjob
                             $search_it->indexArticle($art['id'], $art['clang_id']);
                         }
                     }
+                    break;
+
+                case 4:
+                    // URLs neu indexieren
+					if(rex_addon::get('search_it')->getConfig('index_url_addon') && search_it_isUrlAddOnAvailable()) {
+						$url_sql = rex_sql::factory();
+                        $url_sql->setTable(search_it_getUrlAddOnTableName());
+						if ($url_sql->select('id, article_id, clang_id, profile_id, data_id')) {
+							// index und cache zuerst löschen, damit keine alten Einträge überleben
+							$search_it->deleteIndexForType("url");
+							foreach ($url_sql->getArray() as $url) {
+								$search_it->indexUrl($url['id'], $url['article_id'], $url['clang_id'], $url['profile_id'], $url['data_id']);
+							}
+						}
+					}
                     break;
 
                 case 1:
@@ -58,7 +73,8 @@ class rex_cronjob_reindex extends rex_cronjob
                 'options' => [
                     1 => rex_i18n::msg('search_it_generate_full'),
                     2 => rex_i18n::msg('search_it_generate_columns'),
-                    3 => rex_i18n::msg('search_it_generate_articles')],
+                    3 => rex_i18n::msg('search_it_generate_articles'),
+                    4 => rex_i18n::msg('search_it_generate_urls')],
                 'default' => '1',
                 'notice' => rex_i18n::msg('search_it_generate_actions_title'),
             ],

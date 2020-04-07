@@ -14,7 +14,7 @@ if (rex_post('config-submit', 'boolean')) {
     if( !empty($posted_config['blacklist']) ) {
         $posted_config['blacklist'] = explode(',',$posted_config['blacklist']);
     } else {
-        $posted_config['blacklist'] = array();
+        $posted_config['blacklist'] = [];
     }
 
 
@@ -41,12 +41,12 @@ if (rex_post('config-submit', 'boolean')) {
 
 
 $content = '';
-$content2 = array();
+$content2 = [];
 $formElements = [];
 
 
 
-$categories = array();
+$categories = [];
 foreach(search_it_getCategories(false) as $id => $name){
   $categories[] = array(
       'value' => $id,
@@ -54,7 +54,7 @@ foreach(search_it_getCategories(false) as $id => $name){
       'name' => $name.' ('.$id.')'
   );
 }
-$articles = array();
+$articles = [];
 foreach(search_it_getArticles() as $id => $name){
   $articles[] = array(
       'value' => $id,

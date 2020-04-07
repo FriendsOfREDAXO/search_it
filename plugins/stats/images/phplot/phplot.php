@@ -152,7 +152,7 @@ class PHPlot
     static protected $datatypes = array(   // See DecodeDataType() and $datatype_* flags
         'text-data'          => array('implied' => TRUE),
         'text-data-single'   => array('implied' => TRUE, 'pie_single' => TRUE),
-        'data-data'          => array(),
+        'data-data'          => [],
         'data-data-error'    => array('error_bars' => TRUE),
         'data-data-yx'       => array('swapped_xy' => TRUE),
         'text-data-yx'       => array('implied' => TRUE, 'swapped_xy' => TRUE),
@@ -179,7 +179,7 @@ class PHPlot
     /** Default TrueType font file */
     protected $default_ttfont;
     /** Array of flags for elements that must be drawn at most once */
-    protected $done = array();
+    protected $done = [];
     /** Flag: How to handle missing Y values */
     protected $draw_broken_lines = FALSE;
     /** Flag: Draw data borders, available with some plot types */
@@ -233,7 +233,7 @@ class PHPlot
     /** Flag: don't send headers */
     protected $is_inline = FALSE;
     /** Label format info */
-    protected $label_format = array('x' => array(), 'xd' => array(), 'y' => array(), 'yd' => array());
+    protected $label_format = array('x' => [], 'xd' => [], 'y' => [], 'yd' => []);
     /** Pie chart label position factor */
     protected $label_scale_position = 0.5;
     /** Legend text array */
@@ -830,7 +830,7 @@ class PHPlot
     protected function GetColorIndexArray($color_array, $max_colors)
     {
         $n = min(count($color_array), $max_colors);
-        $result = array();
+        $result = [];
         for ($i = 0; $i < $n; $i++)
             $result[] = $this->GetColorIndex($color_array[$i]);
         return $result;
@@ -849,7 +849,7 @@ class PHPlot
     protected function GetDarkColorIndexArray($color_array, $max_colors)
     {
         $n = min(count($color_array), $max_colors);
-        $result = array();
+        $result = [];
         for ($i = 0; $i < $n; $i++)
             $result[] = $this->GetDarkColorIndex($color_array[$i]);
         return $result;
@@ -1278,7 +1278,7 @@ class PHPlot
 
         // Check each color and convert to array (r,g,b,a) form.
         // Use the $alpha argument as a default for the alpha value of each color.
-        $this->data_colors = array();
+        $this->data_colors = [];
         foreach ($colors as $color) {
             $color_array = $this->SetRGBColor($color, $alpha);
             if (!$color_array) return FALSE; // SetRGBColor already did an error message.
@@ -1314,7 +1314,7 @@ class PHPlot
         }
 
         // Check each color and convert to array (r,g,b,a) form.
-        $this->data_border_colors = array();
+        $this->data_border_colors = [];
         foreach ($colors as $color) {
             $color_array = $this->SetRGBColor($color);
             if (!$color_array) return FALSE; // SetRGBColor already did an error message.
@@ -1346,7 +1346,7 @@ class PHPlot
         }
 
         // Check each color and convert to array (r,g,b,a) form.
-        $this->error_bar_colors = array();
+        $this->error_bar_colors = [];
         foreach ($colors as $color) {
             $color_array = $this->SetRGBColor($color);
             if (!$color_array) return FALSE; // SetRGBColor already did an error message.
@@ -2488,7 +2488,7 @@ class PHPlot
         echo $this->stream_frame_header, "Content-Length: $size\r\n\r\n", $frame, "\r\n";
         flush();
         // This gets the next DrawGraph() to do background and titles again.
-        $this->done = array();
+        $this->done = [];
         return TRUE;
     }
 
@@ -2866,7 +2866,7 @@ class PHPlot
     protected function CheckOptionArray($opt, $acc, $func)
     {
         $opt_array = (array)$opt;
-        $result = array();
+        $result = [];
         foreach ($opt_array as $option) {
             $choice = $this->CheckOption($option, $acc, $func);
             if (is_null($choice)) return NULL; // In case CheckOption error handler returns
@@ -3495,8 +3495,8 @@ class PHPlot
     {
         $this->num_data_rows = count($which_dv);
         $this->total_records = 0;
-        $this->data = array();
-        $this->num_recs = array();
+        $this->data = [];
+        $this->num_recs = [];
         for ($i = 0; $i < $this->num_data_rows; $i++) {
             if (!isset($which_dv[$i]) || !is_array($which_dv[$i])) {
                 return $this->PrintError("SetDataValues(): Invalid data array (row $i)");
@@ -3930,15 +3930,15 @@ class PHPlot
         $abs_vals = !empty(self::$plots[$this->plot_type]['abs_vals']); // Take absolute values
 
         // Initialize arrays which track the min/max per-row dependent values:
-        $this->data_min = array();
-        $this->data_max = array();
+        $this->data_min = [];
+        $this->data_max = [];
 
         // Independent values are in the data array or assumed?
         if ($this->datatype_implied) {
             // Range for text-data is 0.5 to num_data_rows-0.5. Add 0.5 fixed margins on each side.
             $all_iv = array(0, $this->num_data_rows);
         } else {
-            $all_iv = array(); // Calculated below
+            $all_iv = []; // Calculated below
         }
         // For X/Y/Z plots, make sure these are not left over from a previous plot.
         if ($this->datatype_yz)
@@ -3956,7 +3956,7 @@ class PHPlot
             if ($sum_vals) {
                 $all_dv = array(0, 0); // One limit is 0, other calculated below
             } else {
-                $all_dv = array();
+                $all_dv = [];
             }
             while ($j < $n_vals) {
                 if (is_numeric($val = $this->data[$i][$j++])) {
@@ -6404,7 +6404,7 @@ class PHPlot
      */
     protected function FormatPieLabel($index, $pie_label_source, $arc_angle, $slice_weight)
     {
-        $values = array(); // Builds up label value, one field at a time.
+        $values = []; // Builds up label value, one field at a time.
         foreach ($pie_label_source as $word) {
             switch ($word) {
             case 'label':    // Use label from data array, but only if data type is compatible
@@ -6490,7 +6490,7 @@ class PHPlot
         if (is_array($which_leg)) {           // use array (or cancel, if empty array)
             $this->legend = $which_leg;
         } elseif (!is_null($which_leg)) {     // append string
-            if (!isset($this->legend)) $this->legend = array(); // Seems unnecessary, but be safe.
+            if (!isset($this->legend)) $this->legend = []; // Seems unnecessary, but be safe.
             $this->legend[] = $which_leg;
         } else {
             $this->legend = NULL;  // Reset to no legend.
@@ -7292,8 +7292,8 @@ class PHPlot
      */
     protected function SetupAreaPlot($stacked, &$xd, &$yd)
     {
-        $xd = array();
-        $yd = array();
+        $xd = [];
+        $yd = [];
 
         // Outer loop over rows (X); inner over columns (Y):
         for ($row = 0; $row < $this->num_data_rows; $row++) {
@@ -7316,7 +7316,7 @@ class PHPlot
             if ($stacked)
                 $yd[$row] = array($this->x_axis_y_pixels);
             else
-                $yd[$row] = array();
+                $yd[$row] = [];
 
             // Store the Y values for this X. Missing Y values are not supported, and are replaced with 0.
             // Negative numbers are not supported, and are replaced with absolute values.
@@ -7491,7 +7491,7 @@ class PHPlot
         $label_max_width = 0;  // Widest label width, in pixels
         $label_max_height = 0; // Tallest label height, in pixels
         if ($do_labels) {
-            $labels = array(); // Array to store the formatted label strings
+            $labels = []; // Array to store the formatted label strings
             $end_angle = $start_angle = $this->pie_start_angle;
             for ($j = 0; $j < $num_slices; $j++) {
                 $slice_weight = $sumarr[$j];
@@ -7664,7 +7664,7 @@ class PHPlot
         // Adjust the point shapes and point sizes arrays:
         $this->CheckPointParams();
 
-        $gcvars = array(); // For GetDataColor, which initializes and uses this.
+        $gcvars = []; // For GetDataColor, which initializes and uses this.
         // Special flag for data color callback to indicate the 'points' part of 'linepoints':
         $alt_flag = $paired ? 1 : 0;
 
@@ -7758,7 +7758,7 @@ class PHPlot
         if (!$this->CheckDataType('text-data, data-data, text-data-yx, data-data-yx'))
             return FALSE;
 
-        $gcvars = array(); // For GetDataColor, which initializes and uses this.
+        $gcvars = []; // For GetDataColor, which initializes and uses this.
 
         for ($row = 0; $row < $this->num_data_rows; $row++) {
             $rec = 1;                    // Skip record #0 (data label)
@@ -7843,7 +7843,7 @@ class PHPlot
         // number of entries in the yd[] arrays is data_columns+1.
         $prev_col = 0;
         for ($col = 1; $col < $n_columns; $col++) { // 1 extra for X axis artificial column
-            $pts = array();
+            $pts = [];
             // Previous data set forms top (for area) or bottom (for stackedarea):
             for ($row = 0; $row < $n_rows; $row++) {
                 array_push($pts, $xd[$row], $yd[$row][$prev_col]);
@@ -7892,7 +7892,7 @@ class PHPlot
         if ($this->data_columns > 0)
             $start_lines = array_fill(0, $this->data_columns, FALSE);
 
-        $gcvars = array(); // For GetDataColor, which initializes and uses this.
+        $gcvars = []; // For GetDataColor, which initializes and uses this.
 
         // Data labels, Data Value Labels?
         if ($this->datatype_swapped_xy) {
@@ -8035,7 +8035,7 @@ class PHPlot
         if ($this->data_columns > 0)
             $start_lines = array_fill(0, $this->data_columns, FALSE);
 
-        $gcvars = array(); // For GetDataColor, which initializes and uses this.
+        $gcvars = []; // For GetDataColor, which initializes and uses this.
 
         // Data Value Labels?
         $do_dvls = $this->CheckDataValueLabels($this->y_data_label_pos, $dvl);
@@ -8180,7 +8180,7 @@ class PHPlot
         // in the group. See also CalcBarWidths above.
         $x_first_bar = ($this->data_columns * $this->record_bar_width) / 2 - $this->bar_adjust_gap;
 
-        $gcvars = array(); // For GetBarColors, which initializes and uses this.
+        $gcvars = []; // For GetBarColors, which initializes and uses this.
 
         for ($row = 0; $row < $this->num_data_rows; $row++) {
             $record = 1;                                    // Skip record #0 (data label)
@@ -8249,7 +8249,7 @@ class PHPlot
         // in the group. See also CalcBarWidths above.
         $y_first_bar = ($this->data_columns * $this->record_bar_width) / 2 - $this->bar_adjust_gap;
 
-        $gcvars = array(); // For GetBarColors, which initializes and uses this.
+        $gcvars = []; // For GetBarColors, which initializes and uses this.
 
         for ($row = 0; $row < $this->num_data_rows; $row++) {
             $record = 1;                                    // Skip record #0 (data label)
@@ -8322,7 +8322,7 @@ class PHPlot
         // This is the X offset from the bar's label center point to the left side of the bar.
         $x_first_bar = $this->record_bar_width / 2 - $this->bar_adjust_gap;
 
-        $gcvars = array(); // For GetBarColors, which initializes and uses this.
+        $gcvars = []; // For GetBarColors, which initializes and uses this.
 
         // Determine if any data labels are on:
         $data_labels_within = ($this->y_data_label_pos == 'plotstack');
@@ -8432,7 +8432,7 @@ class PHPlot
         // This is the Y offset from the bar's label center point to the bottom of the bar
         $y_first_bar = $this->record_bar_width / 2 - $this->bar_adjust_gap;
 
-        $gcvars = array(); // For GetBarColors, which initializes and uses this.
+        $gcvars = []; // For GetBarColors, which initializes and uses this.
 
         // Determine if any data labels are on:
         $data_labels_within = ($this->x_data_label_pos == 'plotstack');
@@ -8559,7 +8559,7 @@ class PHPlot
         // Get line widths to use: index 0 for body/stroke, 1 for wick/tick.
         list($body_thickness, $wick_thickness) = $this->line_widths;
 
-        $gcvars = array(); // For GetDataColor, which initializes and uses this.
+        $gcvars = []; // For GetDataColor, which initializes and uses this.
 
         for ($row = 0; $row < $this->num_data_rows; $row++) {
             $record = 1;                                    // Skip record #0 (data label)
@@ -8660,7 +8660,7 @@ class PHPlot
         if (!$this->CheckDataType('data-data-xyz'))
             return FALSE;
 
-        $gcvars = array(); // For GetDataColor, which initializes and uses this.
+        $gcvars = []; // For GetDataColor, which initializes and uses this.
 
         // Calculate or use supplied maximum bubble size:
         if (isset($this->bubbles_max_size)) {
@@ -8738,7 +8738,7 @@ class PHPlot
         // A box plot can use up to 3 different line widths:
         list($box_thickness, $belt_thickness, $whisker_thickness) = $this->line_widths;
 
-        $gcvars = array(); // For GetDataColor, which initializes and uses this.
+        $gcvars = []; // For GetDataColor, which initializes and uses this.
 
         for ($row = 0; $row < $this->num_data_rows; $row++) {
             $record = 1;                                    // Skip record #0 (data label)
@@ -8762,7 +8762,7 @@ class PHPlot
             }
 
             // Collect the 5 primary Y values, plus any outliers:
-            $yd = array(); // Device coords
+            $yd = []; // Device coords
             for ($i = 0; $i < $num_y; $i++) {
                 $yd[$i] = is_numeric($y = $this->data[$row][$record++]) ? $this->ytr($y) : NULL;
             }
@@ -8832,7 +8832,7 @@ class PHPlot
         // Load some configuration values from the array of plot types:
         $pt = &self::$plots[$this->plot_type]; // Use reference for shortcut
         $draw_method = $pt['draw_method'];
-        $draw_arg = isset($pt['draw_arg']) ? $pt['draw_arg'] : array();
+        $draw_arg = isset($pt['draw_arg']) ? $pt['draw_arg'] : [];
         $draw_axes = empty($pt['suppress_axes']);
 
         // Allocate colors for the plot:

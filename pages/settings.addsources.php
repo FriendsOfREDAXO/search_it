@@ -14,27 +14,27 @@ if (rex_post('config-submit', 'boolean')) {
 
     // aus Komma-Listen arrays machen, bzw. arrays umformen
     if( !empty($posted_config['fileextensions']) ) {
-        $fileExtensions = array();
+        $fileExtensions = [];
         foreach(explode(',', $posted_config['fileextensions']) as $fileext) {
             $fileExtensions[] = trim($fileext);
         }
         $posted_config['fileextensions'] = $fileExtensions;
     } else {
-        $posted_config['fileextensions'] = array();
+        $posted_config['fileextensions'] = [];
     }
 
     if( !empty($posted_config['include']) && is_array($posted_config['include']) ) {
-        $returnArray = array();
+        $returnArray = [];
         foreach($posted_config['include'] as $include) {
             $includeArray = explode('`.`',$include);
             if(!array_key_exists($includeArray[0],$returnArray)) {
-                $returnArray[$includeArray[0]] = array();
+                $returnArray[$includeArray[0]] = [];
             }
             $returnArray[$includeArray[0]][] = $includeArray[1];
         }
         $posted_config['include'] = $returnArray;
     } else {
-        $posted_config['include'] = array();
+        $posted_config['include'] = [];
     }
 
     $changed = array_keys(array_merge(array_diff_assoc(array_map('serialize',$posted_config),array_map('serialize',$this->getConfig())), array_diff_assoc(array_map('serialize',$this->getConfig()),array_map('serialize',$posted_config))));
@@ -67,13 +67,13 @@ $content1 = '';
 $sql_tables = rex_sql::factory();
 foreach ( $sql_tables->getTablesAndViews() as $table ) {
     if ( false === strpos($table, 'search_it') ) {
-        $options = array();
+        $options = [];
         $sql_columns = $sql_tables->showColumns($table);
         sort($sql_columns);
         foreach ( $sql_columns as $column ) {
             $options[] = array(
                 'value' => rex_escape($table . '`.`' . $column['name']),
-                'checked' => in_array($column['name'], (!empty($this->getConfig('include')[$table]) AND is_array($this->getConfig('include')[$table])) ? $this->getConfig('include')[$table] : array()),
+                'checked' => in_array($column['name'], (!empty($this->getConfig('include')[$table]) AND is_array($this->getConfig('include')[$table])) ? $this->getConfig('include')[$table] : []),
                 'name' =>  $column['name'],
                 'id' => $table . '.' . $column['name']
             );

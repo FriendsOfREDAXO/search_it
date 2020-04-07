@@ -25,8 +25,8 @@ function search_it_getPlaintext($_text,$_remove){
             case 'regex':
                 // regex
                 if (!empty($pt->getConfig('regex'))) {
-                    $regex = array();
-                    $replacement = array();
+                    $regex = [];
+                    $replacement = [];
                     $odd = true;
                     foreach (explode("\n", $pt->getConfig('regex')) as $line) {
                         if ($line != '') {

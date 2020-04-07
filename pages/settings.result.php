@@ -22,7 +22,7 @@ if (rex_post('config-submit', 'boolean')) {
 
 
 $content = '';
-$content2 = array();
+$content2 = [];
 $formElements = [];
 
 

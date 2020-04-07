@@ -47,4 +47,3 @@ rex_sql_table::get(rex::getTable(rex::getTempPrefix().'search_it_keywords'))
     ->setPrimaryKey('id')
     ->ensureIndex(new rex_sql_index('keyword', ['keyword', 'clang'], rex_sql_index::UNIQUE))
     ->ensure();
-

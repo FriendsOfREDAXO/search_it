@@ -1,6 +1,8 @@
 # Änderungen von search_it
 
-- bei schrittweiser Indexierung sind die Artikel in der Ausgabe verlinkt
+## Version 6.7.0 (2020-04-02)
+- URLs aus dem URL Addon (>= 2.0) können indexiert werden. @TobiasKrais
+- bei schrittweiser Indexierung sind die Artikel in der Ausgabe verlinkt @alexplusde
 - minimale PHP Version ergänzt @staabm
 - install.sql -> install.php
 - wird eine Tabelle oder Spalte gelöscht, die in "zusätzliche Datenquelle" angegeben ist und neuindexiert -> woops #222 thx @alexplusde

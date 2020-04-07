@@ -8,8 +8,10 @@ Dabei werden Artikel, Medien, Dateien, PDF-Inhalte und Datenbank-Felder in einer
 
 ## Systemvoraussetzungen
 
-* `PHP ^7`
+* `PHP ^7.0`
 * `REDAXO >= 5.5.0`
+* `pdftotext` [optional für das Durchsuchen von pdf-Inhalten, [Link](https://www.xpdfreader.com/pdftotext-man.html)]
+
 
 ## Plugins
 

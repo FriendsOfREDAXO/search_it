@@ -65,7 +65,7 @@ $formElements = [];
 
 $content1 = '';
 $sql_tables = rex_sql::factory();
-foreach ( $sql_tables->showTables() as $table ) {
+foreach ( $sql_tables->getTablesAndViews() as $table ) {
     if ( false === strpos($table, 'search_it') ) {
         $options = [];
         $sql_columns = $sql_tables->showColumns($table);

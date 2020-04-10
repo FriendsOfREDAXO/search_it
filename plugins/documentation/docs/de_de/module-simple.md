@@ -14,22 +14,22 @@ $request = rex_request('search', 'string', false);
 if($request) {
     $search_it = new search_it();
     $result = $search_it->search($request);
-	# dump($result); // Zum Debuggen ausgeben.
+    # dump($result); // Zum Debuggen ausgeben.
 
     if($result['count']) {
         echo '<h2 class="search_it-headline">{{ Suchergebnisse }}</h2>';
 
-        echo '<ul class="search_it-results">';                          
+        echo '<ul class="search_it-results">';
         foreach($result['hits'] as $hit) {
 
             # dump($hit);
             if($hit['type'] == 'article') {
                 $article = rex_article::get($hit['fid']);
-				$hit_server = $server;
-				if(rex_addon::get('yrewrite')->isAvailable()) {
-					$hit_domain = rex_yrewrite::getDomainByArticleId($hit['fid'], $hit['clang']);
-					$hit_server = rtrim($hit_domain->getUrl(), "/");
-				}
+                $hit_server = $server;
+                if(rex_addon::get('yrewrite')->isAvailable()) {
+                    $hit_domain = rex_yrewrite::getDomainByArticleId($hit['fid'], $hit['clang']);
+                    $hit_server = rtrim($hit_domain->getUrl(), "/");
+                }
                 echo '<li class="search_it-result search_it-article">
                           <p class="search_it-title">
                               <a href="'.$hit_server.rex_getUrl($hit['fid'], $hit['clang'], array('search_highlighter' => $request)).'" title="'.$article->getName().'">'.$article->getName().'</a>
@@ -37,9 +37,7 @@ if($request) {
                           <p class="search_it-url">'.$hit_server.rex_getUrl($hit['fid'], $hit['clang']).'</p>
                           <p class="search_it-teaser">'.$hit['highlightedtext'].'</p>
                       </li>';
-            } else {                                  
-               
-               
+            } else {
                 echo '<p class="search_it-missing_type">Das Suchergebnis vom Typ <i class="search_it-type">'.$hit['type'].' </i> kann nicht dargestellt werden.</p>';
             }
 
@@ -65,24 +63,24 @@ $request = rex_request('search', 'string', false); // GET/POST-Anfrage: Casting 
 if($request) { // Wenn ein Suchbegriff eingegeben wurde
     $search_it = new search_it(); // Suche initialisieren
     $result = $search_it->search($request); // Suche ausführen
-	# dump($result); // Zum Debuggen ausgeben.
+    # dump($result); // Zum Debuggen ausgeben.
 
     if($result['count']) { // Wenn Ergebnisse vorhanden sind...
         echo '<h2 class="search_it-headline">{{ Suchergebnisse }}</h2>'; // Sprog-AddOn zur Übersetzung benutzen
 
-        echo '<ul class="search_it-results">';                          
+        echo '<ul class="search_it-results">';
         foreach($result['hits'] as $hit) { // Jeder Treffer in $hit
 
             # dump($hit); // Zum Debuggen ausgeben.
             if($hit['type'] == 'article') { // Wenn der Treffer aus der Artikelsuche stammt
                 $article = rex_article::get($hit['fid']); // REDAXO-Artikel-Objekt holen
 
-				// falls YRewrite genutzt wird
-				$hit_server = $server;
-				if(rex_addon::get('yrewrite')->isAvailable()) {
-					$hit_domain = rex_yrewrite::getDomainByArticleId($hit['fid'], $hit['clang']);
-					$hit_server = rtrim($hit_domain->getUrl(), "/");
-				}
+                // falls YRewrite genutzt wird
+                $hit_server = $server;
+                if(rex_addon::get('yrewrite')->isAvailable()) {
+                    $hit_domain = rex_yrewrite::getDomainByArticleId($hit['fid'], $hit['clang']);
+                    $hit_server = rtrim($hit_domain->getUrl(), "/");
+                }
 
                 echo '<li class="search_it-result search_it-article">
                           <p class="search_it-title">
@@ -91,7 +89,7 @@ if($request) { // Wenn ein Suchbegriff eingegeben wurde
                           <p class="search_it-url">'.$hit_server.rex_getUrl($hit['fid'], $hit['clang']).'</p>
                           <p class="search_it-teaser">'.$hit['highlightedtext'].'</p>
                       </li>'; // Ausgabe des Suchtreffers
-            } else {                                  
+            } else {
                 // Wenn der Treffer nicht aus REDAXO-Artikeln stammt, z.B., weil Medienpool oder Datenbankspalten
                 // indiziert wurden. Siehe erweiterte Beispiele für die Ausgabe. Oder: Indexierung auf Artikel beschränken.
                 echo '<p class="search_it-missing_type">Das Suchergebnis vom Typ <i class="search_it-type">'.$hit['type'].' </i> kann nicht dargestellt werden.</p>';
@@ -130,7 +128,6 @@ Das Sucheingabe-Formular kann beliebig formatiert und mit Klassen ausgezeichnet 
         color: rgba(0,0,0,0.4);
         margin-bottom: 2rem;
     }
-   
     .search_it-results {
         padding: 0;
         margin: 0;
@@ -155,7 +152,6 @@ Das Sucheingabe-Formular kann beliebig formatiert und mit Klassen ausgezeichnet 
     .search_it-result .search_it-url {
         color: rgba(0,0,0,0.4);
     }
-   
     .search_it-missing_type,
     .search_it-zero {
         background: rgba(180,0,0,0.05);

@@ -2,17 +2,17 @@
 
 - [Beispiel](#beispiel)
 - [Aufbau](#aufbau)
-	- [hits](#hits)
-	- [keywords](#keywords)
-	- [searchterm](#searchterm)
-	- [sql](#sql)
-	- [blacklisted](#blacklisted)
-	- [time](#time)
-	- [count](#count)
-	- [hash](#hash)
-	- [simwordsnewsearch](#simwordsnewsearch)
-	- [simwords](#simwords)
-	
+  - [hits](#hits)
+  - [keywords](#keywords)
+  - [searchterm](#searchterm)
+  - [sql](#sql)
+  - [blacklisted](#blacklisted)
+  - [time](#time)
+  - [count](#count)
+  - [hash](#hash)
+  - [simwordsnewsearch](#simwordsnewsearch)
+  - [simwords](#simwords)
+
 ## Beispiel
 
 Mit jeder Suche gibt `search_it`-Klasse ein Ergebnis-Array mit Suchtreffern zurück.
@@ -35,8 +35,8 @@ Array
     [errormessages] =>
     [count] => 2
     [hits] => Array
-	[...]
-	[blacklisted] =>
+    [...]
+    [blacklisted] =>
     [hash] => 4f6d834a6bf25ad92d60098de19f9ea6
     [time] => 0.42217803001404
 )
@@ -72,18 +72,18 @@ Array mit verwendeten Suchbegriffen, z. B.:
 
 ```text
 [0] => Array
-	(
-		[search] => Pudding
-		[weight] => 1
-		[clang] =>
-	)
+    (
+        [search] => Pudding
+        [weight] => 1
+        [clang] =>
+    )
 
 [1] => Array
-	(
-		[search] => Milch
-		[weight] => 1
-		[clang] =>
-	)
+    (
+        [search] => Milch
+        [weight] => 1
+        [clang] =>
+    )
 ```
 
 ### searchterm
@@ -138,7 +138,3 @@ Key | Value
 typedin|noch einmal das "falsche" Wort
 keyword|das "richtige" Schlüsselwort
 count|Anzahl, wie oft das "richtige" Schlüsselwort gefunden wurde
-
-
-
-

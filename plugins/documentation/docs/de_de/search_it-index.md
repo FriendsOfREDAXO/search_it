@@ -53,6 +53,7 @@ $search_it->indexColumn('table', 'field'[, 'id'[, $datensatz_id]]);
 ```
 
 Die Methode `indexColumn` benötigt daher folgende Parameter:
+
 * Die Namen der Datenbanktabelle (hier: `table`) und
 * das Datenbank-Feld (hier: `field`),
 * optional der Primärschlüssel (Standard: `id`) und
@@ -109,7 +110,16 @@ $rexsearch_article->searchInFileCategories(true); // durchsucht Dateien
 ```
 
 ```php
+# im Medienpool in Kategorie 5 nur pdf durchsuchen
+$search_it->searchInFileCategories(5);
+$search_it->setWhere('fileext = "pdf"');
+# im Dateisystem-Ordner /example/ alle Dateien durchsuchen
+$search_it->setWhere('filename LIKE 'example/%');
+```
+
+```php
 $result = $search_it->search(rex_request('search', 'string')); // Suche ausführen.
 ```
+
 
 > Weitere Tipps und Tricks zum Filtern von Suchergebnissen in den FAQ.

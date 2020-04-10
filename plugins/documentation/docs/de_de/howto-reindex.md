@@ -1,4 +1,4 @@
-# Automatische Reindexierung 
+# Automatische Reindexierung
 
 `Search it` greift auf folgende Extension Points zurück, um Änderungen an den Inhalten von REDAXO-Artikeln zu erfassen:
 
@@ -28,9 +28,7 @@ Die Klasse `search_it` bietet allerdings die Methode `indexColumn` an. Über die
 ### Alle reindexieren
 
 ```php
-
     $search_it = new search_it;
-    
     $includeColumns = is_array(rex_addon::get('search_it')->getConfig('include')) ? rex_addon::get('search_it')->getConfig('include') : array();
 
     foreach( $includeColumns as $table => $columnArray ){
@@ -43,12 +41,12 @@ Die Klasse `search_it` bietet allerdings die Methode `indexColumn` an. Über die
 ### Für AddOns
 
 Ein AddOn arbeitet mit einer eigenen Datenbank-Tabelle, hier: `table`. Search it soll Inhalte dieses AddOns auch automatisch reindexieren. Da das AddOn selbst weiß, wann die Beispieldatenbank-Feld `field` reindexiert werden soll, kann die Methode `indexColumn` von diesem AddOn aufgerufen werden:
- 
-```
+
+```php
 $search_it = new search_it;
 $search_it->indexColumn('table', 'field'[, 'id'[, $datensatz_id]]);
 ```
- 
+
 Die Methode `indexColumn` benötigt daher folgende Parameter:
 *    Die Namen der Datenbanktabelle (hier: `table`) und
 *    das Datenbank-Feld (hier: `field`),

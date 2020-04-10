@@ -4,12 +4,12 @@ Search it kann nicht nur Suchergebnisse innerhalb der Suchergebnis-Liste hervorh
 
 Damit die Suche den Suchbegriff an die aufgerufene Seite übergibt, muss der Link in der Suchergebnis-Liste angepasst werden.
 
-```
-if($hit['type'] == 'article') { 
+```php
+if($hit['type'] == 'article') {
 	$article = rex_article::get($hit['fid']);
 	$url = rex_getUrl(
-		$hit['fid'], 
-		$hit['clang'], 
+		$hit['fid'],
+		$hit['clang'],
 		array('search_highlighter' => rex_request('search', 'string'))
 	)
 	echo '<a href="'.$url.'" title="'.$article->getName().'">'.$article->getName().'</a>';

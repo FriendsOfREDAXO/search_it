@@ -17,7 +17,7 @@
 
 Mit jeder Suche gibt `search_it`-Klasse ein Ergebnis-Array mit Suchtreffern zurück.
 
-```
+```text
 Array
 (
     [simwordsnewsearch] => Pudding Puddingpulver Putensteak Putens Milch
@@ -32,11 +32,11 @@ Array
 
         )
 
-    [errormessages] => 
+    [errormessages] =>
     [count] => 2
     [hits] => Array
 	[...]
-	[blacklisted] => 
+	[blacklisted] =>
     [hash] => 4f6d834a6bf25ad92d60098de19f9ea6
     [time] => 0.42217803001404
 )
@@ -70,19 +70,19 @@ values|wenn mehrere Spalten der gleichen Tabelle indexiert sind, so stehen deren
 
 Array mit verwendeten Suchbegriffen, z. B.:
 
-```
+```text
 [0] => Array
 	(
 		[search] => Pudding
 		[weight] => 1
-		[clang] => 
+		[clang] =>
 	)
 
 [1] => Array
 	(
 		[search] => Milch
 		[weight] => 1
-		[clang] => 
+		[clang] =>
 	)
 ```
 
@@ -94,26 +94,26 @@ Der vom Nutzer eingegebene Suchbegriff, z. B.:  `Pudding Milch`
 
 Der von Search it erstellte SQL-Befehl, z. B.:
 
-```
-            SELECT SQL_CALC_FOUND_ROWS (SELECT SUM((( MATCH (`plaintext`) AGAINST ('Pudding')) * 1) + (( MATCH (`plaintext`) AGAINST ('Milch')) * 1) + 1) FROM `rex_search_it_index` summe WHERE summe.fid = r1.fid AND summe.ftable = r1.ftable) AS RELEVANCE_SEARCH_IT,
+```sql
+SELECT SQL_CALC_FOUND_ROWS (SELECT SUM((( MATCH (`plaintext`) AGAINST ('Pudding')) * 1) + (( MATCH (`plaintext`) AGAINST ('Milch')) * 1) + 1) FROM `rex_search_it_index` summe WHERE summe.fid = r1.fid AND summe.ftable = r1.ftable) AS RELEVANCE_SEARCH_IT,
 (SELECT COUNT(*) FROM `rex_search_it_index` summe WHERE summe.fid = r1.fid AND (summe.ftable IS NULL OR summe.ftable = r1.ftable) AND (summe.fcolumn IS NULL OR summe.fcolumn = r1.fcolumn) AND summe.texttype = r1.texttype) AS COUNT_SEARCH_IT, `id`,`fid`,`catid`,`ftable`,`fcolumn`,`texttype`,`clang`,`unchangedtext`,`plaintext`,`teaser`,`values`,`filename`,`fileext` FROM `rex_search_it_index` r1
-            WHERE ((((`plaintext` LIKE '%Pudding%')) AND ((`plaintext` LIKE '%Milch%')))) AND (
-              (
-                ((( MATCH (`plaintext`) AGAINST ('Pudding')) * 1) + (( MATCH (`plaintext`) AGAINST ('Milch')) * 1) + 1) = (SELECT MAX((( MATCH (`plaintext`) AGAINST ('Pudding')) * 1) + (( MATCH (`plaintext`) AGAINST ('Milch')) * 1) + 1) FROM `rex_search_it_index` r2 WHERE r1.ftable = r2.ftable AND r1.fid = r2.fid )
-                AND fid IS NOT NULL
-              ) OR
-              ftable IS NULL
-            )
-            GROUP BY ftable,fid,clang
-            ORDER BY RELEVANCE_SEARCH_IT DESC
-            LIMIT 0,5
+WHERE ((((`plaintext` LIKE '%Pudding%')) AND ((`plaintext` LIKE '%Milch%')))) AND (
+    (
+    ((( MATCH (`plaintext`) AGAINST ('Pudding')) * 1) + (( MATCH (`plaintext`) AGAINST ('Milch')) * 1) + 1) = (SELECT MAX((( MATCH (`plaintext`) AGAINST ('Pudding')) * 1) + (( MATCH (`plaintext`) AGAINST ('Milch')) * 1) + 1) FROM `rex_search_it_index` r2 WHERE r1.ftable = r2.ftable AND r1.fid = r2.fid )
+    AND fid IS NOT NULL
+    ) OR
+    ftable IS NULL
+)
+GROUP BY ftable,fid,clang
+ORDER BY RELEVANCE_SEARCH_IT DESC
+LIMIT 0,5
 ```
 
 ### blacklisted
 
 Array mit "schwarzen" Wörtern, die in der Suchabfrage genutzt wurden
 
-### time 
+### time
 
 Dauer der Suche
 
@@ -129,7 +129,7 @@ Hash, unter dem die Suche im Cache gespeichert wurde
 
 Vorschlag für ähnliche Suchbegriffe (nur, wenn die Suche kein Ergebnis brachte)
 
-### simwords: 
+### simwords:
 
 ein Array mit Wörtern, die den Suchbegriffen ähneln, wobei die Schlüssel dieses Arrays die eingegebenen "falschen" Wörter sind und die Werte wiederum ein Array, das wie folgt aufgebaut ist:
 
@@ -137,8 +137,8 @@ Key | Value
 ------ | ------
 typedin|noch einmal das "falsche" Wort
 keyword|das "richtige" Schlüsselwort
-count|Anzahl, wie oft das "richtige" Schlüsselwort gefunden wurde 
+count|Anzahl, wie oft das "richtige" Schlüsselwort gefunden wurde
 
 
 
- 
+

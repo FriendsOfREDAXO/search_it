@@ -1,6 +1,6 @@
 # Plaintext
 
-Das Plugin Plaintext reduziert die Artikelinhalte auf reinen Text und entfernt dabei alle HTML-Tags. 
+Das Plugin Plaintext reduziert die Artikelinhalte auf reinen Text und entfernt dabei alle HTML-Tags.
 Darüberhinaus können CSS-Klassen von der Filterung ausgenommen werden und mit Hilfe Regulärer Ausdrücke Ersetzungen vorgenommen werden.
 Die Reihenfolge dieser Aktionen kann ebenfalls beeinflusst werden.
 
@@ -11,7 +11,7 @@ Hier können CSS-Selektoren angegeben werden. Alle Elemente, die darauf passen, 
 ## Reguläre Ausdrücke
 Immer zwei Zeilen bestimmen eine Ersetzungsregel. Die erste enthält den Regulären Ausdruck (mit Begrenzungszeichen)und die zweite Zeile den einzufügenden Inhalt.
 Bsp.:
-```
+```text
 ~<h1>.+</h1>~
 (Leerzeile)
 ~abc~
@@ -22,10 +22,10 @@ Dieses Beispiel entfernt alle h1-Überschriften und ersetzt alle Vorkommen von "
 
 
 ## Textile parsen
-Wenn die Artikel Textile-Markup enthalten, kann es gewünschtr sein dieses erst zu parsen. 
+Wenn die Artikel Textile-Markup enthalten, kann es gewünschtr sein dieses erst zu parsen.
 
 ## HTML-Tags entfernen
-Aktiviert man diese Option, so werden alle HTML-Tags entfernt.  
+Aktiviert man diese Option, so werden alle HTML-Tags entfernt. 
 
 ## Standard-Plaintext-Konvertierung durchführen
 Diese Option bestimmt, ob der Plaintext auch Standard-Prozedur zur Generierung des Plaintext durchlaufen soll.

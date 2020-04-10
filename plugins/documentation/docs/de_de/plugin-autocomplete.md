@@ -4,9 +4,9 @@ Das Plugin stellt das "Suggest"-jQuery-PlugIn für die Autovervollständigung be
 
 ## Requirements
 
-* Installiertes jQuery im Frontend 
-* Funktionierendes Suchformular, das die HTML-Klasse "search_it-form", 
-sowie ein HTML-Eingabefeld für die Suche mit dem Namen "search". 
+* Installiertes jQuery im Frontend
+* Funktionierendes Suchformular, das die HTML-Klasse "search_it-form",
+sowie ein HTML-Eingabefeld für die Suche mit dem Namen "search".
 
 ## Installation
 
@@ -15,7 +15,7 @@ sowie ein HTML-Eingabefeld für die Suche mit dem Namen "search".
 3. Konfiguration im Plugin vornehmen und speichern
 4. Den generierten Code für das Template herauskopieren und in das Template, welches für das Suchfeld verwendet wird, vor dem schließenden `</body>` Tag hinzufügen
 5. Sollte das Suchfeld überall verwendet werden, beispielsweise im Kopf der Seite, muss der generierte Code in das entsprechende Template hinzugefügt werden
-6. Optional: CSS und JS Datei in den eigenen Frontend_prozess einbauen ( z.B. per Minify oder im Bimmelbam ) 
+6. Optional: CSS und JS Datei in den eigenen Frontend_prozess einbauen ( z.B. per Minify oder im Bimmelbam )
 
 ## Hinweis
 Wenn die Ähnlichkeitssuche aktiviert wird, muss der Keyword-Index erneuert werden.
@@ -25,7 +25,7 @@ Wenn die Ähnlichkeitssuche aktiviert wird, muss der Keyword-Index erneuert werd
 "Autocomplete" von Manétage steht unter MIT Lizenz.
 
 ## Rechtliches
-Verwendung auf eigene Gefahr. 
+Verwendung auf eigene Gefahr.
 
 ## Autor
 
@@ -33,6 +33,5 @@ Verwendung auf eigene Gefahr.
 * https://www.manetage.de
 
 **Friends Of REDAXO**
-
 * https://www.redaxo.org
 * https://github.com/FriendsOfREDAXO

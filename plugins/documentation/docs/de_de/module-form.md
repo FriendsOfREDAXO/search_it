@@ -2,9 +2,9 @@
 
 Dieses Formular kann bspw. in den `<header>` eines Website-Templates eingebunden werden.
 
-**PHP** 
+## Beispiel-PHP
 
-```
+```php
 <?php $article_id = 1 // ID des Suchergebnis-Artikels - bitte anpassen! ?>
 
 <form class="search_it-form" id="search_it-form1" action="<?php echo rex_getUrl($article_id, rex_clang::getCurrentId()); ?>" method="get">
@@ -23,11 +23,11 @@ Dieses Formular kann bspw. in den `<header>` eines Website-Templates eingebunden
 
 > Tipp: Bei mehrsprachigen Websites können die Platzhalter `{{ }}` mit dem Sprog-AddOn übersetzt werden.
 
-**CSS**
+## Beispiel-CSS
 
 Das Sucheingabe-Formular kann beliebig formatiert und mit Klassen ausgezeichnet werden. Das nachfolgende CSS formatiert das oben vorgegebene Beispiel und blendet den Platzhalter-Text beim Klick in das Such-Eingabefeld aus.
 
-```
+```css
 <style>
     .search_it-form {
         box-sizing: border-box;
@@ -52,13 +52,13 @@ Das Sucheingabe-Formular kann beliebig formatiert und mit Klassen ausgezeichnet 
         border: 0;
     }
     .search_it-form legend, label {
-        display: none;   
+        display: none;  
     }
     .search_it-flex > * {
-        flex: 2 2 200px;   
+        flex: 2 2 200px;  
     }
     .search_it-flex > .search_it-button {
-        flex: 1 1 100px;   
+        flex: 1 1 100px;  
     }
 
     .search_it-form input:focus::-webkit-input-placeholder{

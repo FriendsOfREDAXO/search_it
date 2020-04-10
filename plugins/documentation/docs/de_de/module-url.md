@@ -4,7 +4,7 @@ Dieses Suchergebnis-Modul gibt Suchergebnisse aus dem URL Addon 2.0 oder größe
 
 ## Modulausgabe
 
-```
+```php
 <?php
 $article_id = rex_article::getCurrentId();
 $request = rex_request('search', 'string', false);
@@ -66,7 +66,7 @@ if($request) { // Wenn ein Suchbegriff eingegeben wurde
 
 Das Sucheingabe-Formular kann beliebig formatiert und mit Klassen ausgezeichnet werden. Das nachfolgende CSS formatiert das oben vorgegebene Beispiel.
 
-```
+```css
 <style>
     /* Diese CSS-Datei in das Design ausschneiden und anpassen */
 	.search_it-headline, .search_it-result {

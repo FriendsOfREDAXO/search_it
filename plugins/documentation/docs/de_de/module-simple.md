@@ -4,26 +4,26 @@ Dieses Suchergebnis-Modul nimmt einen Suchbegriff mittels GET/POST-Parameter `se
 
 ## Modulausgabe (ohne Erläuterungen)
 
-```
+```php
 <section class="search_it-modul">
     <p class="search_it-demotitle">[search_it] Suchergebnisse - Einfaches Beispielmodul</p>
     <?php
-$server = rtrim(rex::getServer(),"/"); 
-$request = rex_request('search', 'string', false); 
+$server = rtrim(rex::getServer(),"/");
+$request = rex_request('search', 'string', false);
 
-if($request) { 
-    $search_it = new search_it(); 
-    $result = $search_it->search($request); 
+if($request) {
+    $search_it = new search_it();
+    $result = $search_it->search($request);
 	# dump($result); // Zum Debuggen ausgeben.
 
-    if($result['count']) { 
-        echo '<h2 class="search_it-headline">{{ Suchergebnisse }}</h2>'; 
+    if($result['count']) {
+        echo '<h2 class="search_it-headline">{{ Suchergebnisse }}</h2>';
 
-        echo '<ul class="search_it-results">';                           
-        foreach($result['hits'] as $hit) { 
+        echo '<ul class="search_it-results">';                          
+        foreach($result['hits'] as $hit) {
 
-            # dump($hit); 
-            if($hit['type'] == 'article') { 
+            # dump($hit);
+            if($hit['type'] == 'article') {
                 $article = rex_article::get($hit['fid']);
 				$hit_server = $server;
 				if(rex_addon::get('yrewrite')->isAvailable()) {
@@ -36,26 +36,26 @@ if($request) {
                           </p>
                           <p class="search_it-url">'.$hit_server.rex_getUrl($hit['fid'], $hit['clang']).'</p>
                           <p class="search_it-teaser">'.$hit['highlightedtext'].'</p>
-                      </li>'; 
-            } else {                                   
-                
-                
+                      </li>';
+            } else {                                  
+               
+               
                 echo '<p class="search_it-missing_type">Das Suchergebnis vom Typ <i class="search_it-type">'.$hit['type'].' </i> kann nicht dargestellt werden.</p>';
             }
 
-        } 
+        }
         echo '</ul>';
-    } else if(!$result['count']) { 
+    } else if(!$result['count']) {
         echo '<p class="search_it-zero">Die Suche nach <i class="search_it-request">'.rex_escape($request).' </i> ergab keine Treffer.</p>';
     }
-} 
+}
     ?>
 </section>
 ```
 
 ## Modulausgabe (mit Erläuterungen)
 
-```
+```php
 <section class="search_it-modul">
     <p class="search_it-demotitle">[search_it] Suchergebnisse - Einfaches Beispielmodul</p>
     <?php
@@ -70,11 +70,11 @@ if($request) { // Wenn ein Suchbegriff eingegeben wurde
     if($result['count']) { // Wenn Ergebnisse vorhanden sind...
         echo '<h2 class="search_it-headline">{{ Suchergebnisse }}</h2>'; // Sprog-AddOn zur Übersetzung benutzen
 
-        echo '<ul class="search_it-results">';                           
+        echo '<ul class="search_it-results">';                          
         foreach($result['hits'] as $hit) { // Jeder Treffer in $hit
 
             # dump($hit); // Zum Debuggen ausgeben.
-            if($hit['type'] == 'article') { // Wenn der Treffer aus der Artikelsuche stammt 
+            if($hit['type'] == 'article') { // Wenn der Treffer aus der Artikelsuche stammt
                 $article = rex_article::get($hit['fid']); // REDAXO-Artikel-Objekt holen
 
 				// falls YRewrite genutzt wird
@@ -91,7 +91,7 @@ if($request) { // Wenn ein Suchbegriff eingegeben wurde
                           <p class="search_it-url">'.$hit_server.rex_getUrl($hit['fid'], $hit['clang']).'</p>
                           <p class="search_it-teaser">'.$hit['highlightedtext'].'</p>
                       </li>'; // Ausgabe des Suchtreffers
-            } else {                                   
+            } else {                                  
                 // Wenn der Treffer nicht aus REDAXO-Artikeln stammt, z.B., weil Medienpool oder Datenbankspalten
                 // indiziert wurden. Siehe erweiterte Beispiele für die Ausgabe. Oder: Indexierung auf Artikel beschränken.
                 echo '<p class="search_it-missing_type">Das Suchergebnis vom Typ <i class="search_it-type">'.$hit['type'].' </i> kann nicht dargestellt werden.</p>';
@@ -99,7 +99,7 @@ if($request) { // Wenn ein Suchbegriff eingegeben wurde
 
         } // foreach($result['hits'] as $hit) END
         echo '</ul>';
-    } else if(!$result['count']) { // Wenn keine Ergebnisse vorhanden sind.... 
+    } else if(!$result['count']) { // Wenn keine Ergebnisse vorhanden sind....
         echo '<p class="search_it-zero">Die Suche nach <i class="search_it-request">'.rex_escape($request).' </i> ergab keine Treffer.</p>';
     }
 } // if($request) END
@@ -111,7 +111,7 @@ if($request) { // Wenn ein Suchbegriff eingegeben wurde
 
 Das Sucheingabe-Formular kann beliebig formatiert und mit Klassen ausgezeichnet werden. Das nachfolgende CSS formatiert das oben vorgegebene Beispiel.
 
-```
+```css
 <style>
     /* Diese CSS-Datei in das Design ausschneiden und anpassen */
     .search_it-modul {
@@ -130,7 +130,7 @@ Das Sucheingabe-Formular kann beliebig formatiert und mit Klassen ausgezeichnet 
         color: rgba(0,0,0,0.4);
         margin-bottom: 2rem;
     }
-    
+   
     .search_it-results {
         padding: 0;
         margin: 0;
@@ -155,7 +155,7 @@ Das Sucheingabe-Formular kann beliebig formatiert und mit Klassen ausgezeichnet 
     .search_it-result .search_it-url {
         color: rgba(0,0,0,0.4);
     }
-    
+   
     .search_it-missing_type,
     .search_it-zero {
         background: rgba(180,0,0,0.05);

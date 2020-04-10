@@ -1,6 +1,6 @@
 # Einfache Artikel-Suchergebnisse
 
-Dieses Suchergebnis-Modul nimmt einen Suchbegriff mittels GET/POST-Parameter `search` entgegen und gibt gefundene Medien aus. 
+Dieses Suchergebnis-Modul nimmt einen Suchbegriff mittels GET/POST-Parameter `search` entgegen und gibt gefundene Medien aus.
 
 ## Search it Einstellungen
 
@@ -15,31 +15,31 @@ Außerdem sollte das maximale Trefferlimit auf 20 gestellt werden.
 
 ## Modulausgabe (ohne Erläuterungen)
 
-```
+```php
 <section class="search_it-modul">
     <p class="search_it-demotitle">[search_it] Suchergebnisse - Bildersuche</p>
     <?php
-$server = rtrim(rex::getServer(),"/"); 
-$request = rex_request('search', 'string', false); 
+$server = rtrim(rex::getServer(),"/");
+$request = rex_request('search', 'string', false);
 
-if($request) { 
-    $search_it = new search_it(); 
+if($request) {
+    $search_it = new search_it();
     $search_it->searchInDbColumn(rex::getTablePrefix().'media','title');
     $search_it->searchInDbColumn(rex::getTablePrefix().'media','filename');
     $search_it->searchInDbColumn(rex::getTablePrefix().'media','fileext');
     $search_it->searchInDbColumn(rex::getTablePrefix().'media','med_description');
-    $result = $search_it->search($request); 
-    # echo "<pre><code>"; print_r($result); echo "</code></pre>"; 
+    $result = $search_it->search($request);
+    # echo "<pre><code>"; print_r($result); echo "</code></pre>";
 
-    if($result['count']) { 
-        echo '<h2 class="search_it-headline">{{ Suchergebnisse }}</h2>'; 
+    if($result['count']) {
+        echo '<h2 class="search_it-headline">{{ Suchergebnisse }}</h2>';
 
-        echo '<ul class="search_it-results">';                           
-        foreach($result['hits'] as $hit) { 
+        echo '<ul class="search_it-results">';                          
+        foreach($result['hits'] as $hit) {
 
-            # echo "<pre><code>"; print_r($hit); echo "</code></pre>"; 
+            # echo "<pre><code>"; print_r($hit); echo "</code></pre>";
             $media = rex_media::get($hit['values']['filename']);
-            if(is_object($media)) { 
+            if(is_object($media)) {
                 echo '<li class="search_it-result search_it-image search_it-flex">
                           <p class="search_it-img">
                               <a href="'.$server.'/media/'.$media->getFileName().'" title="'.$media->getTitle().'"><img src="'.$server.'/images/mediamanagerprofile/'.$media->getFileName().'" alt="'.$media->getTitle().'" /></a>
@@ -47,25 +47,25 @@ if($request) {
                           <p class="search_it-title">
                               <a href="'.$server.'/media/'.$media->getFileName().'" title="'.$media->getTitle().'">'.$media->getTitle().'</a>
                           </p>
-                      </li>'; 
-            } else {                                   
-                
-                
+                      </li>';
+            } else {                                  
+               
+               
                 echo '<p class="search_it-missing_type">Das Suchergebnis vom Typ <i class="search_it-type">'.$hit['type'].' </i> kann nicht dargestellt werden.</p>';
             }
-        } 
+        }
         echo '</ul>';
-    } else if(!$result['count']) { 
+    } else if(!$result['count']) {
         echo '<p class="search_it-zero">Die Suche nach <i class="search_it-request">'. rex_escape($request).' </i> ergab keine Treffer.</p>';
     }
-} 
+}
     ?>
 </section>
 ```
 
 ## Modulausgabe (mit Erläuterungen)
 
-```
+```php
 <section class="search_it-modul">
     <p class="search_it-demotitle">[search_it] Suchergebnisse - Bildersuche</p>
     <?php
@@ -84,7 +84,7 @@ if($request) { // Wenn ein Suchbegriff eingegeben wurde
     if($result['count']) { // Wenn Ergebnisse vorhanden sind...
         echo '<h2 class="search_it-headline">{{ Suchergebnisse }}</h2>'; // Sprog-AddOn zur Übersetzung benutzen
 
-        echo '<ul class="search_it-results">';                           
+        echo '<ul class="search_it-results">';                          
         foreach($result['hits'] as $hit) { // Jeder Treffer ein $hit
 
             # echo "<pre><code>"; print_r($hit); echo "</code></pre>"; // Zum Debuggen ausgeben.
@@ -98,14 +98,14 @@ if($request) { // Wenn ein Suchbegriff eingegeben wurde
                               <a href="'.$server.'/media/'.$media->getFileName().'" title="'.$media->getTitle().'">'.$media->getTitle().'</a>
                           </p>
                       </li>'; // Ausgabe des Suchtreffers
-            } else {                                   
+            } else {                                  
                 // Wenn der Treffer nicht aus REDAXO-Artikeln stammt, z.B., weil Medienpool oder Datenbankspalten
                 // indiziert wurden. Siehe erweiterte Beispiele für die Ausgabe. Oder: Indexierung auf Artikel beschränken.
                 echo '<p class="search_it-missing_type">Das Suchergebnis vom Typ <i class="search_it-type">'.$hit['type'].' </i> kann nicht dargestellt werden.</p>';
             }
         } // foreach($result['hits'] as $hit) END
         echo '</ul>';
-    } else if(!$result['count']) { // Wenn keine Ergebnisse vorhanden sind.... 
+    } else if(!$result['count']) { // Wenn keine Ergebnisse vorhanden sind....
         echo '<p class="search_it-zero">Die Suche nach <i class="search_it-request">'.rex_escape($request).' </i> ergab keine Treffer.</p>';
     }
 } // if($request) END
@@ -118,7 +118,7 @@ if($request) { // Wenn ein Suchbegriff eingegeben wurde
 
 Das Sucheingabe-Formular kann beliebig formatiert und mit Klassen ausgezeichnet werden. Das nachfolgende CSS formatiert das oben vorgegebene Beispiel.
 
-```
+```css
 <style>
     /* Diese CSS-Datei in das Design ausschneiden und anpassen */
     .search_it-modul {
@@ -181,11 +181,11 @@ Das Sucheingabe-Formular kann beliebig formatiert und mit Klassen ausgezeichnet 
     }
 
     .search_it-image .search_it-flex {
-        display: flex;   
+        display: flex;  
     }
     .search_it-image .search_it-flex > * {
         padding: 1rem;
-        flex: 1 1 200px;   
+        flex: 1 1 200px;  
     }
 </style>
 ```

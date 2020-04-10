@@ -25,9 +25,9 @@ Fragen können auch im [REDAXO-Channel auf Slack](https://friendsofredaxo.slack.
 
 # Installation
 
-Die Installation erfolgt über den REDAXO-Installer, alternativ gibt es die aktuellste Beta-Version auf [GitHub](https://github.com/FriendsOfREDAXO/search_it). 
+Die Installation erfolgt über den REDAXO-Installer, alternativ gibt es die aktuellste Beta-Version auf [GitHub](https://github.com/FriendsOfREDAXO/search_it).
 
-Bei der Installation werden fünf Datenbanktabellen angelegt: 
+Bei der Installation werden fünf Datenbanktabellen angelegt:
 * `rex_temp_search_it_index` für die Indexierung von Artikeln und DB-Spalten
 * `rex_temp_search_it_keywords` für die Ähnlichkeitssuche
 * `rex_temp_search_it_cache` und `rex_temp_search_it_cacheindex_ids` für den Suchcache
@@ -40,18 +40,18 @@ Die Tabellen werden nicht in die Datenbank-Sicherung des backup-Addons miteinbez
 Nach der Installation sollten zunächst die Einstellungen vorgenommen werden und anschließend der Index vollständig generiert werden.
 
 ## Lizenz
-MIT Lizenz, siehe [LICENSE.md](https://github.com/FriendsOfREDAXO/search_it/blob/master/LICENSE.md)  
+MIT Lizenz, siehe [LICENSE.md](https://github.com/FriendsOfREDAXO/search_it/blob/master/LICENSE.md) 
 
 ## Autor
-**Friends Of REDAXO**  
-http://www.redaxo.org  
-https://github.com/FriendsOfREDAXO  
-**Projekt-Lead**  
+**Friends Of REDAXO** 
+http://www.redaxo.org 
+https://github.com/FriendsOfREDAXO 
+**Projekt-Lead** 
 [Norbert Micheel](https://github.com/tyrant88)
 
 ## Credits
-Search it basiert auf: [RexSearch (Xong) für REDAXO 4](https://github.com/xong/rexsearch)  
+Search it basiert auf: [RexSearch (Xong) für REDAXO 4](https://github.com/xong/rexsearch) 
 [Norbert Micheel](https://github.com/tyrant88/) Portierung für R5 und aktiven Entwicklung
-[Alexander Walther](https://github.com/skerbis) Dokumentation und Hilfe  
+[Alexander Walther](https://github.com/skerbis) Dokumentation und Hilfe 
 [Tobias Krais](https://github.com/tobiaskrais) URL Addon (>= 2.0) Support
 [und weitere Entwickler...](https://github.com/FriendsOfREDAXO/search_it/graphs/contributors)

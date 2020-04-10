@@ -4,13 +4,13 @@
 
 Für umfangreiche Webauftritte kann eine Pagination für die Suchergebnisse sinnvoll oder notwendig sein.
 
-```
+```php
         <?php
 		$article_id = rex_article::getCurrentId();
 		$request = rex_request('search', 'string', false);
 		$limit = 10; // Anzahl Treffer pro Seite
 		$start = rex_request('start', 'int', 0);
-        
+       
 		if($request) { // Wenn ein Suchbegriff eingegeben wurde
 			$server = rtrim(rex::getServer(), "/");
 			
@@ -41,7 +41,7 @@ Für umfangreiche Webauftritte kann eine Pagination für die Suchergebnisse sinn
 				}
 				echo $pagination; // Pagination vor den Suchergebnissen ausgeben
 				
-				echo '<ul class="search_it-results">';                           
+				echo '<ul class="search_it-results">';                          
 				foreach($result['hits'] as $hit) {
 					// Hier werden die Suchergebnisse ausgegeben um den Code einfach zu halten wurde dieser Teil entfernt
 				}
@@ -51,14 +51,14 @@ Für umfangreiche Webauftritte kann eine Pagination für die Suchergebnisse sinn
 			}
 			print "</section>";
 		}
-        
+       
         ?>
 ```
 
 ## Ähnlichkeitssuche
 
 Dieses Beispielmodul erweitert eine Suche um die Suche nach ähnlichen Wörtern. Wichtig ist dabei, dass die Ähnlichkeitssuche im Backend aktiviert ist.
-```
+```php
 <?php
 $request = rex_request('search', 'string', false);
 
@@ -94,7 +94,7 @@ if($request) { // Wenn ein Suchbegriff eingegeben wurde
 
 Dieses Beispielmodul erweitert das Paginationsmodul und die Ähnlichkeitssuche um die Suche von PDF-Dateien aus dem Medienpool. Die Ähnlichkeitssuche sollte aktiviert, sowie bei der Dateisuche die Option "Medienpool indexieren" ausgewählt sein. Außerdem sollte in dem Feld für die Dateiendungen nur "pdf" stehen.
 
-```
+```php
 <?php
 $article_id = rex_article::getCurrentId();
 $request = rex_request('search', 'string', false);
@@ -139,7 +139,7 @@ if($request) { // Wenn ein Suchbegriff eingegeben wurde
 		}
 		echo $pagination;
 		
-		echo '<ul class="search_it-results">';                           
+		echo '<ul class="search_it-results">';                          
         foreach($result['hits'] as $hit) {
 
             if($hit['type'] == 'article') {
@@ -165,7 +165,7 @@ if($request) { // Wenn ein Suchbegriff eingegeben wurde
             else if($hit['type'] == 'file') {
 				// pdf hits
 				$media = rex_media::get(pathinfo($hit['filename'], PATHINFO_BASENAME));
-				if(is_object($media)) { 
+				if(is_object($media)) {
 					$hit_link = $server . rex_url::media($media->getFileName());
 					echo '<li class="search_it-result search_it-image search_it-flex">';
 					echo '<span class="search_it-title">';
@@ -175,7 +175,7 @@ if($request) { // Wenn ein Suchbegriff eingegeben wurde
 					echo '</span><br>';
 					echo '<span class="search_it-teaser">'. $hit['highlightedtext'] .'</span><br>';
 					echo '<span class="search_it-url"><a href="'. $hit_link .'" title="'. $media->getTitle() .'">'. $hit_link .'</a></span>';
-					echo '</li>'; 
+					echo '</li>';
 				}
 			}
 			else {

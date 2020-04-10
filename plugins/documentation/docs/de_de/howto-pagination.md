@@ -4,13 +4,13 @@
 
 Für umfangreiche Webauftritte kann eine Pagination für die Suchergebnisse sinnvoll oder notwendig sein.
 
-```
+```php
         <?php
 		$article_id = rex_article::getCurrentId();
 		$request = rex_request('search', 'string', false);
 		$limit = 10; // Anzahl Treffer pro Seite
 		$start = rex_request('start', 'int', 0);
-        
+       
 		if($request) { // Wenn ein Suchbegriff eingegeben wurde
 			$server = rtrim(rex::getServer(), "/");
 			
@@ -41,7 +41,7 @@ Für umfangreiche Webauftritte kann eine Pagination für die Suchergebnisse sinn
 				}
 				echo $pagination; // Pagination vor den Suchergebnissen ausgeben
 				
-				echo '<ul class="search_it-results">';                           
+				echo '<ul class="search_it-results">';                          
 				foreach($result['hits'] as $hit) {
 					// Hier werden die Suchergebnisse ausgegeben um den Code einfach zu halten wurde dieser Teil entfernt
 				}
@@ -51,6 +51,6 @@ Für umfangreiche Webauftritte kann eine Pagination für die Suchergebnisse sinn
 			}
 			print "</section>";
 		}
-        
+       
         ?>
 ```

@@ -32,9 +32,9 @@
 
 ---
 
-**Credits**
+## Credits
 
-xong (Robert Rupf)  
-tyrant88 (Norbert Micheel)  
-alexplusde (Alexander Walther)  
-TobiasKrais (Tobias Krais)  
+xong (Robert Rupf) 
+tyrant88 (Norbert Micheel) 
+alexplusde (Alexander Walther) 
+TobiasKrais (Tobias Krais) 

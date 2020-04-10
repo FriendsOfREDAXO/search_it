@@ -12,7 +12,7 @@ Sollte eine Suche keine Ergebnisse liefern, füllt Search it das Result-Array mi
 
 ## Beispielmodul Output
 
-```
+```php
 <?php
 $request = rex_request('search', 'string', false);
 

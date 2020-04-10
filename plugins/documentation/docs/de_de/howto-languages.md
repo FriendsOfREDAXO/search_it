@@ -4,12 +4,12 @@ Search it sucht per Standard in allen Sprachen. Um sprachabhängige Suchen zu er
 
 *Such-Formular*
 
-```
-<input type="hidden" name="clang" value="REX_CLANG_ID" /> 
+```html
+<input type="hidden" name="clang" value="REX_CLANG_ID" />
 ```
 
 *Suchergebnis-Ausgabe*
 
-```
+```php
 $search_it = new search_it(REX_CLANG_ID);
 ```

@@ -15,7 +15,7 @@ Dabei werden Artikel, Medien, Dateien, PDF-Inhalte und Datenbank-Felder in einer
 
 ## Plugins
 
-* `Plaintext`: Reduziert Artikel auf reinen Text und entfernt dabei alle HTML-Tags. 
+* `Plaintext`: Reduziert Artikel auf reinen Text und entfernt dabei alle HTML-Tags.
 * `Statistik`: Liefert Informationen zur `Search it`-Datenbank und zu den häufigsten Suchanfragen.
 * `Dokumentation`: Zeigt diese Dokumentation an.
 
@@ -27,7 +27,7 @@ Dabei werden Artikel, Medien, Dateien, PDF-Inhalte und Datenbank-Felder in einer
 * `Search it`-AddOn und Plugins aktivieren
 * Einstellungen von `Search it` festlegen [(Hilfe)](search_it-settings.md)
 * Indexierung starten
-* Suchergebnis-Artikel anlegen 
+* Suchergebnis-Artikel anlegen
 * Suchfeld-Modul / Suchfeld-Template hinzufügen [(Hilfe)](module-form.md)
 * Suchergebnis-Modul hinzufügen [(Hilfe)](module-simple.md)
 
@@ -44,9 +44,9 @@ Die aktuelle Search it-Version wird in [FriendsOfREDAXO](https://github.com/frie
 
 ## Hinweis zur Installation
 
-Die Installation erfolgt über den REDAXO 5 Installer, alternativ gibt es die aktuellste Beta-Version auf [GitHub](https://github.com/friendsofredaxo/search_it). 
+Die Installation erfolgt über den REDAXO 5 Installer, alternativ gibt es die aktuellste Beta-Version auf [GitHub](https://github.com/friendsofredaxo/search_it).
 
-Bei der Installation werden fünf Datenbanktabellen angelegt: 
+Bei der Installation werden fünf Datenbanktabellen angelegt:
 * `rex_search_it_index` für die Indexierung von Artikeln und DB-Spalten
 * `rex_search_it_keywords` für die Ähnlichkeitssuche
 * `rex_search_it_cache` und `rex_search_it_cacheindex_ids` für den Suchcache

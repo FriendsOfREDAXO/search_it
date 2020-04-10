@@ -13,11 +13,11 @@ Mögliche Szenarien für eine solche View sind:
 
 ## Schritt für Schritt-Anleitung
 
-**1. SQL-Abfrage formulieren**
- 
+### 1. SQL-Abfrage formulieren
+
 Zunächst formulieren wir eine `SELECT`-Abfrage, die nur die gewünschten Datensätze einer Datenbanktabelle übrig lässt. In diesem Beispiel sollen nur Excel-Dateien aus dem Medienpool gefunden werden.
 
-```
+```sql
 SELECT id, filetype, filename, title
 FROM rex_media
 WHERE filetype = "application/vnd.ms-excel"
@@ -25,20 +25,20 @@ WHERE filetype = "application/vnd.ms-excel"
 
 Das Ergebnis dieser Tabelle könnte bspw. so aussehen:
 
-```
+```text
 id  filetype                  filename            title
 43  application/vnd.ms-excel	auflistung.xls	    Auflistung aller Aufgaben
 44  application/vnd.ms-excel	bestellung.xls      Bestellformular
 ```
 
-**2. VIEW erstellen**
+### 2. VIEW erstellen
 
 Aus der SELECT-Abfrage wird eine `VIEW` erstellt. Die `VIEW` ist eine Ergebnistabelle und mit den Datensätzen der Original-Tabellen verknüpft. Eine Änderung in der Original-Tabelle wird sofort in der `VIEW` abgebildet.
 
 Aus dem o.g. Beispiel wird nun in der Datenbank eine `VIEW` namens `rex_media_excel_view` erstellt.
 
-```
-CREATE VIEW rex_media_excel_view AS 
+```sql
+CREATE VIEW rex_media_excel_view AS
 SELECT id, filetype, filename, title
 FROM rex_media
 WHERE filetype = "application/vnd.ms-excel"
@@ -46,11 +46,9 @@ WHERE filetype = "application/vnd.ms-excel"
 
 Die `VIEW` `rex_media_excel_view` ist jetzt permanent eingerichtet und zugriffsbereit für `Search it`
 
-** 3. Search it konfigurieren **
+### 3. Search it konfigurieren
 
 In den `Search it`-Einstellungen des REDAXO-Backends unter `Zusätzliche Datenquellen` kann jetzt `rex_media_excel_view` als Datenquelle angegeben werden. Anschließend muss der Index erneuert werden und ggf. das Suchausgabe-Modul an die Datenbanktabelle angepasst werden, siehe:
 
 * [Aufbau der Suchergebnisse](search_it-result.md)
 * [Erweiterte Suche](module-enhanced.md)
-
-

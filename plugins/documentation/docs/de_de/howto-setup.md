@@ -1,6 +1,6 @@
 # Tipps zur Konfiguration
 
-## Was soll durchsuchbar sein? (Artikel, Meta-Infos, Medien, Datenbanktabellen) 
+## Was soll durchsuchbar sein? (Artikel, Meta-Infos, Medien, Datenbanktabellen)
 
 Standardmäßig ist Search it eine reine Volltextsuche. Begriffe, die in den Suchergebnissen gefunden werden sollen, müssen demnach immer innerhalb eines Artikels ausgegeben werden. Meta-Informationen, darunter der Artikelinhalt, sowie Datenbanktabellen und Medien werden nicht durchsucht.
 
@@ -10,7 +10,7 @@ Standardmäßig ist Search it eine reine Volltextsuche. Begriffe, die in den Suc
 2. Das Suchausgabe-Modul muss den Treffer innerhalb der `rex_article`-Tabelle abfangen: `if($hit['type'] == 'db_column' AND $hit['table'] == rex::getTablePrefix().'article')`
 
 > Tipp: mit `dump($hit)` lassen sich weitere Informationen zum passenden Treffer einsehen, bspw. `$hit['clang']` für die Sprach-ID des Treffers
- 
+
 ### Datenbank-Tabellen indexieren
 
 1. Unter `Search it` > `Einstellungen` > `Zusätzliche Datenquellen` > die gewünschten Datenbankfelder der Tabelle anhaken, z.B. `rex_meine_tabelle`
@@ -22,13 +22,13 @@ Standardmäßig ist Search it eine reine Volltextsuche. Begriffe, die in den Suc
 
 ## Lassen sich verschiedene Suchergebnisse realisieren?
 
-Ja! Es können unterschiedliche Sucheingabe- und Suchausgabe-Module erstellt werden. 
+Ja! Es können unterschiedliche Sucheingabe- und Suchausgabe-Module erstellt werden.
 
-Zum Beispiel könnte eine Seite 2 Suchen haben: Eine Suche, die nur Artikelinhalte als Suchergebnis ausgibt - und eine Suche, die nur Dokumente im Medienpool durchsucht. Oder eine Suche, die nur in Kategorie A sucht - und eine Suchergebnis-Seite, die nur in Kategorie B sucht. 
+Zum Beispiel könnte eine Seite 2 Suchen haben: Eine Suche, die nur Artikelinhalte als Suchergebnis ausgibt - und eine Suche, die nur Dokumente im Medienpool durchsucht. Oder eine Suche, die nur in Kategorie A sucht - und eine Suchergebnis-Seite, die nur in Kategorie B sucht.
 
 Dazu werden in der Suchmodul-Ausgabe zusätzliche Parameter vor dem Aufruf von `search()` übergeben. Beispiele:
 
-```
+```php
 $search_it = new search_it(REX_CLANG_ID); // Nur in einer bestimmten Kategorie suchen
 
 # $rexsearch_article->setLimit(array($offset, $max));
@@ -37,9 +37,9 @@ $search_it = new search_it(REX_CLANG_ID); // Nur in einer bestimmten Kategorie s
 # $search_it->searchInCategories(array(5,6,13)); // durchsucht nur die Kategorien 5, 6 und 13
 # $search_it->setSearchAllArticlesAnyway(false) // Keine Artikel durchsuchen
 
-# Datenbank-Suche 
+# Datenbank-Suche
 # $search_it->searchInDbColumn('rex_article', 'name'); // Durchsucht das Meta-Info-Feld "name" (dieses muss in den Search it-Einstellungen unter "Zusätzliche Datenquellen" markiert sein!)
-# $search_it->searchInDbColumn('rex_meine_tabelle', 'mein_feld'); // Durchsucht das Feld "mein_feld" (dieses muss in den Search it-Einstellungen unter "Zusätzliche Datenquellen" markiert sein!) 
+# $search_it->searchInDbColumn('rex_meine_tabelle', 'mein_feld'); // Durchsucht das Feld "mein_feld" (dieses muss in den Search it-Einstellungen unter "Zusätzliche Datenquellen" markiert sein!)
 
 # Datei-Suche
 # $rexsearch_article->searchInFileCategories(false); // durchsucht keine Dateien
@@ -55,7 +55,7 @@ Das Sortieren von Suchergebnissen ist derzeit noch nicht möglich. Ein passender
 > Hinweis: Die hier gezeigten Beispiele gelten nur für Search it und werden nicht von Suchmaschinen, bspw. Google, berücksichtigt.
 
 ### Datensätze in Datenbanktabellen filtern
- 
+
 Mit einer `VIEW` lassen sich die zu indexierenden Datensätze bereits im Vorfeld filtern:
 
 1. Eine VIEW in der Datenbanktabelle erstellen (Weitere Informationen zu Views)[https://de.wikibooks.org/wiki/Einf%C3%BChrung_in_SQL:_Erstellen_von_Views]
@@ -63,15 +63,14 @@ Mit einer `VIEW` lassen sich die zu indexierenden Datensätze bereits im Vorfeld
 
 ### Module, Blöcke, Artikel oder bestimmte Abschnitte filtern
 
-Das Plaintext-Plugin hat die Möglichkeit, anhand bestimmter Selektoren Inhalte auszuschließen. So werden bspw. `<header>` oder `<footer>` nicht indexiert. Mit diesem Trick können auch ganze Module von der Suche ausschließen. 
+Das Plaintext-Plugin hat die Möglichkeit, anhand bestimmter Selektoren Inhalte auszuschließen. So werden bspw. `<header>` oder `<footer>` nicht indexiert. Mit diesem Trick können auch ganze Module von der Suche ausschließen.
 
-**Beispiel-Modulausgabe:**
+## Beispiel-Modulausgabe
 
-```
+```html
 <section class="donotsearch">REX_VALUE[1]</section>
 ```
 
-** Beispiel Plaintext-Selektor:** `section.donotsearch`
+**Beispiel Plaintext-Selektor:** `section.donotsearch`
 
 Auf dieselbe Weise lassen sich auch Artikel oder Kategorien von der Indexierung ausschließen, indem eine passende Klasse dem `<body>`-Tag zugewiesen wird.
-

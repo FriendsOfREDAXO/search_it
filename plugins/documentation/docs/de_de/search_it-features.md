@@ -2,10 +2,10 @@
 
 * Volltextsuche für Artikel und beliebige Datenbankspalten mehrsprachenfähig
 * Suche im Originaltext, im Plaintext oder in beiden möglich
-* Suchmodi: 
-** OR (mindestens ein Suchwort muss enthalten sein) 
-** AND (alle Suchworte müssen enthalten sein)
-* Suche mit ** LIKE oder** MATCH AGAINST
+* Suchmodi:
+* * OR (mindestens ein Suchwort muss enthalten sein)
+* * AND (alle Suchworte müssen enthalten sein)
+* Suche mit `LIKE` oder `MATCH AGAINST`
 * Verschiedene Möglichkeiten Suchwörter hervorzuheben
 * Einstellen einer maximalen Trefferanzahl
 * Einstellen der maximalen Zeichenanzahl für den Teaser-Text
@@ -20,4 +20,4 @@
 * Angabe von Kategorien, Artikeln und DB-Spalten, in denen gesucht werden soll
 * Durchsuchen von beliebigen Ordnern mit beliebigen Dateien möglich
 * einfache Konfiguration im Backend
-* einstellbar, wer das AddOn konfigurieren darf  
+* einstellbar, wer das AddOn konfigurieren darf

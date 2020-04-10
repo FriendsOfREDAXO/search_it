@@ -17,30 +17,30 @@ Sollte eine Suche keine Ergebnisse liefern, füllt Search it das Result-Array mi
 $request = rex_request('search', 'string', false);
 
 if($request) { // Wenn ein Suchbegriff eingegeben wurde
-	$server = rtrim(rex::getServer(), "/");
-	
-	print '<section class="search_it-hits">';
-	
-	// Init search and execute
+    $server = rtrim(rex::getServer(), "/");
+
+    print '<section class="search_it-hits">';
+
+    // Init search and execute
     $search_it = new search_it();
     $result = $search_it->search($request);
 
-	echo '<h2 class="search_it-headline">Suchergebnisse</h2>';
-	if($result['count'] == 0 && count($result['simwords']) > 0){
-		// Ähnlichkeitssuche ausgeben
-		$newsearchString = $result['simwordsnewsearch'];
-		$result_simwords = $search_it->search($newsearchString);
-		if($result_simwords['count'] > 0){
-			echo '<p>Meinten Sie <strong>'. $newsearchString .'</strong>?</p>';
-		}
-	}
-
-	if($result['count']) {
-		// Ausgabe der Treffer
+    echo '<h2 class="search_it-headline">Suchergebnisse</h2>';
+    if($result['count'] == 0 && count($result['simwords']) > 0){
+        // Ähnlichkeitssuche ausgeben
+        $newsearchString = $result['simwordsnewsearch'];
+        $result_simwords = $search_it->search($newsearchString);
+        if($result_simwords['count'] > 0){
+            echo '<p>Meinten Sie <strong>'. $newsearchString .'</strong>?</p>';
+        }
     }
-	else if(!$result['count']) {
-		echo '<p class="search_it-zero">{{ d2u_helper_module_14_search_results_none }}</p>';
-	}
-	print "</section>";
+
+    if($result['count']) {
+        // Ausgabe der Treffer
+    }
+    else if(!$result['count']) {
+        echo '<p class="search_it-zero">{{ d2u_helper_module_14_search_results_none }}</p>';
+    }
+    print "</section>";
 }
 ```

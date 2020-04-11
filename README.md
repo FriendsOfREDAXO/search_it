@@ -28,10 +28,10 @@ Fragen können auch im [REDAXO-Channel auf Slack](https://friendsofredaxo.slack.
 Die Installation erfolgt über den REDAXO-Installer, alternativ gibt es die aktuellste Beta-Version auf [GitHub](https://github.com/FriendsOfREDAXO/search_it).
 
 Bei der Installation werden fünf Datenbanktabellen angelegt:
-* `rex_temp_search_it_index` für die Indexierung von Artikeln und DB-Spalten
-* `rex_temp_search_it_keywords` für die Ähnlichkeitssuche
-* `rex_temp_search_it_cache` und `rex_temp_search_it_cacheindex_ids` für den Suchcache
-* `rex_temp_search_it_stats_searchterms` für die Statistik
+* `rex_tmp_search_it_index` für die Indexierung von Artikeln und DB-Spalten
+* `rex_tmp_search_it_keywords` für die Ähnlichkeitssuche
+* `rex_tmp_search_it_cache` und `rex_tmp_search_it_cacheindex_ids` für den Suchcache
+* `rex_tmp_search_it_stats_searchterms` für die Statistik
 
 Die Tabellen werden nicht in die Datenbank-Sicherung des backup-Addons miteinbezogen.
 

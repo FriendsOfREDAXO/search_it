@@ -24,7 +24,9 @@ SLICE_ADDED, SLICE_DELETED, SLICE_UPDATED|Der Artikel wird neu indexiert
 
 ### Reindexierung von Artikeln via Cronjob
 
-`Search it` fügt ein eigenes Cronjob-Profil hinzu, das sich im Cronjob-AddOn zeitgesteuert ausführen lässt. Um ihn zu nutzen muss ein neuer CronJob hinzugefügt werden und im Feld "Typ" der Wert "Search it: Reindexieren
+`Search it` fügt ein eigenes Cronjob-Profil hinzu, das sich im Cronjob-AddOn zeitgesteuert ausführen lässt. Um ihn zu nutzen muss ein neuer CronJob hinzugefügt werden und im Feld "Typ" der Wert "Search it: Reindexieren"
+
+Um URLs aus dem URL Addon automatisch neu zu indexieren muss ein Cronjob angelegt werden, da aktuell keine Extension Points existieren..
 
 ### Reindexierung von Datenbank-Feldern
 

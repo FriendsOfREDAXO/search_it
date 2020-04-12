@@ -8,7 +8,9 @@ Methode | Erläuterung
 [unindexArticle($_id,$_clang = false)](https://github.com/friendsofredaxo/search_it/blob/Doku/lib/search_it.php#L929) | Removes an article from the index.
 [indexColumn($_table, $_column, $_idcol = false, $_id = false, $_start = false, $_count = false, $_where = false)](https://github.com/friendsofredaxo/search_it/blob/Doku/lib/search_it.php#L569) | Indexes a certain column. Returns the number of the indexed rows or false.
 [indexFile($_filename, $_doPlaintext = false, $_clang = false, $_fid = false, $_catid = false)](https://github.com/friendsofredaxo/search_it/blob/Doku/lib/search_it.php#L734) | Indexes a certain file. Returns SEARCH_IT_FILE_GENERATED or an error code.
+[indexURL($id, $article_id, $clang_id, $profile_id, $data_id)](https://github.com/friendsofredaxo/search_it/blob/Doku/lib/search_it.php#L384) | Indexes a certain url from URL Addon.
 [deleteIndex()](https://github.com/friendsofredaxo/search_it/blob/Doku/lib/search_it.php#L960) | Deletes the complete search index.
+[deleteIndexForType($texttype)](https://github.com/friendsofredaxo/search_it/blob/Doku/lib/search_it.php#L1032) | Deletes the complete search index for a special text type.
 [deleteCache($_indexIds = false)](https://github.com/friendsofredaxo/search_it/blob/Doku/lib/search_it.php#L1691) | Truncates the cache or deletes all data that are concerned with the given index-ids.
 [deleteKeywords()](https://github.com/friendsofredaxo/search_it/blob/Doku/lib/search_it.php#L1772) | Delete Keywords
 -----|-----
@@ -20,7 +22,7 @@ Methode | Erläuterung
 [searchInDbColumn($_table, $_column)](https://github.com/friendsofredaxo/search_it/blob/Doku/lib/search_it.php#L1072) | Sets the columns which only should be searched through.
 [setSearchAllArticlesAnyway($_bool = false)](https://github.com/friendsofredaxo/search_it/blob/Doku/lib/search_it.php#L238) | Selects if articles will be searched
 [setWhere($_where)](https://github.com/friendsofredaxo/search_it/blob/Doku/lib/search_it.php#L1091) | Set additional WHERE Clause
-[setOrder($_order)](https://github.com/friendsofredaxo/search_it/blob/Doku/lib/search_it.php#L1211) | Sets the sort order of the results.
+[setOrder($_order, $put_first = false)](https://github.com/friendsofredaxo/search_it/blob/Doku/lib/search_it.php#L1346) | Sets the sort order of the results.
 [doGroupBy($_bool = true)](https://github.com/friendsofredaxo/search_it/blob/Doku/lib/search_it.php#L243) | Use GROUP BY to group results by ftable,fid,clang
 -----|-----
 [setLogicalMode($_logicalMode)](https://github.com/friendsofredaxo/search_it/blob/Doku/lib/search_it.php#L1107) | Sets the mode of how the keywords are logical connected.

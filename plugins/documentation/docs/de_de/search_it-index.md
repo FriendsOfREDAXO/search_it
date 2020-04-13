@@ -32,7 +32,7 @@ Um URLs des URL-Addons automatisch neu zu indexieren, muss der Cronjob erstellt 
 
 Die Klasse `search_it` bietet die Methode `indexURL` an. Über diese Methode können URLs neu oder wieder indexiert werden. Außerdem bietet sie die Methode `unindexURL` an. Über diese Methode können URLs aus dem Index entfernt werden.
 
-Nachfolgend ein Codebeispiel um den kompletten URL Index neu aufzubauen:
+Nachfolgend ein Beispiel, um den kompletten URL-Index neu aufzubauen:
 
 ```php
 $url_sql = rex_sql::factory();

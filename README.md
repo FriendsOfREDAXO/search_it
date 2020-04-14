@@ -5,7 +5,7 @@ Search it indexiert Artikel, Medien, Dateien, PDF-Inhalte und Datenbank-Felder u
 ## Systemvoraussetzungen
 
 * `PHP >= 7.0`
-* `REDAXO >= 5.5`
+* `REDAXO >= 5.9`
 * `pdftotext` [optional für das Durchsuchen von pdf-Inhalten, [Link](https://www.xpdfreader.com/pdftotext-man.html)]
 
 ## Features

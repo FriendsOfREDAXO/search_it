@@ -152,3 +152,9 @@ search_it_test_mode_all = Genomsök artiklar, databas och media pool (filhantera
 search_it_test_mode_db = Bara databasen
 search_it_test_mode_media = Bara media poolen (filhanteraren)
 search_it_test_mode_article = Bara artiklar
+
+search_it_documentation_title = Dokumentation
+
+search_it_documentation_general_title = Allmänt
+search_it_documentation_plugins_title = Plugins
+search_it_documentation_modules_title = Sökmoduler

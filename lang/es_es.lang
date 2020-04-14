@@ -152,3 +152,9 @@ search_it_test_mode_all = Artículo de búsqueda, base de datos y grupo de medio
 search_it_test_mode_db = Solo base de datos
 search_it_test_mode_media = Solo grupo de medios
 search_it_test_mode_article = Solo artículos
+
+search_it_documentation_title = Documentación
+
+search_it_documentation_general_title = En general
+search_it_documentation_plugins_title = Plugins
+search_it_documentation_modules_title = Módulo de búsqueda

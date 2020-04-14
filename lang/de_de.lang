@@ -152,3 +152,9 @@ search_it_test_mode_all = Artikel, Datenbank und Medienpool durchsuchen
 search_it_test_mode_db = Nur Datenbank
 search_it_test_mode_media = Nur Medienpool
 search_it_test_mode_article = Nur Artikel
+
+search_it_documentation_title = Dokumentation
+
+search_it_documentation_general_title = Allgemein
+search_it_documentation_plugins_title = Plugins
+search_it_documentation_modules_title = Suchmodule

@@ -44,7 +44,6 @@ Array
 
 ## Aufbau
 
-
 ### hits
 
 Ein Array der Treffer, wobei jeder Treffer selbst ein Array mit folgendem Inhalt ist:

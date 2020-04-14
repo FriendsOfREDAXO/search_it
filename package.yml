@@ -21,12 +21,55 @@ page:
                          addsources: { title: 'translate:settings_addsources' }
                          blacklist: { title: 'translate:settings_blacklist' }
         test: { title: 'translate:test', icon: rex-icon fa-flask }
+        docs:
+            perm: search_it[plugin:documentation]
+            title: 'translate:search_it_documentation_title'
+            pjax: false
+            icon: rex-icon fa-book
+            itemclass: pull-right
+            subPath: docs/de_de/intro.md
+            subpages:
+                intro:
+                    subPath: README.md
+                    title: Intro
+                    icon: rex-icon fa-info-circle
+                settings:
+                    subPath: docs/settings.md
+                    title: Einstellungen
+                    icon: rex-icon fa-cog
+                indexing:
+                    subPath: docs/indexing.md
+                    title: Indexierung
+                    icon: rex-icon fa-table
+                form:
+                    subPath: docs/form.md
+                    title: Suchformular
+                    icon: rex-icon fa-search
+                results:
+                    subPath: docs/results.md
+                    title: Suchergebnisse
+                    icon: rex-icon fa-list
+                module:
+                    subPath: docs/module.md
+                    title: "Beispiel-Module"
+                    icon: rex-icon rex-icon-module
+                plugins:
+                    subPath: docs/plugins.md
+                    title: Plugins
+                    icon: rex-icon fa-puzzle-piece
+                reference:
+                    subPath: docs/reference.md
+                    title: Referenz
+                    icon: rex-icon fa-book
+                faq:
+                    subPath: docs/faq.md
+                    title: Tipps & Tricks
+                    icon: rex-icon fa-lightbulb-o
+
+
 requires:
     redaxo: '^5.5.0'
     php: '^7'
-
-system_plugins:
-    - documentation
 
 plugins:
     - plaintext

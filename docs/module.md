@@ -18,7 +18,7 @@ $limit = 10; // Anzahl Treffer pro Seite
 $start = rex_request('start', 'int', 0);
 
 if($searchterm) { // Wenn ein Suchbegriff eingegeben wurde
-    $search_it = new search_it(REX_CLANG_ID); // Suche initialisieren
+    $search_it = new search_it(rex_clang::getCurrentId()); // Suche initialisieren
     $search_it->setLimit($start, $limit); // Anzahl der Suchergebnisse auf $limit beschränken
     $result = $search_it->search($searchterm); // Suche ausführen
 

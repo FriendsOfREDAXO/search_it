@@ -568,6 +568,34 @@ class search_it
         $this->deleteCache($indexIds);
     }
 
+	/**
+     * Excludes an url from the index.
+     *
+     * @param int $_id
+     */
+    public function unindexURL($_id)
+    {
+        // exclude url
+        $art_sql = rex_sql::factory();
+        $art_sql->setTable($this->tempTablePrefix . 'search_it_index');
+
+        $where = "fid = " . intval($_id) . " AND texttype='url'";
+        $art_sql->setWhere($where);
+        $art_sql->delete();
+
+        // delete from cache
+        $select = rex_sql::factory();
+        $select->setTable($this->tempTablePrefix. 'search_it_index');
+        $select->setWhere($where);
+        $select->select('id');
+
+        $indexIds = [];
+        foreach ($select->getArray() as $result) {
+            $indexIds[] = $result['id'];
+        }
+        $this->deleteCache($indexIds);
+    }
+
     /**
      * Indexes a certain column.
      * Returns the number of the indexed rows or false.

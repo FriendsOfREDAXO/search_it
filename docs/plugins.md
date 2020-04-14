@@ -18,11 +18,11 @@ Das Plugin stellt das "Suggest"-jQuery-PlugIn für die Autovervollständigung be
 5. Sollte das Suchfeld überall verwendet werden, beispielsweise im Kopf der Seite, muss der generierte Code in das entsprechende Template hinzugefügt werden
 6. Optional: CSS- und JS-Datei in den eigenen Frontend-Prozess einbauen (z.B. per Minify-AddOn oder im Bimmelbam-Workflow von FriendsOfREDAXO)
 
-## Lizenz
+### Lizenz
 
 MIT
 
-## Credits
+### Credits
 
 **Manetage** - Ronny Kemmereit / Pascal Schuchmann
 * https://www.manetage.de

@@ -155,6 +155,12 @@ search_it_test_mode_article = Nur Artikel
 
 search_it_documentation_title = Dokumentation
 
-search_it_documentation_general_title = Allgemein
-search_it_documentation_plugins_title = Plugins
-search_it_documentation_modules_title = Suchmodule
+search_it_documentation_intro       = Einleitung
+search_it_documentation_settings    = Einstellungen
+search_it_documentation_indexing    = Indexierung
+search_it_documentation_form        = Suchformular
+search_it_documentation_result      = Suchergebnisse
+search_it_documentation_module      = Beispiel-Module
+search_it_documentation_plugins     = Plugins
+search_it_documentation_referenz    = Referenz
+search_it_documentation_faq         = Tipps & Tricks

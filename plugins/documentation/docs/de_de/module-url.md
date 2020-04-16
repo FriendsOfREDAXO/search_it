@@ -22,33 +22,35 @@ if($request) { // Wenn ein Suchbegriff eingegeben wurde
 	if($result['count']) {
 
 		echo '<ul class="search_it-results">';
-        foreach($result['hits'] as $hit) {
-            if($hit['type'] == 'url') {
+		foreach($result['hits'] as $hit) {
+			if($hit['type'] == 'url') {
 				// url hits
 				$url_sql = rex_sql::factory();
 				$url_sql->setTable(search_it_getUrlAddOnTableName());
 				$url_sql->setWhere("id = ". $hit['fid']);
 				if ($url_sql->select('article_id, clang_id, profile_id, data_id, seo')) {
-					$url_info = json_decode($url_sql->getValue('seo'), true);
-					$url_profile = \Url\Profile::get($url_sql->getValue('profile_id'));
+					if($url_sql->getRows() > 0) {
+						$url_info = json_decode($url_sql->getValue('seo'), true);
+						$url_profile = \Url\Profile::get($url_sql->getValue('profile_id'));
 
-					// get yrewrite article domain
-					$hit_server = $server;
-					if(rex_addon::get('yrewrite')->isAvailable()) {
-						$hit_domain = rex_yrewrite::getDomainByArticleId($url_sql->getValue('article_id'), $url_sql->getValue('clang_id'));
-						$hit_server = rtrim($hit_domain->getUrl(), "/");
+						// get yrewrite article domain
+						$hit_server = $server;
+						if(rex_addon::get('yrewrite')->isAvailable()) {
+							$hit_domain = rex_yrewrite::getDomainByArticleId($url_sql->getValue('article_id'), $url_sql->getValue('clang_id'));
+							$hit_server = rtrim($hit_domain->getUrl(), "/");
+						}
+
+						$hit_link = $hit_server . rex_getUrl($url_sql->getValue('article_id'), $url_sql->getValue('clang_id'), [$url_profile->getNamespace() => $url_sql->getValue('data_id'), 'search_highlighter' => $request]);
+						echo '<li class="search_it-result search_it-article">';
+						echo '<span class="search_it-title">';
+						echo '<a href="'. $hit_link .'" title="'. $url_info['title'] .'">'. $url_info['title'] .'</a>';
+						echo '</span><br>';
+						echo '<span class="search_it-teaser">'. $hit['highlightedtext'] .'</span><br>';
+						echo '<span class="search_it-url"><a href="'. $hit_link .'" title="'. $url_info['title'] .'">'.$hit_server.rex_getUrl($url_sql->getValue('article_id'), $url_sql->getValue('clang_id'), [$url_profile->getNamespace() => $url_sql->getValue('data_id')]).'</a></span>';
+						echo '</li>';
 					}
-
-					$hit_link = $hit_server . rex_getUrl($url_sql->getValue('article_id'), $url_sql->getValue('clang_id'), [$url_profile->getNamespace() => $url_sql->getValue('data_id'), 'search_highlighter' => $request]);
-					echo '<li class="search_it-result search_it-article">';
-					echo '<span class="search_it-title">';
-					echo '<a href="'. $hit_link .'" title="'. $url_info['title'] .'">'. $url_info['title'] .'</a>';
-					echo '</span><br>';
-					echo '<span class="search_it-teaser">'. $hit['highlightedtext'] .'</span><br>';
-					echo '<span class="search_it-url"><a href="'. $hit_link .'" title="'. $url_info['title'] .'">'.$hit_server.rex_getUrl($url_sql->getValue('article_id'), $url_sql->getValue('clang_id'), [$url_profile->getNamespace() => $url_sql->getValue('data_id')]).'</a></span>';
-					echo '</li>';
 				}
-            }
+			}
 			else {
                 // other hit types
             }

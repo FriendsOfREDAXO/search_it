@@ -53,9 +53,9 @@ if ( !empty(rex_get('do')) AND rex_get('do') == 'incremental') {
 	if(rex_addon::get('search_it')->getConfig('index_url_addon') && search_it_isUrlAddOnAvailable()) {
 		$url_sql = rex_sql::factory();
 		$url_sql->setTable(search_it_getUrlAddOnTableName());
-		if ($url_sql->select('id')) {
+		if ($url_sql->select('url_hash')) {
 			foreach ($url_sql->getArray() as $url) {
-		        $js_output .= 'indexArray.push(new Array("url",'. $url['id'] .'));';
+		        $js_output .= 'indexArray.push(new Array("url","'. $url['url_hash'] .'"));';
 				$globalcount++;
 			}
 		}

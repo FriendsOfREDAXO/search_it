@@ -119,9 +119,6 @@ class search_it
         }
     }
 
-
-
-
     /* indexing */
     /**
      * Generates the full index at once.
@@ -149,9 +146,9 @@ class search_it
 		if(rex_addon::get('search_it')->getConfig('index_url_addon') && search_it_isUrlAddOnAvailable()) {
 			$url_sql = rex_sql::factory();
 			$url_sql->setTable($this->urlAddOnTableName);
-			if ($url_sql->select('id, article_id, clang_id, profile_id, data_id')) {
+			if ($url_sql->select('url_hash, article_id, clang_id, profile_id, data_id')) {
 				foreach ($url_sql->getArray() as $url) {
-					$returns = $this->indexUrl($url['id'], $url['article_id'], $url['clang_id'], $url['profile_id'], $url['data_id']);
+					$returns = $this->indexUrl($url['url_hash'], $url['article_id'], $url['clang_id'], $url['profile_id'], $url['data_id']);
 					foreach ( $returns as $return ) {
 						if ($return > 3 ) { $global_return += $return; }
 					}
@@ -373,7 +370,7 @@ class search_it
     /**
      * Indexes a certain url from url Addon.
      *
-     * @param int $id url_generator_url table id
+     * @param int $url_hash url_generator_url table id
      * @param int $article_id redaxo article id
      * @param int $profile_id url addon profile id
      * @param int $data_id url addon profile id
@@ -381,13 +378,13 @@ class search_it
      *
      * @return int
      */
-    public function indexURL($id, $article_id, $clang_id, $profile_id, $data_id)
+    public function indexURL($url_hash, $article_id, $clang_id, $profile_id, $data_id)
     {
         $return = [];
         $keywords = [];
 
 		$delete = rex_sql::factory();
-		$where = "ftable = '". $this->urlAddOnTableName ."' AND fid = ". $id ." AND clang = ". $clang_id;
+		$where = "ftable = '". $this->urlAddOnTableName ."' AND fid = '". $url_hash ."' ";
 		// delete from cache
 		$select = rex_sql::factory();
 		$select->setTable($this->tempTablePrefix . 'search_it_index');
@@ -496,7 +493,7 @@ class search_it
 			$articleData['ftable'] = $this->urlAddOnTableName;
 			$articleData['fcolumn'] = NULL;
 			$articleData['clang'] = $clang_id;
-			$articleData['fid'] = intval($id);
+			$articleData['fid'] = $url_hash;
 			$articleData['catid'] = $article->getCategoryId();
 			$articleData['unchangedtext'] = $articleText;
 			$plaintext = $this->getPlaintext($articleText);
@@ -506,7 +503,7 @@ class search_it
 				$additionalValues = [];
 				$select->flushValues();
 				$select->setTable($this->urlAddOnTableName);
-				$select->setWhere('id = ' . $id . ' AND clang_id = ' . $clang_id);
+				$select->setWhere('url_hash = "' . $url_hash . '"');
 				$select->select('`' . implode('`,`', $this->includeColumns[$this->urlAddOnTableName]) . '`');
 				foreach ($this->includeColumns[$this->urlAddOnTableName] as $col) {
 					if ( $select->hasValue($col) ) { $additionalValues[$col] = $select->getValue($col); }
@@ -571,15 +568,15 @@ class search_it
 	/**
      * Excludes an url from the index.
      *
-     * @param int $_id
+     * @param int $url_hash
      */
-    public function unindexURL($_id)
+    public function unindexURL($url_hash)
     {
         // exclude url
         $art_sql = rex_sql::factory();
         $art_sql->setTable($this->tempTablePrefix . 'search_it_index');
 
-        $where = "fid = " . intval($_id) . " AND texttype='url'";
+        $where = "fid = '" . $url_hash . "' AND texttype='url'";
         $art_sql->setWhere($where);
         $art_sql->delete();
 

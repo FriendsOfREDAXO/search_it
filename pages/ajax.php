@@ -45,12 +45,12 @@ switch($ajax) {
             case 'url':
 				$url_sql = rex_sql::factory();
 				$url_sql->setTable(search_it_getUrlAddOnTableName());
-				$url_sql->setWhere("id = ". rex_get('id'));
-				if ($url_sql->select('id, article_id, clang_id, profile_id, data_id, seo, url')) {
-					if($url_sql->getValue('id') > 0) {
-						foreach($search_it->indexUrl($url_sql->getValue('id'), $url_sql->getValue('article_id'), $url_sql->getValue('clang_id'), $url_sql->getValue('profile_id'), $url_sql->getValue('data_id')) as $langID => $url) {
+				$url_sql->setWhere("url_hash = '". rex_get('id') ."'");
+				if ($url_sql->select('url_hash, article_id, clang_id, profile_id, data_id, seo, url')) {
+					if($url_sql->getValue('url_hash')) {
+						foreach($search_it->indexUrl($url_sql->getValue('url_hash'), $url_sql->getValue('article_id'), $url_sql->getValue('clang_id'), $url_sql->getValue('profile_id'), $url_sql->getValue('data_id')) as $langID => $url) {
 							$url_info = json_decode($url_sql->getValue('seo'), true);
-							$msgtext = '<em><a target="_blank" href="'. $url_sql->getValue('url') .'">'. rex_escape($url_info["title"]).'</a></em> (URL ID=<strong>'. $url_sql->getValue('id') .'</strong>) ';
+							$msgtext = '<em><a target="_blank" href="'. $url_sql->getValue('url') .'">'. rex_escape($url_info["title"]).'</a></em> (URL Addon) ';
 
 							switch($url){
 								case SEARCH_IT_URL_ERROR:

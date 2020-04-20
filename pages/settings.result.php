@@ -36,7 +36,6 @@ $field->setLabel($this->i18n('search_it_settings_searchmode'));
 $select = $field->getSelect();
 $select->addOption($this->i18n('search_it_settings_searchmode_like'), 'like');
 $select->addOption($this->i18n('search_it_settings_searchmode_match'), 'match');
-$select->addOption('Vegetarisch', 'vegetarisch');
 
 $form->addFieldset($this->i18n('search_it_settings_search_highlighter'));
 

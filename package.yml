@@ -21,12 +21,55 @@ page:
                          addsources: { title: 'translate:settings_addsources' }
                          blacklist: { title: 'translate:settings_blacklist' }
         test: { title: 'translate:test', icon: rex-icon fa-flask }
+        docs:
+            perm: search_it[plugin:documentation]
+            title: 'translate:search_it_documentation_title'
+            pjax: false
+            icon: rex-icon fa-book
+            itemclass: pull-right
+            subPath: docs/de_de/intro.md
+            subpages:
+                intro:
+                    subPath: README.md
+                    title: translate:search_it_documentation_intro
+                    icon: rex-icon fa-info-circle
+                settings:
+                    subPath: docs/settings.md
+                    title: translate:search_it_documentation_settings
+                    icon: rex-icon fa-cog
+                indexing:
+                    subPath: docs/indexing.md
+                    title: translate:search_it_documentation_indexing
+                    icon: rex-icon fa-table
+                form:
+                    subPath: docs/form.md
+                    title: translate:search_it_documentation_form
+                    icon: rex-icon fa-search
+                result:
+                    subPath: docs/result.md
+                    title: translate:search_it_documentation_result
+                    icon: rex-icon fa-list
+                module:
+                    subPath: docs/module.md
+                    title: translate:search_it_documentation_module
+                    icon: rex-icon rex-icon-module
+                plugins:
+                    subPath: docs/plugins.md
+                    title: translate:search_it_documentation_plugins
+                    icon: rex-icon fa-puzzle-piece
+                reference:
+                    subPath: docs/reference.md
+                    title: translate:search_it_documentation_referenz
+                    icon: rex-icon fa-book
+                faq:
+                    subPath: docs/faq.md
+                    title: translate:search_it_documentation_faq
+                    icon: rex-icon fa-lightbulb-o
+
+
 requires:
     redaxo: '^5.5.0'
     php: '^7'
-
-system_plugins:
-    - documentation
 
 plugins:
     - plaintext

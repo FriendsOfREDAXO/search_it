@@ -1,19 +1,10 @@
 # Aufbau der Suchergebnisse
 
-- [Beispiel](#beispiel)
-- [Aufbau](#aufbau)
-  - [hits](#hits)
-  - [keywords](#keywords)
-  - [searchterm](#searchterm)
-  - [sql](#sql)
-  - [blacklisted](#blacklisted)
-  - [time](#time)
-  - [count](#count)
-  - [hash](#hash)
-  - [simwordsnewsearch](#simwordsnewsearch)
-  - [simwords](#simwords)
+Die eigentliche Suche und Ausgabe der Suchergebnisse können als Modul erstellt und ausgegeben werden.
 
-## Beispiel
+## Aufbau des Suchergebnis-Arrays `$hits`
+
+### Beispiel
 
 Mit jeder Suche gibt `search_it`-Klasse ein Ergebnis-Array mit Suchtreffern zurück.
 
@@ -42,10 +33,9 @@ Array
 )
 ```
 
-## Aufbau
+### Erläuterungen
 
-
-### hits
+#### hits
 
 Ein Array der Treffer, wobei jeder Treffer selbst ein Array mit folgendem Inhalt ist:
 
@@ -66,7 +56,7 @@ highlightedtext|Text oder Array mit hervorgehobenen Suchbegriffen innerhalb von 
 article_teaser|wenn eine Datenbankspalte aus der Tabelle `rex_article` indexiert wurde, dann steht hier der Teaser des Artikels
 values|wenn mehrere Spalten der gleichen Tabelle indexiert sind, so stehen deren Werte für jeden Datensatz als Array zur Verfügung.
 
-### keywords
+#### keywords
 
 Array mit verwendeten Suchbegriffen, z. B.:
 
@@ -86,11 +76,11 @@ Array mit verwendeten Suchbegriffen, z. B.:
     )
 ```
 
-### searchterm
+#### searchterm
 
 Der vom Nutzer eingegebene Suchbegriff, z. B.:  `Pudding Milch`
 
-### sql
+#### sql
 
 Der von Search it erstellte SQL-Befehl, z. B.:
 
@@ -109,27 +99,27 @@ ORDER BY RELEVANCE_SEARCH_IT DESC
 LIMIT 0,5
 ```
 
-### blacklisted
+#### blacklisted
 
 Array mit "schwarzen" Wörtern, die in der Suchabfrage genutzt wurden
 
-### time
+#### time
 
 Dauer der Suche
 
-### count
+#### count
 
 Anzahl aller Datensätze, die ohne LIMIT-Klausel gefunden werden könnten
 
-### hash
+#### hash
 
 Hash, unter dem die Suche im Cache gespeichert wurde
 
-### simwordsnewsearch
+#### simwordsnewsearch
 
 Vorschlag für ähnliche Suchbegriffe (nur, wenn die Suche kein Ergebnis brachte)
 
-### simwords:
+#### simwords
 
 ein Array mit Wörtern, die den Suchbegriffen ähneln, wobei die Schlüssel dieses Arrays die eingegebenen "falschen" Wörter sind und die Werte wiederum ein Array, das wie folgt aufgebaut ist:
 

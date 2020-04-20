@@ -4,25 +4,24 @@
 
 Das Plugin stellt das "Suggest"-jQuery-PlugIn für die Autovervollständigung bei der Suche im Frontend zur Verfügung und generiert einen Code, welcher im Template eingebunden werden muss.
 
-### Requirements
+### Voraussetzungen
 
 * jQuery im Frontend
 * Ein Suchformular, das die HTML-Klasse `search_it-form`, sowie ein HTML-Eingabefeld für die Suche mit dem Namen `search` enthält.
 
 ### Installation
 
-1. Über Installer laden oder ZIP-Datei im Plugin-Ordner der search_it entpacken, der Ordner muss „autocomplete“ heißen.
-2. Plugin installieren und aktivieren
-3. Konfiguration im Plugin vornehmen und speichern
-4. Den generierten Code für das Template herauskopieren und in das Template, welches für das Suchfeld verwendet wird, vor dem schließenden `</body>`-Tag hinzufügen
-5. Sollte das Suchfeld überall verwendet werden, beispielsweise im Kopf der Seite, muss der generierte Code in das entsprechende Template hinzugefügt werden
-6. Optional: CSS- und JS-Datei in den eigenen Frontend-Prozess einbauen (z.B. per Minify-AddOn oder im Bimmelbam-Workflow von FriendsOfREDAXO)
+1. Plugin installieren und aktivieren
+2. Konfiguration im Plugin vornehmen und speichern
+3. Den generierten Code für das Template herauskopieren und in das Template, welches für das Suchfeld verwendet wird, vor dem schließenden `</body>`-Tag hinzufügen
+4. Sollte das Suchfeld überall verwendet werden, beispielsweise im Kopf der Seite, muss der generierte Code in das entsprechende Template hinzugefügt werden
+5. Optional: CSS- und JS-Datei in den eigenen Frontend-Prozess einbauen (z.B. per Minify-AddOn oder im Bimmelbam-Workflow von FriendsOfREDAXO)
 
-## Lizenz
+### Lizenz
 
 MIT
 
-## Credits
+### Credits
 
 **Manetage** - Ronny Kemmereit / Pascal Schuchmann
 * https://www.manetage.de

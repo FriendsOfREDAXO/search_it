@@ -10,18 +10,20 @@ page:
     pjax: false
     icon: rex-icon fa-search
     subpages:
-        generate: { title: 'translate:generate', perm: search_it[generate], icon: rex-icon fa-tasks }
         settings:
             title: 'translate:settings'
             perm: search_it[settings]
             icon: rex-icon fa-wrench
             subpages:
-                         mode: { title: 'translate:settings_mode' }
+                         generate: { title: 'translate:generate', perm: search_it[generate], icon: rex-icon fa-tasks }
+                         article: { title: 'Artikel' }
+                         media: { title: 'Medienpool' }
+                         url: { title: 'URLs' }
+                         table: { title: 'Tabellen' }
+                         file: { title: 'Verzeichnisse' }
+                         httpauth: { title: 'HTTP-Auth' }
                          result: { title: 'translate:settings_result' }
                          highlighter: { title: 'translate:settings_highlighter' }
-                         addtables: { title: 'translate:settings_addtables' }
-                         addfiles: { title: 'translate:settings_addfiles' }
-                         blacklist: { title: 'translate:settings_blacklist' }
         test: { title: 'translate:test', icon: rex-icon fa-flask }
         docs:
             perm: search_it[plugin:documentation]

@@ -17,7 +17,7 @@ $field->setLabel($this->i18n('search_it_settings_exclude_categories'));
 
 $fragment = new rex_fragment();
 $fragment->setVar('class', 'edit', false);
-$fragment->setVar('title', $addon->i18n('example_title'), false);
+$fragment->setVar('title', $addon->i18n('search_it_settings'), false);
 $fragment->setVar('body', $form->get(), false);
 echo $fragment->parse('core/page/section.php');
 

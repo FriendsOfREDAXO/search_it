@@ -11,9 +11,17 @@ $field = $form->addLinklistField('exclude_article_ids');
 // legt die Strukturkategorie fest
 $field->setLabel($this->i18n('search_it_settings_exclude_articles'));
 
-$field = $form->addLinklistField('exclude_category_ids');
-// legt die Strukturkategorie fest
+$cats = rex_sql::factory()->getArray("select id, catname, path from rex_article where startarticle = 1 GROUP BY id ORDER BY path DESC");
+
+
+$field = $form->addSelectField('exclude_category_ids', $value = null, ['class'=>'form-control selectpicker']);
+$field->setAttribute('multiple', 'multiple');
 $field->setLabel($this->i18n('search_it_settings_exclude_categories'));
+$select = $field->getSelect();
+
+foreach ($cats as $cat) {
+    $select->addOption($cat['path'] ." ". $cat['catname'], $cat['id']);
+}
 
 $fragment = new rex_fragment();
 $fragment->setVar('class', 'edit', false);

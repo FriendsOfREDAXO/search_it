@@ -21,6 +21,10 @@ $field = $form->addCheckboxField('index_url_addon');
 $field->setLabel("");
 $field->addOption($this->i18n('search_it_settings_index_url_addon_label'), '1');
 
+$field = $form->addCheckboxField('indexmediapool');
+$field->setLabel("");
+$field->addOption($this->i18n('search_it_settings_file_mediapool'), '1');
+
 $form->addFieldset($this->i18n('search_it_settings_http_authbasic'));
 
 $field = $form->addTextField('htaccess_user');

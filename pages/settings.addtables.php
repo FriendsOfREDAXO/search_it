@@ -3,7 +3,7 @@
 $addon = rex_addon::get('search_it');
 $form = rex_config_form::factory($addon->name);
 
-$form->addFieldset($this->i18n('search_it_settings_search_highlighter'));
+$form->addFieldset($this->i18n('search_it_settings'));
 
 $sql_tables = rex_sql::factory();
 foreach ($sql_tables->getTablesAndViews() as $table) {
@@ -17,10 +17,6 @@ foreach ($sql_tables->getTablesAndViews() as $table) {
         $select->addOption($column['name'], $table . '`.`' . $column['name']);
     }
 }
-
-$field = $form->addTextField('text', '', ["class" => "form-control"]);
-$field->setLabel($this->i18n('search_it_settings_search_highlighter'));
-$field->setNotice($this->i18n('search_it_settings_highlighterclass'));
 
 $fragment = new rex_fragment();
 $fragment->setVar('class', 'edit', false);

@@ -28,7 +28,7 @@ SLICE_ADDED, SLICE_DELETED, SLICE_UPDATED|Der Artikel wird neu indexiert
 
 Um URLs des URL-Addons automatisch neu zu indexieren, muss der Cronjob erstellt sein, da aktuell keine Extension Points existieren.
 
-### Reindexierung von URLs aus dem URL Addon
+### Reindexierung von URLs aus dem URL-Addon
 
 Die Klasse `search_it` bietet die Methode `indexURL` an. Über diese Methode können URLs neu oder wieder indexiert werden. Außerdem bietet sie die Methode `unindexURL` an. Über diese Methode können URLs aus dem Index entfernt werden.
 

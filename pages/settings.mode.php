@@ -10,10 +10,6 @@ $field = $form->addCheckboxField('reindex_cols_onforms');
 $field->setLabel("");
 $field->addOption($this->i18n('search_it_settings_reindex_cols_onforms_label'), '1');
 */
-$field = $form->addCheckboxField('index_url_addon');
-$field->setLabel("");
-$field->addOption($this->i18n('search_it_settings_index_url_addon_label'), '1');
-
 
 $fragment = new rex_fragment();
 $fragment->setVar('class', 'edit', false);

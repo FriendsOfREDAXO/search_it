@@ -1,21 +1,19 @@
 <?php
 
 if (rex_post('config-submit', 'boolean')) {
-
     $posted_config = rex_post('search_config', [
         ['include', 'array'],
 
         ['fileextensions','string'],
-        ['indexmediapool', 'bool'],
         ['dirdepth', 'string'],
         ['indexfolders', 'array'],
 
     ]);
 
     // aus Komma-Listen arrays machen, bzw. arrays umformen
-    if( !empty($posted_config['fileextensions']) ) {
+    if (!empty($posted_config['fileextensions'])) {
         $fileExtensions = [];
-        foreach(explode(',', $posted_config['fileextensions']) as $fileext) {
+        foreach (explode(',', $posted_config['fileextensions']) as $fileext) {
             $fileExtensions[] = trim($fileext);
         }
         $posted_config['fileextensions'] = $fileExtensions;
@@ -23,11 +21,11 @@ if (rex_post('config-submit', 'boolean')) {
         $posted_config['fileextensions'] = [];
     }
 
-    if( !empty($posted_config['include']) && is_array($posted_config['include']) ) {
+    if (!empty($posted_config['include']) && is_array($posted_config['include'])) {
         $returnArray = [];
-        foreach($posted_config['include'] as $include) {
-            $includeArray = explode('`.`',$include);
-            if(!array_key_exists($includeArray[0],$returnArray)) {
+        foreach ($posted_config['include'] as $include) {
+            $includeArray = explode('`.`', $include);
+            if (!array_key_exists($includeArray[0], $returnArray)) {
                 $returnArray[$includeArray[0]] = [];
             }
             $returnArray[$includeArray[0]][] = $includeArray[1];
@@ -37,15 +35,18 @@ if (rex_post('config-submit', 'boolean')) {
         $posted_config['include'] = [];
     }
 
-    $changed = array_keys(array_merge(array_diff_assoc(array_map('serialize',$posted_config),array_map('serialize',$this->getConfig())), array_diff_assoc(array_map('serialize',$this->getConfig()),array_map('serialize',$posted_config))));
-    foreach ( $posted_config as $index=>$val ) {
-        if ( in_array($index, $changed) ){
-            echo rex_view::warning($this->i18n('search_it_settings_saved_warning')); break;
-        } elseif ( is_array($this->getConfig($index)) && is_array($val) ) { // Der Konfig-Wert ist ein Array
-            if ( count(array_merge(
-                array_diff_assoc(array_map('serialize',$this->getConfig($index)), array_map('serialize',$val)),
-                array_diff_assoc(array_map('serialize',$val), array_map('serialize',$this->getConfig($index))) )) > 0 ) {
-                    echo rex_view::warning($this->i18n('search_it_settings_saved_warning')); break;
+    $changed = array_keys(array_merge(array_diff_assoc(array_map('serialize', $posted_config), array_map('serialize', $this->getConfig())), array_diff_assoc(array_map('serialize', $this->getConfig()), array_map('serialize', $posted_config))));
+    foreach ($posted_config as $index=>$val) {
+        if (in_array($index, $changed)) {
+            echo rex_view::warning($this->i18n('search_it_settings_saved_warning'));
+            break;
+        } elseif (is_array($this->getConfig($index)) && is_array($val)) { // Der Konfig-Wert ist ein Array
+            if (count(array_merge(
+                array_diff_assoc(array_map('serialize', $this->getConfig($index)), array_map('serialize', $val)),
+                array_diff_assoc(array_map('serialize', $val), array_map('serialize', $this->getConfig($index)))
+            )) > 0) {
+                echo rex_view::warning($this->i18n('search_it_settings_saved_warning'));
+                break;
             }
         }
     }
@@ -55,7 +56,6 @@ if (rex_post('config-submit', 'boolean')) {
 
     //tell it
     echo rex_view::success($this->i18n('search_it_settings_saved'));
-
 }
 
 
@@ -65,15 +65,15 @@ $formElements = [];
 
 $content1 = '';
 $sql_tables = rex_sql::factory();
-foreach ( $sql_tables->getTablesAndViews() as $table ) {
-    if ( false === strpos($table, 'search_it') ) {
+foreach ($sql_tables->getTablesAndViews() as $table) {
+    if (false === strpos($table, 'search_it')) {
         $options = [];
         $sql_columns = $sql_tables->showColumns($table);
         sort($sql_columns);
-        foreach ( $sql_columns as $column ) {
+        foreach ($sql_columns as $column) {
             $options[] = array(
                 'value' => rex_escape($table . '`.`' . $column['name']),
-                'checked' => in_array($column['name'], (!empty($this->getConfig('include')[$table]) AND is_array($this->getConfig('include')[$table])) ? $this->getConfig('include')[$table] : []),
+                'checked' => in_array($column['name'], (!empty($this->getConfig('include')[$table]) and is_array($this->getConfig('include')[$table])) ? $this->getConfig('include')[$table] : []),
                 'name' =>  $column['name'],
                 'id' => $table . '.' . $column['name']
             );
@@ -91,9 +91,10 @@ foreach ( $sql_tables->getTablesAndViews() as $table ) {
                     'size' => 20,
                     'options' => $options
                 )
-            ),'info',true
+            ),
+            'info',
+            true
         ).'</div>';
-
     }
 }
 
@@ -138,19 +139,11 @@ $content3[] = search_it_getSettingsFormSection(
             'id' => 'search_it_settings_fileext_label',
             'name' => 'search_config[fileextensions]',
             'label' => rex_i18n::rawMsg('search_it_settings_fileext_label'),
-            'value' => !empty($this->getConfig('fileextensions')) ? rex_escape(implode(',',$this->getConfig('fileextensions'))) : ''
+            'value' => !empty($this->getConfig('fileextensions')) ? rex_escape(implode(',', $this->getConfig('fileextensions'))) : ''
         ),
         array(
             'type' => 'directoutput',
             'output' => '<div class="rex-form-row"></div>'
-        ),
-        array(
-            'type' => 'checkbox',
-            'id' => 'search_it_settings_file_mediapool',
-            'name' => 'search_config[indexmediapool]',
-            'label' => $this->i18n('search_it_settings_file_mediapool'),
-            'value' => '1',
-            'checked' => !empty($this->getConfig('indexmediapool'))
         ),
         array(
             'type' => 'directoutput',
@@ -171,7 +164,8 @@ $content3[] = search_it_getSettingsFormSection(
             'size' => 10,
             'options' => $options
         )
-    ),'edit'
+    ),
+    'edit'
 );
 
 $fragment = new rex_fragment();

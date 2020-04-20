@@ -45,6 +45,7 @@ Search it indexiert Artikel, Medien, Dateien, PDF-Inhalte und Datenbank-Felder u
 Die Installation erfolgt über den REDAXO 5 Installer, alternativ gibt es die aktuellste Beta-Version auf [GitHub](https://github.com/friendsofredaxo/search_it).
 
 Bei der Installation werden fünf Datenbanktabellen angelegt:
+
 * `rex_tmp_search_it_index` für die Indexierung von Artikeln und DB-Spalten
 * `rex_tmp_search_it_keywords` für die Ähnlichkeitssuche
 * `rex_tmp_search_it_cache` und `rex_tmp_search_it_cacheindex_ids` für den Suchcache

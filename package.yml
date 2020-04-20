@@ -18,7 +18,9 @@ page:
             subpages:
                          mode: { title: 'translate:settings_mode' }
                          result: { title: 'translate:settings_result' }
-                         addsources: { title: 'translate:settings_addsources' }
+                         highlighter: { title: 'translate:settings_highlighter' }
+                         addtables: { title: 'translate:settings_addtables' }
+                         addfiles: { title: 'translate:settings_addfiles' }
                          blacklist: { title: 'translate:settings_blacklist' }
         test: { title: 'translate:test', icon: rex-icon fa-flask }
         docs:

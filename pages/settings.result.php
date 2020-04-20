@@ -37,12 +37,6 @@ $select = $field->getSelect();
 $select->addOption($this->i18n('search_it_settings_searchmode_like'), 'like');
 $select->addOption($this->i18n('search_it_settings_searchmode_match'), 'match');
 
-$form->addFieldset($this->i18n('search_it_settings_search_highlighter'));
-
-$field = $form->addTextField('text', '', ["class" => "form-control"]);
-$field->setLabel($this->i18n('search_it_settings_search_highlighter'));
-$field->setNotice($this->i18n('search_it_settings_highlighterclass'));
-
 $form->addFieldset($this->i18n('search_it_settings_search_result'));
 
 $field = $form->addTextField('surroundtags[0]', '', ["class" => "form-control"]);

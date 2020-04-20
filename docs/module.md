@@ -1,4 +1,3 @@
-
 # Beispiel-Module
 
 ## Suchergebnisse

@@ -28,6 +28,25 @@ SLICE_ADDED, SLICE_DELETED, SLICE_UPDATED|Der Artikel wird neu indexiert
 
 Um URLs des URL-Addons automatisch neu zu indexieren, muss der Cronjob erstellt sein, da aktuell keine Extension Points existieren.
 
+### Reindexierung von URLs aus dem URL-Addon
+
+Die Klasse `search_it` bietet die Methode `indexURL` an. Über diese Methode können URLs neu oder wieder indexiert werden. Außerdem bietet sie die Methode `unindexURL` an. Über diese Methode können URLs aus dem Index entfernt werden.
+
+Nachfolgend ein Beispiel, um den kompletten URL-Index neu aufzubauen:
+
+```php
+$url_sql = rex_sql::factory();
+$url_sql->setTable(search_it_getUrlAddOnTableName());
+if ($url_sql->select('id, article_id, clang_id, profile_id, data_id')) {
+	// index und cache zuerst löschen, damit keine alten Einträge überleben
+	$search_it->deleteIndexForType("url");
+    // index neu aufbauen
+	foreach ($url_sql->getArray() as $url) {
+		$search_it->indexUrl($url['id'], $url['article_id'], $url['clang_id'], $url['profile_id'], $url['data_id']);
+	}
+}
+```
+
 ### Reindexierung von Datenbank-Feldern
 
 Die Klasse `search_it` bietet allerdings die Methode `indexColumn` an. Über diese Methode können Datenbankspalten neu oder wieder indexiert werden. Müssen die Datenbankspalten nur zu einem bestimmten Datensatz indexiert werden, kann außerdem die ID dieses Datensatzes angegeben werden. Search it wird dann auch nur den betroffenen Datensatz reindexieren.

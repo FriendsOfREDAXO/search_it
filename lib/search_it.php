@@ -637,14 +637,16 @@ class search_it
             $unindexIds[] = $result['id'];
         }
 
-		// delete from index
-		$delete = rex_sql::factory();
-		$delete->setTable($this->tempTablePrefix . 'search_it_index');
-		$delete->setWhere('id IN (' . implode(',', $unindexIds) . ')');
-		$delete->delete();
-		
-		// delete from cache
-        $this->deleteCache($unindexIds);
+		if(count($unindexIds) > 0) {
+			// delete from index
+			$delete = rex_sql::factory();
+			$delete->setTable($this->tempTablePrefix . 'search_it_index');
+			$delete->setWhere('id IN (' . implode(',', $unindexIds) . ')');
+			$delete->delete();
+
+			// delete from cache
+			$this->deleteCache($unindexIds);
+		}
     }
 	
 	/**

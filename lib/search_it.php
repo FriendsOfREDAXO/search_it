@@ -534,6 +534,28 @@ class search_it
         return $return;
     }
 
+    /**
+     * Compares index table with url addon table and adds new urls to index
+     */
+    public function indexNewURLs()
+    {
+		// index url 2 addon URLs
+		if(rex_addon::get('search_it')->getConfig('index_url_addon') && search_it_isUrlAddOnAvailable()) {
+			$sql = rex_sql::factory();
+			$sql->setQuery("SELECT url.url_hash, url.article_id, url.clang_id, url.profile_id, url.data_id FROM `". search_it_getUrlAddOnTableName() ."` as url "
+				. "LEFT JOIN `". $this->tempTablePrefix ."search_it_index` AS search_it ON url.url_hash = search_it.fid "
+				. "WHERE search_it.fid IS NULL;");
+
+			foreach ($sql->getArray() as $result) {
+				$returns = $this->indexUrl($result['url_hash'], $result['article_id'], $result['clang_id'], $result['profile_id'], $result['data_id']);
+				foreach ( $returns as $return ) {
+					if ($return > 3 ) { $global_return += $return; }
+				}
+			}
+		}
+		return $global_return;
+    }
+
 	/**
      * Excludes an article from the index.
      *

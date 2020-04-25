@@ -5,7 +5,6 @@ Dieses Suchergebnis-Modul gibt Suchergebnisse aus dem URL Addon 2.0 oder größe
 ## Modulausgabe
 
 ```php
-<?php
 $article_id = rex_article::getCurrentId();
 $request = rex_request('search', 'string', false);
 
@@ -27,7 +26,7 @@ if($request) { // Wenn ein Suchbegriff eingegeben wurde
 				// url hits
 				$url_sql = rex_sql::factory();
 				$url_sql->setTable(search_it_getUrlAddOnTableName());
-				$url_sql->setWhere("id = ". $hit['fid']);
+				$url_sql->setWhere("url_hash = '". $hit['fid'] ."'");
 				if ($url_sql->select('article_id, clang_id, profile_id, data_id, seo')) {
 					if($url_sql->getRows() > 0) {
 						$url_info = json_decode($url_sql->getValue('seo'), true);

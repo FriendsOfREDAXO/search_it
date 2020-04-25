@@ -568,6 +568,35 @@ class search_it
     }
 
 	/**
+     * Compares index table with url table and excludes all deleted urls from the index.
+     */
+    public function unindexDeletedURLs()
+    {
+		if(!search_it_isUrlAddOnAvailable()) {
+			return;
+		}
+		
+        $sql = rex_sql::factory();
+		$sql->setQuery("SELECT search_it.id FROM `". $this->tempTablePrefix ."search_it_index` AS search_it "
+			. "LEFT JOIN `". search_it_getUrlAddOnTableName() ."` as url ON search_it.fid = url.url_hash "
+			. "WHERE texttype = 'url' AND url.id IS NULL;");
+
+		$unindexIds = [];
+        foreach ($sql->getArray() as $result) {
+            $unindexIds[] = $result['id'];
+        }
+
+		// delete from index
+		$delete = rex_sql::factory();
+		$delete->setTable($this->tempTablePrefix . 'search_it_index');
+		$delete->setWhere('id IN (' . implode(',', $unindexIds) . ')');
+		$delete->delete();
+		
+		// delete from cache
+        $this->deleteCache($unindexIds);
+    }
+	
+	/**
      * Excludes an url from the index.
      *
      * @param int $url_hash

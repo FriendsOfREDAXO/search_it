@@ -333,6 +333,7 @@ class search_it
                 $articleData['unchangedtext'] = $articleText;
                 $plaintext = $this->getPlaintext($articleText);
                 $articleData['plaintext'] = $plaintext;
+				$articleData['lastindexed'] =  date(DATE_W3C, time());
 
                 if (array_key_exists($this->tablePrefix . 'article', $this->includeColumns)) {
                     $additionalValues = [];
@@ -501,6 +502,7 @@ class search_it
 			$articleData['unchangedtext'] = $articleText;
 			$plaintext = $this->getPlaintext($articleText);
 			$articleData['plaintext'] = $plaintext;
+			$articleData['lastindexed'] =  date(DATE_W3C, time());
 
 			if (array_key_exists($this->urlAddOnTableName, $this->includeColumns)) {
 				$additionalValues = [];
@@ -726,6 +728,7 @@ class search_it
                     $indexData['unchangedtext'] = (string)$row[$_column];
                     $plaintext = $this->getPlaintext($row[$_column]);
                     $indexData['plaintext'] = $plaintext;
+					$indexData['lastindexed'] =  date(DATE_W3C, time());
 
                     foreach (preg_split('~[[:punct:][:space:]]+~ismu', $plaintext) as $keyword) {
                         if ($this->significantCharacterCount <= mb_strlen($keyword, 'UTF-8')) {
@@ -943,6 +946,7 @@ class search_it
         }
         $fileData['unchangedtext'] = $text;
         $fileData['plaintext'] = $plaintext;
+		$fileData['lastindexed'] =  date(DATE_W3C, time());
 
         $keywords = [];
         foreach (preg_split('~[[:punct:][:space:]]+~ismu', $plaintext) as $keyword) {

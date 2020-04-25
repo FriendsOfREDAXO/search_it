@@ -27,4 +27,7 @@ if ( rex_sql_table::get(rex::getTable('search_it_keywords'))->exists() && !rex_s
     rex_sql_table::get(rex::getTable('search_it_keywords'))->setName(rex::getTable(rex::getTempPrefix().'search_it_keywords'))->alter();
 }
 
-
+\rex_sql_table::get(
+    \rex::getTable(rex::getTempPrefix().'search_it_index'))
+    ->ensureColumn(new \rex_sql_column('lastindexed', 'VARCHAR(255)', TRUE))
+    ->alter();

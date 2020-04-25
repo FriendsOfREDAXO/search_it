@@ -133,7 +133,7 @@ if ( !empty(rex_get('do')) AND rex_get('do') == 'incremental') {
             if(type === 'art') {
                 url = 'index.php?page=search_it&ajax=generate&do=incremental&type=art&id=' + data;
             } else if(type === 'url') {
-                url = 'index.php?page=search_it&ajax=generate&do=incremental&type=url&id=' + data;
+                url = 'index.php?page=search_it&ajax=generate&do=incremental&type=url&url_hash=' + data;
             } else if(type === 'col') {
                 url = 'index.php?page=search_it&ajax=generate&do=incremental&type=col&t=' + data[0] + '&c=' + data[1] + '&s=' + data[2] + '&w=' + data[3];
             } else if(type === 'file') {

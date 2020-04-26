@@ -53,9 +53,9 @@ if ( !empty(rex_get('do')) AND rex_get('do') == 'incremental') {
 	if(rex_addon::get('search_it')->getConfig('index_url_addon') && search_it_isUrlAddOnAvailable()) {
 		$url_sql = rex_sql::factory();
 		$url_sql->setTable(search_it_getUrlAddOnTableName());
-		if ($url_sql->select('id')) {
+		if ($url_sql->select('url_hash')) {
 			foreach ($url_sql->getArray() as $url) {
-		        $js_output .= 'indexArray.push(new Array("url",'. $url['id'] .'));';
+		        $js_output .= 'indexArray.push(new Array("url","'. $url['url_hash'] .'"));';
 				$globalcount++;
 			}
 		}
@@ -133,7 +133,7 @@ if ( !empty(rex_get('do')) AND rex_get('do') == 'incremental') {
             if(type === 'art') {
                 url = 'index.php?page=search_it&ajax=generate&do=incremental&type=art&id=' + data;
             } else if(type === 'url') {
-                url = 'index.php?page=search_it&ajax=generate&do=incremental&type=url&id=' + data;
+                url = 'index.php?page=search_it&ajax=generate&do=incremental&type=url&url_hash=' + data;
             } else if(type === 'col') {
                 url = 'index.php?page=search_it&ajax=generate&do=incremental&type=col&t=' + data[0] + '&c=' + data[1] + '&s=' + data[2] + '&w=' + data[3];
             } else if(type === 'file') {

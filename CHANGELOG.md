@@ -1,7 +1,9 @@
 # Änderungen von search_it
 
-## Version 6.7.0 (2020-04-02)
+## Version 6.7.0 (2020-04-26)
 - URLs aus dem URL Addon (>= 2.0) können indexiert werden. @TobiasKrais
+- showTables is deprecated --> getTablesAndViews
+- Die Tabellen sind nicht automatisch im Backup enthalten (mit "tmp_"-Präfix versehen) thx @alexplus
 - bei schrittweiser Indexierung sind die Artikel in der Ausgabe verlinkt @alexplusde
 - minimale PHP Version ergänzt @staabm
 - install.sql -> install.php
@@ -242,11 +244,3 @@
   - Möglichkeit, bei der Indexierung von Artikelinhalten
     den Extension Point "OUTPUT_FILTER" aufzurufen, implementiert
     (http://forum.redaxo.de/sutra84454.html#84454)
-
-
-
-
-
-
-
-

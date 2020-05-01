@@ -10,7 +10,7 @@ class search_it_stats{
 
     function flushSQL(){
         $this->sql->flushValues();
-        $this->sql->setTable(rex::getTablePrefix().rex::getTempPrefix(). 'search_it_stats_searchterms');
+        $this->sql->setTable(rex::getTablePrefix(). 'search_it_stats_searchterms');
     }
 
     function insert($_searchterm, $_resultcount, $_time = false){
@@ -32,18 +32,18 @@ class search_it_stats{
     }
 
     function truncate(){
-        $this->sql->setQuery('TRUNCATE ' . rex::getTablePrefix().rex::getTempPrefix(). 'search_it_stats_searchterms');
+        $this->sql->setQuery('TRUNCATE ' . rex::getTablePrefix(). 'search_it_stats_searchterms');
     }
 
     function getTopSearchterms($_count, $_getonly = 0){
         $this->flushSQL();
 
         if (empty($_getonly)){
-            $query = 'SELECT term, COUNT(*) as count, 1 as success FROM `' . rex::getTablePrefix().rex::getTempPrefix(). 'search_it_stats_searchterms' . '` WHERE resultcount > 0 GROUP BY term
+            $query = 'SELECT term, COUNT(*) as count, 1 as success FROM `' . rex::getTablePrefix(). 'search_it_stats_searchterms' . '` WHERE resultcount > 0 GROUP BY term
                       UNION
-                      SELECT term, COUNT(*) as count, 0 as success FROM `' . rex::getTablePrefix().rex::getTempPrefix(). 'search_it_stats_searchterms' . '` WHERE resultcount <= 0 GROUP BY term';
+                      SELECT term, COUNT(*) as count, 0 as success FROM `' . rex::getTablePrefix(). 'search_it_stats_searchterms' . '` WHERE resultcount <= 0 GROUP BY term';
         } else {
-            $query = 'SELECT term, COUNT(*) as count, ' . ($_getonly == 1 ? 1 : 0) . ' as success FROM `' . rex::getTempPrefix(). 'search_it_stats_searchterms' . '` WHERE resultcount ' . ($_getonly == 1 ? '>' : '<=') . ' 0 GROUP BY term';
+            $query = 'SELECT term, COUNT(*) as count, ' . ($_getonly == 1 ? 1 : 0) . ' as success FROM `' .  'search_it_stats_searchterms' . '` WHERE resultcount ' . ($_getonly == 1 ? '>' : '<=') . ' 0 GROUP BY term';
             // getonly = 1: only successful searchterms
             // getonly = 2: only failed searchterms
         }

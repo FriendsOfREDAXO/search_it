@@ -1,5 +1,8 @@
 # Änderungen von search_it
 
+## Version 6.7.1 (2020-05-02)
+- Fix stats plugin - kein tmp Präfix nutzen #279
+
 ## Version 6.7.0 (2020-04-26)
 - URLs aus dem URL Addon (>= 2.0) können indexiert werden. @TobiasKrais
 - showTables is deprecated --> getTablesAndViews

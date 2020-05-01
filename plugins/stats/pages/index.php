@@ -60,9 +60,9 @@ $sql = rex_sql::factory();
 
 $generalstats = $sql->getArray('SELECT
   ((SELECT COUNT(DISTINCT ftable,fid) as count FROM `' . rex::getTablePrefix() . rex::getTempPrefix().'search_it_index` WHERE ftable IS NOT NULL) + (SELECT COUNT(DISTINCT fid) as count FROM `' . rex::getTablePrefix() .rex::getTempPrefix(). 'search_it_index` WHERE ftable IS NULL)) AS 010_uniquedatasetcount,
-  (SELECT AVG(resultcount) FROM `' . rex::getTablePrefix() .rex::getTempPrefix(). 'search_it_stats_searchterms`) AS 020_averageresultcount,
+  (SELECT AVG(resultcount) FROM `' . rex::getTablePrefix() . 'search_it_stats_searchterms`) AS 020_averageresultcount,
   (SELECT COUNT(*) FROM `' . rex::getTablePrefix().rex::getTempPrefix() . 'search_it_stats_searchterms` WHERE resultcount > 0) AS 040_successfullsearchescount,
-  (SELECT COUNT(*) FROM `' . rex::getTablePrefix() .rex::getTempPrefix(). 'search_it_stats_searchterms` WHERE resultcount = 0) AS 050_failedsearchescount,
+  (SELECT COUNT(*) FROM `' . rex::getTablePrefix() . 'search_it_stats_searchterms` WHERE resultcount = 0) AS 050_failedsearchescount,
   (SELECT COUNT(DISTINCT term) FROM `' . rex::getTablePrefix().rex::getTempPrefix() . 'search_it_stats_searchterms`) AS 060_uniquesearchterms'
 );
 $generalstats = $generalstats[0];

@@ -1,5 +1,8 @@
 # Änderungen von search_it
 
+## Version 6.7.2 (2020-05-05)
+- Fix stats plugin 2
+
 ## Version 6.7.1 (2020-05-02)
 - Fix stats plugin - kein tmp Präfix nutzen #279
 

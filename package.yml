@@ -20,6 +20,7 @@ page:
                          result: { title: 'translate:settings_result' }
                          addsources: { title: 'translate:settings_addsources' }
                          blacklist: { title: 'translate:settings_blacklist' }
+                         dev: { title: 'translate:dev' }
         test: { title: 'translate:test', icon: rex-icon fa-flask }
         docs:
             perm: search_it[plugin:documentation]

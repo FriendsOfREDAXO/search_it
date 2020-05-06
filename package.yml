@@ -3,7 +3,6 @@ version: '7.0-dev'
 author: Friends Of REDAXO
 supportpage: https://github.com/FriendsOfREDAXO/search_it
 
-
 page:
     title: 'translate:title'
     perm: search_it[]
@@ -15,26 +14,25 @@ page:
             perm: search_it[settings]
             icon: rex-icon fa-wrench
             subpages:
-                         generate: { title: 'translate:generate', perm: search_it[generate], icon: rex-icon fa-tasks }
-                         article: { title: 'Artikel' }
-                         media: { title: 'Medienpool' }
-                         url: { title: 'URLs' }
-                         table: { title: 'Tabellen' }
-                         file: { title: 'Verzeichnisse' }
-                         httpauth: { title: 'HTTP-Auth' }
+                generate: { title: 'translate:generate', perm: search_it[generate], icon: rex-icon fa-tasks }
+                article: { title: 'Artikel' }
+                media: { title: 'Medienpool' }
+                url: { title: 'URLs' }
+                table: { title: 'Tabellen' }
+                file: { title: 'Verzeichnisse' }
+                httpauth: { title: 'HTTP-Auth' }
         search:
             title: 'translate:Search'
             perm: search_it[settings]
             icon: rex-icon fa-wrench
             subpages:
-                         result: { title: 'translate:settings_result' }
-                         addsources: { title: 'translate:settings_addsources' }
-                         blacklist: { title: 'translate:settings_blacklist' }
-                         dev: { title: 'translate:dev' }
-                          test: { title: 'translate:test', icon: rex-icon fa-flask }
-                         teaser: { title: 'translate:settings_teaser' }
-                         highlighter: { title: 'translate:settings_highlighter' }
-                         test: { title: 'translate:test', icon: rex-icon fa-flask }
+                result: { title: 'translate:settings_result' }
+                addsources: { title: 'translate:settings_addsources' }
+                blacklist: { title: 'translate:settings_blacklist' }
+                dev: { title: 'translate:dev' }
+                teaser: { title: 'translate:settings_teaser' }
+                highlighter: { title: 'translate:settings_highlighter' }
+                test: { title: 'translate:test', icon: rex-icon fa-flask }
         docs:
             perm: search_it[plugin:documentation]
             title: 'translate:search_it_documentation_title'
@@ -79,7 +77,6 @@ page:
                     subPath: docs/faq.md
                     title: translate:search_it_documentation_faq
                     icon: rex-icon fa-lightbulb-o
-
 
 requires:
     redaxo: '^5.5.0'

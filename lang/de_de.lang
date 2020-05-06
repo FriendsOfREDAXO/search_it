@@ -9,8 +9,7 @@ search_it_reindex = Search it: Reindexieren
 
 search_it_settings_mode = Index und Suchmodus
 search_it_settings_result = Suchergebnis
-search_it_settings_addsources = Zusätzl. Datenquellen
-search_it_settings_blacklist = Blacklist
+search_it_settings_article_blacklist = Blacklist
 
 search_it_settings_logicalmode = Logischer Suchmodus
 search_it_settings_logicalmode_and = Konjunktive Suche (AND)
@@ -24,8 +23,9 @@ search_it_settings_textmode_html = Durchsuche HTML-Quellcode
 search_it_settings_textmode_both = Durchsuche beides (HTML und Plain)
 
 search_it_settings_title_indexmode = Indexierung
-search_it_settings_indexoffline = Offline-Artikel indexieren
-search_it_settings_automaticindex_label = Artikel (ADD, EDIT, DELETE) automatisch (de)indexieren
+search_it_settings_indexoffline = einschließlich Artikel, die offline sind
+search_it_settings_automaticindex_label = automatisch (re-/de-)indexieren, wenn Artikel hinzugefügt, bearbeitet oder entfernt werden
+search_it_settings_automaticindex_notice = Beim Auruf passsender Extension-Points werden Artikeländerungen automatisch in den Index übernommen. Diese Einstellung wirkt sich auf die Backend-Performance aus.
 search_it_settings_reindex_cols_onforms_label = Reindexieren aller Spalten, wenn Tabellen mit YForm oder form bearbeitet werden
 search_it_settings_index_url_addon_label = URLs aus dem URL Addon (Version >=2) indexieren
 
@@ -155,7 +155,8 @@ search_it_test_mode_article = Nur Artikel
 
 search_it_indexing              = Indexierung
 search_it_indexing_generate     = Wartung
-search_it_indexing_article      = Artikel
+search_it_indexing_article      = Struktur
+search_it_indexing_article_opt  = Artikel indexieren
 search_it_indexing_mediapool    = Medienpool
 search_it_indexing_urls         = URL-Profile
 search_it_indexing_tables       = Datenbank-Tabellen
@@ -163,9 +164,7 @@ search_it_indexing_folders      = Verzeichnisse
 search_it_indexing_httpauth     = HTTP-Auth
 
 search_it_settings              = Suchergebnisse
-search_it_settings_result       = Suchergebnisse
-search_it_settings_addsources   = Quellen
-search_it_settings_blacklist    = Blacklist
+search_it_settings_result       = Ausgabe
 search_it_settings_highlighter  = Hervorheben
 search_it_settings_test         = Testsuche
 search_it_settings_teaser       = Teaser

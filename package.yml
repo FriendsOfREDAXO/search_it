@@ -10,29 +10,29 @@ page:
     icon: rex-icon fa-search
     subpages:
         indexing:
-            title: 'translate:Indexing'
+            title: 'translate:search_it_indexing'
             perm: search_it[settings]
             icon: rex-icon fa-wrench
             subpages:
-                generate: { title: 'translate:generate', perm: search_it[generate], icon: rex-icon fa-tasks }
-                article: { title: 'Artikel' }
-                media: { title: 'Medienpool' }
-                url: { title: 'URLs' }
-                table: { title: 'Tabellen' }
-                file: { title: 'Verzeichnisse' }
-                httpauth: { title: 'HTTP-Auth' }
+                generate: { title: 'translate:search_it_indexing_generate', perm: search_it[generate], icon: rex-icon fa-tasks }
+                article: { title: 'search_it_indexing_article' }
+                media: { title: 'search_it_indexing_mediapool' }
+                url: { title: 'search_it_indexing_urls' }
+                table: { title: 'search_it_indexing_tables' }
+                file: { title: 'search_it_indexing_folders' }
+                httpauth: { title: 'search_it_indexing_httpauth' }
         search:
-            title: 'translate:Search'
+            title: 'translate:search_it_settings'
             perm: search_it[settings]
             icon: rex-icon fa-wrench
             subpages:
-                result: { title: 'translate:settings_result' }
-                addsources: { title: 'translate:settings_addsources' }
-                blacklist: { title: 'translate:settings_blacklist' }
-                dev: { title: 'translate:dev' }
-                teaser: { title: 'translate:settings_teaser' }
-                highlighter: { title: 'translate:settings_highlighter' }
-                test: { title: 'translate:test', icon: rex-icon fa-flask }
+                result: { title: 'translate:search_it_settings_result' }
+                addsources: { title: 'translate:search_it_settings_addsources' }
+                blacklist: { title: 'translate:search_it_settings_blacklist' }
+                teaser: { title: 'translate:search_it_settings_teaser' }
+                highlighter: { title: 'translate:search_it_settings_highlighter' }
+                test: { title: 'translate:search_it_settings_test', icon: rex-icon fa-flask }
+                dev: { title: 'translate:search_it_dev' }
         docs:
             perm: search_it[plugin:documentation]
             title: 'translate:search_it_documentation_title'

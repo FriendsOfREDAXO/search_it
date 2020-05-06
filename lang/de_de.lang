@@ -153,6 +153,23 @@ search_it_test_mode_db = Nur Datenbank
 search_it_test_mode_media = Nur Medienpool
 search_it_test_mode_article = Nur Artikel
 
+search_it_indexing              = Indexierung
+search_it_indexing_generate     = Wartung
+search_it_indexing_article      = Artikel
+search_it_indexing_mediapool    = Medienpool
+search_it_indexing_urls         = URL-Profile
+search_it_indexing_tables       = Datenbank-Tabellen
+search_it_indexing_folders      = Verzeichnisse
+search_it_indexing_httpauth     = HTTP-Auth
+
+search_it_settings              = Indexierung
+search_it_settings_result       = Suchergebnisse
+search_it_settings_addsources   = Quellen
+search_it_settings_blacklist    = Blacklist
+search_it_settings_highlighter  = Hervorheben
+search_it_settings_test         = Testsuche
+search_it_settings_teaser       = Teaser
+
 search_it_documentation_title = Dokumentation
 
 search_it_documentation_intro       = Einleitung

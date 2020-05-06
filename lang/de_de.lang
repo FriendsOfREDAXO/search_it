@@ -27,7 +27,8 @@ search_it_settings_indexoffline = einschließlich Artikel, die offline sind
 search_it_settings_automaticindex_label = automatisch (re-/de-)indexieren, wenn Artikel hinzugefügt, bearbeitet oder entfernt werden
 search_it_settings_automaticindex_notice = Beim Auruf passsender Extension-Points werden Artikeländerungen automatisch in den Index übernommen. Diese Einstellung wirkt sich auf die Backend-Performance aus.
 search_it_settings_reindex_cols_onforms_label = Reindexieren aller Spalten, wenn Tabellen mit YForm oder form bearbeitet werden
-search_it_settings_index_url_addon_label = URLs aus dem URL Addon (Version >=2) indexieren
+search_it_settings_index_url_addon_label = URLs indexieren
+search_it_settings_index_url_addon_notice = Benötigt das URL-Addon ≥2
 
 search_it_settings_http_authbasic = HTTP Basic AUTH ( .htaccess Passwortschutz)
 search_it_settings_http_auth_desc = Wenn ein Zugriffsschutz die Website schützt, kann hier ein Login hinterlegt werden, um die Indexierung zu ermöglichen
@@ -123,6 +124,7 @@ search_it_generate_url_excluded = nicht indexiert, URL wurde ausgeschlossen
 search_it_settings_fileext_header = Datei-Inhalte durchsuchen
 search_it_settings_fileext_label = Dateiendungen (z.B. <code>txt,csv,pdf</code>)<br />(frei lassen für beliebige Dateien)
 search_it_settings_file_mediapool = Medien im Medienpool indexieren
+search_it_settings_file_mediapool_meta = Titel und Beschreibung zusätzlich indexieren
 search_it_settings_additional_folders_label = Und / Oder andere Ordner auswählen:
 search_it_settings_file_dirdepth_label = Verzeichnistiefe
 search_it_settings_folders_label = Folgende Ordner in die Suche einschließen
@@ -168,6 +170,8 @@ search_it_settings_result       = Ausgabe
 search_it_settings_highlighter  = Hervorheben
 search_it_settings_test         = Testsuche
 search_it_settings_teaser       = Teaser
+search_it_settings_media_fileext_label = Whitelist
+search_it_settings_media_fileext_notice = Indexierung auf folgende Dateiendungen beschränken, z.B. <code>pdf,csv,txt</code>
 
 search_it_documentation_title = Dokumentation
 

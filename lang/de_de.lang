@@ -162,7 +162,7 @@ search_it_indexing_tables       = Datenbank-Tabellen
 search_it_indexing_folders      = Verzeichnisse
 search_it_indexing_httpauth     = HTTP-Auth
 
-search_it_settings              = Einstellungen
+search_it_settings              = Suchergebnisse
 search_it_settings_result       = Suchergebnisse
 search_it_settings_addsources   = Quellen
 search_it_settings_blacklist    = Blacklist

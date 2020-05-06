@@ -27,8 +27,6 @@ page:
             icon: rex-icon fa-wrench
             subpages:
                 result: { title: 'translate:search_it_settings_result' }
-                addsources: { title: 'translate:search_it_settings_addsources' }
-                blacklist: { title: 'translate:search_it_settings_blacklist' }
                 teaser: { title: 'translate:search_it_settings_teaser' }
                 highlighter: { title: 'translate:search_it_settings_highlighter' }
                 test: { title: 'translate:search_it_settings_test', icon: rex-icon fa-flask }

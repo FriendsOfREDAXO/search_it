@@ -47,3 +47,23 @@ rex_sql_table::get(rex::getTable(rex::getTempPrefix().'search_it_keywords'))
     ->setPrimaryKey('id')
     ->ensureIndex(new rex_sql_index('keyword', ['keyword', 'clang'], rex_sql_index::UNIQUE))
     ->ensure();
+
+$modules = scandir(rex_path::addon("search_it")."module");
+
+foreach ($modules as $module) {
+    if ($module == "." || $module == "..") {
+        continue;
+    }
+    $module_array = json_decode(rex_file::get(rex_path::addon("search_it")."module/".$module), 1);
+
+    rex_sql::factory()->setDebug(0)->setTable("rex_module")
+    ->setValue("name", $module_array['name'])
+    ->setValue("key", $module_array['key'])
+    ->setValue("input", $module_array['input'])
+    ->setValue("output", $module_array['output'])
+    ->setValue("createuser", "")
+    ->setValue("updateuser", "search_it")
+    ->setValue("createdate", date("Y-m-d H:i:s"))
+    ->setValue("updatedate", date("Y-m-d H:i:s"))
+    ->insertOrUpdate();
+}

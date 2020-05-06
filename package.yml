@@ -28,6 +28,10 @@ page:
             icon: rex-icon fa-wrench
             subpages:
                          result: { title: 'translate:settings_result' }
+                         addsources: { title: 'translate:settings_addsources' }
+                         blacklist: { title: 'translate:settings_blacklist' }
+                         dev: { title: 'translate:dev' }
+                          test: { title: 'translate:test', icon: rex-icon fa-flask }
                          teaser: { title: 'translate:settings_teaser' }
                          highlighter: { title: 'translate:settings_highlighter' }
                          test: { title: 'translate:test', icon: rex-icon fa-flask }

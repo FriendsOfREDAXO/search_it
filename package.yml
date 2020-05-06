@@ -10,18 +10,31 @@ page:
     pjax: false
     icon: rex-icon fa-search
     subpages:
-        generate: { title: 'translate:generate', perm: search_it[generate], icon: rex-icon fa-tasks }
-        settings:
-            title: 'translate:settings'
+        indexing:
+            title: 'translate:Indexing'
             perm: search_it[settings]
             icon: rex-icon fa-wrench
             subpages:
-                         mode: { title: 'translate:settings_mode' }
+                         generate: { title: 'translate:generate', perm: search_it[generate], icon: rex-icon fa-tasks }
+                         article: { title: 'Artikel' }
+                         media: { title: 'Medienpool' }
+                         url: { title: 'URLs' }
+                         table: { title: 'Tabellen' }
+                         file: { title: 'Verzeichnisse' }
+                         httpauth: { title: 'HTTP-Auth' }
+        search:
+            title: 'translate:Search'
+            perm: search_it[settings]
+            icon: rex-icon fa-wrench
+            subpages:
                          result: { title: 'translate:settings_result' }
                          addsources: { title: 'translate:settings_addsources' }
                          blacklist: { title: 'translate:settings_blacklist' }
                          dev: { title: 'translate:dev' }
-        test: { title: 'translate:test', icon: rex-icon fa-flask }
+                          test: { title: 'translate:test', icon: rex-icon fa-flask }
+                         teaser: { title: 'translate:settings_teaser' }
+                         highlighter: { title: 'translate:settings_highlighter' }
+                         test: { title: 'translate:test', icon: rex-icon fa-flask }
         docs:
             perm: search_it[plugin:documentation]
             title: 'translate:search_it_documentation_title'

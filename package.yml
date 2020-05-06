@@ -26,13 +26,13 @@ page:
             perm: search_it[settings]
             icon: rex-icon fa-wrench
             subpages:
-                result: { title: 'translate:translate:search_it_settings_result' }
-                addsources: { title: 'translate:translate:search_it_settings_addsources' }
-                blacklist: { title: 'translate:translate:search_it_settings_blacklist' }
-                teaser: { title: 'translate:translate:search_it_settings_teaser' }
-                highlighter: { title: 'translate:translate:search_it_settings_highlighter' }
-                test: { title: 'translate:translate:search_it_settings_test', icon: rex-icon fa-flask }
-                dev: { title: 'translate:translate:search_it_dev' }
+                result: { title: 'translate:search_it_settings_result' }
+                addsources: { title: 'translate:search_it_settings_addsources' }
+                blacklist: { title: 'translate:search_it_settings_blacklist' }
+                teaser: { title: 'translate:search_it_settings_teaser' }
+                highlighter: { title: 'translate:search_it_settings_highlighter' }
+                test: { title: 'translate:search_it_settings_test', icon: rex-icon fa-flask }
+                dev: { title: 'translate:search_it_dev' }
         docs:
             perm: search_it[plugin:documentation]
             title: 'translate:search_it_documentation_title'

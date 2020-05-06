@@ -9,9 +9,6 @@ $form->addFieldset($this->i18n('search_it_settings_fileext_header'));
 $field = $form->addTextField('fileextensions');
 $field->setLabel($this->i18n('search_it_settings_fileext_label'));
 
-$field = $form->addTextField('dirdepth');
-$field->setLabel($this->i18n('search_it_settings_file_dirdepth_label'));
-
 $field = $form->addTextareaField('indexfolders');
 $field->setLabel($this->i18n('search_it_settings_folders_label'));
 

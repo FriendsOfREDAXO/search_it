@@ -44,7 +44,6 @@ $search_it->search([Suchbegriff]);
 
 ### Datensätze in Datenbanktabellen filtern
 
-
 In `Search it` ist es derzeit nicht möglich, eigene Filter-Parameter zu definieren.
 
 Es ist jedoch möglich, bereits in der MySQL-Tabelle eine `VIEW` zu erstellen, die nur die gewünschten Datensätze enthält. Diese `VIEW` kann dann von `Search it` in den Einstellungen unter `Zusätzliche Datenquellen` als Tabelle indexiert werden.
@@ -71,8 +70,8 @@ Das Ergebnis dieser Tabelle könnte bspw. so aussehen:
 
 ```text
 id  filetype                  filename            title
-43  application/vnd.ms-excel	auflistung.xls	    Auflistung aller Aufgaben
-44  application/vnd.ms-excel	bestellung.xls      Bestellformular
+43  application/vnd.ms-excel auflistung.xls     Auflistung aller Aufgaben
+44  application/vnd.ms-excel bestellung.xls      Bestellformular
 ```
 
 #### 2. VIEW erstellen
@@ -96,7 +95,6 @@ In den `Search it`-Einstellungen des REDAXO-Backends unter `Zusätzliche Datenqu
 
 * [Aufbau der Suchergebnisse](search_it-result.md)
 * [Erweiterte Suche](module-enhanced.md)
-
 
 ### Module, Blöcke, Artikel oder bestimmte Abschnitte filtern
 

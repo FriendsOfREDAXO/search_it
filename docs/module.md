@@ -220,9 +220,7 @@ Search it baut anschließend bei jeder Suche, die einen Treffer ergab, einen Sch
 Sollte eine Suche keine Ergebnisse liefern, füllt Search it das Result-Array mit eventuell gefundenen ähnlichen Wörtern und macht auch einen Vorschlag, wie der neue Suchbegriff aussehen könnte.
 
 > Tipp: Um die Ähnlichkeitssuche effektiv einsetzen zu können, empfiehlt es sich, die Suche selbst mit richtigen Schlagwörtern zu füttern. Dadurch sind erste Suchwörter indexiert und die Ähnlichkeitssuche kann bei einer falschen Schreibweise dieser Wörter diese vorschlagen.
-
 > Tipp: Die durchgeführte Ähnlichkeitssuche gibt bei der Ergebnis-Rückgabe zusätzliche Informationen zurück, bspw., ob sie überhaupt angewendet wurde, welche Begriffe berücksichtigt wurden u.a.
-
 
 ## Artikel-Suchergebnisse inkl. Metadaten
 
@@ -252,7 +250,7 @@ if($searchterm) { // Wenn ein Suchbegriff eingegeben wurde
     # dump($result); // Zum Debuggen ausgeben.
 
     if($result['count']) { // Wenn Ergebnisse vorhanden sind...
-        echo '<h2 class="search_it-headline">Suchergebnisse</h2>'; 
+        echo '<h2 class="search_it-headline">Suchergebnisse</h2>';
 
         echo '<ul class="search_it-results">';
         foreach($result['hits'] as $hit) { // Jeder Treffer ein $hit
@@ -361,7 +359,7 @@ if($searchterm) { // Wenn ein Suchbegriff eingegeben wurde
 
 ## Komplexe Suchergebnisse
 
-> Hinweis: Dieses Beispiel wurde noch nicht für Search_it portiert. Du kannst helfen, diese Anleitung zu korrigieren: https://github.com/FriendsOfREDAXO/search_it/
+> Hinweis: Dieses Beispiel wurde noch nicht für Search_it portiert. Du kannst helfen, diese Anleitung zu korrigieren: <https://github.com/FriendsOfREDAXO/search_it/>
 
 Dieses Beispielmodul ähnelt dem Beispiel: Modul zur Suche mit PDF-Dateien, Paginierung und Ähnlichkeitssuche. Die Ähnlichkeitssuche sollte aktiviert, sowie bei der Dateisuche die Option "Medienpool indexieren" ausgewählt sein. Außerdem sollte in dem Feld für die Dateiendungen nur "pdf" stehen.
 

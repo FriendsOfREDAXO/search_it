@@ -21,7 +21,6 @@ CAT_STATUS, CAT_ADDED| Eine Kategorie, die offline geschaltet wird, wird deindex
 MEDIA_ADDED, MEDIA_UPDATED|Wenn ein Medium hinzugefügt wurde, werden alle ausgewählten DB-Spalten aus der Tabelle rex_file neu indexiert.
 SLICE_ADDED, SLICE_DELETED, SLICE_UPDATED|Der Artikel wird neu indexiert
 
-
 ### Reindexierung von Artikeln via Cronjob
 
 `Search it` fügt ein eigenes Cronjob-Profil hinzu, das sich im Cronjob-AddOn zeitgesteuert ausführen lässt. Um diese Funktion zu nutzen, muss ein neuer Cronjob des Typs `Search it: Reindexieren` ausgewählt werden.
@@ -99,10 +98,9 @@ Standardmäßig ist Search it eine reine Volltextsuche. Begriffe, die in den Suc
 2. Das Suchausgabe-Modul muss den Treffer innerhalb der `rex_article`-Tabelle abfangen: `if($hit['type'] == 'db_column' AND $hit['table'] == rex_meine_tabelle')`
 
 > Tipp: mit `dump($hit)` lassen sich weitere Informationen zum passenden Treffer ausgeben, bspw. `$hit['column']` für das Feld, in dem der Treffer ausgelöst wurde, oder `$hit['fid']` für die ID des Datensatzes.
-
 > Tipp mit einer `VIEW` lassen sich die zu indexierenden Datensätze im Vorfeld filtern. [Weitere Informationen zu Views](https://de.wikibooks.org/wiki/Einf%C3%BChrung_in_SQL:_Erstellen_von_Views)
 
-### Lassen sich verschiedene Suchergebnisse realisieren?
+### Lassen sich verschiedene Suchergebnisse realisieren
 
 Ja! Es können unterschiedliche Sucheingabe- und Suchausgabe-Module erstellt werden.
 
@@ -141,6 +139,5 @@ $search_it->setWhere('filename LIKE 'example/%');
 ```php
 $result = $search_it->search(rex_request('search', 'string')); // Suche ausführen.
 ```
-
 
 > Weitere Tipps und Tricks zum Filtern von Suchergebnissen in den FAQ.

@@ -24,12 +24,13 @@ MIT
 ### Credits
 
 **Manetage** - Ronny Kemmereit / Pascal Schuchmann
-* https://www.manetage.de
+
+* <https://www.manetage.de>
 
 **Friends Of REDAXO**
 
-* https://www.redaxo.org
-* https://github.com/FriendsOfREDAXO
+* <https://www.redaxo.org>
+* <https://github.com/FriendsOfREDAXO>
 
 ## Plaintext
 

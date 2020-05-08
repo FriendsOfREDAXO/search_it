@@ -43,7 +43,6 @@ Dies sind die Standard-Einstellungen für den Aufbau eines Suchindex und die Dur
 
 Bei der Indexierung durchsucht Search it alle in den Einstellungen angegebenen Orte (Artikel, URLs aus dem URL-Addon, Datenbank, Medienpool) und erstellt einen Suchindex.
 
-
 #### Suchmodi
 
 ##### Logischer Suchmodus

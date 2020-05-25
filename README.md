@@ -8,7 +8,7 @@ Dabei werden Artikel, Medien, Dateien, PDF-Inhalte und Datenbank-Felder in einer
 
 * `PHP >= 7.0`
 * `REDAXO >= 5.5`
-* `pdftotext` [optional für das Durchsuchen von pdf-Inhalten, [Link](https://www.xpdfreader.com/pdftotext-man.html)]
+* [`pdftotext`](https://www.xpdfreader.com/pdftotext-man.html) für das Durchsuchen von pdf-Inhalten, optional.
 
 ## Plugins
 
@@ -40,16 +40,20 @@ Die Tabellen werden nicht in die Datenbank-Sicherung des backup-Addons miteinbez
 Nach der Installation sollten zunächst die Einstellungen vorgenommen werden und anschließend der Index vollständig generiert werden.
 
 ## Lizenz
-MIT Lizenz, siehe [LICENSE.md](https://github.com/FriendsOfREDAXO/search_it/blob/master/LICENSE.md) 
+
+[MIT Lizenz](https://github.com/FriendsOfREDAXO/search_it/blob/master/LICENSE.md) 
 
 ## Autor
-**Friends Of REDAXO** 
+
+**Friends Of REDAXO**
 http://www.redaxo.org 
 https://github.com/FriendsOfREDAXO 
+
 **Projekt-Lead** 
 [Norbert Micheel](https://github.com/tyrant88)
 
 ## Credits
+
 Search it basiert auf: [RexSearch (Xong) für REDAXO 4](https://github.com/xong/rexsearch) 
 [Norbert Micheel](https://github.com/tyrant88/) Portierung für R5 und aktiven Entwicklung
 [Alexander Walther](https://github.com/skerbis) Dokumentation und Hilfe 

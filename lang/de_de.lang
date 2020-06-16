@@ -9,7 +9,7 @@ search_it_reindex = Search it: Reindexieren
 
 search_it_settings_mode = Index und Suchmodus
 search_it_settings_result = Suchergebnis
-search_it_settings_article_blacklist = Blacklist
+search_it_settings_article_blacklist = Blocklist
 
 search_it_settings_logicalmode = Logischer Suchmodus
 search_it_settings_logicalmode_and = Konjunktive Suche (AND)

@@ -99,7 +99,7 @@ search_it_generate_articles = Re-indexar artículos
 search_it_generate_columns = Re-index tables
 search_it_generate_urls = reindex url addon urls
 
-search_it_generate_article_excluded = No indexado, el artículo fue excluido
+search_it_generate_article_excluded = No indexado, el url fue excluido
 search_it_generate_article_done = indexado
 search_it_generate_article_redirect = no indexado, demasiados redireccionamientos
 search_it_generate_article_http_error = no indexado, error de HTTP
@@ -118,7 +118,7 @@ search_it_generate_media_error_pdf2 = Otro error de PDF
 search_it_generate_media_error_output = Error de XPDF: error al abrir un archivo de salida
 search_it_generate_media_error_permissions = Error de XPDF: faltan los derechos de PDF
 search_it_generate_media_empty = El medio está vacío o no se pudo extraer contenido
-search_it_generate_article_excluded = No indexado, el url fue excluido
+search_it_generate_url_excluded = No indexado, se excluyó la URL
 
 search_it_settings_fileext_header = Buscar contenido de archivos
 search_it_settings_fileext_label = Extensiones de archivos (por ejemplo, <code>txt, csv, pdf</code>)<br/> (déjelo en blanco para cualquier archivo)

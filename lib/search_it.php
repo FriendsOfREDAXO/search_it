@@ -1023,7 +1023,7 @@ class search_it
     private static function getMinFID()
     {
         $minfid_sql = rex_sql::factory();
-        $minfid_result = $minfid_sql->getArray('SELECT MIN(CONVERT(fid, SIGNED)) as minfid FROM `' . self::tempTablePrefix.'search_it_index'. '`');
+        $minfid_result = $minfid_sql->getArray('SELECT MIN(CONVERT(fid, SIGNED)) as minfid FROM `' . rex::getTablePrefix().rex::getTempPrefix().'search_it_index'. '`');
         $minfid = intval($minfid_result[0]['minfid']);
 
         return ($minfid < 0) ? --$minfid : -1;
@@ -1032,7 +1032,7 @@ class search_it
     private static function getMaxFID($_table)
     {
         $maxfid_sql = rex_sql::factory();
-        $maxfid_result = $maxfid_sql->getArray('SELECT MAX(CONVERT(fid, SIGNED)) as maxfid FROM `' . self::tempTablePrefix.'search_it_index' . '` WHERE ftable = "'.$_table.'" ');
+        $maxfid_result = $maxfid_sql->getArray('SELECT MAX(CONVERT(fid, SIGNED)) as maxfid FROM `' . rex::getTablePrefix().rex::getTempPrefix().'search_it_index' . '` WHERE ftable = "'.$_table.'" ');
         $maxfid = intval($maxfid_result[0]['maxfid']);
 
         return ($maxfid > 0) ? ++$maxfid : 1;

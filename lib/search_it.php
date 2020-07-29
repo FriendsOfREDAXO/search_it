@@ -342,6 +342,7 @@ class search_it
                 $articleData['unchangedtext'] = $articleText;
                 $plaintext = $this->getPlaintext($articleText);
                 $articleData['plaintext'] = $plaintext;
+				$articleData['lastindexed'] =  date(DATE_W3C, time());
 
                 if (array_key_exists(self::getTablePrefix() . 'article', $this->includeColumns)) {
                     $additionalValues = [];
@@ -510,6 +511,7 @@ class search_it
 			$articleData['unchangedtext'] = $articleText;
 			$plaintext = $this->getPlaintext($articleText);
 			$articleData['plaintext'] = $plaintext;
+			$articleData['lastindexed'] =  date(DATE_W3C, time());
 
 			if (array_key_exists($this->urlAddOnTableName, $this->includeColumns)) {
 				$additionalValues = [];
@@ -542,6 +544,57 @@ class search_it
 		}
 
         return $return;
+    }
+
+    /**
+     * Compares index table with url addon table and adds new urls to index
+	 * @return string[] Array containing index results
+     */
+    public function indexNewURLs()
+    {
+        $global_return = 0;
+
+		// index url 2 addon URLs
+		if(rex_addon::get('search_it')->getConfig('index_url_addon') && search_it_isUrlAddOnAvailable()) {
+			$sql = rex_sql::factory();
+			$sql->setQuery("SELECT url.url_hash, url.article_id, url.clang_id, url.profile_id, url.data_id FROM `". search_it_getUrlAddOnTableName() ."` as url "
+				. "LEFT JOIN `". self::getTempTablePrefix() ."search_it_index` AS search_it ON url.url_hash = search_it.fid "
+				. "WHERE search_it.fid IS NULL;");
+
+			foreach ($sql->getArray() as $result) {
+				$returns = $this->indexUrl($result['url_hash'], $result['article_id'], $result['clang_id'], $result['profile_id'], $result['data_id']);
+				foreach ( $returns as $return ) {
+					if ($return > 3 ) { $global_return += $return; }
+				}
+			}
+		}
+		return $global_return;
+    }
+
+    /**
+     * Compares index table with url addon table and adds new urls to index
+	 * @return string[] Array containing index results
+     */
+    public function indexUpdatedURLs()
+    {
+        $global_return = 0;
+
+		// index url 2 addon URLs
+		if(rex_addon::get('search_it')->getConfig('index_url_addon') && search_it_isUrlAddOnAvailable()) {
+			$sql = rex_sql::factory();
+			$sql->setQuery("SELECT url.url_hash, url.article_id, url.clang_id, url.profile_id, url.data_id FROM `". search_it_getUrlAddOnTableName() ."` as url "
+				. "LEFT JOIN `". self::getTempTablePrefix() ."search_it_index` AS search_it ON url.url_hash = search_it.fid "
+				. "WHERE search_it.lastindexed < url.lastmod;");
+
+			foreach ($sql->getArray() as $result) {
+				$this->unindexURL($result['url_hash']);
+				$returns = $this->indexUrl($result['url_hash'], $result['article_id'], $result['clang_id'], $result['profile_id'], $result['data_id']);
+				foreach ( $returns as $return ) {
+					if ($return > 3 ) { $global_return += $return; }
+				}
+			}
+		}
+		return $global_return;
     }
 
 	/**
@@ -577,6 +630,37 @@ class search_it
         $this->deleteCache($indexIds);
     }
 
+	/**
+     * Compares index table with url table and excludes all deleted urls from the index.
+     */
+    public function unindexDeletedURLs()
+    {
+		if(!search_it_isUrlAddOnAvailable()) {
+			return;
+		}
+		
+        $sql = rex_sql::factory();
+		$sql->setQuery("SELECT search_it.id FROM `". self::getTempTablePrefix() ."search_it_index` AS search_it "
+			. "LEFT JOIN `". search_it_getUrlAddOnTableName() ."` as url ON search_it.fid = url.url_hash "
+			. "WHERE texttype = 'url' AND url.id IS NULL;");
+
+		$unindexIds = [];
+        foreach ($sql->getArray() as $result) {
+            $unindexIds[] = $result['id'];
+        }
+
+		if(count($unindexIds) > 0) {
+			// delete from index
+			$delete = rex_sql::factory();
+			$delete->setTable(self::getTempTablePrefix() . 'search_it_index');
+			$delete->setWhere('id IN (' . implode(',', $unindexIds) . ')');
+			$delete->delete();
+
+			// delete from cache
+			$this->deleteCache($unindexIds);
+		}
+    }
+	
 	/**
      * Excludes an url from the index.
      *
@@ -735,6 +819,7 @@ class search_it
                     $indexData['unchangedtext'] = (string)$row[$_column];
                     $plaintext = $this->getPlaintext($row[$_column]);
                     $indexData['plaintext'] = $plaintext;
+					$indexData['lastindexed'] =  date(DATE_W3C, time());
 
                     foreach (preg_split('~[[:punct:][:space:]]+~ismu', $plaintext) as $keyword) {
                         if ($this->significantCharacterCount <= mb_strlen($keyword, 'UTF-8')) {
@@ -952,6 +1037,7 @@ class search_it
         }
         $fileData['unchangedtext'] = $text;
         $fileData['plaintext'] = $plaintext;
+		$fileData['lastindexed'] =  date(DATE_W3C, time());
 
         $keywords = [];
         foreach (preg_split('~[[:punct:][:space:]]+~ismu', $plaintext) as $keyword) {

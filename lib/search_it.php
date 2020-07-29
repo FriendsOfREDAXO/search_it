@@ -106,8 +106,6 @@ class search_it
         }
 
         $this->setClang($_clang);
-        self::getTablePrefix() = rex::getTablePrefix();
-        self::getTempTablePrefix() = rex::getTablePrefix().rex::getTempPrefix();
         $this->urlAddOnTableName = search_it_getUrlAddOnTableName();
 
         $this->ellipsis = rex_i18n::msg('search_it_ellipsis');
@@ -2387,7 +2385,7 @@ class search_it
             ORDER BY %s
             LIMIT %d,%d',
                 implode(",\n", $selectFields),
-                self::getTempTablePrefix()v . 'search_it_index',
+                self::getTempTablePrefix() . 'search_it_index',
                 $where,
                 implode(",\n", $Aorder),
                 $this->limit[0], $this->limit[1]

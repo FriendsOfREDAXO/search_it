@@ -1998,7 +1998,7 @@ class search_it
     public function deleteCache($_indexIds = false)
     {
         if ($_indexIds === false) {
-            // delete entire search-chache
+            // delete entire search-cache
             $delete = rex_sql::factory();
             $delete->setQuery('TRUNCATE '. self::getTempTablePrefix() . 'search_it_cacheindex_ids');
             $delete->setQuery('TRUNCATE '. self::getTempTablePrefix() . 'search_it_cache');

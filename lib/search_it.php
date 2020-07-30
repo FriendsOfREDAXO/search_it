@@ -2014,7 +2014,7 @@ class search_it
                 implode(',', $_indexIds)
             );
 
-            $deleteIds = array(0);
+            $deleteIds = [0];
             foreach ($sql->getArray($query) as $cacheId) {
                 $deleteIds[] = $cacheId['cache_id'];
             }

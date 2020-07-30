@@ -385,9 +385,9 @@ class search_it
      *
      * @param int $url_hash url_generator_url table id
      * @param int $article_id redaxo article id
+     * @param int $clang_id redaxo clang id
      * @param int $profile_id url addon profile id
      * @param int $data_id url addon profile id
-     * @param int $clang_id redaxo clang id
      *
      * @return int
      */
@@ -1969,15 +1969,13 @@ class search_it
             $sql2 = rex_sql::factory();
 
             try {
-                $sqlResult = $sql2->setQuery(
+                $sql2->setQuery(
                     sprintf(
-                        'INSERT INTO `%s` (index_id,cache_id) VALUES
-            %s;',
+                        'INSERT INTO `%s` (index_id,cache_id) VALUES %s;',
                         self::getTempTablePrefix() . 'search_it_cacheindex_ids',
                         implode(',', $Ainsert)
                     )
                 );
-                $info = 'Success';
                 return true;
             } catch (rex_sql_exception $e) {
                 $error = $e->getMessage();
@@ -1992,8 +1990,6 @@ class search_it
      * Truncates the cache or deletes all data that are concerned with the given index-ids.
      *
      * @param mixed $_indexIds
-     *
-     *
      */
     public function deleteCache($_indexIds = false)
     {
@@ -2409,7 +2405,6 @@ class search_it
         //echo '<pre>'.implode(",\n",$selectFields).'</pre>';
         try {
             $sqlResult = $sql->getArray($query);
-            $info = 'Success';
         } catch (rex_sql_exception $e) {
             $sqlResult = [];
             $error = $e->getMessage();
@@ -2486,7 +2481,6 @@ class search_it
         }
 
         $return['hash'] = $this->cacheHash($this->searchString);
-
 
         // no test? then store keywords and cache
         if (rex_request('search_it_test', 'string', '') == '') {

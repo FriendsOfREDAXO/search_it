@@ -385,9 +385,9 @@ class search_it
      *
      * @param int $url_hash url_generator_url table id
      * @param int $article_id redaxo article id
+     * @param int $clang_id redaxo clang id
      * @param int $profile_id url addon profile id
      * @param int $data_id url addon profile id
-     * @param int $clang_id redaxo clang id
      *
      * @return int
      */
@@ -1731,7 +1731,6 @@ class search_it
             case 'array':
                 $this->highlightType = $_type;
                 return true;
-                break;
 
             default:
                 $this->highlightType = 'surroundtextsingle';
@@ -1808,7 +1807,6 @@ class search_it
                     }
                 }
                 return $return;
-                break;
 
             case 'surroundtext':
             case 'surroundtextsingle':
@@ -1888,7 +1886,6 @@ class search_it
                 $return = preg_replace($replace, $this->surroundTags[0] . '$0' . $this->surroundTags[1], $return);
 
                 return $return;
-                break;
 
             case 'teaser':
                 $search = [];
@@ -1896,7 +1893,6 @@ class search_it
                     $search[] = '~' . preg_quote($keyword['search'], '~') . '~isu';
                 }
                 return preg_replace($search, $this->surroundTags[0] . '$0' . $this->surroundTags[1], $this->getTeaserText($_text));
-                break;
         }
 
         $this->searchArray = $tmp_searchArray;
@@ -1971,13 +1967,11 @@ class search_it
             try {
                 $sqlResult = $sql2->setQuery(
                     sprintf(
-                        'INSERT INTO `%s` (index_id,cache_id) VALUES
-            %s;',
+                        'INSERT INTO `%s` (index_id,cache_id) VALUES %s;',
                         self::getTempTablePrefix() . 'search_it_cacheindex_ids',
                         implode(',', $Ainsert)
                     )
                 );
-                $info = 'Success';
                 return true;
             } catch (rex_sql_exception $e) {
                 $error = $e->getMessage();
@@ -2409,7 +2403,6 @@ class search_it
         //echo '<pre>'.implode(",\n",$selectFields).'</pre>';
         try {
             $sqlResult = $sql->getArray($query);
-            $info = 'Success';
         } catch (rex_sql_exception $e) {
             $sqlResult = [];
             $error = $e->getMessage();

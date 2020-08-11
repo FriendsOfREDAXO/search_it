@@ -264,7 +264,7 @@ $content[] =  '</div>';
                     }
                     // list
                     jQuery('#topsearchterms ol').append(
-                        jQuery('<li class="' + cssclass + '">').html('<strong>' + item.term + '<' + '/strong> <em>(' + item.count + ')<' + '/em><' + '/li>')
+                        jQuery('<li class="' + cssclass + '">').html('<strong>' + jQuery('<div>').text(item.term).html() + '<' + '/strong> <em>(' + item.count + ')<' + '/em><' + '/li>')
                     );
 
                     // select

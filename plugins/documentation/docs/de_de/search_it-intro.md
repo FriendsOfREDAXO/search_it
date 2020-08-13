@@ -69,7 +69,7 @@ Bei der Installation werden fünf Datenbanktabellen angelegt:
 
 ### Häufige Fehler
 
-* bleibt die Indextabelle leer, könnte ein .htaccess Zugriffsschutz die Indexierung verhindern.
+* bleibt die Indextabelle leer, könnte ein .htaccess Zugriffsschutz die Indexierung verhindern. Ggf. verhindert auch das aktivierte `Maintenance`-AddOn oder eine Abfrage nach der Admin-Rolle oder Backend-Session die Indizierung. `Search it` indexiert über das Frontend, weshalb das Frontend "offen" sein muss.
 * bleibt die Indextabelle leer, ist eventuell ein "Minifier" im Einsatz, der HTML-Kommentare aus dem Quellcode entfernt.
 `Search it` benötigt HTML-Kommentare, um die zu indexierenden Inhalte zu markieren. Man kann auf den URL-Parameter 'search_it_build_index' prüfen, z.B. durch `rex_request('search_it_build_index', 'int', false)` - wenn er gesetzt ist, ist es ein Aufruf von `Search it`
 * Findet sich im syslog die Meldung `Warning: You should not use non-secure socket connections while connecting to "my-domain.tld"` so liegt dies daran, das die eigene Domain in den Einstellungen unter System (oder bei Verwendung von des Addons `YRewrite` in den Einstellungen dort) ohne `https://` eingetragen wurde.

@@ -64,16 +64,19 @@ if ( rex_addon::get('search_it')->getConfig('index_url_addon') == true) {
 		rex_config::set('search_it', 'update_urls', true);
 	});
 
-	// automatic indexing of url addon urls: set trigger
-	rex_extension::register('RESPONSE_SHUTDOWN', function() {
-		if ( rex_config::has('search_it', 'update_urls') && rex::isBackend() ) {
-			$search_it = new search_it();
-			$search_it->unindexDeletedURLs();
-			$search_it->indexNewURLs();
-			$search_it->indexUpdatedURLs();
-			rex_config::remove('search_it', 'update_urls');
-		}
-	});
+	// automatic indexing of url addon urls: only set if current page is not indexing page to avoid cascading index actions
+	if ( rex_request('search_it_build_index', 'string', '') == '' ) {
+		// automatic indexing of url addon urls: set trigger
+		rex_extension::register('RESPONSE_SHUTDOWN', function() {
+			if ( rex_config::has('search_it', 'update_urls') && rex::isBackend() ) {
+				$search_it = new search_it();
+				$search_it->unindexDeletedURLs();
+				$search_it->indexNewURLs();
+				$search_it->indexUpdatedURLs();
+				rex_config::remove('search_it', 'update_urls');
+			}
+		});
+	}
 }
 
 if ( rex::isBackend() && rex::getUser() ) {

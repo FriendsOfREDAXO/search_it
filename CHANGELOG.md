@@ -1,4 +1,9 @@
 # Änderungen von search_it
+- Fix syslog error messages
+- avoid cascading indexing (#291), Performanceupdate für URL Addon URLs (#277), autoupdate urls from url addon 2.x (#289) thx  @TobiasKrais
+- Escape term output to redeem xss-vulnerability (#290) thx @DanielWeitenauer
+- change member variables $tablePrefix and $tempTablePrefix as static functions thx @elricco, @xong
+- markdown fixes thx @alexplus, @danspringer
 
 ## Version 6.7.2 (2020-05-05)
 - Fix stats plugin 2

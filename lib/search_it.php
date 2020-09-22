@@ -299,12 +299,12 @@ class search_it
                             if ( $response->isRedirection() ) {
                                 $return[$langID] = SEARCH_IT_ART_REDIRECT;
                                 $response_text = rex_i18n::msg('search_it_generate_article_redirect');
-                                rex_logger::factory()->log( 'Warning', rex_i18n::msg('search_it_generate_article_http_error') .' '. $scanurl . '<br>' . $response_text );
+                                rex_logger::factory()->log( 'Warning', rex_i18n::msg('search_it_generate_article_http_error') .' '. $scanurl . PHP_EOL . $response_text );
                             } else if ( $response->getStatusCode() == '404' ) {
                                 $return[$langID] = SEARCH_IT_ART_404;
-                                rex_logger::factory()->log( 'Warning', rex_i18n::msg('search_it_generate_article_404_error') .' '. $scanurl . '<br>' . $response_text );
+                                rex_logger::factory()->log( 'Warning', rex_i18n::msg('search_it_generate_article_404_error') .' '. $scanurl . PHP_EOL . $response_text );
                             } else {
-                                rex_logger::factory()->log( 'Warning', rex_i18n::msg('search_it_generate_article_http_error') .' '. $scanurl . '<br>' . $response_text );
+                                rex_logger::factory()->log( 'Warning', rex_i18n::msg('search_it_generate_article_http_error') .' '. $scanurl . PHP_EOL . $response_text );
                                 $return[$langID] = SEARCH_IT_ART_NOTOK;
                             }
                             continue;
@@ -312,7 +312,7 @@ class search_it
 
                  } catch (rex_socket_exception $e) {
                     $articleText = '';
-                    rex_logger::factory()->log( 'Warning', rex_i18n::msg('search_it_generate_article_socket_error') .' '.$scanurl. '<br>' .$e->getMessage() );
+                    rex_logger::factory()->error( rex_i18n::msg('search_it_generate_article_socket_error') .': '.$scanurl. PHP_EOL .$e->getMessage() );
                     $return[$langID] = SEARCH_IT_ART_ERROR;
                     continue;
 
@@ -473,12 +473,12 @@ class search_it
 					if ( $response->isRedirection() ) {
 						$return[$clang_id] = SEARCH_IT_URL_REDIRECT;
 						$response_text = rex_i18n::msg('search_it_generate_article_redirect');
-						rex_logger::factory()->log( 'Warning', rex_i18n::msg('search_it_generate_article_http_error') .' '. $scanurl . '<br>' . $response_text );
+						rex_logger::factory()->log( 'Warning', rex_i18n::msg('search_it_generate_article_http_error') .' '. $scanurl . PHP_EOL . $response_text );
 					} else if ( $response->getStatusCode() == '404' ) {
 						$return[$clang_id] = SEARCH_IT_URL_404;
-						rex_logger::factory()->log( 'Warning', rex_i18n::msg('search_it_generate_article_404_error') .' '. $scanurl . '<br>' . $response_text );
+						rex_logger::factory()->log( 'Warning', rex_i18n::msg('search_it_generate_article_404_error') .' '. $scanurl . PHP_EOL . $response_text );
 					} else {
-						rex_logger::factory()->log( 'Warning', rex_i18n::msg('search_it_generate_article_http_error') .' '. $scanurl . '<br>' . $response_text );
+						rex_logger::factory()->log( 'Warning', rex_i18n::msg('search_it_generate_article_http_error') .' '. $scanurl . PHP_EOL . $response_text );
 						$return[$clang_id] = SEARCH_IT_URL_NOTOK;
 					}
 					return $return;
@@ -486,7 +486,7 @@ class search_it
 
 			} catch (rex_socket_exception $e) {
 				$articleText = '';
-				rex_logger::factory()->log( 'Warning', rex_i18n::msg('search_it_generate_article_socket_error') .' '.$scanurl. '<br>' .$e->getMessage() );
+				rex_logger::factory()->error( rex_i18n::msg('search_it_generate_article_socket_error') .' '.$scanurl. PHP_EOL .$e->getMessage() );
 				$return[$clang_id] = SEARCH_IT_URL_ERROR;
 			}
 			// regex time
@@ -638,7 +638,7 @@ class search_it
 		if(!search_it_isUrlAddOnAvailable()) {
 			return;
 		}
-		
+
         $sql = rex_sql::factory();
 		$sql->setQuery("SELECT search_it.id FROM `". self::getTempTablePrefix() ."search_it_index` AS search_it "
 			. "LEFT JOIN `". search_it_getUrlAddOnTableName() ."` as url ON search_it.fid = url.url_hash "
@@ -660,7 +660,7 @@ class search_it
 			$this->deleteCache($unindexIds);
 		}
     }
-	
+
 	/**
      * Excludes an url from the index.
      *

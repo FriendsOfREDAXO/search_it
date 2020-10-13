@@ -23,11 +23,12 @@ rex_sql_table::get(rex::getTable(rex::getTempPrefix().'search_it_index'))
     ->ensure();
 
 
-rex_sql_table::get(rex::getTable(rex::getTempPrefix().'search_it_cache'))
+rex_sql_table::get(rex::getTable('tmp_search_it_cache'))
     ->ensureColumn(new rex_sql_column('id', 'int(11)', false, null, 'auto_increment'))
     ->ensureColumn(new rex_sql_column('hash', 'char(32)'))
     ->ensureColumn(new rex_sql_column('returnarray', 'longtext', true))
     ->setPrimaryKey('id')
+    ->ensureIndex(new rex_sql_index('hash', ['hash']))
     ->ensure();
 
 rex_sql_table::get(rex::getTable(rex::getTempPrefix().'search_it_cacheindex_ids'))

@@ -1,5 +1,5 @@
 package: search_it/stats
-version: '6.7.2'
+version: '6.7.3'
 author: Friends Of REDAXO
 
 title: 'translate:search_it_stats_plugin_title'

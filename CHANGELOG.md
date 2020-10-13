@@ -1,9 +1,15 @@
 # Änderungen von search_it
+- update.php now includes install.php
+- Add index on column "hash" in table rex_tmp_search_it_cache @xong
 - Fix syslog error messages
 - avoid cascading indexing (#291), Performanceupdate für URL Addon URLs (#277), autoupdate urls from url addon 2.x (#289) thx  @TobiasKrais
 - Escape term output to redeem xss-vulnerability (#290) thx @DanielWeitenauer
 - change member variables $tablePrefix and $tempTablePrefix as static functions thx @elricco, @xong
 - markdown fixes thx @alexplus, @danspringer
+
+## Versione 6.7.3 (2020-10-13
+- Added index to hash column for better performance 
+- Some minor changes to update.php
 
 ## Version 6.7.2 (2020-05-05)
 - Fix stats plugin 2

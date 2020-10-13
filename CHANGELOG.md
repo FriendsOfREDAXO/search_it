@@ -1,4 +1,5 @@
 # Änderungen von search_it
+- Add index on column "hash" in table rex_tmp_search_it_cache @xong
 - Fix syslog error messages
 - avoid cascading indexing (#291), Performanceupdate für URL Addon URLs (#277), autoupdate urls from url addon 2.x (#289) thx  @TobiasKrais
 - Escape term output to redeem xss-vulnerability (#290) thx @DanielWeitenauer

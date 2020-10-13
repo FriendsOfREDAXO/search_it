@@ -3,15 +3,17 @@
  * Search it AddOn.
  * @author @tyrant88
  * @package search_it
- * @var rex_addon $this
+ * @var rex_addon $addon
  */
-if ( is_dir($this->getPlugin('reindex')->getPath()) ) {
-    rex_dir::delete($this->getPlugin('reindex')->getPath());
-    //echo rex_view::warning($this->i18n('search_it_settings_plugin_deleted'));
+$addon = rex_addon::get('search_it');
+
+if ( is_dir($addon->getPlugin('reindex')->getPath()) ) {
+    rex_dir::delete($addon->getPlugin('reindex')->getPath());
+    //echo rex_view::warning($addon->i18n('search_it_settings_plugin_deleted'));
 }
-if ( is_dir($this->getPlugin('search_highlighter')->getPath()) ) {
-    rex_dir::delete($this->getPlugin('search_highlighter')->getPath());
-    //echo rex_view::warning($this->i18n('search_it_settings_plugin_deleted'));
+if ( is_dir($addon->getPlugin('search_highlighter')->getPath()) ) {
+    rex_dir::delete($addon->getPlugin('search_highlighter')->getPath());
+    //echo rex_view::warning($addon->i18n('search_it_settings_plugin_deleted'));
 }
 
 if ( rex_sql_table::get(rex::getTable('search_it_cacheindex_ids'))->exists() && !rex_sql_table::get(rex::getTable(rex::getTempPrefix().'search_it_cacheindex_ids'))->exists() ) {
@@ -31,3 +33,5 @@ if ( rex_sql_table::get(rex::getTable('search_it_keywords'))->exists() && !rex_s
     \rex::getTable(rex::getTempPrefix().'search_it_index'))
     ->ensureColumn(new \rex_sql_column('lastindexed', 'VARCHAR(255)', TRUE))
     ->alter();
+
+$addon->includeFile(__DIR__ . '/install.php');

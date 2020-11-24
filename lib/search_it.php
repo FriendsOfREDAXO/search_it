@@ -2115,7 +2115,7 @@ class search_it
             );
         }
 
-        // ask cache
+		// ask cache
         if (rex_request('search_it_test', 'string', '') == '' && $this->cache AND $this->isCached($this->searchString)) {
             $this->cachedArray['time'] = microtime(true) - $startTime;
 
@@ -2128,7 +2128,6 @@ class search_it
 
             return $this->cachedArray;
         }
-
 
         if ($this->similarwords) {
             $simWordsSQL = rex_sql::factory();
@@ -2240,9 +2239,6 @@ class search_it
         foreach ($this->searchArray as $searchword) {
             $AWhere = [];
             $similarkeywords = '';
-            if ($this->similarwords && !isset($return['simwords'][$searchword['search']])) {
-                continue;
-            }
             if (isset($return['simwords'][$searchword['search']]['keyword'])) {
                 $similarkeywords = $return['simwords'][$searchword['search']]['keyword'];
             }
@@ -2285,7 +2281,7 @@ class search_it
         $match = '(' . implode(' + ', $Amatch) . ' + 1)';
 
         // build WHERE-String
-        $where = !empty($A2Where) ? '(' . implode($this->logicalMode, $A2Where) . ')' : '1';
+        $where = '(' . implode($this->logicalMode, $A2Where) . ')';
         //$where = sprintf("( MATCH (%s) AGAINST ('%s' IN BOOLEAN MODE)) > 0",implode(',',$searchColumns),implode(' ',$Awhere));
 
         // language

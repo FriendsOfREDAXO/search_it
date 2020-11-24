@@ -2049,7 +2049,7 @@ class search_it
                 $simWords[] = sprintf(
                     "(%s, '%s', '%s', '%s', %s)",
                     $simWordsSQL->escape($keyword['search']),
-                    ($this->similarwordsMode & SEARCH_IT_SIMILARWORDS_SOUNDEX) ? soundex($keyword['search']) : '',
+                    ($this->similarwordsMode & SEARCH_IT_SIMILARWORDS_SOUNDEX && !is_numeric(soundex($keyword['search']))) ? soundex($keyword['search']) : '',
                     ($this->similarwordsMode & SEARCH_IT_SIMILARWORDS_METAPHONE) ? metaphone($keyword['search']) : '',
                     ($this->similarwordsMode & SEARCH_IT_SIMILARWORDS_COLOGNEPHONE) ? soundex_ger($keyword['search']) : '',
                     (isset($keyword['clang']) AND $keyword['clang'] !== false) ? $keyword['clang'] : '-1'

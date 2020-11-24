@@ -2051,7 +2051,7 @@ class search_it
                     $simWordsSQL->escape($keyword['search']),
                     ($this->similarwordsMode & SEARCH_IT_SIMILARWORDS_SOUNDEX && !is_numeric(soundex($keyword['search']))) ? soundex($keyword['search']) : '',
                     ($this->similarwordsMode & SEARCH_IT_SIMILARWORDS_METAPHONE) ? metaphone($keyword['search']) : '',
-                    ($this->similarwordsMode & SEARCH_IT_SIMILARWORDS_COLOGNEPHONE) ? soundex_ger($keyword['search']) : '',
+                    ($this->similarwordsMode & SEARCH_IT_SIMILARWORDS_COLOGNEPHONE && !is_numeric(soundex($keyword['search']))) ? soundex_ger($keyword['search']) : '',
                     (isset($keyword['clang']) AND $keyword['clang'] !== false) ? $keyword['clang'] : '-1'
                 );
             }
@@ -2134,18 +2134,18 @@ class search_it
             $simwordQuerys = [];
             foreach ($this->searchArray as $keyword) {
                 $sounds = [];
-                if ($this->similarwordsMode & SEARCH_IT_SIMILARWORDS_SOUNDEX && !is_numeric(soundex($keyword['search']))) {
+                if ($this->similarwordsMode && SEARCH_IT_SIMILARWORDS_SOUNDEX && !is_numeric(soundex($keyword['search']))) {
                     $sounds[] = "soundex = '" . soundex($keyword['search']) . "'";
                 }
 
-                if ($this->similarwordsMode & SEARCH_IT_SIMILARWORDS_METAPHONE) {
+                if ($this->similarwordsMode && SEARCH_IT_SIMILARWORDS_METAPHONE) {
                     $sounds[] = "metaphone = '" . metaphone($keyword['search']) . "'";
                 }
 
-                if ($this->similarwordsMode & SEARCH_IT_SIMILARWORDS_COLOGNEPHONE) {
+                if ($this->similarwordsMode && SEARCH_IT_SIMILARWORDS_COLOGNEPHONE && !is_numeric(soundex($keyword['search']))) {
                     $sounds[] = "colognephone = '" . soundex_ger($keyword['search']) . "'";
                 }
-                if(count($sounds) > 0) {
+				if(!empty($sounds)) {
 					$simwordQuerys[] = sprintf("
 					  (SELECT
 						GROUP_CONCAT(DISTINCT keyword SEPARATOR ' ') as keyword,
@@ -2161,11 +2161,11 @@ class search_it
 						implode(' OR ', $sounds)
 					);
 				}
-            }
+			}
             //echo '<br><pre>'; var_dump($simwordQuerys);echo '</pre>'; // Eine SQL-Abfrage pro Suchwort
 
             // simwords
-			if(count($simwordQuerys) > 0) {
+			if(!empty($simwordQuerys)) {
 				$simWordsSQL = rex_sql::factory();
 				foreach ($simWordsSQL->getArray(sprintf("
 					SELECT * FROM (%s) AS t
@@ -2203,10 +2203,9 @@ class search_it
 						$newsearch[] = $quotes . $keyword['search'] . $quotes;
 					}
 				}
+	            $return['simwordsnewsearch'] = implode(' ', $newsearch);
 			}
-
-            $return['simwordsnewsearch'] = implode(' ', $newsearch);
-        }
+		}
 
         //print_r($this->searchArray);echo '<br><br>';
         if ($this->similarwordsPermanent) {
@@ -2282,7 +2281,7 @@ class search_it
         $match = '(' . implode(' + ', $Amatch) . ' + 1)';
 
         // build WHERE-String
-        $where = count($A2Where) > 0 ? '(' . implode($this->logicalMode, $A2Where) . ')' : '1';
+        $where = '(' . implode($this->logicalMode, $A2Where) . ')';
         //$where = sprintf("( MATCH (%s) AGAINST ('%s' IN BOOLEAN MODE)) > 0",implode(',',$searchColumns),implode(' ',$Awhere));
 
         // language

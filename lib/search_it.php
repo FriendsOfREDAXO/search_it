@@ -2280,11 +2280,12 @@ class search_it
             }
             $A2Where[] = '(' . implode(' OR ', $AWhere) . ')';
         }
+		
         // build MATCH-String
         $match = '(' . implode(' + ', $Amatch) . ' + 1)';
 
         // build WHERE-String
-        $where = '(' . implode($this->logicalMode, $A2Where) . ')';
+        $where = !empty($A2Where) ? '(' . implode($this->logicalMode, $A2Where) . ')' : '1';
         //$where = sprintf("( MATCH (%s) AGAINST ('%s' IN BOOLEAN MODE)) > 0",implode(',',$searchColumns),implode(' ',$Awhere));
 
         // language

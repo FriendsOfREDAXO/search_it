@@ -2165,43 +2165,45 @@ class search_it
             //echo '<br><pre>'; var_dump($simwordQuerys);echo '</pre>'; // Eine SQL-Abfrage pro Suchwort
 
             // simwords
-            $simWordsSQL = rex_sql::factory();
-            foreach ($simWordsSQL->getArray(sprintf("
-                SELECT * FROM (%s) AS t
-                %s
-                ORDER BY count",
-                    implode(' UNION ', $simwordQuerys),
-                    $this->similarwordsPermanent ? '' : 'GROUP BY keyword, typedin'
-                )
-            ) as $simword) {
-                //echo '<br><pre>'; var_dump($simword);echo '</pre>';
-                $return['simwords'][$simword['typedin']] = array(
-                    'keyword' => $simword['keyword'],
-                    'typedin' => $simword['typedin'],
-                    'count' => $simword['count'],
-                );
-            }
-            /*echo '<br><pre>' .sprintf("
-            SELECT * FROM (%s) AS t
-            %s
-            ORDER BY count",
-                implode(' UNION ', $simwordQuerys),
-                $this->similarwordsPermanent ? '' : 'GROUP BY keyword, typedin'
-            ).'</pre>'; die();*/
-            $newsearch = [];
-            foreach ($this->searchArray as $keyword) {
-                if (preg_match('~\s~isu', $keyword['search'])) {
-                    $quotes = '"';
-                } else {
-                    $quotes = '';
-                }
+			if(count($simwordQuerys) > 0) {
+				$simWordsSQL = rex_sql::factory();
+				foreach ($simWordsSQL->getArray(sprintf("
+					SELECT * FROM (%s) AS t
+					%s
+					ORDER BY count",
+						implode(' UNION ', $simwordQuerys),
+						$this->similarwordsPermanent ? '' : 'GROUP BY keyword, typedin'
+					)
+				) as $simword) {
+					//echo '<br><pre>'; var_dump($simword);echo '</pre>';
+					$return['simwords'][$simword['typedin']] = array(
+						'keyword' => $simword['keyword'],
+						'typedin' => $simword['typedin'],
+						'count' => $simword['count'],
+					);
+				}
+				/*echo '<br><pre>' .sprintf("
+				SELECT * FROM (%s) AS t
+				%s
+				ORDER BY count",
+					implode(' UNION ', $simwordQuerys),
+					$this->similarwordsPermanent ? '' : 'GROUP BY keyword, typedin'
+				).'</pre>'; die();*/
+				$newsearch = [];
+				foreach ($this->searchArray as $keyword) {
+					if (preg_match('~\s~isu', $keyword['search'])) {
+						$quotes = '"';
+					} else {
+						$quotes = '';
+					}
 
-                if (array_key_exists($keyword['search'], $return['simwords'])) {
-                    $newsearch[] = $quotes . $return['simwords'][$keyword['search']]['keyword'] . $quotes;
-                } else {
-                    $newsearch[] = $quotes . $keyword['search'] . $quotes;
-                }
-            }
+					if (array_key_exists($keyword['search'], $return['simwords'])) {
+						$newsearch[] = $quotes . $return['simwords'][$keyword['search']]['keyword'] . $quotes;
+					} else {
+						$newsearch[] = $quotes . $keyword['search'] . $quotes;
+					}
+				}
+			}
 
             $return['simwordsnewsearch'] = implode(' ', $newsearch);
         }
@@ -2280,7 +2282,7 @@ class search_it
         $match = '(' . implode(' + ', $Amatch) . ' + 1)';
 
         // build WHERE-String
-        $where = '(' . implode($this->logicalMode, $A2Where) . ')';
+        $where = count($A2Where) > 0 ? '(' . implode($this->logicalMode, $A2Where) . ')' : '1';
         //$where = sprintf("( MATCH (%s) AGAINST ('%s' IN BOOLEAN MODE)) > 0",implode(',',$searchColumns),implode(' ',$Awhere));
 
         // language

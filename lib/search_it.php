@@ -2049,9 +2049,9 @@ class search_it
                 $simWords[] = sprintf(
                     "(%s, '%s', '%s', '%s', %s)",
                     $simWordsSQL->escape($keyword['search']),
-                    ($this->similarwordsMode & SEARCH_IT_SIMILARWORDS_SOUNDEX) ? soundex($keyword['search']) : '',
+                    ($this->similarwordsMode & SEARCH_IT_SIMILARWORDS_SOUNDEX && !is_numeric(soundex($keyword['search']))) ? soundex($keyword['search']) : '',
                     ($this->similarwordsMode & SEARCH_IT_SIMILARWORDS_METAPHONE) ? metaphone($keyword['search']) : '',
-                    ($this->similarwordsMode & SEARCH_IT_SIMILARWORDS_COLOGNEPHONE) ? soundex_ger($keyword['search']) : '',
+                    ($this->similarwordsMode & SEARCH_IT_SIMILARWORDS_COLOGNEPHONE && !is_numeric(soundex($keyword['search']))) ? soundex_ger($keyword['search']) : '',
                     (isset($keyword['clang']) AND $keyword['clang'] !== false) ? $keyword['clang'] : '-1'
                 );
             }
@@ -2134,75 +2134,78 @@ class search_it
             $simwordQuerys = [];
             foreach ($this->searchArray as $keyword) {
                 $sounds = [];
-                if ($this->similarwordsMode & SEARCH_IT_SIMILARWORDS_SOUNDEX) {
+                if ($this->similarwordsMode && SEARCH_IT_SIMILARWORDS_SOUNDEX && !is_numeric(soundex($keyword['search']))) {
                     $sounds[] = "soundex = '" . soundex($keyword['search']) . "'";
                 }
 
-                if ($this->similarwordsMode & SEARCH_IT_SIMILARWORDS_METAPHONE) {
+                if ($this->similarwordsMode && SEARCH_IT_SIMILARWORDS_METAPHONE) {
                     $sounds[] = "metaphone = '" . metaphone($keyword['search']) . "'";
                 }
 
-                if ($this->similarwordsMode & SEARCH_IT_SIMILARWORDS_COLOGNEPHONE) {
+                if ($this->similarwordsMode && SEARCH_IT_SIMILARWORDS_COLOGNEPHONE && !is_numeric(soundex($keyword['search']))) {
                     $sounds[] = "colognephone = '" . soundex_ger($keyword['search']) . "'";
                 }
-                $simwordQuerys[] = sprintf("
-                  (SELECT
-                    GROUP_CONCAT(DISTINCT keyword SEPARATOR ' ') as keyword,
-                    %s AS typedin,
-                    SUM(count) as count
-                  FROM `%s`
-                  WHERE 1
-                    %s
-                    AND (%s))",
-                    $simWordsSQL->escape($keyword['search']),
-                    self::getTempTablePrefix() . 'search_it_keywords',
-                    ($this->clang !== false) ? 'AND (clang = ' . intval($this->clang) . ' OR clang IS NULL)' : '',
-                    implode(' OR ', $sounds)
-                );
-            }
+				if(!empty($sounds)) {
+					$simwordQuerys[] = sprintf("
+					  (SELECT
+						GROUP_CONCAT(DISTINCT keyword SEPARATOR ' ') as keyword,
+						%s AS typedin,
+						SUM(count) as count
+					  FROM `%s`
+					  WHERE 1
+						%s
+						AND (%s))",
+						$simWordsSQL->escape($keyword['search']),
+						self::getTempTablePrefix() . 'search_it_keywords',
+						($this->clang !== false) ? 'AND (clang = ' . intval($this->clang) . ' OR clang IS NULL)' : '',
+						implode(' OR ', $sounds)
+					);
+				}
+			}
             //echo '<br><pre>'; var_dump($simwordQuerys);echo '</pre>'; // Eine SQL-Abfrage pro Suchwort
 
             // simwords
-            $simWordsSQL = rex_sql::factory();
-            foreach ($simWordsSQL->getArray(sprintf("
-                SELECT * FROM (%s) AS t
-                %s
-                ORDER BY count",
-                    implode(' UNION ', $simwordQuerys),
-                    $this->similarwordsPermanent ? '' : 'GROUP BY keyword, typedin'
-                )
-            ) as $simword) {
-                //echo '<br><pre>'; var_dump($simword);echo '</pre>';
-                $return['simwords'][$simword['typedin']] = array(
-                    'keyword' => $simword['keyword'],
-                    'typedin' => $simword['typedin'],
-                    'count' => $simword['count'],
-                );
-            }
-            /*echo '<br><pre>' .sprintf("
-            SELECT * FROM (%s) AS t
-            %s
-            ORDER BY count",
-                implode(' UNION ', $simwordQuerys),
-                $this->similarwordsPermanent ? '' : 'GROUP BY keyword, typedin'
-            ).'</pre>'; die();*/
-            $newsearch = [];
-            foreach ($this->searchArray as $keyword) {
-                if (preg_match('~\s~isu', $keyword['search'])) {
-                    $quotes = '"';
-                } else {
-                    $quotes = '';
-                }
+			if(!empty($simwordQuerys)) {
+				$simWordsSQL = rex_sql::factory();
+				foreach ($simWordsSQL->getArray(sprintf("
+					SELECT * FROM (%s) AS t
+					%s
+					ORDER BY count",
+						implode(' UNION ', $simwordQuerys),
+						$this->similarwordsPermanent ? '' : 'GROUP BY keyword, typedin'
+					)
+				) as $simword) {
+					//echo '<br><pre>'; var_dump($simword);echo '</pre>';
+					$return['simwords'][$simword['typedin']] = array(
+						'keyword' => $simword['keyword'],
+						'typedin' => $simword['typedin'],
+						'count' => $simword['count'],
+					);
+				}
+				/*echo '<br><pre>' .sprintf("
+				SELECT * FROM (%s) AS t
+				%s
+				ORDER BY count",
+					implode(' UNION ', $simwordQuerys),
+					$this->similarwordsPermanent ? '' : 'GROUP BY keyword, typedin'
+				).'</pre>'; die();*/
+				$newsearch = [];
+				foreach ($this->searchArray as $keyword) {
+					if (preg_match('~\s~isu', $keyword['search'])) {
+						$quotes = '"';
+					} else {
+						$quotes = '';
+					}
 
-                if (array_key_exists($keyword['search'], $return['simwords'])) {
-                    $newsearch[] = $quotes . $return['simwords'][$keyword['search']]['keyword'] . $quotes;
-                } else {
-                    $newsearch[] = $quotes . $keyword['search'] . $quotes;
-                }
-            }
-
-            $return['simwordsnewsearch'] = implode(' ', $newsearch);
-        }
+					if (array_key_exists($keyword['search'], $return['simwords'])) {
+						$newsearch[] = $quotes . $return['simwords'][$keyword['search']]['keyword'] . $quotes;
+					} else {
+						$newsearch[] = $quotes . $keyword['search'] . $quotes;
+					}
+				}
+	            $return['simwordsnewsearch'] = implode(' ', $newsearch);
+			}
+		}
 
         //print_r($this->searchArray);echo '<br><br>';
         if ($this->similarwordsPermanent) {

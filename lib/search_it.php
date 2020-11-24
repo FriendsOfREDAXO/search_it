@@ -2045,7 +2045,7 @@ class search_it
         foreach ($_keywords as $keyword) {
             if (!in_array(mb_strtolower($keyword['search'], 'UTF-8'), $this->blacklist) &&
                 !in_array(mb_strtolower($keyword['search'], 'UTF-8'), $this->stopwords) &&
-		!is_numeric($keyword['search']))
+		!is_numeric($keyword['search'])
             ) {
                 $simWords[] = sprintf(
                     "(%s, '%s', '%s', '%s', %s)",

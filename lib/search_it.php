@@ -2134,7 +2134,7 @@ class search_it
             $simwordQuerys = [];
             foreach ($this->searchArray as $keyword) {
                 $sounds = [];
-                if ($this->similarwordsMode & SEARCH_IT_SIMILARWORDS_SOUNDEX) {
+                if ($this->similarwordsMode & SEARCH_IT_SIMILARWORDS_SOUNDEX && !is_numeric(soundex($keyword['search']))) {
                     $sounds[] = "soundex = '" . soundex($keyword['search']) . "'";
                 }
 
@@ -2145,20 +2145,22 @@ class search_it
                 if ($this->similarwordsMode & SEARCH_IT_SIMILARWORDS_COLOGNEPHONE) {
                     $sounds[] = "colognephone = '" . soundex_ger($keyword['search']) . "'";
                 }
-                $simwordQuerys[] = sprintf("
-                  (SELECT
-                    GROUP_CONCAT(DISTINCT keyword SEPARATOR ' ') as keyword,
-                    %s AS typedin,
-                    SUM(count) as count
-                  FROM `%s`
-                  WHERE 1
-                    %s
-                    AND (%s))",
-                    $simWordsSQL->escape($keyword['search']),
-                    self::getTempTablePrefix() . 'search_it_keywords',
-                    ($this->clang !== false) ? 'AND (clang = ' . intval($this->clang) . ' OR clang IS NULL)' : '',
-                    implode(' OR ', $sounds)
-                );
+                if(count($sounds) > 0) {
+					$simwordQuerys[] = sprintf("
+					  (SELECT
+						GROUP_CONCAT(DISTINCT keyword SEPARATOR ' ') as keyword,
+						%s AS typedin,
+						SUM(count) as count
+					  FROM `%s`
+					  WHERE 1
+						%s
+						AND (%s))",
+						$simWordsSQL->escape($keyword['search']),
+						self::getTempTablePrefix() . 'search_it_keywords',
+						($this->clang !== false) ? 'AND (clang = ' . intval($this->clang) . ' OR clang IS NULL)' : '',
+						implode(' OR ', $sounds)
+					);
+				}
             }
             //echo '<br><pre>'; var_dump($simwordQuerys);echo '</pre>'; // Eine SQL-Abfrage pro Suchwort
 

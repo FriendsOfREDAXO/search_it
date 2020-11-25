@@ -42,7 +42,7 @@ if($request) { // Wenn ein Suchbegriff eingegeben wurde
 			if($result_simwords['count'] > 0) {
 				$simwords_out .= '<li><a href="'. $article->getUrl(['search' => $new_search_word]) .'">'. $new_search_word .'</a></li>';
 				$sim_counter++;
-                // Optional: Anzahl ähnlicher Suchbegriffe begrenzen
+				// Optional: Anzahl ähnlicher Suchbegriffe begrenzen
 				if($sim_counter >= $sim_limit) {
 					break;
 				}
@@ -50,7 +50,7 @@ if($request) { // Wenn ein Suchbegriff eingegeben wurde
 		}
 		$simwords_out .= '</ul></strong></p>';
 		if($sim_counter > 0) {
-			print $simwords_out;
+			echo $simwords_out;
 		}
     }
 }

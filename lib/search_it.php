@@ -2043,15 +2043,16 @@ class search_it
         $simWordsSQL = rex_sql::factory();
         $simWords = [];
         foreach ($_keywords as $keyword) {
-            if (!in_array(mb_strtolower($keyword['search'], 'UTF-8'), $this->blacklist) AND
-                !in_array(mb_strtolower($keyword['search'], 'UTF-8'), $this->stopwords)
+            if (!in_array(mb_strtolower($keyword['search'], 'UTF-8'), $this->blacklist) &&
+                !in_array(mb_strtolower($keyword['search'], 'UTF-8'), $this->stopwords) &&
+				!is_numeric($keyword['search'])
             ) {
                 $simWords[] = sprintf(
                     "(%s, '%s', '%s', '%s', %s)",
                     $simWordsSQL->escape($keyword['search']),
-                    ($this->similarwordsMode & SEARCH_IT_SIMILARWORDS_SOUNDEX && !is_numeric(soundex($keyword['search']))) ? soundex($keyword['search']) : '',
-                    ($this->similarwordsMode & SEARCH_IT_SIMILARWORDS_METAPHONE) ? metaphone($keyword['search']) : '',
-                    ($this->similarwordsMode & SEARCH_IT_SIMILARWORDS_COLOGNEPHONE && !is_numeric(soundex($keyword['search']))) ? soundex_ger($keyword['search']) : '',
+                    (($this->similarwordsMode & SEARCH_IT_SIMILARWORDS_SOUNDEX) && !is_numeric(soundex($keyword['search']))) ? soundex($keyword['search']) : '',
+                    (($this->similarwordsMode & SEARCH_IT_SIMILARWORDS_METAPHONE) && !is_numeric(metaphone($keyword['search']))) ? metaphone($keyword['search']) : '',
+                    (($this->similarwordsMode & SEARCH_IT_SIMILARWORDS_COLOGNEPHONE) && !is_numeric(soundex_ger($keyword['search']))) ? soundex_ger($keyword['search']) : '',
                     (isset($keyword['clang']) AND $keyword['clang'] !== false) ? $keyword['clang'] : '-1'
                 );
             }
@@ -2114,7 +2115,7 @@ class search_it
             );
         }
 
-        // ask cache
+		// ask cache
         if (rex_request('search_it_test', 'string', '') == '' && $this->cache AND $this->isCached($this->searchString)) {
             $this->cachedArray['time'] = microtime(true) - $startTime;
 
@@ -2128,38 +2129,39 @@ class search_it
             return $this->cachedArray;
         }
 
-
         if ($this->similarwords) {
             $simWordsSQL = rex_sql::factory();
             $simwordQuerys = [];
             foreach ($this->searchArray as $keyword) {
-                $sounds = [];
-                if ($this->similarwordsMode && SEARCH_IT_SIMILARWORDS_SOUNDEX && !is_numeric(soundex($keyword['search']))) {
-                    $sounds[] = "soundex = '" . soundex($keyword['search']) . "'";
-                }
+				if(!is_numeric($keyword['search'])) {
+					$sounds = [];
+					if ($this->similarwordsMode && SEARCH_IT_SIMILARWORDS_SOUNDEX && !is_numeric(soundex($keyword['search']))) {
+						$sounds[] = "soundex = '" . soundex($keyword['search']) . "'";
+					}
 
-                if ($this->similarwordsMode && SEARCH_IT_SIMILARWORDS_METAPHONE) {
-                    $sounds[] = "metaphone = '" . metaphone($keyword['search']) . "'";
-                }
+					if ($this->similarwordsMode && SEARCH_IT_SIMILARWORDS_METAPHONE && !is_numeric(metaphone($keyword['search']))) {
+						$sounds[] = "metaphone = '" . metaphone($keyword['search']) . "'";
+					}
 
-                if ($this->similarwordsMode && SEARCH_IT_SIMILARWORDS_COLOGNEPHONE && !is_numeric(soundex($keyword['search']))) {
-                    $sounds[] = "colognephone = '" . soundex_ger($keyword['search']) . "'";
-                }
-				if(!empty($sounds)) {
-					$simwordQuerys[] = sprintf("
-					  (SELECT
-						GROUP_CONCAT(DISTINCT keyword SEPARATOR ' ') as keyword,
-						%s AS typedin,
-						SUM(count) as count
-					  FROM `%s`
-					  WHERE 1
-						%s
-						AND (%s))",
-						$simWordsSQL->escape($keyword['search']),
-						self::getTempTablePrefix() . 'search_it_keywords',
-						($this->clang !== false) ? 'AND (clang = ' . intval($this->clang) . ' OR clang IS NULL)' : '',
-						implode(' OR ', $sounds)
-					);
+					if ($this->similarwordsMode && SEARCH_IT_SIMILARWORDS_COLOGNEPHONE && !is_numeric(soundex_ger($keyword['search']))) {
+						$sounds[] = "colognephone = '" . soundex_ger($keyword['search']) . "'";
+					}
+					if(!empty($sounds)) {
+						$simwordQuerys[] = sprintf("
+						  (SELECT
+							GROUP_CONCAT(DISTINCT keyword SEPARATOR ' ') as keyword,
+							%s AS typedin,
+							SUM(count) as count
+						  FROM `%s`
+						  WHERE 1
+							%s
+							AND (%s))",
+							$simWordsSQL->escape($keyword['search']),
+							self::getTempTablePrefix() . 'search_it_keywords',
+							($this->clang !== false) ? 'AND (clang = ' . intval($this->clang) . ' OR clang IS NULL)' : '',
+							implode(' OR ', $sounds)
+						);
+					}
 				}
 			}
             //echo '<br><pre>'; var_dump($simwordQuerys);echo '</pre>'; // Eine SQL-Abfrage pro Suchwort
@@ -2237,9 +2239,6 @@ class search_it
         foreach ($this->searchArray as $searchword) {
             $AWhere = [];
             $similarkeywords = '';
-            if ($this->similarwords && !isset($return['simwords'][$searchword['search']])) {
-                continue;
-            }
             if (isset($return['simwords'][$searchword['search']]['keyword'])) {
                 $similarkeywords = $return['simwords'][$searchword['search']]['keyword'];
             }
@@ -2277,6 +2276,7 @@ class search_it
             }
             $A2Where[] = '(' . implode(' OR ', $AWhere) . ')';
         }
+		
         // build MATCH-String
         $match = '(' . implode(' + ', $Amatch) . ' + 1)';
 

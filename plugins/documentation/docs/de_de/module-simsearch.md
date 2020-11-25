@@ -29,7 +29,7 @@ if($request) { // Wenn ein Suchbegriff eingegeben wurde
         // Ausgabe der Treffer
     }
     else if(!$result['count']) {
-        echo '<p class="search_it-zero">{{ d2u_helper_module_14_search_results_none }}</p>';
+        echo '<p class="search_it-zero">Es wurden keine Suchergebnisse gefunden.</p>';
     }
     
     if(!$result['count'] && !empty($result['simwordsnewsearch'])){

@@ -20,9 +20,11 @@ $search_it = new search_it(REX_CLANG_ID);
 
 Das Sortieren von Suchergebnissen ist derzeit noch nicht möglich. Ein passender PR auf GitHub ist jedoch willkommen! Allerdings lassen sich mit ein paar Kniffen dennoch bestimmte Inhalte und Daten von der Indexierung ausschließen.
 
-### Nur bestimmte Kategorien durchsuchen
+### In bestimmten Kategorien suchen
 
 Der `search_it`-Klasse kann mitgeteilt werden, auf welche Kategorien und Artikel die Ausgabe der Suchergebnisse beschränkt wird. Diese Artikel und Kategorien müssen zuvor indexiert worden sein.
+
+**Nur in festgelegten Kategorien suchen** 
 
 ```php
 $search_it = new search_it();
@@ -30,7 +32,16 @@ $search_it->searchInCategories(array(5,6,13));
 $result = $search_it->search(rex_request('search', 'string'));
 ```
 
-### Mehrsprachigkeit mit YRewrite
+**Ab einer festgelegten Kategorie rekursiv suchen**
+
+```php
+$search_it = new search_it();
+$search_it->searchInCategories(search_it_getCategories(true, true, array(5))); // 5 = id der Kategorie
+$result = $search_it->search(rex_request('search', 'string'));
+```
+
+
+### Multidomains mit YRewrite, Suche auf Domain eingrenzen
 
 > Wie funktioniert Search it in Kombination mit YRewrite mit verschiedenen Domains?
 

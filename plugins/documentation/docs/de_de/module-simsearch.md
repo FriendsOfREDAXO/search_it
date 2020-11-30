@@ -26,7 +26,7 @@ if($request) { // Wenn ein Suchbegriff eingegeben wurde
     $result = $search_it->search($request);
 
     if($result['count']) {
-        // Ausgabe der Treffer
+        // Hier bitte den Code für die Ausgabe der Suchtreffer einfügen
     }
     else if(!$result['count']) {
         echo '<p class="search_it-zero">Es wurden keine Suchergebnisse gefunden.</p>';
@@ -49,6 +49,7 @@ if($request) { // Wenn ein Suchbegriff eingegeben wurde
 			}
 		}
 		$simwords_out .= '</ul></strong></p>';
+		// Ähnlichkeitssuche nur ausgeben, wenn auch Suchtreffer für die ähnlichen Begriffe vorliegen
 		if($sim_counter > 0) {
 			echo $simwords_out;
 		}

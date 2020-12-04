@@ -228,17 +228,8 @@ class search_it
             $delete = rex_sql::factory();
             $where = sprintf("ftable = '%s' AND fid = %d AND clang = %d", self::getTablePrefix() . 'article', $_id, $langID);
 
-            // delete from cache
-            $select = rex_sql::factory();
-            $select->setTable(self::getTempTablePrefix() . 'search_it_index');
-            $select->setWhere($where);
-            $select->select('id');
-
-            $indexIds = [];
-            foreach ($select->getArray() as $result) {
-                $indexIds[] = $result['id'];
-            }
-            $this->deleteCache($indexIds);
+            // delete complete cache (see https://github.com/FriendsOfREDAXO/search_it/issues/284)
+            $this->deleteCache();
 
             // delete old
             $delete->setTable(self::getTempTablePrefix() . 'search_it_index');
@@ -398,17 +389,9 @@ class search_it
 
 		$delete = rex_sql::factory();
 		$where = "ftable = '". $this->urlAddOnTableName ."' AND fid = '". $url_hash ."' ";
-		// delete from cache
-		$select = rex_sql::factory();
-		$select->setTable(self::getTempTablePrefix() . 'search_it_index');
-		$select->setWhere($where);
-		$select->select('id');
 
-		$indexIds = [];
-		foreach ($select->getArray() as $result) {
-			$indexIds[] = $result['id'];
-		}
-		$this->deleteCache($indexIds);
+		// delete complete cache (see https://github.com/FriendsOfREDAXO/search_it/issues/284)
+		$this->deleteCache();
 
 		// delete old
 		$delete->setTable(self::getTempTablePrefix() . 'search_it_index');
@@ -723,16 +706,8 @@ class search_it
         }
         $delete->setWhere($where);
 
-        $cache = clone $delete;
-
-        // delete from cache
-        $indexIds = [];
-        if ($cache->select('id')) {
-            foreach ($cache->getArray() as $result) {
-                $indexIds[] = $result['id'];
-            }
-            $this->deleteCache($indexIds);
-        }
+		// delete complete cache (see https://github.com/FriendsOfREDAXO/search_it/issues/284)
+		$this->deleteCache();
 
         // delete from index
         if ( $_start === false || $_start == 0 ) { $delete->delete(); }
@@ -901,17 +876,8 @@ class search_it
             $where .= sprintf(' AND catid = %d', $_catid);
         }
 
-        // delete from cache
-        $select = rex_sql::factory();
-        $select->setTable(self::getTempTablePrefix() . 'search_it_index');
-        $select->setWhere($where);
-        $indexIds = [];
-        if ($select->select('id')) {
-            foreach ($select->getArray() as $result) {
-                $indexIds[] = $result['id'];
-            }
-            $this->deleteCache($indexIds);
-        }
+		// delete complete cache (see https://github.com/FriendsOfREDAXO/search_it/issues/284)
+		$this->deleteCache();
 
         // delete old data
         $delete->setTable(self::getTempTablePrefix() . 'search_it_index');

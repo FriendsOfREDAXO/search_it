@@ -8,6 +8,7 @@ Dabei werden Artikel, Medien, Dateien, PDF-Inhalte und Datenbank-Felder in einer
 
 * `PHP >= 7.0`
 * `REDAXO >= 5.5`
+* `MySQL >= 5.6` oder `MariaDB >= 10.0.5`
 * [`pdftotext`](https://www.xpdfreader.com/pdftotext-man.html) für das Durchsuchen von pdf-Inhalten, optional.
 
 ## Plugins

@@ -36,12 +36,13 @@ $sampleoutput = '<div id="search_it_sample_wrapper">
 $search_it = new search_it();
 $search_it->setSearchString('"velit esse" accusam');
 $search_it->parseSearchString('"velit esse" accusam');
-if ( $this->getConfig('highlight') == 'array' ) {
+$samplehighlighttext = $search_it->getHighlightedText($sample);
+if ( is_array($samplehighlighttext) ) {
     $sampleoutput .= '<pre>';
-    $sampleoutput .= print_r($search_it->getHighlightedText($sample), true);
+    $sampleoutput .= print_r($samplehighlighttext, true);
     $sampleoutput .= '</pre>';
 } else {
-    $sampleoutput .= $search_it->getHighlightedText($sample);
+    $sampleoutput .= $samplehighlighttext;
 }
 $sampleoutput .= '</div></div>';
 

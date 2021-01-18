@@ -348,7 +348,7 @@ class search_it
                     $articleData['values'] = serialize($additionalValues);
                 }
 
-                foreach (preg_split('~[[:punct:][:space:]]+~ismu', $plaintext) as $keyword) {
+                foreach ((array) preg_split('~[[:punct:][:space:]]+~ismu', $plaintext) as $keyword) {
                     if ($this->significantCharacterCount <= mb_strlen($keyword, 'UTF-8')) {
                         $keywords[] = array('search' => $keyword, 'clang' => $langID);
                     }
@@ -1059,7 +1059,7 @@ class search_it
     private function getTeaserText($_text)
     {
         $i = 0;
-        $textArray = preg_split('~\s+~siu', $_text, $this->maxTeaserChars);
+        $textArray = (array) preg_split('~\s+~siu', $_text, $this->maxTeaserChars);
 
         $return = '';
         $aborted = false;

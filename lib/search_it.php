@@ -337,7 +337,7 @@ class search_it
 
                 if (array_key_exists(self::getTablePrefix() . 'article', $this->includeColumns)) {
                     $additionalValues = [];
-                    $select->flushValues();
+                    $select = rex_sql::factory();
                     $select->setTable(self::getTablePrefix() . 'article');
                     $select->setWhere('id = ' . $_id . ' AND clang_id = ' . $langID);
                     $select->select('`' . implode('`,`', $this->includeColumns[self::getTablePrefix() . 'article']) . '`');
@@ -498,7 +498,7 @@ class search_it
 
 			if (array_key_exists($this->urlAddOnTableName, $this->includeColumns)) {
 				$additionalValues = [];
-				$select->flushValues();
+                $select = rex_sql::factory();
 				$select->setTable($this->urlAddOnTableName);
 				$select->setWhere('url_hash = "' . $url_hash . '"');
 				$select->select('`' . implode('`,`', $this->includeColumns[$this->urlAddOnTableName]) . '`');
@@ -2242,7 +2242,7 @@ class search_it
             }
             $A2Where[] = '(' . implode(' OR ', $AWhere) . ')';
         }
-		
+
         // build MATCH-String
         $match = '(' . implode(' + ', $Amatch) . ' + 1)';
 

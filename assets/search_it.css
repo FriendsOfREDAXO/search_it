@@ -206,19 +206,19 @@ body.rex-theme-dark #search_it_settings_folders option {
 
 @media (prefers-color-scheme: dark) {
 
-    body:not(.rex-theme-light) #search_it_sample {
+    body.rex-has-theme:not(.rex-theme-light) #search_it_sample {
         color: rgba(255, 255, 255, 0.75);
         background-color: rgba(27, 35, 44, 0.8);
         border-color: rgba(21, 28, 34, 0.8);
     }
 
-    body:not(.rex-theme-light) #search_it_settings_folders {
+    body.rex-has-theme:not(.rex-theme-light) #search_it_settings_folders {
         color: rgba(255, 255, 255, 0.75);
         background-color: rgba(27, 35, 44, 0.8);
         border-color: rgba(21, 28, 34, 0.8);
     }
 
-    body:not(.rex-theme-light) #search_it_settings_folders option {
+    body.rex-has-theme:not(.rex-theme-light) #search_it_settings_folders option {
         color: rgba(255, 255, 255, 0.75);
     }
 }

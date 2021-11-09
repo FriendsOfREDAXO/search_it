@@ -1608,7 +1608,13 @@ class search_it
 
         return true;
     }
-
+    /**
+     * Sets similarwordsmode
+     */
+    public function setSimilarWordsMode($_mode)
+    {
+        $this->similarwordsMode = intval($_mode);
+    }
 
 
 

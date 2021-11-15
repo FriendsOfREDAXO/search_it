@@ -1,3 +1,9 @@
+## Versione 6.8.0 (2021-11-15)
+
+- console command search_it:reindex 
+- dark mode thx @schuer
+- diverse Fixes, Warnungen, Verbesserungen @aeberhard, @TobiasKrais, @skerbis, @marcohanke
+
 ## Versione 6.7.3 (2020-10-13)
 - update.php now includes install.php @skerbis
 - Add index on column "hash" in table rex_tmp_search_it_cache @xong

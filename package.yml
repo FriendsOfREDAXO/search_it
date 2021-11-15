@@ -1,5 +1,5 @@
 package: search_it
-version: '6.7.4'
+version: '6.8.0'
 author: Friends Of REDAXO
 supportpage: https://github.com/FriendsOfREDAXO/search_it
 
@@ -21,6 +21,10 @@ page:
                          addsources: { title: 'translate:settings_addsources' }
                          blacklist: { title: 'translate:settings_blacklist' }
         test: { title: 'translate:test', icon: rex-icon fa-flask }
+
+console_commands:
+    search_it:reindex: rex_search_it_command_reindex
+
 requires:
     redaxo: '^5.5.0'
     php: '>=7'

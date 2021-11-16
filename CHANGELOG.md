@@ -1,5 +1,7 @@
-## Versione 6.8.0 (2021-11-15)
+## Versione 6.8.1 (2021-11-16)
+- Fix für REDAXO 5.13
 
+## Versione 6.8.0 (2021-11-15)
 - console command search_it:reindex 
 - dark mode thx @schuer
 - diverse Fixes, Warnungen, Verbesserungen @aeberhard, @TobiasKrais, @skerbis, @marcohanke

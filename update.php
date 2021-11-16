@@ -7,11 +7,11 @@
  */
 $addon = rex_addon::get('search_it');
 
-if ( is_dir($addon->getPlugin('reindex')->getPath()) ) {
+if ( $addon->pluginExists('reindex') ) {
     rex_dir::delete($addon->getPlugin('reindex')->getPath());
     //echo rex_view::warning($addon->i18n('search_it_settings_plugin_deleted'));
 }
-if ( is_dir($addon->getPlugin('search_highlighter')->getPath()) ) {
+if ( $addon->pluginExists('search_highlighter') ) {
     rex_dir::delete($addon->getPlugin('search_highlighter')->getPath());
     //echo rex_view::warning($addon->i18n('search_it_settings_plugin_deleted'));
 }

@@ -28,6 +28,7 @@ search_it_settings_indexoffline = Indexar artigos offline
 search_it_settings_automaticindex_label = Indexar e de-indexar artigos automaticamente (ADD, EDIT, DELETE)
 search_it_settings_reindex_cols_onforms_label = Re-indexar todas as colunas se as tabelas foram modificadas com Yform ou form
 search_it_settings_index_url_addon_label = Index URL addon (version >=2) URLs
+search_it_settings_index_without_ssl_verification_label = SSL Zertifikat nicht überprüfen ( hilfreich bei lokaler Entwicklung und der Nutzung von selbst-zertifizierten Zertifikaten )
 
 search_it_settings_http_authbasic = HTTP Basic AUTH ( .htaccess Passwortschutz)
 search_it_settings_http_auth_desc = Wenn ein Zugriffsschutz die Website schützt, kann hier ein Login hinterlegt werden, um die Indexierung zu ermöglichen

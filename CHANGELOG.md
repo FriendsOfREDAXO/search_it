@@ -1,16 +1,16 @@
-## Versione 6.9.0 (2021-12-18)
+## Version 6.9.0 (2021-12-18)
 - NEU: host & port kann für den Indexierungsvorgang angegeben werden
 - NEU ab REDAXO 5.13: Die Verifizierung des SSL-Zertifikat kann abgeschaltet werden (für lokale Entwicklung & selbst-ausgestellte Zertifikate)
 
-## Versione 6.8.1 (2021-11-16)
+## Version 6.8.1 (2021-11-16)
 - Fix für REDAXO 5.13
 
-## Versione 6.8.0 (2021-11-15)
+## Version 6.8.0 (2021-11-15)
 - console command search_it:reindex 
 - dark mode thx @schuer
 - diverse Fixes, Warnungen, Verbesserungen @aeberhard, @TobiasKrais, @skerbis, @marcohanke
 
-## Versione 6.7.3 (2020-10-13)
+## Version 6.7.3 (2020-10-13)
 - update.php now includes install.php @skerbis
 - Add index on column "hash" in table rex_tmp_search_it_cache @xong
 - Fix syslog error messages

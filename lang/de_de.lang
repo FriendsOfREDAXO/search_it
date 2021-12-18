@@ -28,10 +28,10 @@ search_it_settings_indexoffline = Offline-Artikel indexieren
 search_it_settings_automaticindex_label = Artikel (ADD, EDIT, DELETE) automatisch (de)indexieren
 search_it_settings_reindex_cols_onforms_label = Reindexieren aller Spalten, wenn Tabellen mit YForm oder form bearbeitet werden
 search_it_settings_index_url_addon_label = URLs aus dem URL Addon (Version >=2) indexieren
-search_it_settings_index_without_ssl_verification_label = SSL Zertifikat nicht überprüfen ( hilfreich bei lokaler Entwicklung und der Nutzung von selbst-zertifizierten Zertifikaten )
-search_it_settings_index_host_label = Soll über einen besonderen Host[:Port] indexiert werden? ( Bitte nur angeben, wenn unbedingt erforderlich )
+search_it_settings_index_without_ssl_verification_label = SSL Zertifikat nicht überprüfen (hilfreich bei lokaler Entwicklung und der Nutzung von selbst-zertifizierten Zertifikaten)
+search_it_settings_index_host_label = Soll über einen besonderen Host[:Port] indexiert werden? (Bitte nur angeben, wenn unbedingt erforderlich)
 
-search_it_settings_http_authbasic = HTTP Basic AUTH ( .htaccess Passwortschutz)
+search_it_settings_http_authbasic = HTTP Basic AUTH (.htaccess Passwortschutz)
 search_it_settings_http_auth_desc = Wenn ein Zugriffsschutz die Website schützt, kann hier ein Login hinterlegt werden, um die Indexierung zu ermöglichen
 search_it_settings_htaccess_user = Username
 search_it_settings_htaccess_pass = Passwort

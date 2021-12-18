@@ -17,6 +17,9 @@ if (rex_post('config-submit', 'boolean')) {
         ['reindex_cols_onforms', 'bool'],
         ['index_url_addon', 'bool'],
 
+        ['index_without_ssl_verification', 'bool'],
+        ['index_host', 'string'],
+
     ]);
 
     $changed = array_keys(array_merge(array_diff_assoc(array_map('serialize',$posted_config),array_map('serialize',$this->getConfig())), array_diff_assoc(array_map('serialize',$this->getConfig()),array_map('serialize',$posted_config))));
@@ -59,6 +62,18 @@ if(search_it_isUrlAddOnAvailable()) {
             'checked' => $this->getConfig('index_url_addon')
         ];
 }
+// SSL verify
+$ssl_verify = [];
+if (rex_version::compare(rex::getVersion(), '5.13', '>=')) {
+    $ssl_verify = [
+        'type' => 'checkbox',
+        'id' => 'search_it_index_without_ssl_verification',
+        'name' => 'search_config[index_without_ssl_verification]',
+        'label' => $this->i18n('search_it_settings_index_without_ssl_verification_label'),
+        'value' => '1',
+        'checked' => $this->getConfig('index_without_ssl_verification')
+    ];
+}
 
 $content = search_it_getSettingsFormSection(
     'search_it_index',
@@ -89,6 +104,16 @@ $content = search_it_getSettingsFormSection(
             'checked' => $this->getConfig('reindex_cols_onforms')
         ],
 		$url_checkbox
+        ,
+        $ssl_verify
+        ,
+        [
+            'type' => 'string',
+            'id' => 'search_it_index_host',
+            'name' => 'search_config[index_host]',
+            'label' => $this->i18n('search_it_settings_index_host_label'),
+            'value' => !empty($this->getConfig('index_host')) ? rex_escape($this->getConfig('index_host')) : '',
+        ],
     ],'edit'
 );
 

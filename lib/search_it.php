@@ -216,6 +216,7 @@ class search_it
 
         $return = [];
         $keywords = [];
+
         foreach ($langs as $lang) {
             $langID = $lang->getId();
 
@@ -247,59 +248,74 @@ class search_it
                 AND ($_id != rex_article::getNotfoundArticleId() OR $_id == rex_article::getSiteStartArticleId())  ) {
 
 
-                 try {
-                        $scanurl = rtrim(rex::getServer(), "/") . '/' . ltrim(str_replace(array('../', './'), '', rex_getUrl($_id, $langID,array('search_it_build_index'=>'do-it'),'&')),"/");
-                        if(rex_addon::get("yrewrite") && rex_addon::get("yrewrite")->isAvailable()) {
-                            $scanurl = rex_yrewrite::getFullUrlByArticleId($_id, $langID, array('search_it_build_index' => 'do-it-with-yrewrite'), '&');
+                try {
+                    if (substr(rex_addon::get('search_it')->getConfig('index_host'),0,1) == ':') {
+                        $scanparts['port'] = trim(rex_addon::get('search_it')->getConfig('index_host'),':');
+                    } else {
+                        $scanparts = parse_url(rex_addon::get('search_it')->getConfig('index_host'));
+                    }
+
+                    if(rex_addon::get("yrewrite") && rex_addon::get("yrewrite")->isAvailable() && !isset($scanparts['host'])) {
+                        $scanurl = rex_yrewrite::getFullUrlByArticleId($_id, $langID, array('search_it_build_index' => 'do-it-with-yrewrite'), '&');
+                        if ( isset($scanparts['port']) && $scanparts['port'] != '' ) {
+                            $scanurl = str_replace(parse_url($scanurl,PHP_URL_HOST),parse_url($scanurl,PHP_URL_HOST).':'.$scanparts['port'], $scanurl);
                         }
+                    } else {
+                        $scanhost = ($scanparts['scheme'] ?? 'http' ).'://'.$scanparts['host'] ?? rex::getServer();
+                        $scanhost .= isset($scanparts['port']) ? ':'.$scanparts['port'] : '';
+                        $scanurl = rtrim($scanhost, "/") . '/' . ltrim(str_replace(array('../', './'), '', rex_getUrl($_id, $langID,array('search_it_build_index'=>'do-it'),'&')),"/");
+                    }
 
-                        $files_socket = rex_socket::factoryURL($scanurl);
-                        if (rex_addon::get('search_it')->getConfig('htaccess_user') != '' && rex_addon::get('search_it')->getConfig('htaccess_pass') != '') {
-                            $files_socket->addBasicAuthorization(rex_addon::get('search_it')->getConfig('htaccess_user'),rex_addon::get('search_it')->getConfig('htaccess_pass'));
+                    $scan_socket = $this->prepareSocket($scanurl);
+                    $response = $scan_socket->doGet();
+                    $redircount = 0;
+
+                    while ($response->isRedirection() && $redircount < 3) {
+                        $redircount++;
+                        $lastscanurl = $scanurl;
+                        $scanurl = str_replace(array('../', './'), '/',$response->getHeader('location'));
+
+                        $scanparts = parse_url($scanurl);
+                        if (in_array('query',$scanparts)) {
+                            list($scanurl, $parameters) = explode('?', $scanurl);
+                            parse_str($parameters, $output);
+                            unset($output['search_it_build_index']);
+                            $scanurl = $scanurl . '?' . http_build_query($output);
                         }
-                        $response = $files_socket->doGet();
-
-                        $redircount = 0;
-                        while ($response->isRedirection() && $redircount < 3) {
-
-                            $lastscanurl = $scanurl;
-                            $scanurl = str_replace(array('../', './'), '/',$response->getHeader('location'));
-
-                            if (strpos($scanurl,'//') === false ) {
-                                $parts = parse_url($lastscanurl);
-                                if ( isset($parts['scheme']) && isset($parts['host']) ) {
-                                    $scanurl = $parts['scheme'] . '://' . $parts['host'] . $scanurl;
-                                }
+                        if (!in_array('host',$scanparts)) {
+                            $lastparts = parse_url($lastscanurl);
+                            if ( isset($lastparts['scheme']) && isset($lastparts['host']) ) {
+                                $scanurl = $lastparts['scheme'] . '://' . $lastparts['host'] .
+                                ( isset($lastparts['port']) ? ':'.$lastparts['port'] : '' ).
+                                $scanurl;
                             }
-                            $scanurl .= ( strpos($scanurl,'?') !== false ? '&' : '?').'search_it_build_index=redirect';
-                            //rex_logger::factory()->log('Warning','Redirect von '.$lastscanurl.' zu '.$scanurl.', '.$response->getHeader());
-
-                            $files_socket = rex_socket::factoryURL($scanurl);
-                            if (rex_addon::get('search_it')->getConfig('htaccess_user') != '' && rex_addon::get('search_it')->getConfig('htaccess_pass') != '') {
-                                $files_socket->addBasicAuthorization(rex_addon::get('search_it')->getConfig('htaccess_user'),rex_addon::get('search_it')->getConfig('htaccess_pass'));
-                            }
-                            $response = $files_socket->doGet();
-                            $redircount++;
                         }
 
-                        if ($response->isOk()) {
-                            $articleText = $response->getBody();
+                        $scanurl .= ( strpos($scanurl,'?') !== false ? '&' : '?').'search_it_build_index=redirect';
+                        //rex_logger::factory()->log('Warning','Redirect von '.$lastscanurl.' zu '.$scanurl.', '.$response->getHeader());
+                        $scan_socket = $this->prepareSocket($scanurl);
+                        $response = $scan_socket->doGet();
+
+                    }
+
+                    if ($response->isOk()) {
+                        $articleText = $response->getBody();
+                    } else {
+                        $articleText = '';
+                        !is_null($response) ? $response_text = $response->getStatusCode() . ' - ' . $response->getStatusMessage() : $response_text = '';
+                        if ( $response->isRedirection() ) {
+                            $return[$langID] = SEARCH_IT_ART_REDIRECT;
+                            $response_text = rex_i18n::msg('search_it_generate_article_redirect');
+                            rex_logger::factory()->log( 'Warning', rex_i18n::msg('search_it_generate_article_http_error') .' '. $scanurl . PHP_EOL . $response_text );
+                        } else if ( $response->getStatusCode() == '404' ) {
+                            $return[$langID] = SEARCH_IT_ART_404;
+                            rex_logger::factory()->log( 'Warning', rex_i18n::msg('search_it_generate_article_404_error') .' '. $scanurl . PHP_EOL . $response_text );
                         } else {
-                            $articleText = '';
-                            !is_null($response) ? $response_text = $response->getStatusCode() . ' - ' . $response->getStatusMessage() : $response_text = '';
-                            if ( $response->isRedirection() ) {
-                                $return[$langID] = SEARCH_IT_ART_REDIRECT;
-                                $response_text = rex_i18n::msg('search_it_generate_article_redirect');
-                                rex_logger::factory()->log( 'Warning', rex_i18n::msg('search_it_generate_article_http_error') .' '. $scanurl . PHP_EOL . $response_text );
-                            } else if ( $response->getStatusCode() == '404' ) {
-                                $return[$langID] = SEARCH_IT_ART_404;
-                                rex_logger::factory()->log( 'Warning', rex_i18n::msg('search_it_generate_article_404_error') .' '. $scanurl . PHP_EOL . $response_text );
-                            } else {
-                                rex_logger::factory()->log( 'Warning', rex_i18n::msg('search_it_generate_article_http_error') .' '. $scanurl . PHP_EOL . $response_text );
-                                $return[$langID] = SEARCH_IT_ART_NOTOK;
-                            }
-                            continue;
+                            rex_logger::factory()->log( 'Warning', rex_i18n::msg('search_it_generate_article_http_error') .' '. $scanurl . PHP_EOL . $response_text );
+                            $return[$langID] = SEARCH_IT_ART_NOTOK;
                         }
+                        continue;
+                    }
 
                  } catch (rex_socket_exception $e) {
                     $articleText = '';
@@ -402,52 +418,65 @@ class search_it
 		$article = rex_article::get($article_id, $clang_id);
 		if ( is_null($article)) {
 			$return[$clang_id] = SEARCH_IT_ART_IDNOTFOUND;
-		}
-		else if (is_object($article) AND ($article->isOnline() OR rex_addon::get('search_it')->getConfig('indexoffline'))) {
+		} else if (is_object($article) AND ($article->isOnline() OR rex_addon::get('search_it')->getConfig('indexoffline'))) {
 			try {
-				$url_profile = \Url\Profile::get($profile_id);
-				$server = rtrim(rex::getServer(), "/");
-				$search_it_build_index = "do-it";
-				if(rex_addon::get('yrewrite')->isAvailable()) {
+
+                if (substr(rex_addon::get('search_it')->getConfig('index_host'),0,1) == ':') {
+                    $scanparts['port'] = trim(rex_addon::get('search_it')->getConfig('index_host'),':');
+                } else {
+                    $scanparts = parse_url(rex_addon::get('search_it')->getConfig('index_host'));
+                }
+
+				if(rex_addon::get("yrewrite") && rex_addon::get('yrewrite')->isAvailable() && !isset($scanparts['host'])) {
 					$hit_domain = rex_yrewrite::getDomainByArticleId($article_id, $clang_id);
 					$server = rtrim($hit_domain->getUrl(), "/");
-					$search_it_build_index = "do-it-with-yrewrite";
-				}
+					$search_it_build_index = "do-it-url-with-yrewrite";
+                } else {
+                    $server = ($scanparts['scheme'] ?? 'http' ).'://'.($scanparts['host'] ?? parse_url(rex::getServer(),PHP_URL_HOST));
+                    $server .= isset($scanparts['port']) ? ':'.$scanparts['port'] : '';
+                    $search_it_build_index = "do-it-url";
+                }
 
-				$scanurl = rex_getUrl($article_id, $clang_id, [$url_profile->getNamespace() => $data_id, 'search_it_build_index' => $search_it_build_index],'&');
+                $url_profile = \Url\Profile::get($profile_id);
+                $scanurl = rex_getUrl('', '', [$url_profile->getNamespace() => $data_id, 'search_it_build_index' => $search_it_build_index],'&');
+
 				if(strpos($scanurl, 'http') === false) {
 					// URL addon multidomain site return server name in url
 					$scanurl = $server .'/'. ltrim(str_replace(['../', './'], '', $scanurl),"/");
 				}
 
-				$files_socket = rex_socket::factoryURL($scanurl);
-				if (rex_addon::get('search_it')->getConfig('htaccess_user') != '' && rex_addon::get('search_it')->getConfig('htaccess_pass') != '') {
-					$files_socket->addBasicAuthorization(rex_addon::get('search_it')->getConfig('htaccess_user'), rex_addon::get('search_it')->getConfig('htaccess_pass'));
-				}
-				$response = $files_socket->doGet();
-
+				$scan_socket = $this->prepareSocket($scanurl);
+				$response = $scan_socket->doGet();
 				$redircount = 0;
+
 				while ($response->isRedirection() && $redircount < 3) {
 
-					$lastscanurl = $scanurl;
-					$scanurl = str_replace(array('../', './'), '/', $response->getHeader('location'));
+                    $redircount++;
+                    $lastscanurl = $scanurl;
+                    $scanurl = str_replace(array('../', './'), '/',$response->getHeader('location'));
 
-					if (strpos($scanurl,'//') === false ) {
-						$parts = parse_url($lastscanurl);
-						if ( isset($parts['scheme']) && isset($parts['host']) ) {
-							$scanurl = $parts['scheme'] . '://' . $parts['host'] . $scanurl;
-						}
-					}
-					$scanurl .= ( strpos($scanurl,'?') !== false ? '&' : '?').'search_it_build_index=redirect';
+                    $scanparts = parse_url($scanurl);
+                    if (in_array('query',$scanparts)) {
+                        list($scanurl, $parameters) = explode('?', $scanurl);
+                        parse_str($parameters, $output);
+                        unset($output['search_it_build_index']);
+                        $scanurl = $scanurl . '?' . http_build_query($output);
+                    }
+                    if (!in_array('host',$scanparts)) {
+                        $lastparts = parse_url($lastscanurl);
+                        if ( isset($lastparts['scheme']) && isset($lastparts['host']) ) {
+                            $scanurl = $lastparts['scheme'] . '://' . $lastparts['host'] .
+                                ( isset($lastparts['port']) ? ':'.$lastparts['port'] : '' ).
+                                $scanurl;
+                        }
+                    }
+
+                    $scanurl .= ( strpos($scanurl,'?') !== false ? '&' : '?').'search_it_build_index=redirect';
 					//rex_logger::factory()->log('Warning','Redirect von '.$lastscanurl.' zu '.$scanurl.', '.$response->getHeader());
-
-					$files_socket = rex_socket::factoryURL($scanurl);
-					if (rex_addon::get('search_it')->getConfig('htaccess_user') != '' && rex_addon::get('search_it')->getConfig('htaccess_pass') != '') {
-						$files_socket->addBasicAuthorization(rex_addon::get('search_it')->getConfig('htaccess_user'),rex_addon::get('search_it')->getConfig('htaccess_pass'));
-					}
-					$response = $files_socket->doGet();
-					$redircount++;
+					$scan_socket = $this->prepareSocket($scanurl);
+					$response = $scan_socket->doGet();
 				}
+
 				if ($response->isOk()) {
 					$articleText = $response->getBody();
 				} else {
@@ -472,6 +501,7 @@ class search_it
 				rex_logger::factory()->error( rex_i18n::msg('search_it_generate_article_socket_error') .' '.$scanurl. PHP_EOL .$e->getMessage() );
 				$return[$clang_id] = SEARCH_IT_URL_ERROR;
 			}
+
 			// regex time
 			preg_match_all('/<!--\ssearch_it\s([0-9]*)\s?-->(.*)<!--\s\/search_it\s(\1)\s?-->/sU', $articleText, $matches, PREG_SET_ORDER);
 			$articleText = '';
@@ -2474,5 +2504,23 @@ class search_it
         $return['time'] = microtime(true) - $startTime;
 
         return $return;
+    }
+
+    private function prepareSocket(string $scanurl)
+    {
+        $socket = rex_socket::factoryURL($scanurl);
+        if (rex_version::compare(rex::getVersion(), '5.13', '>=')) {
+            $socket->setOptions([
+                'ssl' => [
+                    'verify_peer' => false,
+                    'verify_peer_name' => false
+                ]
+            ]);
+        }
+        if (rex_addon::get('search_it')->getConfig('htaccess_user') != '' && rex_addon::get('search_it')->getConfig('htaccess_pass') != '') {
+            $socket->addBasicAuthorization(rex_addon::get('search_it')->getConfig('htaccess_user'),rex_addon::get('search_it')->getConfig('htaccess_pass'));
+        }
+
+        return $socket;
     }
 }

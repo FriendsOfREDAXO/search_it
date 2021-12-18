@@ -43,6 +43,13 @@ Dies sind die Standard-Einstellungen für den Aufbau eines Suchindex und die Dur
 
 Bei der Indexierung durchsucht Search it alle in den Einstellungen angegebenen Orte (Artikel, URLs aus dem URL-Addon, Datenbank, Medienpool) und erstellt einen Suchindex.
 
+##### SSL Zertifikat nicht überprüfen 
+Das kann hilfreich sein bei lokaler Entwicklung und der Nutzung von selbst-zertifizierten Zertifikaten )
+
+##### Host[:Port] 
+Falls die Hosting-Umgebung die Nutzung eines speziellen Hosts und/oder Ports nötig macht, kann man hier Host[:Port] angeben mit dem 
+dann die Indexierung durchgeführt wird. Das kann z.B. in einer Docker-Umgebung oder beim Einsatz hinter einem Proxy nötig sein.
+Wird diese Einstellung verwendet, kommt ein eventuell vorhandenes yrewrite nicht mehr zum Tragen.
 
 #### Suchmodi
 

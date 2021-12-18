@@ -283,7 +283,7 @@ class search_it
                             $scanurl = $scanurl . '?' . http_build_query($output);
                         }
                         if (!in_array('host',$scanparts)) {
-                            $lastparts = parse_url($lastscanurl);dump($lastparts);
+                            $lastparts = parse_url($lastscanurl);
                             if ( isset($lastparts['scheme']) && isset($lastparts['host']) ) {
                                 $scanurl = $lastparts['scheme'] . '://' . $lastparts['host'] .
                                 ( isset($lastparts['port']) ? ':'.$lastparts['port'] : '' ).
@@ -418,8 +418,7 @@ class search_it
 		$article = rex_article::get($article_id, $clang_id);
 		if ( is_null($article)) {
 			$return[$clang_id] = SEARCH_IT_ART_IDNOTFOUND;
-		}
-		else if (is_object($article) AND ($article->isOnline() OR rex_addon::get('search_it')->getConfig('indexoffline'))) {
+		} else if (is_object($article) AND ($article->isOnline() OR rex_addon::get('search_it')->getConfig('indexoffline'))) {
 			try {
 
                 if (substr(rex_addon::get('search_it')->getConfig('index_host'),0,1) == ':') {
@@ -433,13 +432,14 @@ class search_it
 					$server = rtrim($hit_domain->getUrl(), "/");
 					$search_it_build_index = "do-it-url-with-yrewrite";
                 } else {
-                    $server = ($scanparts['scheme'] ?? 'http' ).'://'.$scanparts['host'] ?? rex::getServer();
+                    $server = ($scanparts['scheme'] ?? 'http' ).'://'.($scanparts['host'] ?? parse_url(rex::getServer(),PHP_URL_HOST));
                     $server .= isset($scanparts['port']) ? ':'.$scanparts['port'] : '';
                     $search_it_build_index = "do-it-url";
                 }
 
                 $url_profile = \Url\Profile::get($profile_id);
-                $scanurl = rex_getUrl($article_id, $clang_id, [$url_profile->getNamespace() => $data_id, 'search_it_build_index' => $search_it_build_index],'&');
+                $scanurl = rex_getUrl('', '', [$url_profile->getNamespace() => $data_id, 'search_it_build_index' => $search_it_build_index],'&');
+
 				if(strpos($scanurl, 'http') === false) {
 					// URL addon multidomain site return server name in url
 					$scanurl = $server .'/'. ltrim(str_replace(['../', './'], '', $scanurl),"/");
@@ -448,7 +448,7 @@ class search_it
 				$scan_socket = $this->prepareSocket($scanurl);
 				$response = $scan_socket->doGet();
 				$redircount = 0;
-dump($scanurl);
+
 				while ($response->isRedirection() && $redircount < 3) {
 
                     $redircount++;
@@ -473,7 +473,7 @@ dump($scanurl);
 
                     $scanurl .= ( strpos($scanurl,'?') !== false ? '&' : '?').'search_it_build_index=redirect';
 					//rex_logger::factory()->log('Warning','Redirect von '.$lastscanurl.' zu '.$scanurl.', '.$response->getHeader());
-					$scan_socket->setPath($scanurl);
+					$scan_socket = $this->prepareSocket($scanurl);
 					$response = $scan_socket->doGet();
 				}
 
@@ -501,6 +501,7 @@ dump($scanurl);
 				rex_logger::factory()->error( rex_i18n::msg('search_it_generate_article_socket_error') .' '.$scanurl. PHP_EOL .$e->getMessage() );
 				$return[$clang_id] = SEARCH_IT_URL_ERROR;
 			}
+
 			// regex time
 			preg_match_all('/<!--\ssearch_it\s([0-9]*)\s?-->(.*)<!--\s\/search_it\s(\1)\s?-->/sU', $articleText, $matches, PREG_SET_ORDER);
 			$articleText = '';

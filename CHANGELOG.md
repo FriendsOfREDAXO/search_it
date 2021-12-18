@@ -1,6 +1,6 @@
 ## Versione 6.9.0 (2021-12-18)
 - NEU: host & port kann für den Indexierungsvorgang angegeben werden
-- NEU: SSL Verifizierung kann abgeschaltet werden (für lokale Entwicklung & selbst-ausgestellte Zertifikate)
+- NEU ab REDAXO 5.13: Die Verifizierung des SSL-Zertifikat kann abgeschaltet werden (für lokale Entwicklung & selbst-ausgestellte Zertifikate)
 
 ## Versione 6.8.1 (2021-11-16)
 - Fix für REDAXO 5.13

@@ -62,6 +62,18 @@ if(search_it_isUrlAddOnAvailable()) {
             'checked' => $this->getConfig('index_url_addon')
         ];
 }
+// SSL verify
+$ssl_verify = [];
+if (rex_version::compare(rex::getVersion(), '5.13', '>=')) {
+    $ssl_verify = [
+        'type' => 'checkbox',
+        'id' => 'search_it_index_without_ssl_verification',
+        'name' => 'search_config[index_without_ssl_verification]',
+        'label' => $this->i18n('search_it_settings_index_without_ssl_verification_label'),
+        'value' => '1',
+        'checked' => $this->getConfig('index_without_ssl_verification')
+    ];
+}
 
 $content = search_it_getSettingsFormSection(
     'search_it_index',
@@ -93,14 +105,8 @@ $content = search_it_getSettingsFormSection(
         ],
 		$url_checkbox
         ,
-        [
-            'type' => 'checkbox',
-            'id' => 'search_it_index_without_ssl_verification',
-            'name' => 'search_config[index_without_ssl_verification]',
-            'label' => $this->i18n('search_it_settings_index_without_ssl_verification_label'),
-            'value' => '1',
-            'checked' => $this->getConfig('index_without_ssl_verification')
-        ],
+        $ssl_verify
+        ,
         [
             'type' => 'string',
             'id' => 'search_it_index_host',

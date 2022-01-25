@@ -146,7 +146,7 @@ search_it_test_legend = Einstellungen überprüfen und Suche testen
 search_it_test_submit = Suchen
 search_it_test_mode = Suchmodus
 search_it_test_notice = Suche ausgeführt.
-search_it_test_hits = Treffer:
+search_it_test_hits = Treffer
 
 search_it_test_result = Testsuchergebnis
 search_it_test_result_object = Testsuchergebnis-Objekt

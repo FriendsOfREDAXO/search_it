@@ -1,3 +1,5 @@
+- Fix documentation plugin when no translation is provided for selected backend language thx @isospin
+
 ## Version 6.9.0 (2021-12-18)
 - NEU: host & port kann für den Indexierungsvorgang angegeben werden
 - NEU ab REDAXO 5.13: Die Verifizierung des SSL-Zertifikat kann abgeschaltet werden (für lokale Entwicklung & selbst-ausgestellte Zertifikate)

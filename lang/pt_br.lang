@@ -145,7 +145,7 @@ search_it_test_legend = Check settinge and test search
 search_it_test_submit = Search
 search_it_test_mode = Searchmode
 search_it_test_notice = Search done.
-search_it_test_hits = Hits:
+search_it_test_hits = Hits
 
 search_it_test_result = Test search result
 search_it_test_result_object = Test search result object

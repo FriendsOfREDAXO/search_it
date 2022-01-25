@@ -144,7 +144,7 @@ search_it_test_legend = Kontrollera inställningarna och testa söket
 search_it_test_submit = Sök
 search_it_test_mode = Sökmodus
 search_it_test_notice = Sök utförts
-search_it_test_hits = Träff:
+search_it_test_hits = Träff
 
 search_it_test_result = Testsökresultat
 search_it_test_result_object = Testsökobjekt

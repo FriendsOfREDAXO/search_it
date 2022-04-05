@@ -1,3 +1,4 @@
+- Fix get clang or clang_id column from yform table in index table #332 thx @rolandsee
 - Fix documentation plugin when no translation is provided for selected backend language thx @isospin
 
 ## Version 6.9.0 (2021-12-18)

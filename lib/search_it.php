@@ -782,6 +782,8 @@ class search_it
                     $indexData['fcolumn'] = $_column;
 
                     if (array_key_exists('clang', $row)) {
+                        $indexData['clang'] = $row['clang'];
+                    } elseif (array_key_exists('clang_id', $row)) {
                         $indexData['clang'] = $row['clang_id'];
                     } else {
                         $indexData['clang'] = NULL;

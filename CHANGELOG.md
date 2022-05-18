@@ -1,5 +1,6 @@
 # Changelog
 
+- Change table fields used in an index to varchar(191) for utf8mb4 thx @fietstouring
 - Fix changelog headline structure thx @rolandsee
 - Fix get clang or clang_id column from yform table in index table #332 thx @rolandsee
 - Fix documentation plugin when no translation is provided for selected backend language thx @isospin

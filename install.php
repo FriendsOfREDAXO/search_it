@@ -2,7 +2,7 @@
 
 rex_sql_table::get(rex::getTable(rex::getTempPrefix().'search_it_index'))
     ->ensureColumn(new rex_sql_column('id', 'int(11)', false, null, 'auto_increment'))
-    ->ensureColumn(new rex_sql_column('fid', 'varchar(255)', true))
+    ->ensureColumn(new rex_sql_column('fid', 'varchar(191)', true))
     ->ensureColumn(new rex_sql_column('catid', 'int(11)', true))
     ->ensureColumn(new rex_sql_column('ftable', 'varchar(255)', true))
     ->ensureColumn(new rex_sql_column('fcolumn', 'varchar(255)', true))
@@ -40,7 +40,7 @@ rex_sql_table::get(rex::getTable(rex::getTempPrefix().'search_it_cacheindex_ids'
 
 rex_sql_table::get(rex::getTable(rex::getTempPrefix().'search_it_keywords'))
     ->ensureColumn(new rex_sql_column('id', 'int(11)', false, null, 'auto_increment'))
-    ->ensureColumn(new rex_sql_column('keyword', 'varchar(255)'))
+    ->ensureColumn(new rex_sql_column('keyword', 'varchar(191)'))
     ->ensureColumn(new rex_sql_column('soundex', 'varchar(255)'))
     ->ensureColumn(new rex_sql_column('metaphone', 'varchar(255)'))
     ->ensureColumn(new rex_sql_column('colognephone', 'varchar(255)'))

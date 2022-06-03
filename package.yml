@@ -36,4 +36,9 @@ plugins:
     - plaintext
     - stats
 
-
+installer_ignore:
+    - .github
+    - .gitignore
+    - .php-cs-fixer.cache
+    - .php-cs-fixer.dist.php
+    - psalm.xml

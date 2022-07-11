@@ -99,7 +99,7 @@ function search_it_getDirs($_startDir = '', $_getSubdirs = false){
     $dirs = [];
     foreach ($dirs2 as $k => $dir){
         if (@is_dir($_SERVER['DOCUMENT_ROOT'] . $_startDir . '/' . $dir)) {
-            $dirs[$_SERVER['DOCUMENT_ROOT'] . $_startDir . '/' . $dir] = utf8_encode($_startDir . '/' . $dir);
+            $dirs[$_SERVER['DOCUMENT_ROOT'] . $_startDir . '/' . $dir] = $_startDir . '/' . $dir;
         }
     }
     if(!$_getSubdirs) {
@@ -112,7 +112,7 @@ function search_it_getDirs($_startDir = '', $_getSubdirs = false){
 
         $depth = substr_count($dir, '/') - $startDepth;
         if(@is_dir($_SERVER['DOCUMENT_ROOT'].$dir) AND $depth <= $si->getConfig('dirdepth')){
-            $return[$_SERVER['DOCUMENT_ROOT'].$dir] = utf8_encode($dir);
+            $return[$_SERVER['DOCUMENT_ROOT'].$dir] = $dir;
             $subdirs = [];
             foreach(array_diff(scandir($_SERVER['DOCUMENT_ROOT'].$dir), array( '.', '..' )) as $subdir) {
                 if (@is_dir($_SERVER['DOCUMENT_ROOT'] . $dir . '/' . $subdir)) {
@@ -149,7 +149,7 @@ function search_it_getFiles($_startDir = '', $_fileexts = [], $_getSubdirs = fal
         if(@is_dir($_SERVER['DOCUMENT_ROOT'].$_startDir.'/'.$dir)) {
             $dirs[$_SERVER['DOCUMENT_ROOT'] . $_startDir . '/' . $dir] = $_startDir . '/' . $dir;
         } elseif(preg_match($fileextPattern, $dir)) {
-            $return[] = utf8_encode($_startDir . '/' . $dir);
+            $return[] = $_startDir . '/' . $dir;
         }
     }
 

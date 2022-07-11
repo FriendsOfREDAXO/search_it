@@ -1,5 +1,7 @@
 # Changelog
 
+## Version 6.9.1 (2022-07-11)
+- remove/replace utf8_encode() for PHP 8.2 #341 @staabm
 - Change table fields used in an index to varchar(191) for utf8mb4 thx @fietstouring
 - Fix changelog headline structure thx @rolandsee
 - Fix get clang or clang_id column from yform table in index table #332 thx @rolandsee

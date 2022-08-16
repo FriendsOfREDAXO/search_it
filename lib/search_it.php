@@ -1141,7 +1141,7 @@ class search_it
     public function deleteIndex()
     {
         $delete = rex_sql::factory();
-		$delete->setQuery('TRUNCATE '. self::getTempTablePrefix() .'search_it_index');
+        $delete->setQuery('TRUNCATE ' . self::getTempTablePrefix() . 'search_it_index');
 
         $this->deleteCache();
     }
@@ -2000,9 +2000,13 @@ class search_it
         if ($_indexIds === false) {
             // delete entire search-cache
             $delete = rex_sql::factory();
-            $delete->setQuery('TRUNCATE '. self::getTempTablePrefix() . 'search_it_cacheindex_ids');
-            $delete->setQuery('TRUNCATE '. self::getTempTablePrefix() . 'search_it_cache');
-
+            if ($delete->inTransaction()) {
+                $delete->setQuery('DELETE FROM ' . self::getTempTablePrefix() . 'search_it_cacheindex_ids');
+                $delete->setQuery('DELETE FROM ' . self::getTempTablePrefix() . 'search_it_cache');
+            } else {
+                $delete->setQuery('TRUNCATE ' . self::getTempTablePrefix() . 'search_it_cacheindex_ids');
+                $delete->setQuery('TRUNCATE ' . self::getTempTablePrefix() . 'search_it_cache');
+            }
         } elseif (is_array($_indexIds) AND !empty($_indexIds)) {
             $sql = rex_sql::factory();
 

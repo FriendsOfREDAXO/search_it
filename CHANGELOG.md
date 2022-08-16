@@ -1,4 +1,6 @@
 # Changelog
+## Version 6.9.2 (2022-08-16)
+- Fix stats PlugIn for PHP 8.1
 
 ## Version 6.9.1 (2022-07-11)
 - remove/replace utf8_encode() for PHP 8.2 #341 @staabm

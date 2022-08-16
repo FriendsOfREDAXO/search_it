@@ -87,7 +87,7 @@ foreach ($sql->getArray("SHOW TABLE STATUS LIKE '" . rex::getTablePrefix() .rex:
         $generalstats['075_cachedsearchcount'] = $table['Rows'];
 }
 
-$generalstats['020_averageresultcount'] = number_format($generalstats['020_averageresultcount'], 2, ',', '');
+$generalstats['020_averageresultcount'] = number_format($generalstats['020_averageresultcount'] ?? 0, 2, ',', '');
 $generalstats['100_datalength'] = search_it_stats_bytesize($generalstats['100_datalength']);
 $generalstats['110_indexlength'] = search_it_stats_bytesize($generalstats['110_indexlength']);
 
@@ -218,6 +218,7 @@ $content[] =  '</div>';
             jQuery('<dt>')
                 .css('font-weight', '900')
                 .css('margin-bottom','1em')
+                .css('padding','0')
                 .append(
                     jQuery('<a><?php echo $this->i18n('search_it_settings_show_all'); ?><' + '/a>')
                         .css('cursor', 'pointer')

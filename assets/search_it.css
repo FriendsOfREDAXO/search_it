@@ -153,8 +153,7 @@
 #subdirs_29 { background-image:url(29.png); }
 #subdirs_30 { background-image:url(30.png); }
 
-#search_it_plaintext_description,
-#search_it_stats_description { height: 24px; }
+#search_it_plaintext_description { height: 24px; }
 #search_it_plaintext_description dd { padding-left: 16px; }
 .movesymbol { font-size: 21px; }
 #sortable-elements {

@@ -1,4 +1,7 @@
 # Changelog
+## Version 6.9.4 (2022-08-17)
+- Fixes for PHP 8.1 thx @skerbis
+
 ## Version 6.9.3 (2022-08-16)
 - Fix autoreindex on yform change for PHP 8.1 (#337) thx @gharlan
 

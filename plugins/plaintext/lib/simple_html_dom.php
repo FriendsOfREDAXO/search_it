@@ -11,7 +11,7 @@ Contributions by:
 Licensed under The MIT License
 Redistributions of files must retain the above copyright notice.
 
-Edited by Robert Rupf: Added the remove-method, which allows to remove nodes in 
+Edited by Robert Rupf: Added the remove-method, which allows to remove nodes in
 the same way you can find them.
 
 Edited by Norbert Micheel: adapted the regex pattern for pcre2 PHP 7.3 in function parse_selector
@@ -116,7 +116,7 @@ class simple_html_dom_node {
         $this->parent = null;
         $this->children = null;
     }
-    
+
     // dump node's tree
     function dump($show_attr=true) {
         dump_html_tree($this, $show_attr);
@@ -146,7 +146,7 @@ class simple_html_dom_node {
         return null;
     }
 
-    // returns the next sibling of node    
+    // returns the next sibling of node
     function next_sibling() {
         if ($this->parent===null) return null;
         $idx = 0;
@@ -223,7 +223,7 @@ class simple_html_dom_node {
             $ret .= $n->text().' ';
         return $ret;
     }
-    
+
     function xmltext() {
         $ret = $this->innertext();
         $ret = str_ireplace('<![CDATA[', '', $ret);
@@ -319,7 +319,7 @@ class simple_html_dom_node {
                         return;
                     }
                 }
-            } 
+            }
             return;
         }
 
@@ -411,7 +411,10 @@ class simple_html_dom_node {
             if(!empty($m[6])) {$val=$m[6];}
 
             // convert to lowercase
-            if ($this->dom->lowercase) {$tag=strtolower($tag); $key=strtolower($key);}
+            if ($this->dom->lowercase) {
+                $tag = is_null($tag) ? '' : strtolower($tag);
+                $key = is_null($key) ? '' : strtolower($key);
+            }
             //elements that do NOT have the specified attribute
             if (isset($key[0]) && $key[0]==='!') {$key=substr($key, 1); $no_key=true;}
 
@@ -445,7 +448,7 @@ class simple_html_dom_node {
                 return $this->_[HDOM_INFO_INNER] = $value;
         }
         if (!isset($this->attr[$name])) {
-            $this->_[HDOM_INFO_SPACE][] = array(' ', '', ''); 
+            $this->_[HDOM_INFO_SPACE][] = array(' ', '', '');
             $this->_[HDOM_INFO_QUOTE][] = HDOM_QUOTE_DOUBLE;
         }
         $this->attr[$name] = $value;
@@ -482,8 +485,8 @@ class simple_html_dom_node {
     function lastChild() {return $this->last_child();}
     function nextSibling() {return $this->next_sibling();}
     function previousSibling() {return $this->prev_sibling();}
-  
-  
+
+
   // Added by Robert Rupf
   // remove elements by css selector
   function remove($selector) {
@@ -555,11 +558,11 @@ class simple_html_dom {
         'p'=>array('p'=>1),
         'nobr'=>array('nobr'=>1),
     );
-    
+
     function __construct($str=null) {
         if ($str) {
-            if (preg_match("/^http:\/\//i",$str) || is_file($str)) 
-                $this->load_file($str); 
+            if (preg_match("/^http:\/\//i",$str) || is_file($str))
+                $this->load_file($str);
             else
                 $this->load($str);
         }
@@ -632,7 +635,7 @@ class simple_html_dom {
         unset($this->doc);
         unset($this->noise);
     }
-    
+
     function dump($show_attr=true) {
         $this->root->dump($show_attr);
     }
@@ -907,11 +910,13 @@ class simple_html_dom {
     }
 
     /*protected*/ function skip($chars) {
+        if (!isset($chars)) { $chars = ''; }
         $this->pos += strspn($this->doc, $chars, $this->pos);
         $this->char = ($this->pos<$this->size) ? $this->doc[$this->pos] : null; // next
     }
 
     /*protected*/ function copy_skip($chars) {
+        if (!isset($chars)) { $chars = ''; }
         $pos = $this->pos;
         $len = strspn($this->doc, $chars, $pos);
         $this->pos += $len;
@@ -921,6 +926,7 @@ class simple_html_dom {
     }
 
     /*protected*/ function copy_until($chars) {
+        if (!isset($chars)) { $chars = ''; }
         $pos = $this->pos;
         $len = strcspn($this->doc, $chars, $pos);
         $this->pos += $len;
@@ -1018,8 +1024,8 @@ class simple_html_dom {
     function getElementByTagName($name) {return $this->find($name, 0);}
     function getElementsByTagName($name, $idx=-1) {return $this->find($name, $idx);}
     function loadFile() {$args = func_get_args();$this->load(call_user_func_array('file_get_contents', $args), true);}
-    
-    
+
+
   // Added by Robert Rupf
   // remove dom node by css selector
   function remove($selector) {

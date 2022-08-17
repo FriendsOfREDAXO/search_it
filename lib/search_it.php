@@ -249,10 +249,12 @@ class search_it
 
 
                 try {
-                    if (substr(rex_addon::get('search_it')->getConfig('index_host'),0,1) == ':') {
-                        $scanparts['port'] = trim(rex_addon::get('search_it')->getConfig('index_host'),':');
+                    $index_host = rex_addon::get('search_it')->getConfig('index_host');
+                    if (!isset($index_host)) { $index_host = ''; }
+                    if (substr($index_host,0,1) == ':') {
+                        $scanparts['port'] = trim($index_host,':');
                     } else {
-                        $scanparts = parse_url(rex_addon::get('search_it')->getConfig('index_host'));
+                        $scanparts = parse_url($index_host);
                     }
 
                     if(rex_addon::get("yrewrite") && rex_addon::get("yrewrite")->isAvailable() && !isset($scanparts['host'])) {
@@ -421,10 +423,12 @@ class search_it
 		} else if (is_object($article) AND ($article->isOnline() OR rex_addon::get('search_it')->getConfig('indexoffline'))) {
 			try {
 
-                if (substr(rex_addon::get('search_it')->getConfig('index_host'),0,1) == ':') {
-                    $scanparts['port'] = trim(rex_addon::get('search_it')->getConfig('index_host'),':');
+                $index_host = rex_addon::get('search_it')->getConfig('index_host');
+                if (!isset($index_host)) { $index_host = ''; }
+                if (substr($index_host,0,1) == ':') {
+                    $scanparts['port'] = trim($index_host,':');
                 } else {
-                    $scanparts = parse_url(rex_addon::get('search_it')->getConfig('index_host'));
+                    $scanparts = parse_url($index_host);
                 }
 
 				if(rex_addon::get("yrewrite") && rex_addon::get('yrewrite')->isAvailable() && !isset($scanparts['host'])) {

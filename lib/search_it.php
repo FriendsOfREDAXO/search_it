@@ -1925,12 +1925,10 @@ class search_it
     {
         $sql = rex_sql::factory();
         $sql->setTable(self::getTempTablePrefix() . 'search_it_cache');
-        $sql->setWhere(sprintf("hash = '%s'", $this->cacheHash($_search)));
+        $results = $sql->getArray('SELECT returnarray FROM '.self::getTempTablePrefix().'search_it_cache WHERE hash = :hash', ['hash' => $this->cacheHash($_search)]);
 
-        if ($sql->select('returnarray')) {
-            foreach ($sql->getArray() as $value) {
-                return false !== ($this->cachedArray = unserialize($value['returnarray']));
-            }
+        foreach ($results as $value) {
+            return false !== ($this->cachedArray = unserialize($value['returnarray']));
         }
 
         return false;

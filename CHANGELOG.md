@@ -1,4 +1,6 @@
 # Changelog
+- Optimierung, fixes #346 @tbaddade
+
 ## Version 6.9.4 (2022-08-17)
 - Fixes for PHP 8.1 thx @skerbis
 

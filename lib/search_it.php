@@ -1924,7 +1924,6 @@ class search_it
     private function isCached($_search)
     {
         $sql = rex_sql::factory();
-        $sql->setTable(self::getTempTablePrefix() . 'search_it_cache');
         $results = $sql->getArray('SELECT returnarray FROM '.self::getTempTablePrefix().'search_it_cache WHERE hash = :hash', ['hash' => $this->cacheHash($_search)]);
 
         foreach ($results as $value) {

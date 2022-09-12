@@ -160,7 +160,7 @@ class search_it
 			$url_sql->setTable($this->urlAddOnTableName);
 			if ($url_sql->select('url_hash, article_id, clang_id, profile_id, data_id')) {
 				foreach ($url_sql->getArray() as $url) {
-					$returns = $this->indexUrl($url['url_hash'], $url['article_id'], $url['clang_id'], $url['profile_id'], $url['data_id']);
+					$returns = $this->_indexUrl($url['url_hash'], $url['article_id'], $url['clang_id'], $url['profile_id'], $url['data_id']);
 					foreach ( $returns as $return ) {
 						if ($return > 3 ) { $global_return += $return; }
 					}
@@ -216,6 +216,7 @@ class search_it
 
         $return = [];
         $keywords = [];
+        $clearCache = false;
 
         foreach ($langs as $lang) {
             $langID = $lang->getId();
@@ -228,9 +229,6 @@ class search_it
             //rex_clang::setCurrentId($langID);
             $delete = rex_sql::factory();
             $where = sprintf("ftable = '%s' AND fid = %d AND clang = %d", self::getTablePrefix() . 'article', $_id, $langID);
-
-            // delete complete cache (see https://github.com/FriendsOfREDAXO/search_it/issues/284)
-            $this->deleteCache();
 
             // delete old
             $delete->setTable(self::getTempTablePrefix() . 'search_it_index');
@@ -378,12 +376,18 @@ class search_it
                 $insert->setValues($articleData);
                 $insert->insert();
 
+                $clearCache = true;
 
                 $return[$langID] = SEARCH_IT_ART_GENERATED;
             }
         }
 
         $this->storeKeywords($keywords, false);
+
+        if ($clearCache) {
+            // delete complete cache (see https://github.com/FriendsOfREDAXO/search_it/issues/284)
+            $this->deleteCache();
+        }
 
         return $return;
     }
@@ -400,16 +404,13 @@ class search_it
      *
      * @return int
      */
-    public function indexURL($url_hash, $article_id, $clang_id, $profile_id, $data_id)
+    public function indexURL($url_hash, $article_id, $clang_id, $profile_id, $data_id, $clearCache = true)
     {
         $return = [];
         $keywords = [];
 
 		$delete = rex_sql::factory();
 		$where = "ftable = '". $this->urlAddOnTableName ."' AND fid = '". $url_hash ."' ";
-
-		// delete complete cache (see https://github.com/FriendsOfREDAXO/search_it/issues/284)
-		$this->deleteCache();
 
 		// delete old
 		$delete->setTable(self::getTempTablePrefix() . 'search_it_index');
@@ -554,6 +555,9 @@ class search_it
 			$insert->setValues($articleData);
 			$insert->insert();
 
+            if ($clearCache) {
+                $this->deleteCache();
+            }
 
 			$return[$clang_id] = SEARCH_IT_URL_GENERATED;
 
@@ -579,7 +583,7 @@ class search_it
 				. "WHERE search_it.fid IS NULL;");
 
 			foreach ($sql->getArray() as $result) {
-				$returns = $this->indexUrl($result['url_hash'], $result['article_id'], $result['clang_id'], $result['profile_id'], $result['data_id']);
+				$returns = $this->_indexUrl($result['url_hash'], $result['article_id'], $result['clang_id'], $result['profile_id'], $result['data_id']);
 				foreach ( $returns as $return ) {
 					if ($return > 3 ) { $global_return += $return; }
 				}
@@ -605,7 +609,7 @@ class search_it
 
 			foreach ($sql->getArray() as $result) {
 				$this->unindexURL($result['url_hash']);
-				$returns = $this->indexUrl($result['url_hash'], $result['article_id'], $result['clang_id'], $result['profile_id'], $result['data_id']);
+				$returns = $this->_indexUrl($result['url_hash'], $result['article_id'], $result['clang_id'], $result['profile_id'], $result['data_id'], false);
 				foreach ( $returns as $return ) {
 					if ($return > 3 ) { $global_return += $return; }
 				}

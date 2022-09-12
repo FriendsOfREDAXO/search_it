@@ -42,7 +42,7 @@ if ($url_sql->select('id, article_id, clang_id, profile_id, data_id')) {
 	$search_it->deleteIndexForType("url");
     // index neu aufbauen
 	foreach ($url_sql->getArray() as $url) {
-		$search_it->indexUrl($url['id'], $url['article_id'], $url['clang_id'], $url['profile_id'], $url['data_id']);
+		$search_it->_indexUrl($url['id'], $url['article_id'], $url['clang_id'], $url['profile_id'], $url['data_id']);
 	}
 }
 ```

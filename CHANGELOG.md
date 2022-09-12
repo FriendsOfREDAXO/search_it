@@ -1,4 +1,7 @@
 # Changelog
+
+## Version 6.9.5 (2022-09-12)
+- SQL-Queries besser escapen thx @gharlan
 - Optimierung, fixes #346 @tbaddade
 
 ## Version 6.9.4 (2022-08-17)

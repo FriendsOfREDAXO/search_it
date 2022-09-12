@@ -45,7 +45,7 @@ switch($ajax) {
             case 'url':
 				$url_sql = rex_sql::factory();
 				$url_sql->setTable(search_it_getUrlAddOnTableName());
-				$url_sql->setWhere("url_hash = '". rex_get('url_hash') ."'");
+				$url_sql->setWhere(['url_hash' => rex_get('url_hash')]);
 				if ($url_sql->select('url_hash, article_id, clang_id, profile_id, data_id, seo, url')) {
 					if($url_sql->getValue('url_hash')) {
 						foreach($search_it->indexUrl($url_sql->getValue('url_hash'), $url_sql->getValue('article_id'), $url_sql->getValue('clang_id'), $url_sql->getValue('profile_id'), $url_sql->getValue('data_id')) as $langID => $url) {

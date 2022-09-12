@@ -3,6 +3,7 @@
 function search_it_getArticleIds($cats = false) {
     $whereCats = [];
     if(is_array($cats)){
+        $cats = array_map('intval', $cats);
         foreach($cats as $catID) {
             $whereCats[] = "path LIKE '%|" . $catID . "|%'";
         }

@@ -2059,9 +2059,9 @@ class search_it
                 $simWords[] = sprintf(
                     "(%s, %s, %s, %s, %s)",
                     $simWordsSQL->escape($keyword['search']),
-                    (($this->similarwordsMode & SEARCH_IT_SIMILARWORDS_SOUNDEX) && !is_numeric(soundex($keyword['search']))) ? $simWordsSQL->escape(soundex($keyword['search'])) : '',
-                    (($this->similarwordsMode & SEARCH_IT_SIMILARWORDS_METAPHONE) && !is_numeric(metaphone($keyword['search']))) ? $simWordsSQL->escape(metaphone($keyword['search'])) : '',
-                    (($this->similarwordsMode & SEARCH_IT_SIMILARWORDS_COLOGNEPHONE) && !is_numeric(soundex_ger($keyword['search']))) ? $simWordsSQL->escape(soundex_ger($keyword['search'])) : '',
+                    $simWordsSQL->escape((($this->similarwordsMode & SEARCH_IT_SIMILARWORDS_SOUNDEX) && !is_numeric(soundex($keyword['search']))) ? soundex($keyword['search']) : ''),
+                    $simWordsSQL->escape((($this->similarwordsMode & SEARCH_IT_SIMILARWORDS_METAPHONE) && !is_numeric(metaphone($keyword['search']))) ? metaphone($keyword['search']) : ''),
+                    $simWordsSQL->escape((($this->similarwordsMode & SEARCH_IT_SIMILARWORDS_COLOGNEPHONE) && !is_numeric(soundex_ger($keyword['search']))) ? soundex_ger($keyword['search']) : ''),
                     (isset($keyword['clang']) AND $keyword['clang'] !== false) ? (int) $keyword['clang'] : '-1'
                 );
             }

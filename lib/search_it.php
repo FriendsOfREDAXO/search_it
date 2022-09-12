@@ -357,7 +357,7 @@ class search_it
                     $additionalValues = [];
                     $select = rex_sql::factory();
                     $select->setTable(self::getTablePrefix() . 'article');
-                    $select->setWhere('id = ' . $_id . ' AND clang_id = ' . $langID);
+                    $select->setWhere(['id' => $_id, 'clang_id' => $langID]);
                     $select->select('`' . implode('`,`', $this->includeColumns[self::getTablePrefix() . 'article']) . '`');
                     foreach ($this->includeColumns[self::getTablePrefix() . 'article'] as $col) {
                         if ( $select->hasValue($col) ) { $additionalValues[$col] = $select->getValue($col); }
@@ -406,7 +406,7 @@ class search_it
         $keywords = [];
 
 		$delete = rex_sql::factory();
-		$where = "ftable = '". $this->urlAddOnTableName ."' AND fid = '". $url_hash ."' ";
+		$where = ['ftable' => $this->urlAddOnTableName, 'fid' => $url_hash];
 
 		// delete complete cache (see https://github.com/FriendsOfREDAXO/search_it/issues/284)
 		$this->deleteCache();
@@ -534,7 +534,7 @@ class search_it
 				$additionalValues = [];
                 $select = rex_sql::factory();
 				$select->setTable($this->urlAddOnTableName);
-				$select->setWhere('url_hash = "' . $url_hash . '"');
+				$select->setWhere(['url_hash' => $url_hash]);
 				$select->select('`' . implode('`,`', $this->includeColumns[$this->urlAddOnTableName]) . '`');
 				foreach ($this->includeColumns[$this->urlAddOnTableName] as $col) {
 					if ( $select->hasValue($col) ) { $additionalValues[$col] = $select->getValue($col); }
@@ -663,7 +663,7 @@ class search_it
 
 		$unindexIds = [];
         foreach ($sql->getArray() as $result) {
-            $unindexIds[] = $result['id'];
+            $unindexIds[] = (int) $result['id'];
         }
 
 		if(count($unindexIds) > 0) {
@@ -689,7 +689,7 @@ class search_it
         $art_sql = rex_sql::factory();
         $art_sql->setTable(self::getTempTablePrefix() . 'search_it_index');
 
-        $where = "fid = '" . $url_hash . "' AND texttype='url'";
+        $where = ['fid' => $url_hash, 'texttype' => 'url'];
         $art_sql->setWhere($where);
         $art_sql->delete();
 
@@ -1157,13 +1157,13 @@ class search_it
     public function deleteIndexForType($texttype)
     {
         $sql = rex_sql::factory();
-		$query = 'SELECT id FROM '. self::getTempTablePrefix() .'search_it_index WHERE texttype = "'. $texttype .'";';
+		$query = 'SELECT id FROM '. self::getTempTablePrefix() .'search_it_index WHERE texttype = ?;';
 		$deleteIds = [];
-        foreach ($sql->getArray($query) as $cacheId) {
+        foreach ($sql->getArray($query, [$texttype]) as $cacheId) {
 			$deleteIds[] = $cacheId['id'];
 		}
 		// Delete index
-		$sql->setQuery('DELETE FROM '. self::getTempTablePrefix() .'search_it_index WHERE texttype = "'. $texttype .'"');
+		$sql->setQuery('DELETE FROM '. self::getTempTablePrefix() .'search_it_index WHERE texttype = ?', [$texttype]);
 		// Delete cache
 		$this->deleteCache($deleteIds);
     }
@@ -2016,12 +2016,12 @@ class search_it
             FROM %s
             WHERE index_id IN (%s)',
                 self::getTempTablePrefix() . 'search_it_cacheindex_ids',
-                implode(',', $_indexIds)
+                implode(',', array_map('intval', $_indexIds))
             );
 
             $deleteIds = [0];
             foreach ($sql->getArray($query) as $cacheId) {
-                $deleteIds[] = $cacheId['cache_id'];
+                $deleteIds[] = (int) $cacheId['cache_id'];
             }
 
             // delete from search-cache where indexed IDs exist
@@ -2057,12 +2057,12 @@ class search_it
 				!is_numeric($keyword['search'])
             ) {
                 $simWords[] = sprintf(
-                    "(%s, '%s', '%s', '%s', %s)",
+                    "(%s, %s, %s, %s, %s)",
                     $simWordsSQL->escape($keyword['search']),
-                    (($this->similarwordsMode & SEARCH_IT_SIMILARWORDS_SOUNDEX) && !is_numeric(soundex($keyword['search']))) ? soundex($keyword['search']) : '',
-                    (($this->similarwordsMode & SEARCH_IT_SIMILARWORDS_METAPHONE) && !is_numeric(metaphone($keyword['search']))) ? metaphone($keyword['search']) : '',
-                    (($this->similarwordsMode & SEARCH_IT_SIMILARWORDS_COLOGNEPHONE) && !is_numeric(soundex_ger($keyword['search']))) ? soundex_ger($keyword['search']) : '',
-                    (isset($keyword['clang']) AND $keyword['clang'] !== false) ? $keyword['clang'] : '-1'
+                    $simWordsSQL->escape((($this->similarwordsMode & SEARCH_IT_SIMILARWORDS_SOUNDEX) && !is_numeric(soundex($keyword['search']))) ? soundex($keyword['search']) : ''),
+                    $simWordsSQL->escape((($this->similarwordsMode & SEARCH_IT_SIMILARWORDS_METAPHONE) && !is_numeric(metaphone($keyword['search']))) ? metaphone($keyword['search']) : ''),
+                    $simWordsSQL->escape((($this->similarwordsMode & SEARCH_IT_SIMILARWORDS_COLOGNEPHONE) && !is_numeric(soundex_ger($keyword['search']))) ? soundex_ger($keyword['search']) : ''),
+                    (isset($keyword['clang']) AND $keyword['clang'] !== false) ? (int) $keyword['clang'] : '-1'
                 );
             }
         }
@@ -2145,15 +2145,15 @@ class search_it
 				if(!is_numeric($keyword['search'])) {
 					$sounds = [];
 					if ($this->similarwordsMode && SEARCH_IT_SIMILARWORDS_SOUNDEX && !is_numeric(soundex($keyword['search']))) {
-						$sounds[] = "soundex = '" . soundex($keyword['search']) . "'";
+						$sounds[] = 'soundex = ' . $simWordsSQL->escape(soundex($keyword['search']));
 					}
 
 					if ($this->similarwordsMode && SEARCH_IT_SIMILARWORDS_METAPHONE && !is_numeric(metaphone($keyword['search']))) {
-						$sounds[] = "metaphone = '" . metaphone($keyword['search']) . "'";
+						$sounds[] = 'metaphone = ' . $simWordsSQL->escape(metaphone($keyword['search']));
 					}
 
 					if ($this->similarwordsMode && SEARCH_IT_SIMILARWORDS_COLOGNEPHONE && !is_numeric(soundex_ger($keyword['search']))) {
-						$sounds[] = "colognephone = '" . soundex_ger($keyword['search']) . "'";
+						$sounds[] = 'colognephone = ' . $simWordsSQL->escape(soundex_ger($keyword['search']));
 					}
 					if(!empty($sounds)) {
 						$simwordQuerys[] = sprintf("
@@ -2268,10 +2268,10 @@ class search_it
                 } else {
                     $tmpWhere = [];
                     foreach ($searchColumns as $searchColumn) {
-                        $tmpWhere[] = sprintf("(`%s` LIKE '%%%s%%')", $searchColumn, str_replace(array('%', '_'), array('\%', '\_'), substr($sql->escape($keyword['search']), 1, -1)));
+                        $tmpWhere[] = sprintf("(`%s` LIKE %s)", $searchColumn, $sql->escape('%'.str_replace(array('%', '_'), array('\%', '\_'), $keyword['search']).'%'));
 
                         if ($this->searchHtmlEntities) {
-                            $tmpWhere[] = sprintf("(`%s` LIKE '%%%s%%')", $searchColumn, str_replace(array('%', '_'), array('\%', '\_'), htmlentities($keyword['search'], ENT_COMPAT, 'UTF-8')));
+                            $tmpWhere[] = sprintf("(`%s` LIKE %s)", $searchColumn, $sql->escape('%'.str_replace(array('%', '_'), array('\%', '\_'), htmlentities($keyword['search'], ENT_COMPAT, 'UTF-8')).'%'));
                         }
                     }
                     $AWhere[] = '(' . implode(' OR ', $tmpWhere) . ')';

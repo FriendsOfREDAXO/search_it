@@ -79,73 +79,75 @@ class rex_api_search_it_autocomplete_getSimilarWords extends rex_api_function {
           if ($similarWordsMode == '0') {
 
             $sql = sprintf("
-              SELECT keyword FROM `%s` WHERE ( keyword LIKE '%s' ) AND (clang = %s OR clang = %s) GROUP BY keyword ORDER BY count ",
+              SELECT keyword FROM `%s` WHERE ( keyword LIKE :keyword ) AND (clang = -1 OR clang = :clang) GROUP BY keyword ORDER BY count ",
               rex::getTablePrefix() . rex::getTempPrefix().'search_it_keywords',
-              $q.'%',
-              '-1',
-              rex_clang::getCurrentId()
               );
 
+            $params = [
+              'keyword' => str_replace(['_', '%'], ['\_', '\%'], $q).'%',
+              'clang' => rex_clang::getCurrentId(),
+            ];
           }
 
           if ($similarWordsMode == '1') {
 
             $sql = sprintf("
-              SELECT keyword FROM `%s` WHERE ( keyword LIKE '%s' OR soundex = '%s'  ) AND (clang = %s OR clang = %s) GROUP BY keyword ORDER BY count ",
+              SELECT keyword FROM `%s` WHERE ( keyword LIKE :keyword OR soundex = :soundex  ) AND (clang = -1 OR clang = :clang) GROUP BY keyword ORDER BY count ",
               rex::getTablePrefix() . rex::getTempPrefix().'search_it_keywords',
-              $q.'%',
-              soundex($q),
-              '-1',
-              rex_clang::getCurrentId()
               );
 
-
+              $params = [
+                  'keyword' => str_replace(['_', '%'], ['\_', '\%'], $q).'%',
+                  'soundex' => soundex($q),
+                  'clang' => rex_clang::getCurrentId(),
+              ];
           }
 
           if ($similarWordsMode == '2') {
 
             $sql = sprintf("
-              SELECT keyword FROM `%s` WHERE ( keyword LIKE '%s' OR metaphone = '%s'  ) AND (clang = %s OR clang = %s) GROUP BY keyword ORDER BY count ",
+              SELECT keyword FROM `%s` WHERE ( keyword LIKE :keyword OR metaphone = :metaphone  ) AND (clang = -1 OR clang = :clang) GROUP BY keyword ORDER BY count ",
               rex::getTablePrefix() . rex::getTempPrefix().'search_it_keywords',
-              $q.'%',
-              metaphone($q),
-              '-1',
-              rex_clang::getCurrentId()
               );
 
-
+              $params = [
+                  'keyword' => str_replace(['_', '%'], ['\_', '\%'], $q).'%',
+                  'metaphone' => metaphone($q),
+                  'clang' => rex_clang::getCurrentId(),
+              ];
           }
 
           if ($similarWordsMode == '3') {
 
             $sql = sprintf("
-              SELECT keyword FROM `%s` WHERE ( keyword LIKE '%s' OR colognephone = '%s'  ) AND (clang = %s OR clang = %s) GROUP BY keyword ORDER BY count ",
+              SELECT keyword FROM `%s` WHERE ( keyword LIKE :keyword OR colognephone = :soundex_ger  ) AND (clang = -1 OR clang = :clang) GROUP BY keyword ORDER BY count ",
               rex::getTablePrefix() . rex::getTempPrefix().'search_it_keywords',
-              $q.'%',
-              soundex_ger($q),
-              '-1',
-              rex_clang::getCurrentId()
               );
 
-
+              $params = [
+                  'keyword' => str_replace(['_', '%'], ['\_', '\%'], $q).'%',
+                  'soundex_ger' => soundex_ger($q),
+                  'clang' => rex_clang::getCurrentId(),
+              ];
           }
 
           if ($similarWordsMode == '7') {
 
             $sql = sprintf("
-              SELECT keyword FROM `%s` WHERE ( keyword LIKE '%s' OR soundex = '%s' OR metaphone = '%s' OR colognephone = '%s') AND (clang = %s OR clang = %s) GROUP BY keyword ORDER BY count ",
+              SELECT keyword FROM `%s` WHERE ( keyword LIKE :keyword OR soundex = :soundex OR metaphone = :metaphone OR colognephone = :soundex_ger) AND (clang = -1 OR clang = :clang) GROUP BY keyword ORDER BY count ",
               rex::getTablePrefix() . rex::getTempPrefix().'search_it_keywords',
-              $q.'%',
-              soundex($q),
-              metaphone($q),
-              soundex_ger($q),
-              '-1',
-              rex_clang::getCurrentId()
               );
 
+              $params = [
+                  'keyword' => str_replace(['_', '%'], ['\_', '\%'], $q).'%',
+                  'soundex' => soundex($q),
+                  'metaphone' => metaphone($q),
+                  'soundex_ger' => soundex_ger($q),
+                  'clang' => rex_clang::getCurrentId(),
+              ];
           }
 
-          $db->setQuery($sql);
+          $db->setQuery($sql, $params);
 
           if ($db->getRows() > 0) {
             for ($i = 0; $i < $db->getRows(); $i++) {

@@ -1,5 +1,8 @@
 # Changelog
 
+- Eingabefehler bei Limit im BE verhindern #352 thx @staabm
+- Verbesserung Cache löschen @tyrant88
+
 ## Version 6.9.5 (2022-09-12)
 - SQL-Queries besser escapen thx @gharlan
 - Optimierung, fixes #346 @tbaddade

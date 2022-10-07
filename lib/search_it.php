@@ -48,7 +48,7 @@ class search_it
     private $searchMode = 'like';
 
     private $surroundTags = array('<mark>', '</mark>');
-    private $limit = array(0, 10);
+    private $limit = [0, 10];
     private $maxTeaserChars = 200;
     private $maxHighlightedTextChars = 100;
     private $highlightType = 'surroundtext';
@@ -1695,12 +1695,12 @@ class search_it
     public function setLimit($_limit, $_countLimit = false): void
     {
         if (is_array($_limit) AND $_countLimit === false) {
-            $this->limit = array((int)$_limit[0], (int)$_limit[1]);
+            $this->limit = [(int)$_limit[0], (int)$_limit[1]];
         } elseif ($_countLimit === false) {
 
-            $this->limit = array(0, (int)$_limit);
+            $this->limit = [0, (int)$_limit];
         } else {
-            $this->limit = array((int)$_limit, (int)$_countLimit);
+            $this->limit = [(int)$_limit, (int)$_countLimit];
         }
         if ( empty($this->limit[1]) || !is_numeric($this->limit[1]) ) { $this->limit[1] = 10; }
         $this->hashMe .= $this->limit[0] . $this->limit[1];

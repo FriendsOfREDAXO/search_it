@@ -75,7 +75,7 @@ $content2a = search_it_getSettingsFormSection(
             'id' => 'search_it_limit',
             'name' => 'search_config[limit][1]',
             'label' => $this->i18n('search_it_settings_limit'),
-            'value' => !empty($this->getConfig('limit')[1]) && is_numeric($this->getConfig('limit')[1]) ? $this->getConfig('limit')[1] : ''
+            'value' => !empty($this->getConfig('limit')[1]) && is_numeric($this->getConfig('limit')[1]) && $this->getConfig('limit')[1] > 0 ? $this->getConfig('limit')[1] : '10'
         ),
         array(
             'type' => 'string',

@@ -132,10 +132,11 @@ class search_it
     }
 
     /* indexing */
+
     /**
      * Generates the full index at once.
      */
-    public function generateIndex()
+    public function generateIndex(): int
     {
         // delete old index and cache
         $this->deleteIndex();
@@ -194,6 +195,10 @@ class search_it
             }
         }
 
+
+        $this->deleteCache();
+
+
 		return $global_return;
     }
 
@@ -205,7 +210,7 @@ class search_it
      *
      * @return int
      */
-    public function indexArticle($_id, $_clang = false)
+    public function indexArticle($_id, $_clang = false, $clearCache = false)
     {
 
         if ($_clang === false) {
@@ -216,6 +221,7 @@ class search_it
 
         $return = [];
         $keywords = [];
+        $clearCache = false;
 
         foreach ($langs as $lang) {
             $langID = $lang->getId();
@@ -228,9 +234,6 @@ class search_it
             //rex_clang::setCurrentId($langID);
             $delete = rex_sql::factory();
             $where = sprintf("ftable = '%s' AND fid = %d AND clang = %d", self::getTablePrefix() . 'article', $_id, $langID);
-
-            // delete complete cache (see https://github.com/FriendsOfREDAXO/search_it/issues/284)
-            $this->deleteCache();
 
             // delete old
             $delete->setTable(self::getTempTablePrefix() . 'search_it_index');
@@ -378,12 +381,15 @@ class search_it
                 $insert->setValues($articleData);
                 $insert->insert();
 
-
                 $return[$langID] = SEARCH_IT_ART_GENERATED;
             }
         }
 
         $this->storeKeywords($keywords, false);
+
+        if ($clearCache) {
+            $this->deleteCache();
+        }
 
         return $return;
     }
@@ -400,16 +406,13 @@ class search_it
      *
      * @return int
      */
-    public function indexURL($url_hash, $article_id, $clang_id, $profile_id, $data_id)
+    public function indexURL($url_hash, $article_id, $clang_id, $profile_id, $data_id, $clearCache = false): array
     {
         $return = [];
         $keywords = [];
 
 		$delete = rex_sql::factory();
 		$where = ['ftable' => $this->urlAddOnTableName, 'fid' => $url_hash];
-
-		// delete complete cache (see https://github.com/FriendsOfREDAXO/search_it/issues/284)
-		$this->deleteCache();
 
 		// delete old
 		$delete->setTable(self::getTempTablePrefix() . 'search_it_index');
@@ -554,6 +557,9 @@ class search_it
 			$insert->setValues($articleData);
 			$insert->insert();
 
+            if ($clearCache) {
+                $this->deleteCache();
+            }
 
 			$return[$clang_id] = SEARCH_IT_URL_GENERATED;
 
@@ -567,7 +573,7 @@ class search_it
      * Compares index table with url addon table and adds new urls to index
 	 * @return string[] Array containing index results
      */
-    public function indexNewURLs()
+    public function indexNewURLs(): int
     {
         $global_return = 0;
 
@@ -579,7 +585,7 @@ class search_it
 				. "WHERE search_it.fid IS NULL;");
 
 			foreach ($sql->getArray() as $result) {
-				$returns = $this->indexUrl($result['url_hash'], $result['article_id'], $result['clang_id'], $result['profile_id'], $result['data_id']);
+				$returns = $this->indexUrl($result['url_hash'], $result['article_id'], $result['clang_id'], $result['profile_id'], $result['data_id'], false);
 				foreach ( $returns as $return ) {
 					if ($return > 3 ) { $global_return += $return; }
 				}
@@ -592,7 +598,7 @@ class search_it
      * Compares index table with url addon table and adds new urls to index
 	 * @return string[] Array containing index results
      */
-    public function indexUpdatedURLs()
+    public function indexUpdatedURLs(): int
     {
         $global_return = 0;
 
@@ -605,7 +611,7 @@ class search_it
 
 			foreach ($sql->getArray() as $result) {
 				$this->unindexURL($result['url_hash']);
-				$returns = $this->indexUrl($result['url_hash'], $result['article_id'], $result['clang_id'], $result['profile_id'], $result['data_id']);
+				$returns = $this->indexUrl($result['url_hash'], $result['article_id'], $result['clang_id'], $result['profile_id'], $result['data_id'], false);
 				foreach ( $returns as $return ) {
 					if ($return > 3 ) { $global_return += $return; }
 				}
@@ -620,7 +626,7 @@ class search_it
      * @param int $_id
      * @param mixed $_clang
      */
-    public function unindexArticle($_id, $_clang = false)
+    public function unindexArticle($_id, $_clang = false): void
     {
         // exclude article
         $art_sql = rex_sql::factory();
@@ -650,7 +656,7 @@ class search_it
 	/**
      * Compares index table with url table and excludes all deleted urls from the index.
      */
-    public function unindexDeletedURLs()
+    public function unindexDeletedURLs(): void
     {
 		if(!search_it_isUrlAddOnAvailable()) {
 			return;
@@ -681,9 +687,9 @@ class search_it
 	/**
      * Excludes an url from the index.
      *
-     * @param int $url_hash
+     * @param string $url_hash
      */
-    public function unindexURL($url_hash)
+    public function unindexURL($url_hash): void
     {
         // exclude url
         $art_sql = rex_sql::factory();
@@ -716,10 +722,11 @@ class search_it
      * @param mixed $_id
      * @param mixed $_start
      * @param mixed $_count
+     * @param mixed $clearCache
      *
-     * @return mixed
+     * @return int
      */
-    public function indexColumn($_table, $_column, $_idcol = false, $_id = false, $_start = false, $_count = false, $_wherecondition = false)
+    public function indexColumn($_table, $_column, $_idcol = false, $_id = false, $_start = false, $_count = false, $clearCache = false): int
     {
         $sqltest = rex_sql_table::get($_table);
         if ( !$sqltest->exists() ) {
@@ -740,12 +747,8 @@ class search_it
         }
         $delete->setWhere($where);
 
-		// delete complete cache (see https://github.com/FriendsOfREDAXO/search_it/issues/284)
-		$this->deleteCache();
-
         // delete from index
         if ( $_start === false || $_start == 0 ) { $delete->delete(); }
-
 
         // NEW
         $sql = rex_sql::factory();
@@ -870,6 +873,10 @@ class search_it
 
         }
 
+        if ($clearCache) {
+            $this->deleteCache();
+        }
+
         return $count;
     }
 
@@ -882,9 +889,9 @@ class search_it
      * @param mixed $_doPlaintext
      * @param mixed $_articleData
      *
-     * @return mixed
+     * @return int
      */
-    public function indexFile($_filename, $_doPlaintext = false, $_clang = false, $_fid = false, $_catid = false)
+    public function indexFile($_filename, $_doPlaintext = false, $_clang = false, $_fid = false, $_catid = false, $clearCache = false): int
     {
         // $_filename comes with path but stripped of first slash
         // extract file-extension
@@ -911,9 +918,6 @@ class search_it
         if (is_int($_catid)) {
             $where .= sprintf(' AND catid = %d', $_catid);
         }
-
-		// delete complete cache (see https://github.com/FriendsOfREDAXO/search_it/issues/284)
-		$this->deleteCache();
 
         // delete old data
         $delete->setTable(self::getTempTablePrefix() . 'search_it_index');
@@ -1055,6 +1059,10 @@ class search_it
         $insert->setValues($fileData);
         $insert->insert();
 
+        if ($clearCache) {
+            $this->deleteCache();
+        }
+
         return SEARCH_IT_FILE_GENERATED;
     }
 
@@ -1142,7 +1150,7 @@ class search_it
      * Deletes the complete search index.
      *
      */
-    public function deleteIndex()
+    public function deleteIndex(): void
     {
         $delete = rex_sql::factory();
         $delete->setQuery('TRUNCATE ' . self::getTempTablePrefix() . 'search_it_index');
@@ -1154,7 +1162,7 @@ class search_it
      * Deletes the search index for given type
      * @param string $texttype Index text type
      */
-    public function deleteIndexForType($texttype)
+    public function deleteIndexForType($texttype): void
     {
         $sql = rex_sql::factory();
 		$query = 'SELECT id FROM '. self::getTempTablePrefix() .'search_it_index WHERE texttype = ?;';
@@ -1173,7 +1181,7 @@ class search_it
      *
      * Expects an array with the IDs as parameters.
      */
-    private function setExcludeIDs($_ids)
+    private function setExcludeIDs($_ids): void
     {
         foreach ($_ids as $key => $id) {
             $this->excludeIDs[] = intval($id);
@@ -1187,7 +1195,7 @@ class search_it
      *
      * Expects an array with the words as parameters.
      */
-    public function setBlacklist($_words)
+    public function setBlacklist($_words): void
     {
         foreach ($_words as $key => $word) {
             $this->blacklist[] = $tmpkey = (string)($this->ci ? strtolower($word) : $word);
@@ -1196,15 +1204,14 @@ class search_it
     }
 
 
-
-
     /* search */
+
     /**
      * Sets search string.
      *
      * Expects a string.
      */
-    public function setSearchString($_searchString)
+    public function setSearchString($_searchString): void
     {
         $this->searchString = $_searchString;
     }
@@ -1218,7 +1225,7 @@ class search_it
      *
      * @return int
      */
-    public function parseSearchString($_searchString)
+    public function parseSearchString($_searchString): int
     {
         // reset searchArray
         $this->searchArray = [];
@@ -1277,7 +1284,7 @@ class search_it
      *
      *
      */
-    public function addWhitelist($_whitelist)
+    public function addWhitelist($_whitelist): void
     {
         foreach ($_whitelist as $word => $weight) {
             $key = (string)($this->ci ? strtolower($word) : $word);
@@ -1289,7 +1296,7 @@ class search_it
     /**
      * Sets array of IDs for search restriction
      */
-    private function setSearchInIDs($_searchInIDs, $_reset = false)
+    private function setSearchInIDs($_searchInIDs, $_reset = false): void
     {
         if ($_reset) {
             $this->searchInIDs = [];
@@ -1357,7 +1364,7 @@ class search_it
      *
      * @ignore
      */
-    public function setSearchAllArticlesAnyway($_bool = false)
+    public function setSearchAllArticlesAnyway($_bool = false): void
     {
         $this->searchAllArticlesAnyway = $_bool;
         $this->hashMe .= $_bool;
@@ -1370,7 +1377,7 @@ class search_it
      *
      * @ignore
      */
-    public function doSearchArticles($_bool = false)
+    public function doSearchArticles($_bool = false): void
     {
         $this->searchAllArticlesAnyway = $_bool;
         $this->hashMe .= $_bool;
@@ -1381,7 +1388,7 @@ class search_it
      *
      * Expects an array with the IDs as parameters.
      */
-    public function searchInArticles($_ids)
+    public function searchInArticles($_ids): void
     {
         $this->setSearchInIDs(array('articles' => $_ids));
     }
@@ -1391,7 +1398,7 @@ class search_it
      *
      * Expects an array with the IDs as parameters.
      */
-    public function searchInCategories($_ids)
+    public function searchInCategories($_ids): void
     {
         $this->setSearchInIDs(array('categories' => $_ids));
     }
@@ -1401,7 +1408,7 @@ class search_it
      *
      * Expects an ID as parameter.
      */
-    public function searchInCategoryTree($_id)
+    public function searchInCategoryTree($_id): void
     {
         $subcats = self::getChildList($_id);
         $this->setSearchInIDs(array('categories' => $subcats));
@@ -1412,7 +1419,7 @@ class search_it
      *
      * Expects a category ID as parameter.
      */
-    private function getChildList($_id)
+    private function getChildList($_id): array
     {
         $subs= rex_category::get($_id)->getChildren();
         $childlist = [];
@@ -1430,7 +1437,7 @@ class search_it
      *
      * Expects an array with the IDs as parameters.
      */
-    public function searchInFileCategories($_ids)
+    public function searchInFileCategories($_ids): void
     {
         $this->setSearchInIDs(array('filecategories' => $_ids));
     }
@@ -1441,7 +1448,7 @@ class search_it
      * @param string $_table
      * @param string $_column
      */
-    public function searchInDbColumn($_table, $_column)
+    public function searchInDbColumn($_table, $_column): void
     {
         $this->setSearchinIDs(array('db_columns' => array($_table => array($_column))));
     }
@@ -1451,7 +1458,7 @@ class search_it
      *
      * Expects a string suitable as SQL WHERE condition.
      */
-    public function setWhere($_where)
+    public function setWhere($_where): void
     {
         $this->where = $_where;
         $this->hashMe .= $_where;
@@ -1468,7 +1475,7 @@ class search_it
      *
      * @return bool
      */
-    public function setOrder($_order, $put_first = false)
+    public function setOrder($_order, $put_first = false): bool
     {
         if (!is_array($_order)) {
             $this->errormessages = 'Wrong parameter. Expecting an array';
@@ -1503,7 +1510,7 @@ class search_it
      *
      * @ignore
      */
-    public function doGroupBy($_bool = true)
+    public function doGroupBy($_bool = true): void
     {
         $this->groupBy = $_bool;
         $this->hashMe .= $_bool;
@@ -1516,7 +1523,7 @@ class search_it
      *
      * @ignore
      */
-    public function setCaseInsensitive($_ci = true)
+    public function setCaseInsensitive($_ci = true): void
     {
         $this->ci = (bool)$_ci;
     }
@@ -1528,7 +1535,7 @@ class search_it
      *
      *
      */
-    private function setClang($_clang)
+    private function setClang($_clang): void
     {
         if ($_clang === false) {
             $this->clang = false;
@@ -1551,7 +1558,7 @@ class search_it
      *
      * @return bool
      */
-    public function setLogicalMode($_logicalMode)
+    public function setLogicalMode($_logicalMode): bool
     {
         switch (strtolower($_logicalMode)) {
             case 'and':
@@ -1587,7 +1594,7 @@ class search_it
      *
      * @return bool
      */
-    public function setTextMode($_textMode)
+    public function setTextMode($_textMode): bool
     {
         switch (strtolower($_textMode)) {
             case 'html':
@@ -1628,7 +1635,7 @@ class search_it
      *
      * @return bool
      */
-    public function setSearchMode($_searchMode)
+    public function setSearchMode($_searchMode): bool
     {
         switch (strtolower($_searchMode)) {
             case 'like':
@@ -1644,10 +1651,11 @@ class search_it
 
         return true;
     }
+
     /**
      * Sets similarwordsmode
      */
-    public function setSimilarWordsMode($_mode)
+    public function setSimilarWordsMode($_mode): void
     {
         $this->similarwordsMode = intval($_mode);
     }
@@ -1662,7 +1670,7 @@ class search_it
      * Expects either the start- and the end-tag
      * or an array with both tags.
      */
-    public function setSurroundTags($_tags, $_endtag = false)
+    public function setSurroundTags($_tags, $_endtag = false): void
     {
         if (is_array($_tags) AND $_endtag === false) {
             $this->surroundTags = $_tags;
@@ -1684,7 +1692,7 @@ class search_it
      * setLimit(20);          // maximum of 20 results starting with the first result
      * setLimit(array(0,20)); // maximum of 20 results starting with the first result
      */
-    public function setLimit($_limit, $_countLimit = false)
+    public function setLimit($_limit, $_countLimit = false): void
     {
         if (is_array($_limit) AND $_countLimit === false) {
             $this->limit = array((int)$_limit[0], (int)$_limit[1]);
@@ -1703,7 +1711,7 @@ class search_it
      *
      * @param int $_count
      */
-    public function setMaxTeaserChars($_count)
+    public function setMaxTeaserChars($_count): void
     {
         if ( empty($_count) || !is_numeric($_count) ) { $_count = 200; }
         $this->maxTeaserChars = intval($_count);
@@ -1714,7 +1722,7 @@ class search_it
      * Sets the maximum count of letters around an found search term in the highlighted text.
      * @param int $_count
      */
-    public function setMaxHighlightedTextChars($_count)
+    public function setMaxHighlightedTextChars($_count): void
     {
         if ( empty($_count) || !is_numeric($_count) ) { $_count = 100; }
         $this->maxHighlightedTextChars = intval($_count);
@@ -1728,7 +1736,7 @@ class search_it
      *
      * @return bool
      */
-    public function setHighlightType($_type)
+    public function setHighlightType($_type): bool
     {
         switch ($_type) {
             case 'sentence':
@@ -1738,7 +1746,6 @@ class search_it
             case 'teaser':
             case 'array':
                 $this->highlightType = $_type;
-                return true;
                 break;
 
             default:
@@ -1747,6 +1754,7 @@ class search_it
         }
 
         $this->hashMe .= $this->highlightType;
+        return true;
     }
 
     /**
@@ -1757,7 +1765,7 @@ class search_it
      *
      * @return mixed
      */
-    public function getHighlightedText($_text)
+    public function getHighlightedText($_text): mixed
     {
         $tmp_searchArray = $this->searchArray;
 
@@ -1907,7 +1915,7 @@ class search_it
                 break;
         }
 
-        $this->searchArray = $tmp_searchArray;
+        //$this->searchArray = $tmp_searchArray;
     }
 
 
@@ -1921,7 +1929,7 @@ class search_it
      *
      * @return bool
      */
-    private function isCached($_search)
+    private function isCached($_search): bool
     {
         $sql = rex_sql::factory();
         $results = $sql->getArray('SELECT returnarray FROM '.self::getTempTablePrefix().'search_it_cache WHERE hash = :hash', ['hash' => $this->cacheHash($_search)]);
@@ -1940,7 +1948,7 @@ class search_it
      *
      * @return string
      */
-    private function cacheHash($_searchString)
+    private function cacheHash($_searchString): string
     {
         return md5($_searchString . $this->hashMe);
     }
@@ -1953,14 +1961,14 @@ class search_it
      *
      * @return bool
      */
-    private function cacheSearch($_result, $_indexIds)
+    private function cacheSearch($_result, $_indexIds): bool
     {
         $sql = rex_sql::factory();
         $sql->setTable(self::getTempTablePrefix() . 'search_it_cache');
-        $sql->setValues(array(
+        $sql->setValues([
                 'hash' => $this->cacheHash($this->searchString),
                 'returnarray' => $_result
-            )
+            ]
         );
         $sql->insert();
         $lastId = $sql->getLastId();
@@ -1989,6 +1997,8 @@ class search_it
             }
 
         }
+
+        return false;
     }
 
     /**
@@ -1996,7 +2006,7 @@ class search_it
      *
      * @param mixed $_indexIds
      */
-    public function deleteCache($_indexIds = false)
+    public function deleteCache($_indexIds = false): void
     {
         if ($_indexIds === false) {
             // delete entire search-cache
@@ -2046,7 +2056,7 @@ class search_it
 
 
     /* keywords */
-    private function storeKeywords($_keywords, $_doCount = true)
+    private function storeKeywords($_keywords, $_doCount = true): void
     {
         // store similar words
         $simWordsSQL = rex_sql::factory();
@@ -2083,7 +2093,7 @@ class search_it
         }
     }
 
-    public function deleteKeywords()
+    public function deleteKeywords(): mixed
     {
         $kw_sql = rex_sql::factory();
         return $kw_sql->setQuery(sprintf('TRUNCATE TABLE `%s`', self::getTempTablePrefix() . 'search_it_keywords'));
@@ -2097,7 +2107,7 @@ class search_it
      *
      * @return array
      */
-    function search($_search)
+    function search($_search): array
     {
         $startTime = microtime(true);
 

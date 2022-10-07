@@ -18,6 +18,9 @@ class rex_cronjob_reindex extends rex_cronjob
                         foreach( $columnArray as $column ){
                             $search_it->indexColumn($table, $column);
                         }
+                        if (count($columnArray) > 0) {
+                            $search_it->deleteCache();
+                        }
                     }
                     break;
 
@@ -29,6 +32,9 @@ class rex_cronjob_reindex extends rex_cronjob
                         foreach( $art_sql->getArray() as $art ){
                             $search_it->indexArticle($art['id'], $art['clang_id']);
                         }
+
+                        $search_it->deleteCache();
+
                     }
                     break;
 
@@ -38,6 +44,9 @@ class rex_cronjob_reindex extends rex_cronjob
 						$search_it->unindexDeletedURLs();
 						$search_it->indexNewURLs();
 						$search_it->indexUpdatedURLs();
+
+                        $search_it->deleteCache();
+
 					}
                     break;
 

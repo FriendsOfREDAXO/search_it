@@ -73,6 +73,7 @@ if ( rex_addon::get('search_it')->getConfig('index_url_addon') == true) {
 				$search_it->unindexDeletedURLs();
 				$search_it->indexNewURLs();
 				$search_it->indexUpdatedURLs();
+                $search_it->deleteCache();
 				rex_config::remove('search_it', 'update_urls');
 			}
 		});

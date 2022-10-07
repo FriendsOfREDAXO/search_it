@@ -1,6 +1,6 @@
 <?php
 
-function search_it_getArticles($cats = false) {
+function search_it_getArticles($cats = false): array {
     $si = rex_addon::get('search_it');
 
     $whereCats = [];
@@ -28,7 +28,7 @@ function search_it_getArticles($cats = false) {
     return $return;
 }
 
-function search_it_getCategories($_ignoreoffline = true, $_onlyIDs = false, $_cats = false) {
+function search_it_getCategories($_ignoreoffline = true, $_onlyIDs = false, $_cats = false): array {
     $si = rex_addon::get('search_it');
 
     $return = [];
@@ -87,7 +87,7 @@ function search_it_getCategories($_ignoreoffline = true, $_onlyIDs = false, $_ca
     return $return;
 }
 
-function search_it_getDirs($_startDir = '', $_getSubdirs = false){
+function search_it_getDirs($_startDir = '', $_getSubdirs = false): array {
     $si = rex_addon::get('search_it');
 
     $startDepth = substr_count($_startDir, '/');
@@ -126,7 +126,7 @@ function search_it_getDirs($_startDir = '', $_getSubdirs = false){
     return $return;
 }
 
-function search_it_getFiles($_startDir = '', $_fileexts = [], $_getSubdirs = false){
+function search_it_getFiles($_startDir = '', $_fileexts = [], $_getSubdirs = false): array {
     $si = rex_addon::get('search_it');
 
     $return = [];
@@ -181,7 +181,7 @@ function search_it_getFiles($_startDir = '', $_fileexts = [], $_getSubdirs = fal
 
 
 
-function search_it_handle_extensionpoint($_ep){
+function search_it_handle_extensionpoint($_ep): void {
     $si = rex_addon::get('search_it');
 
     $_params = $_ep->getParams();
@@ -206,12 +206,13 @@ function search_it_handle_extensionpoint($_ep){
                     }
                 }
             }
+            $search_it->deleteCache();
             break;
 
         // exclude (if offline) or index (if online) article
         case 'ART_STATUS':
             if( $_params['status'] || $si->getConfig('indexoffline') ) {
-                $search_it->indexArticle($_params['id'], $_params['clang']);
+                $search_it->indexArticle($_params['id'], $_params['clang'], true);
             } else {
                 $search_it->unindexArticle($_params['id'], $_params['clang']);
             }
@@ -220,6 +221,9 @@ function search_it_handle_extensionpoint($_ep){
                 if($table == rex::getTable('article')){
                     foreach($columnArray as $column) {
                         $search_it->indexColumn($table, $column, 'id', $_params['id']);
+                    }
+                    if (count($columnArray) > 0) {
+                        $search_it->deleteCache();
                     }
                 }
             }
@@ -235,6 +239,8 @@ function search_it_handle_extensionpoint($_ep){
                 foreach( search_it_getArticles(array($_params['id'])) as $art_id => $art_name ) {
                     $search_it->indexArticle($art_id, $_params['clang']);
                 }
+                $search_it->deleteCache();
+
             } else {
                 $search_it->unindexArticle($_params['id'], $_params['clang']); // der Kategorie-Artikel ist schon offline gesetzt, und wird von _getArticles nicht mehr geholt
                 foreach( search_it_getArticles(array($_params['id'])) as $art_id => $art_name ) {
@@ -247,6 +253,9 @@ function search_it_handle_extensionpoint($_ep){
                     foreach($columnArray as $column) {
                         $search_it->indexColumn($table, $column, 'id', $_params['id']);
                     }
+                    if (count($columnArray) > 0) {
+                        $search_it->deleteCache();
+                    }
                 }
             }
             break;
@@ -257,6 +266,9 @@ function search_it_handle_extensionpoint($_ep){
                 if($table == rex::getTable('article')){
                     foreach($columnArray as $column) {
                         $search_it->indexColumn($table, $column, 'id', $_params['id']);
+                    }
+                    if (count($columnArray) > 0) {
+                        $search_it->deleteCache();
                     }
                 }
             }
@@ -270,6 +282,9 @@ function search_it_handle_extensionpoint($_ep){
                         // extension point liefert nicht die id des neuen/entfernten Mediums
                         $search_it->indexColumn($table, $column);
                     }
+                    if (count($columnArray) > 0) {
+                        $search_it->deleteCache();
+                    }
                 }
             }
             break;
@@ -280,6 +295,9 @@ function search_it_handle_extensionpoint($_ep){
                     foreach($columnArray as $column) {
                         $search_it->indexColumn($table, $column, 'id', $_params['id']);
                     }
+                    if (count($columnArray) > 0) {
+                        $search_it->deleteCache();
+                    }
                 }
             }
             break;
@@ -287,14 +305,11 @@ function search_it_handle_extensionpoint($_ep){
         case 'SLICE_UPDATED':
         case 'SLICE_DELETED':
         case 'SLICE_ADDED':
-            $search_it->indexArticle($_params['article_id'],$_params['clang']);
+            $search_it->indexArticle($_params['article_id'],$_params['clang'],true);
             break;
-
 
     }
 
-    // Cache leeren
-    $search_it->deleteCache();
 }
 
 function search_it_getSettingsFormSection($id = '', $title = '&nbsp;', $elements = [], $ownsection = 'info', $collapse = false ) {

@@ -406,7 +406,7 @@ class search_it
      *
      * @return int
      */
-    public function indexURL($url_hash, $article_id, $clang_id, $profile_id, $data_id, $clearCache = false): int
+    public function indexURL($url_hash, $article_id, $clang_id, $profile_id, $data_id, $clearCache = false): array
     {
         $return = [];
         $keywords = [];
@@ -1765,7 +1765,7 @@ class search_it
      *
      * @return mixed
      */
-    public function getHighlightedText($_text): void
+    public function getHighlightedText($_text): mixed
     {
         $tmp_searchArray = $this->searchArray;
 

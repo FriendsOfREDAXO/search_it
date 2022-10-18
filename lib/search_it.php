@@ -266,10 +266,11 @@ class search_it
                             $scanurl = str_replace(parse_url($scanurl,PHP_URL_HOST),parse_url($scanurl,PHP_URL_HOST).':'.$scanparts['port'], $scanurl);
                         }
                     } else {
-                        $scanhost = ($scanparts['scheme'] ?? 'http' ).'://'.$scanparts['host'] ?? rex::getServer();
+                        $scanhost = ($scanparts['scheme'] ?? parse_url(rex::getServer(),PHP_URL_SCHEME)).'://'.($scanparts['host'] ?? parse_url(rex::getServer(),PHP_URL_HOST));
                         $scanhost .= isset($scanparts['port']) ? ':'.$scanparts['port'] : '';
                         $scanurl = rtrim($scanhost, "/") . '/' . ltrim(str_replace(array('../', './'), '', rex_getUrl($_id, $langID,array('search_it_build_index'=>'do-it'),'&')),"/");
                     }
+                    //rex_logger::factory()->log('Warning','Indexierungs-URL: '.$scanurl);
 
                     $scan_socket = $this->prepareSocket($scanurl);
                     $response = $scan_socket->doGet();

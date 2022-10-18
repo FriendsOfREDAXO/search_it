@@ -1,5 +1,6 @@
 # Changelog
 
+- Fehler in scanurl, wenn kein yrewrite verwendet wird thx Wolfgang Günther
 - Eingabefehler bei Limit im BE verhindern #352 thx @staabm
 - Verbesserung Cache löschen @tyrant88
 

@@ -1797,7 +1797,6 @@ class search_it
                     $replace[] = '~' . preg_quote($keyword['search'], '~') . '~isu';
                 }
 
-                $i = 0;
                 for ($i = 0; $i < count($Apieces); $i++) {
                     if (preg_match('~(' . implode('|', $search) . ')~isu', $Apieces[$i])) {
                         break;
@@ -1897,14 +1896,11 @@ class search_it
                 if ($startEllipsis) {
                     $return = $this->ellipsis . ' ' . $return;
                 }
-
                 if ($endEllipsis) {
                     $return = $return . ' ' . $this->ellipsis;
                 }
 
-                $return = preg_replace($replace, $this->surroundTags[0] . '$0' . $this->surroundTags[1], $return);
-
-                return $return;
+                return preg_replace($replace, $this->surroundTags[0] . '$0' . $this->surroundTags[1], $return);
                 break;
 
             case 'teaser':
@@ -1914,6 +1910,9 @@ class search_it
                 }
                 return preg_replace($search, $this->surroundTags[0] . '$0' . $this->surroundTags[1], $this->getTeaserText($_text));
                 break;
+
+            default:
+                return '';
         }
 
     }

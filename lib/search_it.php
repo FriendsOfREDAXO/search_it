@@ -1766,13 +1766,13 @@ class search_it
      *
      * @return mixed
      */
-    public function getHighlightedText($_text): mixed
+    public function getHighlightedText($_text)
     {
         $tmp_searchArray = $this->searchArray;
 
         if ($this->searchHtmlEntities) {
             foreach ($this->searchArray as $keyword) {
-                $this->searchArray[] = array('search' => htmlentities($keyword['search'], ENT_COMPAT, 'UTF-8'));
+                $tmp_searchArray[] = array('search' => htmlentities($keyword['search'], ENT_COMPAT, 'UTF-8'));
             }
         }
 
@@ -1792,7 +1792,7 @@ class search_it
 
                 $search = [];
                 $replace = [];
-                foreach ($this->searchArray as $keyword) {
+                foreach ($tmp_searchArray as $keyword) {
                     $search[] = preg_quote($keyword['search'], '~');
                     $replace[] = '~' . preg_quote($keyword['search'], '~') . '~isu';
                 }
@@ -1835,23 +1835,23 @@ class search_it
                 $Ahighlighted = [];
                 $_text = preg_replace('~\s+~', ' ', $_text);
                 $replace = [];
-                foreach ($this->searchArray as $keyword) {
+                foreach ($tmp_searchArray as $keyword) {
                     $replace[] = '~' . preg_quote($keyword['search'], '~') . '~isu';
                 }
 
                 $strlen = mb_strlen($_text);
                 $positions = [];
-                for ($i = 0; $i < count($this->searchArray); $i++) {
+                for ($i = 0; $i < count($tmp_searchArray); $i++) {
                     $hits = [];
                     $offset = 0;
-                    preg_match_all('~((.{0,' . $this->maxHighlightedTextChars . '})' . preg_quote($this->searchArray[$i]['search'], '~') . '(.{0,' . $this->maxHighlightedTextChars . '}))~imsu', $_text, $hits, PREG_SET_ORDER);
+                    preg_match_all('~((.{0,' . $this->maxHighlightedTextChars . '})' . preg_quote($tmp_searchArray[$i]['search'], '~') . '(.{0,' . $this->maxHighlightedTextChars . '}))~imsu', $_text, $hits, PREG_SET_ORDER);
 
                     foreach ($hits as $hit) {
                         $offset = strpos($_text, $hit[0], $offset) + 1;
                         $currentposition = ceil(intval(($offset - 1) / (2 * $this->maxHighlightedTextChars)));
 
-                        if ($this->highlightType == 'array' AND !array_key_exists($this->searchArray[$i]['search'], $Ahighlighted)) {
-                            $Ahighlighted[$this->searchArray[$i]['search']] = [];
+                        if ($this->highlightType == 'array' AND !array_key_exists($tmp_searchArray[$i]['search'], $Ahighlighted)) {
+                            $Ahighlighted[$tmp_searchArray[$i]['search']] = [];
                         }
 
                         if (trim($hit[1]) != '') {
@@ -1869,12 +1869,12 @@ class search_it
                                 $startEllipsis = true;
                             }
 
-                            if ($i == (count($this->searchArray) - 1) AND strlen($hit[3]) > 0) {
+                            if ($i == (count($tmp_searchArray) - 1) AND strlen($hit[3]) > 0) {
                                 $endEllipsis = true;
                             }
 
                             if ($this->highlightType == 'array') {
-                                $Ahighlighted[$this->searchArray[$i]['search']][] = preg_replace($replace, $this->surroundTags[0] . '$0' . $this->surroundTags[1], trim($surroundText));
+                                $Ahighlighted[$tmp_searchArray[$i]['search']][] = preg_replace($replace, $this->surroundTags[0] . '$0' . $this->surroundTags[1], trim($surroundText));
                             } else if (!in_array($currentposition, $positions)) {
                                 $Ahighlighted[] = trim($surroundText);
                             }
@@ -1909,14 +1909,13 @@ class search_it
 
             case 'teaser':
                 $search = [];
-                foreach ($this->searchArray as $keyword) {
+                foreach ($tmp_searchArray as $keyword) {
                     $search[] = '~' . preg_quote($keyword['search'], '~') . '~isu';
                 }
                 return preg_replace($search, $this->surroundTags[0] . '$0' . $this->surroundTags[1], $this->getTeaserText($_text));
                 break;
         }
 
-        //$this->searchArray = $tmp_searchArray;
     }
 
 
@@ -2094,10 +2093,10 @@ class search_it
         }
     }
 
-    public function deleteKeywords(): mixed
+    public function deleteKeywords(): void
     {
         $kw_sql = rex_sql::factory();
-        return $kw_sql->setQuery(sprintf('TRUNCATE TABLE `%s`', self::getTempTablePrefix() . 'search_it_keywords'));
+        $kw_sql->setQuery(sprintf('TRUNCATE TABLE `%s`', self::getTempTablePrefix() . 'search_it_keywords'));
     }
 
 

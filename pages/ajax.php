@@ -82,9 +82,9 @@ switch($ajax) {
 
             case 'col':
                 if(false !== ($count = $search_it->indexColumn(rex_get('t'), rex_get('c'), false, false, rex_get('s'), rex_get('w')))) {
-                    echo '<p class="text-warning"><em>`' . rex_get('t') . '`.`' . rex_get('c') . '` (' . rex_get('s') . ' - ' . (rex_get('s') + rex_get('w')) . ')</em> '. $this->i18n('search_it_generate_col_done',$count) . '</p>';
+                    echo '<p class="text-info"><em>`' . rex_get('t') . '`.`' . rex_get('c') . '` (' . $this->i18n('search_it_generate_col_datasets').' '.rex_get('s') + 1 . ' - ' . (rex_get('s') + rex_get('w')) . ')</em> '. $this->i18n('search_it_generate_col_done',$count) . '</p>';
                 } else {
-                    echo '<p class="text-info">Error: <em>`' . rex_get('t') . '`.`' . rex_get('c') . '`</em>'. $this->i18n('search_it_generate_col_error',$count) . '</p>';
+                    echo '<p class="text-error">Error: <em>`' . rex_get('t') . '`.`' . rex_get('c') . '`</em>'. $this->i18n('search_it_generate_col_error',$count) . '</p>';
                 }
                 break;
 

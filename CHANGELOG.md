@@ -1,5 +1,5 @@
 # Changelog
-
+- Verbesserung Meldung bei schrittweiser Spalten-Indexierung #362 thx @tbaddade
 - return types fixed for PHP 7 thx @michael-kreatif
 - Fehler in scanurl, wenn kein yrewrite verwendet wird thx Wolfgang Günther
 - Eingabefehler bei Limit im BE verhindern #352 thx @staabm

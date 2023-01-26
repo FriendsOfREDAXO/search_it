@@ -72,7 +72,7 @@ if ( !empty(rex_get('do')) AND rex_get('do') == 'incremental') {
             for($i = 0; $i < $count; $i += $step_width) {
                 foreach($columnArray as $column) {
                     #$js_output .= 'index("col",new Array("'.$table.'","'.$column.'"));';
-                    $js_output .= 'indexArray.push(new Array("col",new Array("'.$table.'","'.$column.'",'.$i.','.($i+$step_width < $count ? $step_width : $count).')));';
+                    $js_output .= 'indexArray.push(new Array("col",new Array("'.$table.'","'.$column.'",'.$i.','.($i + $step_width < $count ? $step_width : $count - $i).')));';
                     $globalcount++;
                 }
             }

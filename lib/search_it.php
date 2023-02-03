@@ -138,9 +138,8 @@ class search_it
      */
     public function generateIndex(): int
     {
-        // delete old index and cache
+        // delete old index
         $this->deleteIndex();
-        $this->deleteCache();
 
 		// index articles
         $global_return = 0;
@@ -195,9 +194,8 @@ class search_it
             }
         }
 
-
+        // delete old cache
         $this->deleteCache();
-
 
 		return $global_return;
     }
@@ -1559,7 +1557,7 @@ class search_it
      *
      * @return bool
      */
-    public function setLogicalMode($_logicalMode): bool
+    public function setLogicalMode($_logicalMode = ''): bool
     {
         switch (strtolower($_logicalMode)) {
             case 'and':
@@ -1595,7 +1593,7 @@ class search_it
      *
      * @return bool
      */
-    public function setTextMode($_textMode): bool
+    public function setTextMode($_textMode = ''): bool
     {
         switch (strtolower($_textMode)) {
             case 'html':
@@ -1636,7 +1634,7 @@ class search_it
      *
      * @return bool
      */
-    public function setSearchMode($_searchMode): bool
+    public function setSearchMode($_searchMode = ''): bool
     {
         switch (strtolower($_searchMode)) {
             case 'like':

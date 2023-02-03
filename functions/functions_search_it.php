@@ -841,11 +841,12 @@ function search_it_reindex_cols($_ep){
 
     if(!empty($_params['yform'])){
         $tablename = $_params['form']->params['main_table'];
-        $wherecondition = $_params['form']->params['main_where'];
-    } else if ( !empty($_params['form'])) {
+        $didcol = 'id';
+        $did = $_params['id'];
+    } elseif (!empty($_params['form'])) {
         $tablename = $_params['form']->getTableName();
         $wherecondition = $_params['form']->getWhereCondition();
-    } else if ( !empty($_params['table']) ) {
+    } elseif (!empty($_params['table'])) {
         $tablename = $_params['table']->getTableName();
         $didcol = 'id';
         $did = $_params['data_id'];

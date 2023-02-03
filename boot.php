@@ -41,6 +41,7 @@ if ( rex_request('search_highlighter', 'string', '') != '' && rex_addon::get('se
 if ( rex_addon::get('search_it')->getConfig('reindex_cols_onforms') == true ) {
 	rex_extension::register('REX_FORM_SAVED', 'search_it_reindex_cols');
 	rex_extension::register('REX_YFORM_SAVED', 'search_it_reindex_cols');
+    rex_extension::register('YFORM_SAVED', 'search_it_reindex_cols');
 	rex_extension::register('YFORM_DATA_DELETED','search_it_reindex_cols');
 	rex_extension::register('REX_FORM_DELETED', 'search_it_reindex_cols');
 }

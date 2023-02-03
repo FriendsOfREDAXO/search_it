@@ -1,5 +1,5 @@
 # Changelog
-- IndexColumn() indexiert jetzt wirklich nur einen Datensatz #364 thx @tbaddade 
+- IndexColumn() indexiert jetzt wirklich nur einen Datensatz, wenn id gesetzt #364 thx @tbaddade 
 - neuen EP hinzugefügt YFORM_SAVED
 - Verbesserung Meldung bei schrittweiser Spalten-Indexierung #362 thx @tbaddade
 - return types fixed for PHP 7 thx @michael-kreatif

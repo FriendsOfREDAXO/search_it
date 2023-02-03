@@ -860,7 +860,7 @@ function search_it_reindex_cols($_ep){
     }
 
     foreach($includeColumns[$tablename] as $col) {
-        $search_it->indexColumn($tablename, $col, $didcol, $did, false, false, $wherecondition);
+        $search_it->indexColumn($tablename, $col, $didcol, $did, false, false, true);
     }
 
     return true;

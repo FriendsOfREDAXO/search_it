@@ -7,7 +7,7 @@ Methode | Erläuterung
 [indexArticle($_id,$_clang = false)](https://github.com/friendsofredaxo/search_it/blob/Doku/lib/search_it.php#L422) | Indexes a certain article.
 [unindexArticle($_id,$_clang = false)](https://github.com/friendsofredaxo/search_it/blob/Doku/lib/search_it.php#L544) | Removes an article from the index.
 [unindexURL($_id)](https://github.com/friendsofredaxo/search_it/blob/Doku/lib/search_it.php#L576) | Removes an URL from the index.
-[indexColumn($_table, $_column, $_idcol = false, $_id = false, $_start = false, $_count = false, $_where = false)](https://github.com/friendsofredaxo/search_it/blob/Doku/lib/search_it.php#L569) | Indexes a certain column. Returns the number of the indexed rows or false.
+[indexColumn($_table, $_column, $_idcol = false, $_id = false, $_start = false, $_count = false, $_clearcache)](https://github.com/friendsofredaxo/search_it/blob/Doku/lib/search_it.php#L569) | Indexes a certain column. Returns the number of the indexed rows or false.
 [indexFile($_filename, $_doPlaintext = false, $_clang = false, $_fid = false, $_catid = false)](https://github.com/friendsofredaxo/search_it/blob/Doku/lib/search_it.php#L734) | Indexes a certain file. Returns SEARCH_IT_FILE_GENERATED or an error code.
 [indexURL($id, $article_id, $clang_id, $profile_id, $data_id)](https://github.com/friendsofredaxo/search_it/blob/Doku/lib/search_it.php#L384) | Indexes a certain url from URL Addon.
 [deleteIndex()](https://github.com/friendsofredaxo/search_it/blob/Doku/lib/search_it.php#L960) | Deletes the complete search index.

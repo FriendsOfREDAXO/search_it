@@ -1,4 +1,6 @@
 # Changelog
+## Version 6.9.6 (2023-03-02)
+- Fixes for PHP 8.1
 - IndexColumn() indexiert jetzt wirklich nur einen Datensatz, wenn id gesetzt #364 thx @tbaddade 
 - neuen EP hinzugefügt YFORM_SAVED
 - Verbesserung Meldung bei schrittweiser Spalten-Indexierung #362 thx @tbaddade

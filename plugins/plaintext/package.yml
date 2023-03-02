@@ -1,5 +1,5 @@
 package: search_it/plaintext
-version: '6.9.6'
+version: '6.9.7'
 author: Friends Of REDAXO
 
 title: 'translate:search_it_plaintext_title'

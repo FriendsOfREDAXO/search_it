@@ -892,8 +892,9 @@ class search_it
      */
     public function indexFile($_filename, $_doPlaintext = false, $_clang = false, $_fid = false, $_catid = false, $clearCache = false): int
     {
-        // $_filename comes with path but stripped of first slash
+        // $_filename comes with path but needs to be stripped of first slash
         // extract file-extension
+        $_filename = ltrim($_filename, '/');
         $filenameArray = explode('.', $_filename);
         $fileext = $filenameArray[count($filenameArray) - 1];
 
@@ -939,8 +940,8 @@ class search_it
                 if (function_exists('exec')) {
                     $tempFile = tempnam(rex_path::cache() . 'addons/mediapool/', 'search_it');
                     $encoding = 'UTF-8';
-                    //echo 'pdftotext ' . escapeshellarg(rex_path::base($_filename)) . ' ' . escapeshellarg($tempFile) . ' -enc ' . $encoding;
-                    exec('pdftotext  -enc ' . $encoding.' '. escapeshellarg(rex_path::base($_filename)) . ' ' . escapeshellarg($tempFile) , $dummy, $return);
+                    //echo 'pdftotext ' . escapeshellarg(rex_path::frontend($_filename)) . ' ' . escapeshellarg($tempFile) . ' -enc ' . $encoding;
+                    exec('pdftotext  -enc ' . $encoding.' '. escapeshellarg(rex_path::frontend($_filename)) . ' ' . escapeshellarg($tempFile) , $dummy, $return);
 
                     if ($return > 0) {
                         if ($return == 1) {
@@ -968,7 +969,7 @@ class search_it
 
                 if (!$xpdf) {
                     // if xpdf returned an error, try pdf2txt via php
-                    if (false === $pdfContent = @rex_file::get(rex_path::base($_filename))) {
+                    if (false === $pdfContent = @rex_file::get(rex_path::frontend($_filename))) {
                         $error = SEARCH_IT_FILE_NOEXIST;
                     } else {
                         $text = pdf2txt::directConvert($pdfContent);
@@ -989,7 +990,7 @@ class search_it
             case 'htm':
             case 'html':
             case 'php':
-                if (false === $text = @rex_file::get(rex_path::base($_filename))) {
+                if (false === $text = @rex_file::get(rex_path::frontend($_filename))) {
                     return SEARCH_IT_FILE_NOEXIST;
                 }
 
@@ -998,7 +999,7 @@ class search_it
 
             // other filetype
             default:
-                if (false === $text = @rex_file::get(rex_path::base($_filename))) {
+                if (false === $text = @rex_file::get(rex_path::frontend($_filename))) {
                     return SEARCH_IT_FILE_NOEXIST;
                 }
 

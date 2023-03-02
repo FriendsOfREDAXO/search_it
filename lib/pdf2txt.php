@@ -54,7 +54,7 @@ class pdf2txt
             return false;
         }
 
-        if ($this->data === false) {
+        if ($this->data === false || $this->data == null) {
             // [ ERROR ]
             // nothing to convert
             return false;

@@ -1,4 +1,7 @@
 # Changelog
+
+- Fix Warnings wenn Config noch nicht gespeichert
+
 ## Version 6.9.7 (2023-03-02)
 - Fixes in indexFile und pdf2txt Klasse
 

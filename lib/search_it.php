@@ -1560,7 +1560,7 @@ class search_it
      */
     public function setLogicalMode($_logicalMode = ''): bool
     {
-        switch (strtolower($_logicalMode)) {
+        switch (strtolower($_logicalMode ?? '')) {
             case 'and':
             case 'konj':
             case 'strict':
@@ -1596,7 +1596,7 @@ class search_it
      */
     public function setTextMode($_textMode = ''): bool
     {
-        switch (strtolower($_textMode)) {
+        switch (strtolower($_textMode ?? '')) {
             case 'html':
             case 'xhtml':
             case 'unmodified':
@@ -1637,10 +1637,10 @@ class search_it
      */
     public function setSearchMode($_searchMode = ''): bool
     {
-        switch (strtolower($_searchMode)) {
+        switch (strtolower($_searchMode ?? '')) {
             case 'like':
             case 'match':
-                $this->searchMode = strtolower($_searchMode);
+                $this->searchMode = strtolower($_searchMode ?? '');
                 break;
 
             default:

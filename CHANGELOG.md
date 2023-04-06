@@ -1,5 +1,7 @@
 # Changelog
 
+## Version 6.9.8 (2023-04-06)
+- Fix incorrect new scanurl in redirect
 - Fix Warnings wenn Config noch nicht gespeichert
 
 ## Version 6.9.7 (2023-03-02)

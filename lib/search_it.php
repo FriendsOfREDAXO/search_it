@@ -280,13 +280,13 @@ class search_it
                         $scanurl = str_replace(array('../', './'), '/',$response->getHeader('location'));
 
                         $scanparts = parse_url($scanurl);
-                        if (in_array('query',$scanparts)) {
+                        if (array_key_exists('query', $scanparts)) {
                             list($scanurl, $parameters) = explode('?', $scanurl);
                             parse_str($parameters, $output);
                             unset($output['search_it_build_index']);
                             $scanurl = $scanurl . '?' . http_build_query($output);
                         }
-                        if (!in_array('host',$scanparts)) {
+                        if (!array_key_exists('host', $scanparts)) {
                             $lastparts = parse_url($lastscanurl);
                             if ( isset($lastparts['scheme']) && isset($lastparts['host']) ) {
                                 $scanurl = $lastparts['scheme'] . '://' . $lastparts['host'] .
@@ -462,13 +462,13 @@ class search_it
                     $scanurl = str_replace(array('../', './'), '/',$response->getHeader('location'));
 
                     $scanparts = parse_url($scanurl);
-                    if (in_array('query',$scanparts)) {
+                    if (array_key_exists('query', $scanparts)) {
                         list($scanurl, $parameters) = explode('?', $scanurl);
                         parse_str($parameters, $output);
                         unset($output['search_it_build_index']);
                         $scanurl = $scanurl . '?' . http_build_query($output);
                     }
-                    if (!in_array('host',$scanparts)) {
+                    if (!array_key_exists('host', $scanparts)) {
                         $lastparts = parse_url($lastscanurl);
                         if ( isset($lastparts['scheme']) && isset($lastparts['host']) ) {
                             $scanurl = $lastparts['scheme'] . '://' . $lastparts['host'] .

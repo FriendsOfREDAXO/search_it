@@ -25,18 +25,20 @@ if($request) {
             # dump($hit);
             if($hit['type'] == 'article') {
                 $article = rex_article::get($hit['fid']);
-                $hit_server = $server;
-                if(rex_addon::get('yrewrite')->isAvailable()) {
-                    $hit_domain = rex_yrewrite::getDomainByArticleId($hit['fid'], $hit['clang']);
-                    $hit_server = rtrim($hit_domain->getUrl(), "/");
+                if (isset($article)) {
+                    $hit_server = $server;
+                    if(rex_addon::get('yrewrite')->isAvailable()) {
+                        $hit_domain = rex_yrewrite::getDomainByArticleId($hit['fid'], $hit['clang']);
+                        $hit_server = rtrim($hit_domain->getUrl(), "/");
+                    }
+                    echo '<li class="search_it-result search_it-article">
+                              <p class="search_it-title">
+                                  <a href="'.$hit_server.rex_getUrl($hit['fid'], $hit['clang'], array('search_highlighter' => $request)).'" title="'.$article->getName().'">'.$article->getName().'</a>
+                              </p>
+                              <p class="search_it-url">'.$hit_server.rex_getUrl($hit['fid'], $hit['clang']).'</p>
+                              <p class="search_it-teaser">'.$hit['highlightedtext'].'</p>
+                          </li>';
                 }
-                echo '<li class="search_it-result search_it-article">
-                          <p class="search_it-title">
-                              <a href="'.$hit_server.rex_getUrl($hit['fid'], $hit['clang'], array('search_highlighter' => $request)).'" title="'.$article->getName().'">'.$article->getName().'</a>
-                          </p>
-                          <p class="search_it-url">'.$hit_server.rex_getUrl($hit['fid'], $hit['clang']).'</p>
-                          <p class="search_it-teaser">'.$hit['highlightedtext'].'</p>
-                      </li>';
             } else {
                 echo '<p class="search_it-missing_type">Das Suchergebnis vom Typ <i class="search_it-type">'.$hit['type'].' </i> kann nicht dargestellt werden.</p>';
             }

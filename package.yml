@@ -10,7 +10,7 @@ page:
     pjax: false
     icon: rex-icon fa-search
     subpages:
-        generate: { title: 'translate:generate', perm: search_it[ generate ], icon: rex-icon fa-tasks }
+        generate: { title: 'translate:generate', perm: "search_it[ generate ]", icon: rex-icon fa-tasks }
         settings:
             title: 'translate:settings'
             perm: search_it[settings]

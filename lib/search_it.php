@@ -216,14 +216,14 @@ class search_it
      */
     public function indexArticle($_id, $_clang = false, $clearCache = false)
     {
-        $dont_use_socket = rex_config::has('search_it', 'dont_use_socket');
+        $dont_use_socket = true == rex_config::get('search_it', 'dont_use_socket');
         if ($_clang === false) {
             $langs = rex_clang::getAll();
         } else {
             $langs = array(rex_clang::get($_clang));
         }
 
-        if (rex_config::has('search_it', 'dont_use_socket')) {
+        if ($dont_use_socket) {
             $isBackend = rex::isBackend();
             rex::setProperty('redaxo', false);
         }

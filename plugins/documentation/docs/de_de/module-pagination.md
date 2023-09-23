@@ -1,6 +1,7 @@
 # Suche mit Pagination
 
-Für umfangreiche Webauftritte kann eine Pagination für die Suchergebnisse sinnvoll oder notwendig sein.
+Für umfangreiche Webauftritte kann eine Pagination für die Suchergebnisse
+sinnvoll oder notwendig sein.
 
 ```php
 <?php

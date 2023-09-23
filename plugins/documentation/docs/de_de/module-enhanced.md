@@ -1,10 +1,12 @@
 # Artikel-Suchergebnisse einschließlich Metadaten
 
-Dieses Suchmodul bezieht weitere DB-Spalten in die Suche ein, z.B. den Artikel-Name und das SEO-Description-Feld des YRewrite-AddOns.
+Dieses Suchmodul bezieht weitere DB-Spalten in die Suche ein, z.B. den
+Artikel-Name und das SEO-Description-Feld des YRewrite-AddOns.
 
 ## Search it Einstellungen
 
-In den `Search it`-Einstellungen müssen als Quelle folgende Datenbank-Spalten indexiert werden:
+In den `Search it`-Einstellungen müssen als Quelle folgende Datenbank-Spalten
+indexiert werden:
 
 * `rex_article.name`
 * `rex_article.yrewrite_description`
@@ -130,7 +132,8 @@ if($request) { // Wenn ein Suchbegriff eingegeben wurde
 
 ## CSS
 
-Das Sucheingabe-Formular kann beliebig formatiert und mit Klassen ausgezeichnet werden. Das nachfolgende CSS formatiert das oben vorgegebene Beispiel.
+Das Sucheingabe-Formular kann beliebig formatiert und mit Klassen ausgezeichnet
+werden. Das nachfolgende CSS formatiert das oben vorgegebene Beispiel.
 
 ```css
 <style>

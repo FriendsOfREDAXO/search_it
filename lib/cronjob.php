@@ -5,17 +5,17 @@ class rex_cronjob_reindex extends rex_cronjob
     public function execute()
     {
 
-        if ( rex_addon::get('search_it')->isAvailable() ) {
+        if (rex_addon::get('search_it')->isAvailable()) {
 
             //$message = $this->getParam('action').':'."\n";
 
             $search_it = new search_it();
             $includeColumns = is_array(rex_addon::get('search_it')->getConfig('include')) ? rex_addon::get('search_it')->getConfig('include') : [];
-            switch ($this->getParam('action')){
+            switch ($this->getParam('action')) {
                 case 2:
                     // Spalten neu indexieren
-                    foreach( $includeColumns as $table => $columnArray ){
-                        foreach( $columnArray as $column ){
+                    foreach ($includeColumns as $table => $columnArray) {
+                        foreach ($columnArray as $column) {
                             $search_it->indexColumn($table, $column);
                         }
                         if (count($columnArray) > 0) {
@@ -28,8 +28,8 @@ class rex_cronjob_reindex extends rex_cronjob
                     // Artikel neu indexieren
                     $art_sql = rex_sql::factory();
                     $art_sql->setTable(rex::getTable('article'));
-                    if( $art_sql->select('id,clang_id') ){
-                        foreach( $art_sql->getArray() as $art ){
+                    if ($art_sql->select('id,clang_id')) {
+                        foreach ($art_sql->getArray() as $art) {
                             $search_it->indexArticle($art['id'], $art['clang_id']);
                         }
 
@@ -40,14 +40,14 @@ class rex_cronjob_reindex extends rex_cronjob
 
                 case 4:
                     // URLs neu indexieren
-					if(rex_addon::get('search_it')->getConfig('index_url_addon') && search_it_isUrlAddOnAvailable()) {
-						$search_it->unindexDeletedURLs();
-						$search_it->indexNewURLs();
-						$search_it->indexUpdatedURLs();
+                    if (rex_addon::get('search_it')->getConfig('index_url_addon') && search_it_isUrlAddOnAvailable()) {
+                        $search_it->unindexDeletedURLs();
+                        $search_it->indexNewURLs();
+                        $search_it->indexUpdatedURLs();
 
                         $search_it->deleteCache();
 
-					}
+                    }
                     break;
 
                 case 1:
@@ -62,10 +62,12 @@ class rex_cronjob_reindex extends rex_cronjob
         $this->setMessage('Search it is not installed');
         return false;
     }
+
     public function getTypeName()
     {
         return rex_i18n::msg('search_it_reindex');
     }
+
     public function getParamFields()
     {
         $fields = [

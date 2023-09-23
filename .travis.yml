@@ -6,10 +6,10 @@ php:
 cache:
     directories:
         - $HOME/.composer/cache
-  
+
 before_install:
     - phpenv config-rm xdebug.ini || echo "xdebug not available"
-    
+
 script:
     - composer require --dev friendsofredaxo/linter
     - vendor/bin/rexlint

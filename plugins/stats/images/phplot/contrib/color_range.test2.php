@@ -14,10 +14,10 @@ require_once 'color_range.php';
 # Testing count_data_sets()
 function test_count_data_sets($data, $data_type, $expected)
 {
-  $n = count_data_sets($data, $data_type);
-  if ($n == $expected) $result = "Pass";
-  else $result = "FAIL: Expected $expected but got";
-  echo "$result: $n data sets, $data_type with " . count($data) . " records.\n";
+    $n = count_data_sets($data, $data_type);
+    if ($n == $expected) $result = "Pass";
+    else $result = "FAIL: Expected $expected but got";
+    echo "$result: $n data sets, $data_type with " . count($data) . " records.\n";
 }
 
 function test_driver_count_data_sets()
@@ -27,8 +27,8 @@ function test_driver_count_data_sets()
     $data2 = array(array('a', 1, 2, 3, 4, 5, 6, 7), array('b', 2, 4, 5, 6));
     $data3 = array(array('', 1), array('', 2), array('', 3), array('', 4));
     $data4 = array(array('', 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13),
-                   array('', 1, 2, 3, 4, 5, 6, 7),
-                   array('', 1, 2, 3, 4));
+        array('', 1, 2, 3, 4, 5, 6, 7),
+        array('', 1, 2, 3, 4));
 
     test_count_data_sets($data1, 'text-data', 3);
     test_count_data_sets($data1, 'data-data', 2);
@@ -45,7 +45,7 @@ function test_driver_count_data_sets()
 function test_color_range($color1, $color2, $nsteps, $expected)
 {
     $info = 'From (' . implode(', ', $color1)
-       . ') To (' . implode(', ', $color2) . ") with $nsteps steps";
+        . ') To (' . implode(', ', $color2) . ") with $nsteps steps";
 
     $colors = color_range($color1, $color2, $nsteps);
     if ($colors == $expected) echo "Pass: $info\n";
@@ -57,15 +57,15 @@ function test_color_range($color1, $color2, $nsteps, $expected)
 function test_driver_color_range()
 {
     echo "\nTesting color_range():\n";
-    test_color_range(array(0,0,0), array(255,255,255), 3,
-        array(array(0,0,0), array(127,127,127), array(255,255,255)));
+    test_color_range(array(0, 0, 0), array(255, 255, 255), 3,
+        array(array(0, 0, 0), array(127, 127, 127), array(255, 255, 255)));
 
-    test_color_range(array(255,0,0), array(0,255,0), 2,
-        array(array(255,0,0), array(0,255,0)));
+    test_color_range(array(255, 0, 0), array(0, 255, 0), 2,
+        array(array(255, 0, 0), array(0, 255, 0)));
 
-    test_color_range(array(100,0,100), array(0,100,0), 6,
-        array(array(100,0,100), array(80,20,80), array(60,40,60),
-              array(40,60,40), array(20,80,20), array(0,100,0)));
+    test_color_range(array(100, 0, 100), array(0, 100, 0), 6,
+        array(array(100, 0, 100), array(80, 20, 80), array(60, 40, 60),
+            array(40, 60, 40), array(20, 80, 20), array(0, 100, 0)));
 }
 
 

@@ -115,18 +115,20 @@ class search_it
         }
     }
 
-    private static function getTablePrefix() {
+    private static function getTablePrefix()
+    {
         static $tablePrefix = null;
-        if($tablePrefix == null) {
+        if ($tablePrefix == null) {
             $tablePrefix = rex::getTablePrefix();
         }
         return $tablePrefix;
     }
 
-    private static function getTempTablePrefix() {
+    private static function getTempTablePrefix()
+    {
         static $tempTablePrefix = null;
-        if($tempTablePrefix == null) {
-            $tempTablePrefix = rex::getTablePrefix().rex::getTempPrefix();
+        if ($tempTablePrefix == null) {
+            $tempTablePrefix = rex::getTablePrefix() . rex::getTempPrefix();
         }
         return $tempTablePrefix;
     }
@@ -141,34 +143,38 @@ class search_it
         // delete old index
         $this->deleteIndex();
 
-		// index articles
+        // index articles
         $global_return = 0;
         $art_sql = rex_sql::factory();
         $art_sql->setTable(self::getTablePrefix() . 'article');
         if ($art_sql->select('id,clang_id')) {
             foreach ($art_sql->getArray() as $art) {
                 $returns = $this->indexArticle($art['id'], $art['clang_id']);
-                foreach ( $returns as $return ) {
-                    if ($return > 3 ) { $global_return += $return; }
+                foreach ($returns as $return) {
+                    if ($return > 3) {
+                        $global_return += $return;
+                    }
                 }
-			}
+            }
         }
 
-		// index url 2 addon URLs
-		if(rex_addon::get('search_it')->getConfig('index_url_addon') && search_it_isUrlAddOnAvailable()) {
-			$url_sql = rex_sql::factory();
-			$url_sql->setTable($this->urlAddOnTableName);
-			if ($url_sql->select('url_hash, article_id, clang_id, profile_id, data_id')) {
-				foreach ($url_sql->getArray() as $url) {
-					$returns = $this->indexUrl($url['url_hash'], $url['article_id'], $url['clang_id'], $url['profile_id'], $url['data_id']);
-					foreach ( $returns as $return ) {
-						if ($return > 3 ) { $global_return += $return; }
-					}
-				}
-			}
-		}
+        // index url 2 addon URLs
+        if (rex_addon::get('search_it')->getConfig('index_url_addon') && search_it_isUrlAddOnAvailable()) {
+            $url_sql = rex_sql::factory();
+            $url_sql->setTable($this->urlAddOnTableName);
+            if ($url_sql->select('url_hash, article_id, clang_id, profile_id, data_id')) {
+                foreach ($url_sql->getArray() as $url) {
+                    $returns = $this->indexUrl($url['url_hash'], $url['article_id'], $url['clang_id'], $url['profile_id'], $url['data_id']);
+                    foreach ($returns as $return) {
+                        if ($return > 3) {
+                            $global_return += $return;
+                        }
+                    }
+                }
+            }
+        }
 
-		// index columns
+        // index columns
         foreach ($this->includeColumns as $table => $columnArray) {
             foreach ($columnArray as $column) {
                 $this->indexColumn($table, $column);
@@ -197,7 +203,7 @@ class search_it
         // delete old cache
         $this->deleteCache();
 
-		return $global_return;
+        return $global_return;
     }
 
     /**
@@ -210,13 +216,17 @@ class search_it
      */
     public function indexArticle($_id, $_clang = false, $clearCache = false)
     {
-
+        $dont_use_socket = rex_config::has('search_it', 'dont_use_socket');
         if ($_clang === false) {
             $langs = rex_clang::getAll();
         } else {
             $langs = array(rex_clang::get($_clang));
         }
 
+        if (rex_config::has('search_it', 'dont_use_socket')) {
+            $isBackend = rex::isBackend();
+            rex::setProperty('redaxo', false);
+        }
         $return = [];
         $keywords = [];
         $clearCache = false;
@@ -240,106 +250,131 @@ class search_it
 
             // index article
             $article = rex_article::get(intval($_id), $langID);
-            if ( is_null($article)) {
+            if (is_null($article)) {
                 $return[$langID] = SEARCH_IT_ART_IDNOTFOUND;
                 continue;
             }
 
-            if (is_object($article) AND ($article->isOnline() OR rex_addon::get('search_it')->getConfig('indexoffline')) AND $_id != 0
-                AND ($_id != rex_article::getNotfoundArticleId() OR $_id == rex_article::getSiteStartArticleId())  ) {
+            if (is_object($article) and ($article->isOnline() or rex_addon::get('search_it')->getConfig('indexoffline')) and $_id != 0
+                and ($_id != rex_article::getNotfoundArticleId() or $_id == rex_article::getSiteStartArticleId())) {
 
-
-                try {
-                    $index_host = rex_addon::get('search_it')->getConfig('index_host');
-                    if (!isset($index_host)) { $index_host = ''; }
-                    if (substr($index_host,0,1) == ':') {
-                        $scanparts['port'] = trim($index_host,':');
-                    } else {
-                        $scanparts = parse_url($index_host);
-                    }
-
-                    if(rex_addon::get("yrewrite") && rex_addon::get("yrewrite")->isAvailable() && !isset($scanparts['host'])) {
-                        $scanurl = rex_yrewrite::getFullUrlByArticleId($_id, $langID, array('search_it_build_index' => 'do-it-with-yrewrite'), '&');
-                        if ( isset($scanparts['port']) && $scanparts['port'] != '' ) {
-                            $scanurl = str_replace(parse_url($scanurl,PHP_URL_HOST),parse_url($scanurl,PHP_URL_HOST).':'.$scanparts['port'], $scanurl);
+                if (!$dont_use_socket) {
+                    try {
+                        $index_host = rex_addon::get('search_it')->getConfig('index_host');
+                        if (!isset($index_host)) {
+                            $index_host = '';
                         }
-                    } else {
-                        $scanhost = ($scanparts['scheme'] ?? parse_url(rex::getServer(),PHP_URL_SCHEME)).'://'.($scanparts['host'] ?? parse_url(rex::getServer(),PHP_URL_HOST));
-                        $scanhost .= isset($scanparts['port']) ? ':'.$scanparts['port'] : '';
-                        $scanurl = rtrim($scanhost, "/") . '/' . ltrim(str_replace(array('../', './'), '', rex_getUrl($_id, $langID,array('search_it_build_index'=>'do-it'),'&')),"/");
-                    }
-                    //rex_logger::factory()->log('Warning','Indexierungs-URL: '.$scanurl);
-
-                    $scan_socket = $this->prepareSocket($scanurl);
-                    $response = $scan_socket->doGet();
-                    $redircount = 0;
-
-                    while ($response->isRedirection() && $redircount < 3) {
-                        $redircount++;
-                        $lastscanurl = $scanurl;
-                        $scanurl = str_replace(array('../', './'), '/',$response->getHeader('location'));
-
-                        $scanparts = parse_url($scanurl);
-                        if (array_key_exists('query', $scanparts)) {
-                            list($scanurl, $parameters) = explode('?', $scanurl);
-                            parse_str($parameters, $output);
-                            unset($output['search_it_build_index']);
-                            $scanurl = $scanurl . '?' . http_build_query($output);
+                        if (substr($index_host, 0, 1) == ':') {
+                            $scanparts['port'] = trim($index_host, ':');
+                        } else {
+                            $scanparts = parse_url($index_host);
                         }
-                        if (!array_key_exists('host', $scanparts)) {
-                            $lastparts = parse_url($lastscanurl);
-                            if ( isset($lastparts['scheme']) && isset($lastparts['host']) ) {
-                                $scanurl = $lastparts['scheme'] . '://' . $lastparts['host'] .
-                                ( isset($lastparts['port']) ? ':'.$lastparts['port'] : '' ).
-                                $scanurl;
+
+                        if (rex_addon::get("yrewrite") && rex_addon::get("yrewrite")->isAvailable() && !isset($scanparts['host'])) {
+                            $scanurl = rex_yrewrite::getFullUrlByArticleId($_id, $langID, array('search_it_build_index' => 'do-it-with-yrewrite'), '&');
+                            if (isset($scanparts['port']) && $scanparts['port'] != '') {
+                                $scanurl = str_replace(parse_url($scanurl, PHP_URL_HOST), parse_url($scanurl, PHP_URL_HOST) . ':' . $scanparts['port'], $scanurl);
                             }
+                        } else {
+                            $scanhost = ($scanparts['scheme'] ?? parse_url(rex::getServer(), PHP_URL_SCHEME)) . '://' . ($scanparts['host'] ?? parse_url(rex::getServer(), PHP_URL_HOST));
+                            $scanhost .= isset($scanparts['port']) ? ':' . $scanparts['port'] : '';
+                            $scanurl = rtrim($scanhost, "/") . '/' . ltrim(str_replace(array('../', './'), '', rex_getUrl($_id, $langID, array('search_it_build_index' => 'do-it'), '&')), "/");
                         }
+                        //rex_logger::factory()->log('Warning','Indexierungs-URL: '.$scanurl);
 
-                        $scanurl .= ( strpos($scanurl,'?') !== false ? '&' : '?').'search_it_build_index=redirect';
-                        //rex_logger::factory()->log('Warning','Redirect von '.$lastscanurl.' zu '.$scanurl.', '.$response->getHeader());
                         $scan_socket = $this->prepareSocket($scanurl);
                         $response = $scan_socket->doGet();
+                        $redircount = 0;
+
+                        while ($response->isRedirection() && $redircount < 3) {
+                            $redircount++;
+                            $lastscanurl = $scanurl;
+                            $scanurl = str_replace(array('../', './'), '/', $response->getHeader('location'));
+
+                            $scanparts = parse_url($scanurl);
+                            if (array_key_exists('query', $scanparts)) {
+                                list($scanurl, $parameters) = explode('?', $scanurl);
+                                parse_str($parameters, $output);
+                                unset($output['search_it_build_index']);
+                                $scanurl = $scanurl . '?' . http_build_query($output);
+                            }
+                            if (!array_key_exists('host', $scanparts)) {
+                                $lastparts = parse_url($lastscanurl);
+                                if (isset($lastparts['scheme']) && isset($lastparts['host'])) {
+                                    $scanurl = $lastparts['scheme'] . '://' . $lastparts['host'] .
+                                        (isset($lastparts['port']) ? ':' . $lastparts['port'] : '') .
+                                        $scanurl;
+                                }
+                            }
+
+                            $scanurl .= (strpos($scanurl, '?') !== false ? '&' : '?') . 'search_it_build_index=redirect';
+                            //rex_logger::factory()->log('Warning','Redirect von '.$lastscanurl.' zu '.$scanurl.', '.$response->getHeader());
+                            $scan_socket = $this->prepareSocket($scanurl);
+                            $response = $scan_socket->doGet();
+
+                        }
+
+                        if ($response->isOk()) {
+                            $articleText = $response->getBody();
+                        } else {
+                            $articleText = '';
+                            !is_null($response) ? $response_text = $response->getStatusCode() . ' - ' . $response->getStatusMessage() : $response_text = '';
+                            if ($response->isRedirection()) {
+                                $return[$langID] = SEARCH_IT_ART_REDIRECT;
+                                $response_text = rex_i18n::msg('search_it_generate_article_redirect');
+                                rex_logger::factory()->log('Warning', rex_i18n::msg('search_it_generate_article_http_error') . ' ' . $scanurl . PHP_EOL . $response_text);
+                            } else if ($response->getStatusCode() == '404') {
+                                $return[$langID] = SEARCH_IT_ART_404;
+                                rex_logger::factory()->log('Warning', rex_i18n::msg('search_it_generate_article_404_error') . ' ' . $scanurl . PHP_EOL . $response_text);
+                            } else {
+                                rex_logger::factory()->log('Warning', rex_i18n::msg('search_it_generate_article_http_error') . ' ' . $scanurl . PHP_EOL . $response_text);
+                                $return[$langID] = SEARCH_IT_ART_NOTOK;
+                            }
+                            continue;
+                        }
+
+                    } catch (rex_socket_exception $e) {
+                        $articleText = '';
+                        rex_logger::factory()->error(rex_i18n::msg('search_it_generate_article_socket_error') . ': ' . $scanurl . PHP_EOL . $e->getMessage());
+                        $return[$langID] = SEARCH_IT_ART_ERROR;
+                        continue;
 
                     }
 
-                    if ($response->isOk()) {
-                        $articleText = $response->getBody();
-                    } else {
-                        $articleText = '';
-                        !is_null($response) ? $response_text = $response->getStatusCode() . ' - ' . $response->getStatusMessage() : $response_text = '';
-                        if ( $response->isRedirection() ) {
-                            $return[$langID] = SEARCH_IT_ART_REDIRECT;
-                            $response_text = rex_i18n::msg('search_it_generate_article_redirect');
-                            rex_logger::factory()->log( 'Warning', rex_i18n::msg('search_it_generate_article_http_error') .' '. $scanurl . PHP_EOL . $response_text );
-                        } else if ( $response->getStatusCode() == '404' ) {
-                            $return[$langID] = SEARCH_IT_ART_404;
-                            rex_logger::factory()->log( 'Warning', rex_i18n::msg('search_it_generate_article_404_error') .' '. $scanurl . PHP_EOL . $response_text );
-                        } else {
-                            rex_logger::factory()->log( 'Warning', rex_i18n::msg('search_it_generate_article_http_error') .' '. $scanurl . PHP_EOL . $response_text );
-                            $return[$langID] = SEARCH_IT_ART_NOTOK;
+                    // regex time
+                    preg_match_all('/<!--\ssearch_it\s([0-9]*)\s?-->(.*)<!--\s\/search_it\s(\1)\s?-->/sU', $articleText, $matches, PREG_SET_ORDER);
+                    $articleText = '';
+                    foreach ($matches as $match) {
+                        if ($match[1] == $_id || $match[1] == '') {
+                            // eventuell in diesem enthaltene weitere tags entfernen
+                            $articleText .= ' ' . preg_replace('/<!--\s\/?search_it\s[^(-->)]*\s?-->/s', '', $match[2]);
                         }
+                    }
+
+                } else {
+                    $rex_article = new rex_article_content(intval($_id), $langID);
+                    $article_content_file = rex_path::addonCache('structure', $_id . '.' . $langID . '.content');
+                    if (!file_exists($article_content_file)) {
+                        $generated = rex_content_service::generateArticleContent($_id, $langID);
+                        if ($generated !== true) {
+                            $return[$langID] = SEARCH_IT_ART_IDNOTFOUND;
+                            continue;
+                        }
+                    }
+
+                    if (file_exists($article_content_file) and preg_match('~(header\s*\(\s*["\']\s*Location\s*:)|(rex_redirect\s*\()~isu', rex_file::get($article_content_file))) {
+                        $return[$langID] = SEARCH_IT_ART_REDIRECT;
                         continue;
                     }
 
-                 } catch (rex_socket_exception $e) {
-                    $articleText = '';
-                    rex_logger::factory()->error( rex_i18n::msg('search_it_generate_article_socket_error') .': '.$scanurl. PHP_EOL .$e->getMessage() );
-                    $return[$langID] = SEARCH_IT_ART_ERROR;
-                    continue;
 
-                 }
+                    $articleText = $rex_article->getArticle();
 
 
-                // regex time
-                preg_match_all('/<!--\ssearch_it\s([0-9]*)\s?-->(.*)<!--\s\/search_it\s(\1)\s?-->/sU', $articleText, $matches, PREG_SET_ORDER);
-                $articleText = '';
-                foreach ($matches as $match) {
-                    if ( $match[1] == $_id || $match[1] == '' ) {
-                        // eventuell in diesem enthaltene weitere tags entfernen
-                        $articleText .= ' ' . preg_replace('/<!--\s\/?search_it\s[^(-->)]*\s?-->/s','', $match[2]);
-                    }
+                    rex_clang::setCurrentId($langID);
+                    $articleText = rex_extension::registerPoint(new rex_extension_point('OUTPUT_FILTER', $articleText, ['environment' => 'frontend', 'sendcharset' => false]));
+                    rex_clang::setCurrentId(rex_clang::getCurrentId());
                 }
-
 
                 $insert = rex_sql::factory();
                 $articleData = [];
@@ -353,7 +388,7 @@ class search_it
                 $articleData['unchangedtext'] = $articleText;
                 $plaintext = $this->getPlaintext($articleText);
                 $articleData['plaintext'] = $plaintext;
-				$articleData['lastindexed'] =  date(DATE_W3C, time());
+                $articleData['lastindexed'] = date(DATE_W3C, time());
 
                 if (array_key_exists(self::getTablePrefix() . 'article', $this->includeColumns)) {
                     $additionalValues = [];
@@ -362,7 +397,9 @@ class search_it
                     $select->setWhere(['id' => $_id, 'clang_id' => $langID]);
                     $select->select('`' . implode('`,`', $this->includeColumns[self::getTablePrefix() . 'article']) . '`');
                     foreach ($this->includeColumns[self::getTablePrefix() . 'article'] as $col) {
-                        if ( $select->hasValue($col) ) { $additionalValues[$col] = $select->getValue($col); }
+                        if ($select->hasValue($col)) {
+                            $additionalValues[$col] = $select->getValue($col);
+                        }
                     }
 
                     $articleData['values'] = serialize($additionalValues);
@@ -390,6 +427,9 @@ class search_it
             $this->deleteCache();
         }
 
+        if ($dont_use_socket) {
+            rex::setProperty('redaxo', $isBackend);
+        }
         return $return;
     }
 
@@ -410,56 +450,58 @@ class search_it
         $return = [];
         $keywords = [];
 
-		$delete = rex_sql::factory();
-		$where = ['ftable' => $this->urlAddOnTableName, 'fid' => $url_hash];
+        $delete = rex_sql::factory();
+        $where = ['ftable' => $this->urlAddOnTableName, 'fid' => $url_hash];
 
-		// delete old
-		$delete->setTable(self::getTempTablePrefix() . 'search_it_index');
-		$delete->setWhere($where);
-		$delete->delete();
+        // delete old
+        $delete->setTable(self::getTempTablePrefix() . 'search_it_index');
+        $delete->setWhere($where);
+        $delete->delete();
 
-		// index article
-		$article = rex_article::get($article_id, $clang_id);
-		if ( is_null($article)) {
-			$return[$clang_id] = SEARCH_IT_ART_IDNOTFOUND;
-		} else if (is_object($article) AND ($article->isOnline() OR rex_addon::get('search_it')->getConfig('indexoffline'))) {
-			try {
+        // index article
+        $article = rex_article::get($article_id, $clang_id);
+        if (is_null($article)) {
+            $return[$clang_id] = SEARCH_IT_ART_IDNOTFOUND;
+        } else if (is_object($article) and ($article->isOnline() or rex_addon::get('search_it')->getConfig('indexoffline'))) {
+            try {
 
                 $index_host = rex_addon::get('search_it')->getConfig('index_host');
-                if (!isset($index_host)) { $index_host = ''; }
-                if (substr($index_host,0,1) == ':') {
-                    $scanparts['port'] = trim($index_host,':');
+                if (!isset($index_host)) {
+                    $index_host = '';
+                }
+                if (substr($index_host, 0, 1) == ':') {
+                    $scanparts['port'] = trim($index_host, ':');
                 } else {
                     $scanparts = parse_url($index_host);
                 }
 
-				if(rex_addon::get("yrewrite") && rex_addon::get('yrewrite')->isAvailable() && !isset($scanparts['host'])) {
-					$hit_domain = rex_yrewrite::getDomainByArticleId($article_id, $clang_id);
-					$server = rtrim($hit_domain->getUrl(), "/");
-					$search_it_build_index = "do-it-url-with-yrewrite";
+                if (rex_addon::get("yrewrite") && rex_addon::get('yrewrite')->isAvailable() && !isset($scanparts['host'])) {
+                    $hit_domain = rex_yrewrite::getDomainByArticleId($article_id, $clang_id);
+                    $server = rtrim($hit_domain->getUrl(), "/");
+                    $search_it_build_index = "do-it-url-with-yrewrite";
                 } else {
-                    $server = ($scanparts['scheme'] ?? 'http' ).'://'.($scanparts['host'] ?? parse_url(rex::getServer(),PHP_URL_HOST));
-                    $server .= isset($scanparts['port']) ? ':'.$scanparts['port'] : '';
+                    $server = ($scanparts['scheme'] ?? 'http') . '://' . ($scanparts['host'] ?? parse_url(rex::getServer(), PHP_URL_HOST));
+                    $server .= isset($scanparts['port']) ? ':' . $scanparts['port'] : '';
                     $search_it_build_index = "do-it-url";
                 }
 
                 $url_profile = \Url\Profile::get($profile_id);
-                $scanurl = rex_getUrl('', '', [$url_profile->getNamespace() => $data_id, 'search_it_build_index' => $search_it_build_index],'&');
+                $scanurl = rex_getUrl('', '', [$url_profile->getNamespace() => $data_id, 'search_it_build_index' => $search_it_build_index], '&');
 
-				if(strpos($scanurl, 'http') === false) {
-					// URL addon multidomain site return server name in url
-					$scanurl = $server .'/'. ltrim(str_replace(['../', './'], '', $scanurl),"/");
-				}
+                if (strpos($scanurl, 'http') === false) {
+                    // URL addon multidomain site return server name in url
+                    $scanurl = $server . '/' . ltrim(str_replace(['../', './'], '', $scanurl), "/");
+                }
 
-				$scan_socket = $this->prepareSocket($scanurl);
-				$response = $scan_socket->doGet();
-				$redircount = 0;
+                $scan_socket = $this->prepareSocket($scanurl);
+                $response = $scan_socket->doGet();
+                $redircount = 0;
 
-				while ($response->isRedirection() && $redircount < 3) {
+                while ($response->isRedirection() && $redircount < 3) {
 
                     $redircount++;
                     $lastscanurl = $scanurl;
-                    $scanurl = str_replace(array('../', './'), '/',$response->getHeader('location'));
+                    $scanurl = str_replace(array('../', './'), '/', $response->getHeader('location'));
 
                     $scanparts = parse_url($scanurl);
                     if (array_key_exists('query', $scanparts)) {
@@ -470,156 +512,162 @@ class search_it
                     }
                     if (!array_key_exists('host', $scanparts)) {
                         $lastparts = parse_url($lastscanurl);
-                        if ( isset($lastparts['scheme']) && isset($lastparts['host']) ) {
+                        if (isset($lastparts['scheme']) && isset($lastparts['host'])) {
                             $scanurl = $lastparts['scheme'] . '://' . $lastparts['host'] .
-                                ( isset($lastparts['port']) ? ':'.$lastparts['port'] : '' ).
+                                (isset($lastparts['port']) ? ':' . $lastparts['port'] : '') .
                                 $scanurl;
                         }
                     }
 
-                    $scanurl .= ( strpos($scanurl,'?') !== false ? '&' : '?').'search_it_build_index=redirect';
-					//rex_logger::factory()->log('Warning','Redirect von '.$lastscanurl.' zu '.$scanurl.', '.$response->getHeader());
-					$scan_socket = $this->prepareSocket($scanurl);
-					$response = $scan_socket->doGet();
-				}
+                    $scanurl .= (strpos($scanurl, '?') !== false ? '&' : '?') . 'search_it_build_index=redirect';
+                    //rex_logger::factory()->log('Warning','Redirect von '.$lastscanurl.' zu '.$scanurl.', '.$response->getHeader());
+                    $scan_socket = $this->prepareSocket($scanurl);
+                    $response = $scan_socket->doGet();
+                }
 
-				if ($response->isOk()) {
-					$articleText = $response->getBody();
-				} else {
-					$articleText = '';
-					!is_null($response) ? $response_text = $response->getStatusCode() . ' - ' . $response->getStatusMessage() : $response_text = '';
-					if ( $response->isRedirection() ) {
-						$return[$clang_id] = SEARCH_IT_URL_REDIRECT;
-						$response_text = rex_i18n::msg('search_it_generate_article_redirect');
-						rex_logger::factory()->log( 'Warning', rex_i18n::msg('search_it_generate_article_http_error') .' '. $scanurl . PHP_EOL . $response_text );
-					} else if ( $response->getStatusCode() == '404' ) {
-						$return[$clang_id] = SEARCH_IT_URL_404;
-						rex_logger::factory()->log( 'Warning', rex_i18n::msg('search_it_generate_article_404_error') .' '. $scanurl . PHP_EOL . $response_text );
-					} else {
-						rex_logger::factory()->log( 'Warning', rex_i18n::msg('search_it_generate_article_http_error') .' '. $scanurl . PHP_EOL . $response_text );
-						$return[$clang_id] = SEARCH_IT_URL_NOTOK;
-					}
-					return $return;
-				}
+                if ($response->isOk()) {
+                    $articleText = $response->getBody();
+                } else {
+                    $articleText = '';
+                    !is_null($response) ? $response_text = $response->getStatusCode() . ' - ' . $response->getStatusMessage() : $response_text = '';
+                    if ($response->isRedirection()) {
+                        $return[$clang_id] = SEARCH_IT_URL_REDIRECT;
+                        $response_text = rex_i18n::msg('search_it_generate_article_redirect');
+                        rex_logger::factory()->log('Warning', rex_i18n::msg('search_it_generate_article_http_error') . ' ' . $scanurl . PHP_EOL . $response_text);
+                    } else if ($response->getStatusCode() == '404') {
+                        $return[$clang_id] = SEARCH_IT_URL_404;
+                        rex_logger::factory()->log('Warning', rex_i18n::msg('search_it_generate_article_404_error') . ' ' . $scanurl . PHP_EOL . $response_text);
+                    } else {
+                        rex_logger::factory()->log('Warning', rex_i18n::msg('search_it_generate_article_http_error') . ' ' . $scanurl . PHP_EOL . $response_text);
+                        $return[$clang_id] = SEARCH_IT_URL_NOTOK;
+                    }
+                    return $return;
+                }
 
-			} catch (rex_socket_exception $e) {
-				$articleText = '';
-				rex_logger::factory()->error( rex_i18n::msg('search_it_generate_article_socket_error') .' '.$scanurl. PHP_EOL .$e->getMessage() );
-				$return[$clang_id] = SEARCH_IT_URL_ERROR;
-			}
+            } catch (rex_socket_exception $e) {
+                $articleText = '';
+                rex_logger::factory()->error(rex_i18n::msg('search_it_generate_article_socket_error') . ' ' . $scanurl . PHP_EOL . $e->getMessage());
+                $return[$clang_id] = SEARCH_IT_URL_ERROR;
+            }
 
-			// regex time
-			preg_match_all('/<!--\ssearch_it\s([0-9]*)\s?-->(.*)<!--\s\/search_it\s(\1)\s?-->/sU', $articleText, $matches, PREG_SET_ORDER);
-			$articleText = '';
-			foreach ($matches as $match) {
-				if ( $match[1] == $article_id || $match[1] == '' ) {
-					// eventuell in diesem enthaltene weitere tags entfernen
-					$articleText .= ' ' . preg_replace('/<!--\s\/?search_it\s[^(-->)]*\s?-->/s','', $match[2]);
-				}
-			}
+            // regex time
+            preg_match_all('/<!--\ssearch_it\s([0-9]*)\s?-->(.*)<!--\s\/search_it\s(\1)\s?-->/sU', $articleText, $matches, PREG_SET_ORDER);
+            $articleText = '';
+            foreach ($matches as $match) {
+                if ($match[1] == $article_id || $match[1] == '') {
+                    // eventuell in diesem enthaltene weitere tags entfernen
+                    $articleText .= ' ' . preg_replace('/<!--\s\/?search_it\s[^(-->)]*\s?-->/s', '', $match[2]);
+                }
+            }
 
-			$insert = rex_sql::factory();
-			$articleData = [];
+            $insert = rex_sql::factory();
+            $articleData = [];
 
-			$articleData['texttype'] = 'url';
-			$articleData['ftable'] = $this->urlAddOnTableName;
-			$articleData['fcolumn'] = NULL;
-			$articleData['clang'] = $clang_id;
-			$articleData['fid'] = $url_hash;
-			$articleData['catid'] = $article->getCategoryId();
-			$articleData['unchangedtext'] = $articleText;
-			$plaintext = $this->getPlaintext($articleText);
-			$articleData['plaintext'] = $plaintext;
-			$articleData['lastindexed'] =  date(DATE_W3C, time());
+            $articleData['texttype'] = 'url';
+            $articleData['ftable'] = $this->urlAddOnTableName;
+            $articleData['fcolumn'] = NULL;
+            $articleData['clang'] = $clang_id;
+            $articleData['fid'] = $url_hash;
+            $articleData['catid'] = $article->getCategoryId();
+            $articleData['unchangedtext'] = $articleText;
+            $plaintext = $this->getPlaintext($articleText);
+            $articleData['plaintext'] = $plaintext;
+            $articleData['lastindexed'] = date(DATE_W3C, time());
 
-			if (array_key_exists($this->urlAddOnTableName, $this->includeColumns)) {
-				$additionalValues = [];
+            if (array_key_exists($this->urlAddOnTableName, $this->includeColumns)) {
+                $additionalValues = [];
                 $select = rex_sql::factory();
-				$select->setTable($this->urlAddOnTableName);
-				$select->setWhere(['url_hash' => $url_hash]);
-				$select->select('`' . implode('`,`', $this->includeColumns[$this->urlAddOnTableName]) . '`');
-				foreach ($this->includeColumns[$this->urlAddOnTableName] as $col) {
-					if ( $select->hasValue($col) ) { $additionalValues[$col] = $select->getValue($col); }
-				}
+                $select->setTable($this->urlAddOnTableName);
+                $select->setWhere(['url_hash' => $url_hash]);
+                $select->select('`' . implode('`,`', $this->includeColumns[$this->urlAddOnTableName]) . '`');
+                foreach ($this->includeColumns[$this->urlAddOnTableName] as $col) {
+                    if ($select->hasValue($col)) {
+                        $additionalValues[$col] = $select->getValue($col);
+                    }
+                }
 
-				$articleData['values'] = serialize($additionalValues);
-			}
+                $articleData['values'] = serialize($additionalValues);
+            }
 
-			foreach (preg_split('~[[:punct:][:space:]]+~ismu', $plaintext) as $keyword) {
-				if ($this->significantCharacterCount <= mb_strlen($keyword, 'UTF-8')) {
-					$keywords[] = array('search' => $keyword, 'clang' => $clang_id);
-				}
-			}
+            foreach (preg_split('~[[:punct:][:space:]]+~ismu', $plaintext) as $keyword) {
+                if ($this->significantCharacterCount <= mb_strlen($keyword, 'UTF-8')) {
+                    $keywords[] = array('search' => $keyword, 'clang' => $clang_id);
+                }
+            }
 
-			$articleData['teaser'] = $this->getTeaserText($plaintext);
-			$insert->setTable(self::getTempTablePrefix() . 'search_it_index');
-			$insert->setValues($articleData);
-			$insert->insert();
+            $articleData['teaser'] = $this->getTeaserText($plaintext);
+            $insert->setTable(self::getTempTablePrefix() . 'search_it_index');
+            $insert->setValues($articleData);
+            $insert->insert();
 
             if ($clearCache) {
                 $this->deleteCache();
             }
 
-			$return[$clang_id] = SEARCH_IT_URL_GENERATED;
+            $return[$clang_id] = SEARCH_IT_URL_GENERATED;
 
-			$this->storeKeywords($keywords, false);
-		}
+            $this->storeKeywords($keywords, false);
+        }
 
         return $return;
     }
 
     /**
      * Compares index table with url addon table and adds new urls to index
-	 * @return string[] Array containing index results
+     * @return string[] Array containing index results
      */
     public function indexNewURLs(): int
     {
         $global_return = 0;
 
-		// index url 2 addon URLs
-		if(rex_addon::get('search_it')->getConfig('index_url_addon') && search_it_isUrlAddOnAvailable()) {
-			$sql = rex_sql::factory();
-			$sql->setQuery("SELECT url.url_hash, url.article_id, url.clang_id, url.profile_id, url.data_id FROM `". search_it_getUrlAddOnTableName() ."` as url "
-				. "LEFT JOIN `". self::getTempTablePrefix() ."search_it_index` AS search_it ON url.url_hash = search_it.fid "
-				. "WHERE search_it.fid IS NULL;");
+        // index url 2 addon URLs
+        if (rex_addon::get('search_it')->getConfig('index_url_addon') && search_it_isUrlAddOnAvailable()) {
+            $sql = rex_sql::factory();
+            $sql->setQuery("SELECT url.url_hash, url.article_id, url.clang_id, url.profile_id, url.data_id FROM `" . search_it_getUrlAddOnTableName() . "` as url "
+                . "LEFT JOIN `" . self::getTempTablePrefix() . "search_it_index` AS search_it ON url.url_hash = search_it.fid "
+                . "WHERE search_it.fid IS NULL;");
 
-			foreach ($sql->getArray() as $result) {
-				$returns = $this->indexUrl($result['url_hash'], $result['article_id'], $result['clang_id'], $result['profile_id'], $result['data_id'], false);
-				foreach ( $returns as $return ) {
-					if ($return > 3 ) { $global_return += $return; }
-				}
-			}
-		}
-		return $global_return;
+            foreach ($sql->getArray() as $result) {
+                $returns = $this->indexUrl($result['url_hash'], $result['article_id'], $result['clang_id'], $result['profile_id'], $result['data_id'], false);
+                foreach ($returns as $return) {
+                    if ($return > 3) {
+                        $global_return += $return;
+                    }
+                }
+            }
+        }
+        return $global_return;
     }
 
     /**
      * Compares index table with url addon table and adds new urls to index
-	 * @return string[] Array containing index results
+     * @return string[] Array containing index results
      */
     public function indexUpdatedURLs(): int
     {
         $global_return = 0;
 
-		// index url 2 addon URLs
-		if(rex_addon::get('search_it')->getConfig('index_url_addon') && search_it_isUrlAddOnAvailable()) {
-			$sql = rex_sql::factory();
-			$sql->setQuery("SELECT url.url_hash, url.article_id, url.clang_id, url.profile_id, url.data_id FROM `". search_it_getUrlAddOnTableName() ."` as url "
-				. "LEFT JOIN `". self::getTempTablePrefix() ."search_it_index` AS search_it ON url.url_hash = search_it.fid "
-				. "WHERE search_it.lastindexed < url.lastmod;");
+        // index url 2 addon URLs
+        if (rex_addon::get('search_it')->getConfig('index_url_addon') && search_it_isUrlAddOnAvailable()) {
+            $sql = rex_sql::factory();
+            $sql->setQuery("SELECT url.url_hash, url.article_id, url.clang_id, url.profile_id, url.data_id FROM `" . search_it_getUrlAddOnTableName() . "` as url "
+                . "LEFT JOIN `" . self::getTempTablePrefix() . "search_it_index` AS search_it ON url.url_hash = search_it.fid "
+                . "WHERE search_it.lastindexed < url.lastmod;");
 
-			foreach ($sql->getArray() as $result) {
-				$this->unindexURL($result['url_hash']);
-				$returns = $this->indexUrl($result['url_hash'], $result['article_id'], $result['clang_id'], $result['profile_id'], $result['data_id'], false);
-				foreach ( $returns as $return ) {
-					if ($return > 3 ) { $global_return += $return; }
-				}
-			}
-		}
-		return $global_return;
+            foreach ($sql->getArray() as $result) {
+                $this->unindexURL($result['url_hash']);
+                $returns = $this->indexUrl($result['url_hash'], $result['article_id'], $result['clang_id'], $result['profile_id'], $result['data_id'], false);
+                foreach ($returns as $return) {
+                    if ($return > 3) {
+                        $global_return += $return;
+                    }
+                }
+            }
+        }
+        return $global_return;
     }
 
-	/**
+    /**
      * Excludes an article from the index.
      *
      * @param int $_id
@@ -641,7 +689,7 @@ class search_it
 
         // delete from cache
         $select = rex_sql::factory();
-        $select->setTable(self::getTempTablePrefix(). 'search_it_index');
+        $select->setTable(self::getTempTablePrefix() . 'search_it_index');
         $select->setWhere($where);
         $select->select('id');
 
@@ -652,38 +700,38 @@ class search_it
         $this->deleteCache($indexIds);
     }
 
-	/**
+    /**
      * Compares index table with url table and excludes all deleted urls from the index.
      */
     public function unindexDeletedURLs(): void
     {
-		if(!search_it_isUrlAddOnAvailable()) {
-			return;
-		}
-
-        $sql = rex_sql::factory();
-		$sql->setQuery("SELECT search_it.id FROM `". self::getTempTablePrefix() ."search_it_index` AS search_it "
-			. "LEFT JOIN `". search_it_getUrlAddOnTableName() ."` as url ON search_it.fid = url.url_hash "
-			. "WHERE texttype = 'url' AND url.id IS NULL;");
-
-		$unindexIds = [];
-        foreach ($sql->getArray() as $result) {
-            $unindexIds[] = (int) $result['id'];
+        if (!search_it_isUrlAddOnAvailable()) {
+            return;
         }
 
-		if(count($unindexIds) > 0) {
-			// delete from index
-			$delete = rex_sql::factory();
-			$delete->setTable(self::getTempTablePrefix() . 'search_it_index');
-			$delete->setWhere('id IN (' . implode(',', $unindexIds) . ')');
-			$delete->delete();
+        $sql = rex_sql::factory();
+        $sql->setQuery("SELECT search_it.id FROM `" . self::getTempTablePrefix() . "search_it_index` AS search_it "
+            . "LEFT JOIN `" . search_it_getUrlAddOnTableName() . "` as url ON search_it.fid = url.url_hash "
+            . "WHERE texttype = 'url' AND url.id IS NULL;");
 
-			// delete from cache
-			$this->deleteCache($unindexIds);
-		}
+        $unindexIds = [];
+        foreach ($sql->getArray() as $result) {
+            $unindexIds[] = (int)$result['id'];
+        }
+
+        if (count($unindexIds) > 0) {
+            // delete from index
+            $delete = rex_sql::factory();
+            $delete->setTable(self::getTempTablePrefix() . 'search_it_index');
+            $delete->setWhere('id IN (' . implode(',', $unindexIds) . ')');
+            $delete->delete();
+
+            // delete from cache
+            $this->deleteCache($unindexIds);
+        }
     }
 
-	/**
+    /**
      * Excludes an url from the index.
      *
      * @param string $url_hash
@@ -700,7 +748,7 @@ class search_it
 
         // delete from cache
         $select = rex_sql::factory();
-        $select->setTable(self::getTempTablePrefix(). 'search_it_index');
+        $select->setTable(self::getTempTablePrefix() . 'search_it_index');
         $select->setWhere($where);
         $select->select('id');
 
@@ -728,12 +776,12 @@ class search_it
     public function indexColumn($_table, $_column, $_idcol = false, $_id = false, $_start = false, $_count = false, $clearCache = false): int
     {
         $sqltest = rex_sql_table::get($_table);
-        if ( !$sqltest->exists() ) {
-            rex_logger::factory()->log( 'Warning', rex_i18n::rawMsg('search_it_generate_table_not_exists', $_table));
+        if (!$sqltest->exists()) {
+            rex_logger::factory()->log('Warning', rex_i18n::rawMsg('search_it_generate_table_not_exists', $_table));
             return false;
         } else {
-            if (!$sqltest->hasColumn($_column) ) {
-                rex_logger::factory()->log( 'Warning', rex_i18n::rawMsg('search_it_generate_col_not_exists', $_column, $_table));
+            if (!$sqltest->hasColumn($_column)) {
+                rex_logger::factory()->log('Warning', rex_i18n::rawMsg('search_it_generate_col_not_exists', $_column, $_table));
                 return false;
             }
         }
@@ -741,13 +789,15 @@ class search_it
         $delete->setTable(self::getTempTablePrefix() . 'search_it_index');
 
         $where = sprintf(" `ftable` = '%s' AND `fcolumn` = '%s' AND `texttype` = 'db_column'", $_table, $_column);
-        if (is_string($_idcol) AND ($_id !== false)) {
+        if (is_string($_idcol) and ($_id !== false)) {
             $where .= sprintf(' AND fid = %d', $_id);
         }
         $delete->setWhere($where);
 
         // delete from index
-        if ( $_start === false || $_start == 0 ) { $delete->delete(); }
+        if ($_start === false || $_start == 0) {
+            $delete->delete();
+        }
 
         // NEW
         $sql = rex_sql::factory();
@@ -763,9 +813,9 @@ class search_it
         $sql->setTable($_table);
 
         $where = '1 ';
-        if (is_string($_idcol) AND $_id) {
+        if (is_string($_idcol) and $_id) {
             $where .= sprintf(' AND (%s = %d)', $_idcol, $_id);
-        } elseif (is_numeric($_start) AND is_numeric($_count)) {
+        } elseif (is_numeric($_start) and is_numeric($_count)) {
             $where .= ' LIMIT ' . $_start . ',' . $_count;
         }
         $sql->setWhere($where);
@@ -777,8 +827,8 @@ class search_it
             $keywords = [];
 
             foreach ($sql->getArray() as $row) {
-                if (!empty($row[$_column]) AND ( rex_addon::get('search_it')->getConfig('indexoffline') OR self::getTablePrefix() . 'article' != $_table OR $row['status'] == '1')
-                    AND (self::getTablePrefix() . 'article' != $_table OR !in_array($row['id'], $this->excludeIDs))
+                if (!empty($row[$_column]) and (rex_addon::get('search_it')->getConfig('indexoffline') or self::getTablePrefix() . 'article' != $_table or $row['status'] == '1')
+                    and (self::getTablePrefix() . 'article' != $_table or !in_array($row['id'], $this->excludeIDs))
                 ) {
                     $insert = rex_sql::factory();
                     $indexData = [];
@@ -795,7 +845,7 @@ class search_it
                         $indexData['clang'] = NULL;
                     }
                     $indexData['fid'] = NULL;
-                    if (is_string($_idcol) AND array_key_exists($_idcol, $row)) {
+                    if (is_string($_idcol) and array_key_exists($_idcol, $row)) {
                         $indexData['fid'] = $row[$_idcol];
                     } elseif ($_table == self::getTablePrefix() . 'article') {
                         $indexData['fid'] = $row['id'];
@@ -825,14 +875,16 @@ class search_it
                     }
                     $additionalValues = [];
                     foreach ($this->includeColumns[$_table] as $col) {
-                        if ( isset($row[$col]) ) { $additionalValues[$col] = $row[$col]; }
+                        if (isset($row[$col])) {
+                            $additionalValues[$col] = $row[$col];
+                        }
                     }
                     $indexData['values'] = serialize($additionalValues);
 
                     $indexData['unchangedtext'] = (string)$row[$_column];
                     $plaintext = $this->getPlaintext($row[$_column]);
                     $indexData['plaintext'] = $plaintext;
-					$indexData['lastindexed'] =  date(DATE_W3C, time());
+                    $indexData['lastindexed'] = date(DATE_W3C, time());
 
                     foreach (preg_split('~[[:punct:][:space:]]+~ismu', $plaintext) as $keyword) {
                         if ($this->significantCharacterCount <= mb_strlen($keyword, 'UTF-8')) {
@@ -853,7 +905,7 @@ class search_it
                             }
                         }
 
-                        if (file_exists($article_content_file) AND preg_match('~(header\s*\(\s*["\']\s*Location\s*:)|(rex_redirect\s*\()~isu', rex_file::get($article_content_file))) {
+                        if (file_exists($article_content_file) and preg_match('~(header\s*\(\s*["\']\s*Location\s*:)|(rex_redirect\s*\()~isu', rex_file::get($article_content_file))) {
                             $teaser = false;
                         }
 
@@ -899,7 +951,7 @@ class search_it
         $fileext = $filenameArray[count($filenameArray) - 1];
 
         // check file-extension
-        if ((!in_array($fileext, $this->fileExtensions) AND !empty($this->fileExtensions)) ) {
+        if ((!in_array($fileext, $this->fileExtensions) and !empty($this->fileExtensions))) {
             return SEARCH_IT_FILE_FORBIDDEN_EXTENSION;
         }
 
@@ -941,7 +993,7 @@ class search_it
                     $tempFile = tempnam(rex_path::cache() . 'addons/mediapool/', 'search_it');
                     $encoding = 'UTF-8';
                     //echo 'pdftotext ' . escapeshellarg(rex_path::frontend($_filename)) . ' ' . escapeshellarg($tempFile) . ' -enc ' . $encoding;
-                    exec('pdftotext  -enc ' . $encoding.' '. escapeshellarg(rex_path::frontend($_filename)) . ' ' . escapeshellarg($tempFile) , $dummy, $return);
+                    exec('pdftotext  -enc ' . $encoding . ' ' . escapeshellarg(rex_path::frontend($_filename)) . ' ' . escapeshellarg($tempFile), $dummy, $return);
 
                     if ($return > 0) {
                         if ($return == 1) {
@@ -1043,7 +1095,7 @@ class search_it
         }
         $fileData['unchangedtext'] = $text;
         $fileData['plaintext'] = $plaintext;
-		$fileData['lastindexed'] =  date(DATE_W3C, time());
+        $fileData['lastindexed'] = date(DATE_W3C, time());
 
         $keywords = [];
         foreach (preg_split('~[[:punct:][:space:]]+~ismu', $plaintext) as $keyword) {
@@ -1087,7 +1139,7 @@ class search_it
         if ($process) {
             $tags2nl = '~</?(address|blockquote|center|del|dir|div|dl|fieldset|form|h1|h2|h3|h4|h5|h6|hr|ins|isindex|menu|noframes|noscript|ol|p|pre|table|ul)[^>]+>~siu';
             $_text = trim(strip_tags(preg_replace(array('~<(head|script).+?</(head|script)>~siu', $tags2nl, '~<[^>]+>~siu', '~[\n\r]+~siu', '~[\t ]+~siu'), array('', "\n", ' ', "\n", ' '), $_text)));
-            $_text = html_entity_decode($_text,ENT_QUOTES,'UTF-8');
+            $_text = html_entity_decode($_text, ENT_QUOTES, 'UTF-8');
         }
 
         return preg_replace('~(\s+\n){2,}~', "\r\n", $_text);
@@ -1131,7 +1183,7 @@ class search_it
     private static function getMinFID()
     {
         $minfid_sql = rex_sql::factory();
-        $minfid_result = $minfid_sql->getArray('SELECT MIN(CONVERT(fid, SIGNED)) as minfid FROM `' . self::getTempTablePrefix().'search_it_index'. '`');
+        $minfid_result = $minfid_sql->getArray('SELECT MIN(CONVERT(fid, SIGNED)) as minfid FROM `' . self::getTempTablePrefix() . 'search_it_index' . '`');
         $minfid = intval($minfid_result[0]['minfid']);
 
         return ($minfid < 0) ? --$minfid : -1;
@@ -1140,13 +1192,13 @@ class search_it
     private static function getMaxFID($_table)
     {
         $maxfid_sql = rex_sql::factory();
-        $maxfid_result = $maxfid_sql->getArray('SELECT MAX(CONVERT(fid, SIGNED)) as maxfid FROM `' . self::getTempTablePrefix().'search_it_index' . '` WHERE ftable = "'.$_table.'" ');
+        $maxfid_result = $maxfid_sql->getArray('SELECT MAX(CONVERT(fid, SIGNED)) as maxfid FROM `' . self::getTempTablePrefix() . 'search_it_index' . '` WHERE ftable = "' . $_table . '" ');
         $maxfid = intval($maxfid_result[0]['maxfid']);
 
         return ($maxfid > 0) ? ++$maxfid : 1;
     }
 
-	/**
+    /**
      * Deletes the complete search index.
      *
      */
@@ -1158,22 +1210,22 @@ class search_it
         $this->deleteCache();
     }
 
-	/**
+    /**
      * Deletes the search index for given type
      * @param string $texttype Index text type
      */
     public function deleteIndexForType($texttype): void
     {
         $sql = rex_sql::factory();
-		$query = 'SELECT id FROM '. self::getTempTablePrefix() .'search_it_index WHERE texttype = ?;';
-		$deleteIds = [];
+        $query = 'SELECT id FROM ' . self::getTempTablePrefix() . 'search_it_index WHERE texttype = ?;';
+        $deleteIds = [];
         foreach ($sql->getArray($query, [$texttype]) as $cacheId) {
-			$deleteIds[] = $cacheId['id'];
-		}
-		// Delete index
-		$sql->setQuery('DELETE FROM '. self::getTempTablePrefix() .'search_it_index WHERE texttype = ?', [$texttype]);
-		// Delete cache
-		$this->deleteCache($deleteIds);
+            $deleteIds[] = $cacheId['id'];
+        }
+        // Delete index
+        $sql->setQuery('DELETE FROM ' . self::getTempTablePrefix() . 'search_it_index WHERE texttype = ?', [$texttype]);
+        // Delete cache
+        $this->deleteCache($deleteIds);
     }
 
     /**
@@ -1248,7 +1300,11 @@ class search_it
             } else {
                 continue;
             }
-            if ( in_array($word,$searchWords) ) { continue; } else { $searchWords[] = $word; }
+            if (in_array($word, $searchWords)) {
+                continue;
+            } else {
+                $searchWords[] = $word;
+            }
 
             $notBlacklisted = true;
             // blacklisted words are excluded
@@ -1421,12 +1477,12 @@ class search_it
      */
     private function getChildList($_id): array
     {
-        $subs= rex_category::get($_id)->getChildren();
+        $subs = rex_category::get($_id)->getChildren();
         $childlist = [];
-        $childlist[] = (int) $_id;
-        if( !empty($subs)){
-            foreach ( $subs as $sub){
-                $childlist = array_merge($childlist,self::getChildList((int)$sub->getId()));
+        $childlist[] = (int)$_id;
+        if (!empty($subs)) {
+            foreach ($subs as $sub) {
+                $childlist = array_merge($childlist, self::getChildList((int)$sub->getId()));
             }
         }
         return $childlist;
@@ -1471,7 +1527,7 @@ class search_it
      * and the direction (DESC or ASC) as value (e.g.: array['COLUMN'] = 'ASC').
      *
      * @param array $_order
-	 * @param bool $put_first put new order criteria(s) first in order clause
+     * @param bool $put_first put new order criteria(s) first in order clause
      *
      * @return bool
      */
@@ -1496,7 +1552,7 @@ class search_it
                     $this->errormessages = sprintf('Column %d has no correct sort order (ASC or DESC). Descending (DESC) sort order is assumed', $i);
                     $dir2upper = 'DESC';
                 }
-				$this->order = $put_first ? array_merge([$col => $dir2upper], $this->order) : array_merge($this->order, [$col => $dir2upper]);
+                $this->order = $put_first ? array_merge([$col => $dir2upper], $this->order) : array_merge($this->order, [$col => $dir2upper]);
                 $this->hashMe .= $col2upper . $dir2upper;
             }
         }
@@ -1545,7 +1601,6 @@ class search_it
 
         $this->hashMe .= $_clang;
     }
-
 
 
     /**
@@ -1672,7 +1727,7 @@ class search_it
      */
     public function setSurroundTags($_tags, $_endtag = false): void
     {
-        if (is_array($_tags) AND $_endtag === false) {
+        if (is_array($_tags) and $_endtag === false) {
             $this->surroundTags = $_tags;
         } else {
             $this->surroundTags = array((string)$_tags, (string)$_endtag);
@@ -1694,7 +1749,7 @@ class search_it
      */
     public function setLimit($_limit, $_countLimit = false): void
     {
-        if (is_array($_limit) AND $_countLimit === false) {
+        if (is_array($_limit) and $_countLimit === false) {
             $this->limit = [(int)$_limit[0], (int)$_limit[1]];
         } elseif ($_countLimit === false) {
 
@@ -1702,7 +1757,9 @@ class search_it
         } else {
             $this->limit = [(int)$_limit, (int)$_countLimit];
         }
-        if ( empty($this->limit[1]) || !is_numeric($this->limit[1]) ) { $this->limit[1] = 10; }
+        if (empty($this->limit[1]) || !is_numeric($this->limit[1])) {
+            $this->limit[1] = 10;
+        }
         $this->hashMe .= $this->limit[0] . $this->limit[1];
     }
 
@@ -1713,7 +1770,9 @@ class search_it
      */
     public function setMaxTeaserChars($_count): void
     {
-        if ( empty($_count) || !is_numeric($_count) ) { $_count = 200; }
+        if (empty($_count) || !is_numeric($_count)) {
+            $_count = 200;
+        }
         $this->maxTeaserChars = intval($_count);
         $this->hashMe .= $_count;
     }
@@ -1724,7 +1783,9 @@ class search_it
      */
     public function setMaxHighlightedTextChars($_count): void
     {
-        if ( empty($_count) || !is_numeric($_count) ) { $_count = 100; }
+        if (empty($_count) || !is_numeric($_count)) {
+            $_count = 100;
+        }
         $this->maxHighlightedTextChars = intval($_count);
         $this->hashMe .= $_count;
     }
@@ -1799,7 +1860,7 @@ class search_it
                 for ($i = 0; $i < count($Apieces); $i++) {
                     if (preg_match('~(' . implode('|', $search) . ')~isu', $Apieces[$i])) {
                         break;
-                    } elseif (preg_match('~(' . implode('|', $search) . ')~isu', str_replace(['\'','"'],'',iconv("utf-8","ascii//TRANSLIT",$Apieces[$i])))) {
+                    } elseif (preg_match('~(' . implode('|', $search) . ')~isu', str_replace(['\'', '"'], '', iconv("utf-8", "ascii//TRANSLIT", $Apieces[$i])))) {
                         break;
                     }
                 }
@@ -1848,26 +1909,26 @@ class search_it
                         $offset = strpos($_text, $hit[0], $offset) + 1;
                         $currentposition = ceil(intval(($offset - 1) / (2 * $this->maxHighlightedTextChars)));
 
-                        if ($this->highlightType == 'array' AND !array_key_exists($tmp_searchArray[$i]['search'], $Ahighlighted)) {
+                        if ($this->highlightType == 'array' and !array_key_exists($tmp_searchArray[$i]['search'], $Ahighlighted)) {
                             $Ahighlighted[$tmp_searchArray[$i]['search']] = [];
                         }
 
                         if (trim($hit[1]) != '') {
                             $surroundText = $hit[1];
 
-                            if (strlen($hit[2]) > 0 AND false !== strpos($hit[2], ' ')) {
+                            if (strlen($hit[2]) > 0 and false !== strpos($hit[2], ' ')) {
                                 $surroundText = substr($surroundText, strpos($surroundText, ' '));
                             }
 
-                            if (strlen($hit[3]) > 0 AND false !== strpos($hit[3], ' ')) {
+                            if (strlen($hit[3]) > 0 and false !== strpos($hit[3], ' ')) {
                                 $surroundText = substr($surroundText, 0, strrpos($surroundText, ' '));
                             }
 
-                            if ($i == 0 AND strlen($hit[2]) > 0) {
+                            if ($i == 0 and strlen($hit[2]) > 0) {
                                 $startEllipsis = true;
                             }
 
-                            if ($i == (count($tmp_searchArray) - 1) AND strlen($hit[3]) > 0) {
+                            if ($i == (count($tmp_searchArray) - 1) and strlen($hit[3]) > 0) {
                                 $endEllipsis = true;
                             }
 
@@ -1930,7 +1991,7 @@ class search_it
     private function isCached($_search): bool
     {
         $sql = rex_sql::factory();
-        $results = $sql->getArray('SELECT returnarray FROM '.self::getTempTablePrefix().'search_it_cache WHERE hash = :hash', ['hash' => $this->cacheHash($_search)]);
+        $results = $sql->getArray('SELECT returnarray FROM ' . self::getTempTablePrefix() . 'search_it_cache WHERE hash = :hash', ['hash' => $this->cacheHash($_search)]);
 
         foreach ($results as $value) {
             return false !== ($this->cachedArray = unserialize($value['returnarray']));
@@ -2016,7 +2077,7 @@ class search_it
                 $delete->setQuery('TRUNCATE ' . self::getTempTablePrefix() . 'search_it_cacheindex_ids');
                 $delete->setQuery('TRUNCATE ' . self::getTempTablePrefix() . 'search_it_cache');
             }
-        } elseif (is_array($_indexIds) AND !empty($_indexIds)) {
+        } elseif (is_array($_indexIds) and !empty($_indexIds)) {
             $sql = rex_sql::factory();
 
             $query = sprintf('
@@ -2029,7 +2090,7 @@ class search_it
 
             $deleteIds = [0];
             foreach ($sql->getArray($query) as $cacheId) {
-                $deleteIds[] = (int) $cacheId['cache_id'];
+                $deleteIds[] = (int)$cacheId['cache_id'];
             }
 
             // delete from search-cache where indexed IDs exist
@@ -2062,7 +2123,7 @@ class search_it
         foreach ($_keywords as $keyword) {
             if (!in_array(mb_strtolower($keyword['search'], 'UTF-8'), $this->blacklist) &&
                 !in_array(mb_strtolower($keyword['search'], 'UTF-8'), $this->stopwords) &&
-				!is_numeric($keyword['search'])
+                !is_numeric($keyword['search'])
             ) {
                 $simWords[] = sprintf(
                     "(%s, %s, %s, %s, %s)",
@@ -2070,7 +2131,7 @@ class search_it
                     $simWordsSQL->escape((($this->similarwordsMode & SEARCH_IT_SIMILARWORDS_SOUNDEX) && !is_numeric(soundex($keyword['search']))) ? soundex($keyword['search']) : ''),
                     $simWordsSQL->escape((($this->similarwordsMode & SEARCH_IT_SIMILARWORDS_METAPHONE) && !is_numeric(metaphone($keyword['search']))) ? metaphone($keyword['search']) : ''),
                     $simWordsSQL->escape((($this->similarwordsMode & SEARCH_IT_SIMILARWORDS_COLOGNEPHONE) && !is_numeric(soundex_ger($keyword['search']))) ? soundex_ger($keyword['search']) : ''),
-                    (isset($keyword['clang']) AND $keyword['clang'] !== false) ? (int) $keyword['clang'] : '-1'
+                    (isset($keyword['clang']) and $keyword['clang'] !== false) ? (int)$keyword['clang'] : '-1'
                 );
             }
         }
@@ -2117,7 +2178,7 @@ class search_it
         $this->searchString = trim(stripslashes($_search));
         $keywordCount = $this->parseSearchString($this->searchString); // setzt $this->searchArray
 
-        if (empty($this->searchString) OR empty($this->searchArray)) {
+        if (empty($this->searchString) or empty($this->searchArray)) {
             return array(
                 'count' => 0,
                 'hits' => [],
@@ -2132,11 +2193,11 @@ class search_it
             );
         }
 
-		// ask cache
-        if (rex_request('search_it_test', 'string', '') == '' && $this->cache AND $this->isCached($this->searchString)) {
+        // ask cache
+        if (rex_request('search_it_test', 'string', '') == '' && $this->cache and $this->isCached($this->searchString)) {
             $this->cachedArray['time'] = microtime(true) - $startTime;
 
-            if ($this->similarwords AND $this->cachedArray['count'] > 0) {
+            if ($this->similarwords and $this->cachedArray['count'] > 0) {
                 $this->storeKeywords($this->searchArray);
             }
 
@@ -2150,21 +2211,21 @@ class search_it
             $simWordsSQL = rex_sql::factory();
             $simwordQuerys = [];
             foreach ($this->searchArray as $keyword) {
-				if(!is_numeric($keyword['search'])) {
-					$sounds = [];
-					if ($this->similarwordsMode && SEARCH_IT_SIMILARWORDS_SOUNDEX && !is_numeric(soundex($keyword['search']))) {
-						$sounds[] = 'soundex = ' . $simWordsSQL->escape(soundex($keyword['search']));
-					}
+                if (!is_numeric($keyword['search'])) {
+                    $sounds = [];
+                    if ($this->similarwordsMode && SEARCH_IT_SIMILARWORDS_SOUNDEX && !is_numeric(soundex($keyword['search']))) {
+                        $sounds[] = 'soundex = ' . $simWordsSQL->escape(soundex($keyword['search']));
+                    }
 
-					if ($this->similarwordsMode && SEARCH_IT_SIMILARWORDS_METAPHONE && !is_numeric(metaphone($keyword['search']))) {
-						$sounds[] = 'metaphone = ' . $simWordsSQL->escape(metaphone($keyword['search']));
-					}
+                    if ($this->similarwordsMode && SEARCH_IT_SIMILARWORDS_METAPHONE && !is_numeric(metaphone($keyword['search']))) {
+                        $sounds[] = 'metaphone = ' . $simWordsSQL->escape(metaphone($keyword['search']));
+                    }
 
-					if ($this->similarwordsMode && SEARCH_IT_SIMILARWORDS_COLOGNEPHONE && !is_numeric(soundex_ger($keyword['search']))) {
-						$sounds[] = 'colognephone = ' . $simWordsSQL->escape(soundex_ger($keyword['search']));
-					}
-					if(!empty($sounds)) {
-						$simwordQuerys[] = sprintf("
+                    if ($this->similarwordsMode && SEARCH_IT_SIMILARWORDS_COLOGNEPHONE && !is_numeric(soundex_ger($keyword['search']))) {
+                        $sounds[] = 'colognephone = ' . $simWordsSQL->escape(soundex_ger($keyword['search']));
+                    }
+                    if (!empty($sounds)) {
+                        $simwordQuerys[] = sprintf("
 						  (SELECT
 							GROUP_CONCAT(DISTINCT keyword SEPARATOR ' ') as keyword,
 							%s AS typedin,
@@ -2173,58 +2234,58 @@ class search_it
 						  WHERE 1
 							%s
 							AND (%s))",
-							$simWordsSQL->escape($keyword['search']),
-							self::getTempTablePrefix() . 'search_it_keywords',
-							($this->clang !== false) ? 'AND (clang = ' . intval($this->clang) . ' OR clang IS NULL)' : '',
-							implode(' OR ', $sounds)
-						);
-					}
-				}
-			}
+                            $simWordsSQL->escape($keyword['search']),
+                            self::getTempTablePrefix() . 'search_it_keywords',
+                            ($this->clang !== false) ? 'AND (clang = ' . intval($this->clang) . ' OR clang IS NULL)' : '',
+                            implode(' OR ', $sounds)
+                        );
+                    }
+                }
+            }
             //echo '<br><pre>'; var_dump($simwordQuerys);echo '</pre>'; // Eine SQL-Abfrage pro Suchwort
 
             // simwords
-			if(!empty($simwordQuerys)) {
-				$simWordsSQL = rex_sql::factory();
-				foreach ($simWordsSQL->getArray(sprintf("
+            if (!empty($simwordQuerys)) {
+                $simWordsSQL = rex_sql::factory();
+                foreach ($simWordsSQL->getArray(sprintf("
 					SELECT * FROM (%s) AS t
 					%s
 					ORDER BY count",
-						implode(' UNION ', $simwordQuerys),
-						$this->similarwordsPermanent ? '' : 'GROUP BY keyword, typedin'
-					)
-				) as $simword) {
-					//echo '<br><pre>'; var_dump($simword);echo '</pre>';
-					$return['simwords'][$simword['typedin']] = array(
-						'keyword' => $simword['keyword'],
-						'typedin' => $simword['typedin'],
-						'count' => $simword['count'],
-					);
-				}
-				/*echo '<br><pre>' .sprintf("
-				SELECT * FROM (%s) AS t
-				%s
-				ORDER BY count",
-					implode(' UNION ', $simwordQuerys),
-					$this->similarwordsPermanent ? '' : 'GROUP BY keyword, typedin'
-				).'</pre>'; die();*/
-				$newsearch = [];
-				foreach ($this->searchArray as $keyword) {
-					if (preg_match('~\s~isu', $keyword['search'])) {
-						$quotes = '"';
-					} else {
-						$quotes = '';
-					}
+                        implode(' UNION ', $simwordQuerys),
+                        $this->similarwordsPermanent ? '' : 'GROUP BY keyword, typedin'
+                    )
+                ) as $simword) {
+                    //echo '<br><pre>'; var_dump($simword);echo '</pre>';
+                    $return['simwords'][$simword['typedin']] = array(
+                        'keyword' => $simword['keyword'],
+                        'typedin' => $simword['typedin'],
+                        'count' => $simword['count'],
+                    );
+                }
+                /*echo '<br><pre>' .sprintf("
+                SELECT * FROM (%s) AS t
+                %s
+                ORDER BY count",
+                    implode(' UNION ', $simwordQuerys),
+                    $this->similarwordsPermanent ? '' : 'GROUP BY keyword, typedin'
+                ).'</pre>'; die();*/
+                $newsearch = [];
+                foreach ($this->searchArray as $keyword) {
+                    if (preg_match('~\s~isu', $keyword['search'])) {
+                        $quotes = '"';
+                    } else {
+                        $quotes = '';
+                    }
 
-					if (array_key_exists($keyword['search'], $return['simwords'])) {
-						$newsearch[] = $quotes . $return['simwords'][$keyword['search']]['keyword'] . $quotes;
-					} else {
-						$newsearch[] = $quotes . $keyword['search'] . $quotes;
-					}
-				}
-	            $return['simwordsnewsearch'] = implode(' ', $newsearch);
-			}
-		}
+                    if (array_key_exists($keyword['search'], $return['simwords'])) {
+                        $newsearch[] = $quotes . $return['simwords'][$keyword['search']]['keyword'] . $quotes;
+                    } else {
+                        $newsearch[] = $quotes . $keyword['search'] . $quotes;
+                    }
+                }
+                $return['simwordsnewsearch'] = implode(' ', $newsearch);
+            }
+        }
 
         //print_r($this->searchArray);echo '<br><br>';
         if ($this->similarwordsPermanent) {
@@ -2276,10 +2337,10 @@ class search_it
                 } else {
                     $tmpWhere = [];
                     foreach ($searchColumns as $searchColumn) {
-                        $tmpWhere[] = sprintf("(`%s` LIKE %s)", $searchColumn, $sql->escape('%'.str_replace(array('%', '_'), array('\%', '\_'), $keyword['search']).'%'));
+                        $tmpWhere[] = sprintf("(`%s` LIKE %s)", $searchColumn, $sql->escape('%' . str_replace(array('%', '_'), array('\%', '\_'), $keyword['search']) . '%'));
 
                         if ($this->searchHtmlEntities) {
-                            $tmpWhere[] = sprintf("(`%s` LIKE %s)", $searchColumn, $sql->escape('%'.str_replace(array('%', '_'), array('\%', '\_'), htmlentities($keyword['search'], ENT_COMPAT, 'UTF-8')).'%'));
+                            $tmpWhere[] = sprintf("(`%s` LIKE %s)", $searchColumn, $sql->escape('%' . str_replace(array('%', '_'), array('\%', '\_'), htmlentities($keyword['search'], ENT_COMPAT, 'UTF-8')) . '%'));
                         }
                     }
                     $AWhere[] = '(' . implode(' OR ', $tmpWhere) . ')';
@@ -2308,27 +2369,27 @@ class search_it
 
         $AwhereToSearch = [];
 
-        if (array_key_exists('articles', $this->searchInIDs) AND count($this->searchInIDs['articles'])) {
+        if (array_key_exists('articles', $this->searchInIDs) and count($this->searchInIDs['articles'])) {
             $AwhereToSearch[] = "texttype = 'article'";
             $AwhereToSearch[] = "(fid IN (" . implode(',', $this->searchInIDs['articles']) . "))";
         }
 
-		if(rex_addon::get('search_it')->getConfig('index_url_addon') && search_it_isUrlAddOnAvailable()) {
-			if (array_key_exists('url', $this->searchInIDs) AND count($this->searchInIDs['url'])) {
-				$AwhereToSearch[] = "texttype = 'url'";
-				$AwhereToSearch[] = "(fid IN (" . implode(',', $this->searchInIDs['url']) . "))";
-			}
-		}
+        if (rex_addon::get('search_it')->getConfig('index_url_addon') && search_it_isUrlAddOnAvailable()) {
+            if (array_key_exists('url', $this->searchInIDs) and count($this->searchInIDs['url'])) {
+                $AwhereToSearch[] = "texttype = 'url'";
+                $AwhereToSearch[] = "(fid IN (" . implode(',', $this->searchInIDs['url']) . "))";
+            }
+        }
 
-        if (array_key_exists('categories', $this->searchInIDs) AND count($this->searchInIDs['categories'])) {
+        if (array_key_exists('categories', $this->searchInIDs) and count($this->searchInIDs['categories'])) {
             $AwhereToSearch[] = "(catid IN (" . implode(',', $this->searchInIDs['categories']) . ") AND ftable = '" . self::getTablePrefix() . "article')";
         }
 
-        if (array_key_exists('filecategories', $this->searchInIDs) AND count($this->searchInIDs['filecategories'])) {
+        if (array_key_exists('filecategories', $this->searchInIDs) and count($this->searchInIDs['filecategories'])) {
             $AwhereToSearch[] = "(catid IN (" . implode(',', $this->searchInIDs['filecategories']) . ") AND ftable = '" . self::getTablePrefix() . "media')";
         }
 
-        if (array_key_exists('db_columns', $this->searchInIDs) AND count($this->searchInIDs['db_columns'])) {
+        if (array_key_exists('db_columns', $this->searchInIDs) and count($this->searchInIDs['db_columns'])) {
             $AwhereToSearch[] = "texttype = 'db_column'";
 
             $Acolumns = [];
@@ -2447,7 +2508,7 @@ class search_it
             $return['hits'][$i] = [];
             $return['hits'][$i]['id'] = $hit['id'];
             $return['hits'][$i]['fid'] = $hit['fid'];
-            if (!is_numeric($hit['fid']) AND !is_null($json_decode_fid = json_decode($hit['fid'], true))) {
+            if (!is_numeric($hit['fid']) and !is_null($json_decode_fid = json_decode($hit['fid'], true))) {
                 $return['hits'][$i]['fid'] = $json_decode_fid;
             }
             $return['hits'][$i]['table'] = $hit['ftable'];
@@ -2505,7 +2566,7 @@ class search_it
         // no test? then store keywords and cache
         if (rex_request('search_it_test', 'string', '') == '') {
 
-            if ($this->similarwords AND $i) {
+            if ($this->similarwords and $i) {
                 $this->storeKeywords($this->searchArray);
             }
             // and not test =1 ??? oder doch mit cache?
@@ -2533,7 +2594,7 @@ class search_it
             ]);
         }
         if (rex_addon::get('search_it')->getConfig('htaccess_user') != '' && rex_addon::get('search_it')->getConfig('htaccess_pass') != '') {
-            $socket->addBasicAuthorization(rex_addon::get('search_it')->getConfig('htaccess_user'),rex_addon::get('search_it')->getConfig('htaccess_pass'));
+            $socket->addBasicAuthorization(rex_addon::get('search_it')->getConfig('htaccess_user'), rex_addon::get('search_it')->getConfig('htaccess_pass'));
         }
 
         return $socket;

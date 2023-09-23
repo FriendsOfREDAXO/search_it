@@ -1,19 +1,23 @@
 <?php
 
-class search_it_stats{
+class search_it_stats
+{
     var $sql;
 
-    function __construct(){
+    function __construct()
+    {
         $this->sql = rex_sql::factory();
         $this->flushSQL();
     }
 
-    function flushSQL(){
+    function flushSQL()
+    {
         $this->sql->flushValues();
-        $this->sql->setTable(rex::getTablePrefix(). 'search_it_stats_searchterms');
+        $this->sql->setTable(rex::getTablePrefix() . 'search_it_stats_searchterms');
     }
 
-    function insert($_searchterm, $_resultcount, $_time = false){
+    function insert($_searchterm, $_resultcount, $_time = false)
+    {
         $this->flushSQL();
 
         if (false === $_time) {
@@ -31,19 +35,21 @@ class search_it_stats{
         $this->sql->insert();
     }
 
-    function truncate(){
-        $this->sql->setQuery('TRUNCATE ' . rex::getTablePrefix(). 'search_it_stats_searchterms');
+    function truncate()
+    {
+        $this->sql->setQuery('TRUNCATE ' . rex::getTablePrefix() . 'search_it_stats_searchterms');
     }
 
-    function getTopSearchterms($_count, $_getonly = 0){
+    function getTopSearchterms($_count, $_getonly = 0)
+    {
         $this->flushSQL();
 
-        if (empty($_getonly)){
-            $query = 'SELECT term, COUNT(*) as count, 1 as success FROM `' . rex::getTablePrefix(). 'search_it_stats_searchterms' . '` WHERE resultcount > 0 GROUP BY term
+        if (empty($_getonly)) {
+            $query = 'SELECT term, COUNT(*) as count, 1 as success FROM `' . rex::getTablePrefix() . 'search_it_stats_searchterms' . '` WHERE resultcount > 0 GROUP BY term
                       UNION
-                      SELECT term, COUNT(*) as count, 0 as success FROM `' . rex::getTablePrefix(). 'search_it_stats_searchterms' . '` WHERE resultcount <= 0 GROUP BY term';
+                      SELECT term, COUNT(*) as count, 0 as success FROM `' . rex::getTablePrefix() . 'search_it_stats_searchterms' . '` WHERE resultcount <= 0 GROUP BY term';
         } else {
-            $query = 'SELECT term, COUNT(*) as count, ' . ($_getonly == 1 ? 1 : 0) . ' as success FROM `' . rex::getTablePrefix().  'search_it_stats_searchterms' . '` WHERE resultcount ' . ($_getonly == 1 ? '>' : '<=') . ' 0 GROUP BY term';
+            $query = 'SELECT term, COUNT(*) as count, ' . ($_getonly == 1 ? 1 : 0) . ' as success FROM `' . rex::getTablePrefix() . 'search_it_stats_searchterms' . '` WHERE resultcount ' . ($_getonly == 1 ? '>' : '<=') . ' 0 GROUP BY term';
             // getonly = 1: only successful searchterms
             // getonly = 2: only failed searchterms
         }
@@ -59,7 +65,8 @@ class search_it_stats{
         return $return;
     }
 
-    function getSuccessCount(){
+    function getSuccessCount()
+    {
         $this->flushSQL();
         $this->sql->setWhere('resultcount > 0 LIMIT 1');
         $this->sql->select('COUNT(*) as success');
@@ -67,7 +74,8 @@ class search_it_stats{
         return intval($return[0]['success']);
     }
 
-    function getMissCount(){
+    function getMissCount()
+    {
         $this->flushSQL();
         $this->sql->setWhere('resultcount = 0 LIMIT 1');
         $this->sql->select('COUNT(*) as miss');
@@ -75,7 +83,8 @@ class search_it_stats{
         return intval($return[0]['miss']);
     }
 
-    function getCount($_count = 6){
+    function getCount($_count = 6)
+    {
         $this->flushSQL();
         $this->sql->setWhere('1 GROUP BY y, m ORDER BY y DESC, m DESC LIMIT ' . $_count);
         $this->sql->select('COUNT( * ) AS count, YEAR(`time`) AS y, MONTH(`time`) AS m');
@@ -105,14 +114,16 @@ class search_it_stats{
         return array_reverse($return);
     }
 
-    function getSearchtermCount(){
+    function getSearchtermCount()
+    {
         $this->flushSQL();
         $this->sql->select('COUNT(DISTINCT term) as count');
         $return = $this->sql->getArray();
         return intval($return[0]['count']);
     }
 
-    function getTimestats($_term = '', $_count = 12){
+    function getTimestats($_term = '', $_count = 12)
+    {
         $this->flushSQL();
         if (!empty($_term))
             $where = 'term = ' . $this->sql->escape($_term) . '';
@@ -146,14 +157,16 @@ class search_it_stats{
         return array_reverse($return);
     }
 
-    function getSearchCount(){
+    function getSearchCount()
+    {
         $this->flushSQL();
         $this->sql->select('COUNT(*) as count');
         $return = $this->sql->getArray();
         return intval($return[0]['count']);
     }
 
-    function createTestData(){
+    function createTestData()
+    {
         $this->flushSQL();
         $str = '
 Wir bieten Ihnen leckeres Essen, frische Steinofenpizza, verschiedene Pastavariationen und frische Salate für die ganze Familie,

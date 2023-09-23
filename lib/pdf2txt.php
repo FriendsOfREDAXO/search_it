@@ -45,7 +45,7 @@ class pdf2txt
         }
 
         if ( // load from file?
-            (false !== $this->src) AND
+            (false !== $this->src) and
             // file exists?
             (false === $this->data = file_get_contents($this->src))
         ) {
@@ -100,17 +100,17 @@ class pdf2txt
 
             switch ($switch) {
                 case '(':
-                    if ($isStream AND !$encodedStream)
+                    if ($isStream and !$encodedStream)
                         $openBracketCount++;
                     break;
 
                 case ')':
-                    if ($isStream AND !$encodedStream)
+                    if ($isStream and !$encodedStream)
                         $openBracketCount--;
                     break;
 
                 case 'endstream':
-                    if ($isStream AND $openBracketCount <= 0) {
+                    if ($isStream and $openBracketCount <= 0) {
                         $isStream = false;
                         $streams[] = $stream;
                         $stream = '';
@@ -164,7 +164,7 @@ class pdf2txt
                         break;
 
                     case 'ET':
-                        if ($isTextObj AND $openBracketCount <= 0) {
+                        if ($isTextObj and $openBracketCount <= 0) {
                             $isTextObj = false;
                             $textObjects[] = $textObject;
                             $textObject = '';
@@ -207,7 +207,7 @@ class pdf2txt
                         break;
 
                     case ')':
-                        if ($isString AND $openBracketCount <= 0) {
+                        if ($isString and $openBracketCount <= 0) {
                             $isString = false;
                             $return .= $string;
                             $string = '';
@@ -250,9 +250,9 @@ class pdf2txt
         // replace octal character codes
         $text = preg_replace_callback(
             '~\\\\([0-8]{3})~',
-            function($matches) use ($fromEncoding) {
+            function ($matches) use ($fromEncoding) {
                 if (octdec($matches[1]) > 32)
-                    return mb_convert_encoding(chr(octdec($matches[1])),'UTF-8', $fromEncoding);
+                    return mb_convert_encoding(chr(octdec($matches[1])), 'UTF-8', $fromEncoding);
                 else
                     return "";
             },

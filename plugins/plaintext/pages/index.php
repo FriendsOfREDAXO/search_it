@@ -4,32 +4,34 @@ if (rex_post('sendit', 'boolean')) {
 
     $posted_config = rex_post('search_it_plaintext', [
 
-        ['order', 'string','selectors,regex,textile,striptags'],
+        ['order', 'string', 'selectors,regex,textile,striptags'],
         ['selectors', 'string'],
         ['regex', 'string'],
-        ['textile', 'bool' ],
-        ['striptags', 'bool' ],
-        ['processparent', 'bool' ]
+        ['textile', 'bool'],
+        ['striptags', 'bool'],
+        ['processparent', 'bool']
 
     ]);
 
 
-    $changed = array_keys(array_merge(array_diff_assoc(array_map('serialize',$posted_config),array_map('serialize',$this->getConfig())), array_diff_assoc(array_map('serialize',$this->getConfig()),array_map('serialize',$posted_config))));
-    foreach ( array(
-                  'order',
-                  'selectors',
-                  'regex',
-                  'textile',
-                  'striptags',
-                  'processparent',
-              ) as $index ) {
-        if ( in_array($index, $changed) ){
-            echo rex_view::warning($this->i18n('search_it_settings_saved_warning')); break;
-        } elseif ( is_array($this->getConfig($index)) && is_array($posted_config[$index]) ) { // Der Konfig-Wert ist ein Array
-            if ( count(array_merge(
-                    array_diff_assoc(array_map('serialize',$this->getConfig($index)), array_map('serialize',$posted_config[$index])),
-                    array_diff_assoc(array_map('serialize',$posted_config[$index]), array_map('serialize',$this->getConfig($index))) )) > 0 ) {
-                echo rex_view::warning($this->i18n('search_it_settings_saved_warning')); break;
+    $changed = array_keys(array_merge(array_diff_assoc(array_map('serialize', $posted_config), array_map('serialize', $this->getConfig())), array_diff_assoc(array_map('serialize', $this->getConfig()), array_map('serialize', $posted_config))));
+    foreach (array(
+                 'order',
+                 'selectors',
+                 'regex',
+                 'textile',
+                 'striptags',
+                 'processparent',
+             ) as $index) {
+        if (in_array($index, $changed)) {
+            echo rex_view::warning($this->i18n('search_it_settings_saved_warning'));
+            break;
+        } elseif (is_array($this->getConfig($index)) && is_array($posted_config[$index])) { // Der Konfig-Wert ist ein Array
+            if (count(array_merge(
+                    array_diff_assoc(array_map('serialize', $this->getConfig($index)), array_map('serialize', $posted_config[$index])),
+                    array_diff_assoc(array_map('serialize', $posted_config[$index]), array_map('serialize', $this->getConfig($index))))) > 0) {
+                echo rex_view::warning($this->i18n('search_it_settings_saved_warning'));
+                break;
             }
         }
     }
@@ -63,12 +65,12 @@ $content[] = search_it_getSettingsFormSection(
 );
 
 
-$content[] =  '<div id="sortable-elements">';
+$content[] = '<div id="sortable-elements">';
 
 foreach (explode(',', $this->getConfig('order')) as $elem) {
     switch ($elem) {
         case 'selectors':
-            $content[] =  search_it_getSettingsFormSection(
+            $content[] = search_it_getSettingsFormSection(
                 'search_it_plaintext_selectors_fieldset',
                 rex_i18n::rawMsg('search_it_plaintext_selectors'),
                 array(
@@ -84,7 +86,7 @@ foreach (explode(',', $this->getConfig('order')) as $elem) {
             break;
 
         case 'regex':
-            $content[] =  search_it_getSettingsFormSection(
+            $content[] = search_it_getSettingsFormSection(
                 'search_it_plaintext_regex_fieldset',
                 $this->i18n('search_it_plaintext_regex'),
                 array(
@@ -100,7 +102,7 @@ foreach (explode(',', $this->getConfig('order')) as $elem) {
             break;
 
         case 'textile':
-            $content[] =  search_it_getSettingsFormSection(
+            $content[] = search_it_getSettingsFormSection(
                 'search_it_plaintext_textile_fieldset',
                 $this->i18n('search_it_plaintext_textile'),
                 array(
@@ -117,7 +119,7 @@ foreach (explode(',', $this->getConfig('order')) as $elem) {
             break;
 
         case 'striptags':
-            $content[] =  search_it_getSettingsFormSection(
+            $content[] = search_it_getSettingsFormSection(
                 'search_it_plaintext_striptags_fieldset',
                 $this->i18n('search_it_plaintext_striptags'),
                 array(
@@ -135,7 +137,7 @@ foreach (explode(',', $this->getConfig('order')) as $elem) {
     }
 }
 
-$content[] =  '</div>';
+$content[] = '</div>';
 
 $content[] = search_it_getSettingsFormSection(
     'search_it_plaintext_processparent_fieldset',
@@ -149,81 +151,80 @@ $content[] = search_it_getSettingsFormSection(
             'value' => '1',
             'checked' => !empty($this->getConfig('processparent'))
         )
-    ),'edit'
+    ), 'edit'
 );
 
 
 ?>
-<script type="text/javascript">
-// <![CDATA[
-(function($) {
-    $(document).ready(function () {
-        var mainWidth = jQuery('#search_it_plaintext_form').width();
-        var ondrag = false;
+    <script type="text/javascript">
+        // <![CDATA[
+        (function ($) {
+            $(document).ready(function () {
+                var mainWidth = jQuery('#search_it_plaintext_form').width();
+                var ondrag = false;
 
-        jQuery('#sortable-elements').sortable({
-            connectWith: jQuery('#sortable-elements'),
-            opacity: 0.9,
-            tolerance: 'pointer',
-            placeholder: 'placeholder',
-            forceHelperSize: true,
-            start: function (event, ui) {
-                ondrag = true;
-            },
-            stop: function (event, ui) {
+                jQuery('#sortable-elements').sortable({
+                    connectWith: jQuery('#sortable-elements'),
+                    opacity: 0.9,
+                    tolerance: 'pointer',
+                    placeholder: 'placeholder',
+                    forceHelperSize: true,
+                    start: function (event, ui) {
+                        ondrag = true;
+                    },
+                    stop: function (event, ui) {
 
-                var order = new Array();
-                jQuery('#search_it_plaintext_selectors,#search_it_plaintext_regex,#search_it_plaintext_textile,#search_it_plaintext_striptags').each(function () {
-                    order.push(this.name.match(/\[([a-zA-Z]+)\]/)[1]);
+                        var order = new Array();
+                        jQuery('#search_it_plaintext_selectors,#search_it_plaintext_regex,#search_it_plaintext_textile,#search_it_plaintext_striptags').each(function () {
+                            order.push(this.name.match(/\[([a-zA-Z]+)\]/)[1]);
+                        });
+                        jQuery('input[name="search_it_plaintext[order]"]').attr('value', order.join(','));
+
+                        setTimeout(function () {
+                            ondrag = false;
+                        }, 100);
+                    }
                 });
-                jQuery('input[name="search_it_plaintext[order]"]').attr('value', order.join(','));
 
-                setTimeout(function () {
-                    ondrag = false;
-                }, 100);
-            }
-        });
+                jQuery('#sortable-elements .panel-title').each(function () {
+                    jQuery(this).parent().css('cursor', 'move').css('z-index', '10000');
+                    var text = jQuery(this).html();
+                    jQuery(this).html('')
+                        .append(jQuery('<i>').addClass('fa fa-arrows-v').css('padding-right', '18px'))
+                        .append(text);
+                });
 
-        jQuery('#sortable-elements .panel-title').each(function () {
-            jQuery(this).parent().css('cursor', 'move').css('z-index','10000');
-            var text = jQuery(this).html();
-            jQuery(this).html('')
-                .append(jQuery('<i>').addClass('fa fa-arrows-v').css('padding-right', '18px'))
-                .append(text);
-        });
+                // display links for showing and hiding all sections
+                jQuery('#search_it_plaintext_description dl').first()
+                    .css('position', 'relative')
+                    .append(
+                        jQuery('<dt>')
+                            .css('font-weight', '900')
+                            .css('margin-bottom', '1em').css('padding', '0')
+                            .append(
+                                jQuery('<a><?php echo $this->i18n('search_it_settings_show_all'); ?><' + '/a>')
+                                    .css('cursor', 'pointer')
+                                    .css('padding', '0 1em')
+                                    .click(function () {
+                                        jQuery('#sortable-elements .panel-collapse').collapse('show');
+                                    })
+                            )
+                            .append(
+                                jQuery('<a><?php echo $this->i18n('search_it_settings_show_none'); ?><' + '/a>')
+                                    .css('cursor', 'pointer')
+                                    .click(function () {
+                                        jQuery('#sortable-elements .panel-collapse').collapse('hide');
+                                    })
+                            )
+                    );
 
-        // display links for showing and hiding all sections
-        jQuery('#search_it_plaintext_description dl').first()
-            .css('position', 'relative')
-            .append(
-                jQuery('<dt>')
-                    .css('font-weight', '900')
-                    .css('margin-bottom','1em').css('padding','0')
-                        .append(
-                            jQuery('<a><?php echo $this->i18n('search_it_settings_show_all'); ?><' + '/a>')
-                                .css('cursor', 'pointer')
-                                .css('padding', '0 1em')
-                                .click(function () {
-                            jQuery('#sortable-elements .panel-collapse').collapse('show');
-                                })
-                        )
-                        .append(
-                            jQuery('<a><?php echo $this->i18n('search_it_settings_show_none'); ?><' + '/a>')
-                                .css('cursor', 'pointer')
-                                .click(function () {
-                            jQuery('#sortable-elements .panel-collapse').collapse('hide');
-                                })
-                        )
+            });
+        }(jQuery));
 
-            );
-
-    });
-}(jQuery));
-
-// ]]>
-</script>
+        // ]]>
+    </script>
 <?php
-$content = implode( "\n", $content);
+$content = implode("\n", $content);
 
 $formElements = [];
 $n = [];
@@ -235,11 +236,11 @@ $fragment->setVar('elements', $formElements, false);
 $buttons = $fragment->parse('core/form/submit.php');
 
 $fragment = new rex_fragment();
-$fragment->setVar('title', $this->i18n('search_it_plaintext_title'),'');
+$fragment->setVar('title', $this->i18n('search_it_plaintext_title'), '');
 $fragment->setVar('class', 'info', false);
 $fragment->setVar('body', $content, false);
 $fragment->setVar('buttons', $buttons, false);
 
-echo '<form method="post" action="'. rex_url::currentBackendPage() .'" id="search_it_plaintext_form">';
+echo '<form method="post" action="' . rex_url::currentBackendPage() . '" id="search_it_plaintext_form">';
 echo $fragment->parse('core/page/section.php');
 echo '</form>';

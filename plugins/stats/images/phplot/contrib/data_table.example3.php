@@ -7,10 +7,10 @@ require_once 'data_table.php';
 // Note column 0, labels, are not used by PHPlot itself, but are
 // displayed in the data table, and extracted for the legend.
 $data = array(
-   array('Gold', 20),
-   array('Silver', 40),
-   array('Platinum', 30),
-   array('Tin', 70),
+    array('Gold', 20),
+    array('Silver', 40),
+    array('Platinum', 30),
+    array('Tin', 70),
 );
 
 // The $settings array configures the data table:

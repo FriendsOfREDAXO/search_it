@@ -22,18 +22,20 @@ if (rex_post('config-submit', 'boolean')) {
 
     ]);
 
-    $changed = array_keys(array_merge(array_diff_assoc(array_map('serialize',$posted_config),array_map('serialize',$this->getConfig())), array_diff_assoc(array_map('serialize',$this->getConfig()),array_map('serialize',$posted_config))));
-    foreach ( array(
-                  'similarwordsmode',
-                  'indexoffline',
-              ) as $index ) {
-        if ( in_array($index, $changed) ){
-            echo rex_view::warning($this->i18n('search_it_settings_saved_warning')); break;
-        } elseif ( is_array($this->getConfig($index)) && is_array($posted_config[$index]) ) { // Der Konfig-Wert ist ein Array
-            if ( count(array_merge(
-                array_diff_assoc(array_map('serialize',$this->getConfig($index)), array_map('serialize',$val)),
-                array_diff_assoc(array_map('serialize',$val), array_map('serialize',$this->getConfig($index))) )) > 0 ) {
-                echo rex_view::warning($this->i18n('search_it_settings_saved_warning')); break;
+    $changed = array_keys(array_merge(array_diff_assoc(array_map('serialize', $posted_config), array_map('serialize', $this->getConfig())), array_diff_assoc(array_map('serialize', $this->getConfig()), array_map('serialize', $posted_config))));
+    foreach (array(
+                 'similarwordsmode',
+                 'indexoffline',
+             ) as $index) {
+        if (in_array($index, $changed)) {
+            echo rex_view::warning($this->i18n('search_it_settings_saved_warning'));
+            break;
+        } elseif (is_array($this->getConfig($index)) && is_array($posted_config[$index])) { // Der Konfig-Wert ist ein Array
+            if (count(array_merge(
+                    array_diff_assoc(array_map('serialize', $this->getConfig($index)), array_map('serialize', $val)),
+                    array_diff_assoc(array_map('serialize', $val), array_map('serialize', $this->getConfig($index))))) > 0) {
+                echo rex_view::warning($this->i18n('search_it_settings_saved_warning'));
+                break;
             }
         }
     }
@@ -52,15 +54,15 @@ $content3 = [];
 
 // URL Addon Checkbox
 $url_checkbox = [];
-if(search_it_isUrlAddOnAvailable()) {
-	$url_checkbox = [
-            'type' => 'checkbox',
-            'id' => 'search_it_index_url_addon',
-            'name' => 'search_config[index_url_addon]',
-            'label' => $this->i18n('search_it_settings_index_url_addon_label'),
-            'value' => '1',
-            'checked' => $this->getConfig('index_url_addon')
-        ];
+if (search_it_isUrlAddOnAvailable()) {
+    $url_checkbox = [
+        'type' => 'checkbox',
+        'id' => 'search_it_index_url_addon',
+        'name' => 'search_config[index_url_addon]',
+        'label' => $this->i18n('search_it_settings_index_url_addon_label'),
+        'value' => '1',
+        'checked' => $this->getConfig('index_url_addon')
+    ];
 }
 // SSL verify
 $ssl_verify = [];
@@ -103,7 +105,7 @@ $content = search_it_getSettingsFormSection(
             'value' => '1',
             'checked' => $this->getConfig('reindex_cols_onforms')
         ],
-		$url_checkbox
+        $url_checkbox
         ,
         $ssl_verify
         ,
@@ -114,7 +116,7 @@ $content = search_it_getSettingsFormSection(
             'label' => $this->i18n('search_it_settings_index_host_label'),
             'value' => !empty($this->getConfig('index_host')) ? rex_escape($this->getConfig('index_host')) : '',
         ],
-    ],'edit'
+    ], 'edit'
 );
 
 $content .= search_it_getSettingsFormSection(
@@ -123,7 +125,7 @@ $content .= search_it_getSettingsFormSection(
     array(
         array(
             'type' => 'directoutput',
-            'output' => '<strong>'.$this->i18n('search_it_settings_http_auth_desc').'</strong>',
+            'output' => '<strong>' . $this->i18n('search_it_settings_http_auth_desc') . '</strong>',
             'where' => 'center'
         ),
         array(
@@ -148,7 +150,7 @@ $content .= search_it_getSettingsFormSection(
             'value' => '1',
             'checked' => $this->getConfig('reindex_cols_onforms')
         )*/
-    ),'edit'
+    ), 'edit'
 );
 $content3[] = $content;
 
@@ -256,7 +258,7 @@ $content3[] = search_it_getSettingsFormSection(
                 )
             )
         )
-    ),'edit'
+    ), 'edit'
 );
 
 $fragment = new rex_fragment();

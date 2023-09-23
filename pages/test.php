@@ -21,48 +21,46 @@ $content2[] = search_it_getSettingsFormSection(
             'name' => 'search_it_test[]',
             'label' => $this->i18n('search_it_test_mode'),
             'options' => [
-                ['value' => '0', 'selected'=>'', 'name' => $this->i18n('search_it_test_mode_all')]//,
+                ['value' => '0', 'selected' => '', 'name' => $this->i18n('search_it_test_mode_all')]//,
                 //['value' => 'article', 'name' => $this->i18n('search_it_test_mode_article')],
                 //['value' => 'db', 'name' => $this->i18n('search_it_test_mode_db')],
                 //['value' => 'media', 'name' => $this->i18n('search_it_test_mode_media')]
-                ]
+            ]
         ),
         array(
             'type' => 'string',
             'id' => 'search_it_test_keywords',
             'name' => 'search_it_test_keywords',
             'label' => $this->i18n('search_it_test_keywords'),
-            'value' => !empty(rex_post('search_it_test_keywords','string')) ? rex_escape(rex_post('search_it_test_keywords','string')) : ''
+            'value' => !empty(rex_post('search_it_test_keywords', 'string')) ? rex_escape(rex_post('search_it_test_keywords', 'string')) : ''
         ),
         array(
             'type' => 'directoutput',
             'output' => $buttons
         ),
-    ),'edit'
+    ), 'edit'
 );
-
 
 
 $fragment = new rex_fragment();
 $fragment->setVar('class', 'info');
 $fragment->setVar('title', $this->i18n('search_it_test_result'));
 
-if($request = rex_request('search_it_test_keywords', 'string')) {
+if ($request = rex_request('search_it_test_keywords', 'string')) {
     $search_it = new search_it();
     $result = $search_it->search($request);
 
     ob_start();
-    echo '<p>'.$this->i18n('search_it_test_result_object').'</p>';
+    echo '<p>' . $this->i18n('search_it_test_result_object') . '</p>';
     dump($result);
-    echo '<p>'.$this->i18n('search_it_test_hits').': '.count($result['hits']).'</p>';
-    foreach($result['hits'] as $hit) {
+    echo '<p>' . $this->i18n('search_it_test_hits') . ': ' . count($result['hits']) . '</p>';
+    foreach ($result['hits'] as $hit) {
         dump($hit);
     }
     $dumpstr = ob_get_clean();
 }
 $fragment->setVar('body', $dumpstr, false);
-$content2[] =  $fragment->parse('core/page/section.php');
-
+$content2[] = $fragment->parse('core/page/section.php');
 
 
 $fragment = new rex_fragment();

@@ -30,7 +30,7 @@ function prune_labels(&$data, $maxlabels)
     # Process the data array, zapping M-1 of every M labels:
     $k = 0;
     for ($i = 0; $i < $n; $i++) {
-       if ($k > 0) $data[$i][0] = '';
-       if (++$k >= $m) $k = 0;
+        if ($k > 0) $data[$i][0] = '';
+        if (++$k >= $m) $k = 0;
     }
 }

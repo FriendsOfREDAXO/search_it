@@ -1,12 +1,12 @@
-#search_it_modi legend,#search_it_index legend,#search_it_highlight legend,#search_it_exclude legend,#search_it_include legend,#search_it_files legend {
-    padding-left:30px;
-    background:no-repeat 5px center transparent;
+#search_it_modi legend, #search_it_index legend, #search_it_highlight legend, #search_it_exclude legend, #search_it_include legend, #search_it_files legend {
+    padding-left: 30px;
+    background: no-repeat 5px center transparent;
 }
 
 
 #search_it_files .loading {
-    background:url(loading_lightblue.gif) no-repeat center transparent;
-    padding:6px 20px;
+    background: url(loading_lightblue.gif) no-repeat center transparent;
+    padding: 6px 20px;
 }
 
 #search_it_generate_log {
@@ -16,9 +16,11 @@
     border: 1px solid #b99e33;
     border-top: none;
 }
+
 #search_it_generate_log.index-done {
     border-color: #3C9ED0;
 }
+
 #search_it_generate_log p {
     color: #3C9ED0;
 }
@@ -27,66 +29,68 @@
     background-image: url('loading.gif');
     background-repeat: no-repeat;
 }
+
 #search_it_generate_progressbar {
-    color:#fff;
-    font-weight:900;
-    position:relative;
+    color: #fff;
+    font-weight: 900;
+    position: relative;
     height: 3em;
     line-height: 3em;
-    padding:0 10px;
+    padding: 0 10px;
     margin-bottom: 0;
     background: #b99e33 url(progressbar.gif) no-repeat -5000px 0;
 }
 
 #search_it_generate_progressbar .percentage {
-    position:absolute;
-    top:0;
-    right:10px;
-    height:3em;
-    line-height:3em;
+    position: absolute;
+    top: 0;
+    right: 10px;
+    height: 3em;
+    line-height: 3em;
 }
 
 #search_it_generate_progressbar .duration {
-    position:absolute;
-    top:0;
-    left:25%;
-    height:3em;
-    line-height:3em;
+    position: absolute;
+    top: 0;
+    left: 25%;
+    height: 3em;
+    line-height: 3em;
 }
 
 #search_it_generate_progressbar .timeleft {
-    position:absolute;
-    top:0;
-    right:25%;
-    height:3em;
-    line-height:3em;
+    position: absolute;
+    top: 0;
+    right: 25%;
+    height: 3em;
+    line-height: 3em;
 }
 
 .search_it_formlink a {
-    display:block;
-    padding:3px 5px;
+    display: block;
+    padding: 3px 5px;
 }
 
 
 #search_it_sample_wrapper {
-    clear:left;
-    padding:5px;
-}
-#search_it_sample_wrapper p strong {
-    color:#000;
-    background-color:#fff;
-    padding:0 0.2em;
-    border:1px solid #000;
-    font-style:italic;
-}
-#search_it_sample {
-    margin-top:5px;
-    padding:5px;
-    border:1px solid #000;
-    background:#fff;
-    color:#000;
+    clear: left;
+    padding: 5px;
 }
 
+#search_it_sample_wrapper p strong {
+    color: #000;
+    background-color: #fff;
+    padding: 0 0.2em;
+    border: 1px solid #000;
+    font-style: italic;
+}
+
+#search_it_sample {
+    margin-top: 5px;
+    padding: 5px;
+    border: 1px solid #000;
+    background: #fff;
+    color: #000;
+}
 
 
 #search_it_settings_form .checkbox {
@@ -94,68 +98,172 @@
 }
 
 #search_it_settings_form mark,
-#search_it_settings_form .mark { background-color: transparent; color: #3bb594; }
+#search_it_settings_form .mark {
+    background-color: transparent;
+    color: #3bb594;
+}
 
 
 #search_it_settings_folders {
-    color:#14568A;
-    background:#fff;
-    font-weight:900;
+    color: #14568A;
+    background: #fff;
+    font-weight: 900;
 }
 
 #search_it_settings_folders .options {
-    color:#fff;
-    background:#000;
+    color: #fff;
+    background: #000;
 }
 
 #search_it_optiondummy {
-    display:none;
+    display: none;
 }
 
-.subdirselect,.subdirselectlabel {
+.subdirselect, .subdirselectlabel {
     display: block;
-    margin-top:1em;
+    margin-top: 1em;
 }
 
-#subdirs_0,#subdirs_1,#subdirs_2,#subdirs_3,#subdirs_4,#subdirs_5,#subdirs_6,#subdirs_7,#subdirs_8,#subdirs_9,#subdirs_10,#subdirs_11,#subdirs_12,#subdirs_13,#subdirs_14,#subdirs_15,#subdirs_16,#subdirs_17,#subdirs_18,#subdirs_19,#subdirs_20,#subdirs_21,#subdirs_22,#subdirs_23,#subdirs_24,#subdirs_25,#subdirs_26,#subdirs_27,#subdirs_28,#subdirs_29,#subdirs_30 {
-    background:no-repeat center transparent;
+#subdirs_0, #subdirs_1, #subdirs_2, #subdirs_3, #subdirs_4, #subdirs_5, #subdirs_6, #subdirs_7, #subdirs_8, #subdirs_9, #subdirs_10, #subdirs_11, #subdirs_12, #subdirs_13, #subdirs_14, #subdirs_15, #subdirs_16, #subdirs_17, #subdirs_18, #subdirs_19, #subdirs_20, #subdirs_21, #subdirs_22, #subdirs_23, #subdirs_24, #subdirs_25, #subdirs_26, #subdirs_27, #subdirs_28, #subdirs_29, #subdirs_30 {
+    background: no-repeat center transparent;
 }
 
-#subdirs_0 { background-image:url(0.png); }
-#subdirs_1 { background-image:url(1.png); }
-#subdirs_2 { background-image:url(2.png); }
-#subdirs_3 { background-image:url(3.png); }
-#subdirs_4 { background-image:url(4.png); }
-#subdirs_5 { background-image:url(5.png); }
-#subdirs_6 { background-image:url(6.png); }
-#subdirs_7 { background-image:url(7.png); }
-#subdirs_8 { background-image:url(8.png); }
-#subdirs_9 { background-image:url(9.png); }
-#subdirs_10 { background-image:url(10.png); }
-#subdirs_11 { background-image:url(11.png); }
-#subdirs_12 { background-image:url(12.png); }
-#subdirs_13 { background-image:url(13.png); }
-#subdirs_14 { background-image:url(14.png); }
-#subdirs_15 { background-image:url(15.png); }
-#subdirs_16 { background-image:url(16.png); }
-#subdirs_17 { background-image:url(17.png); }
-#subdirs_18 { background-image:url(18.png); }
-#subdirs_19 { background-image:url(19.png); }
-#subdirs_20 { background-image:url(20.png); }
-#subdirs_21 { background-image:url(21.png); }
-#subdirs_22 { background-image:url(22.png); }
-#subdirs_23 { background-image:url(23.png); }
-#subdirs_24 { background-image:url(24.png); }
-#subdirs_25 { background-image:url(25.png); }
-#subdirs_26 { background-image:url(26.png); }
-#subdirs_27 { background-image:url(27.png); }
-#subdirs_28 { background-image:url(28.png); }
-#subdirs_29 { background-image:url(29.png); }
-#subdirs_30 { background-image:url(30.png); }
+#subdirs_0 {
+    background-image: url(0.png);
+}
 
-#search_it_plaintext_description { height: 24px; }
-#search_it_plaintext_description dd { padding-left: 16px; }
-.movesymbol { font-size: 21px; }
+#subdirs_1 {
+    background-image: url(1.png);
+}
+
+#subdirs_2 {
+    background-image: url(2.png);
+}
+
+#subdirs_3 {
+    background-image: url(3.png);
+}
+
+#subdirs_4 {
+    background-image: url(4.png);
+}
+
+#subdirs_5 {
+    background-image: url(5.png);
+}
+
+#subdirs_6 {
+    background-image: url(6.png);
+}
+
+#subdirs_7 {
+    background-image: url(7.png);
+}
+
+#subdirs_8 {
+    background-image: url(8.png);
+}
+
+#subdirs_9 {
+    background-image: url(9.png);
+}
+
+#subdirs_10 {
+    background-image: url(10.png);
+}
+
+#subdirs_11 {
+    background-image: url(11.png);
+}
+
+#subdirs_12 {
+    background-image: url(12.png);
+}
+
+#subdirs_13 {
+    background-image: url(13.png);
+}
+
+#subdirs_14 {
+    background-image: url(14.png);
+}
+
+#subdirs_15 {
+    background-image: url(15.png);
+}
+
+#subdirs_16 {
+    background-image: url(16.png);
+}
+
+#subdirs_17 {
+    background-image: url(17.png);
+}
+
+#subdirs_18 {
+    background-image: url(18.png);
+}
+
+#subdirs_19 {
+    background-image: url(19.png);
+}
+
+#subdirs_20 {
+    background-image: url(20.png);
+}
+
+#subdirs_21 {
+    background-image: url(21.png);
+}
+
+#subdirs_22 {
+    background-image: url(22.png);
+}
+
+#subdirs_23 {
+    background-image: url(23.png);
+}
+
+#subdirs_24 {
+    background-image: url(24.png);
+}
+
+#subdirs_25 {
+    background-image: url(25.png);
+}
+
+#subdirs_26 {
+    background-image: url(26.png);
+}
+
+#subdirs_27 {
+    background-image: url(27.png);
+}
+
+#subdirs_28 {
+    background-image: url(28.png);
+}
+
+#subdirs_29 {
+    background-image: url(29.png);
+}
+
+#subdirs_30 {
+    background-image: url(30.png);
+}
+
+#search_it_plaintext_description {
+    height: 24px;
+}
+
+#search_it_plaintext_description dd {
+    padding-left: 16px;
+}
+
+.movesymbol {
+    font-size: 21px;
+}
+
 #sortable-elements {
     float: none;
     display: block;
@@ -166,12 +274,17 @@
     -moz-box-sizing: border-box;
     box-sizing: border-box;
 }
+
 #sortable-elements .panel-edit,
 .include_checkboxes .panel {
     margin-bottom: 1px;
 }
 
-#search_it_settings_form .include_checkboxes dt { width: 0; padding: 0; margin: 0;}
+#search_it_settings_form .include_checkboxes dt {
+    width: 0;
+    padding: 0;
+    margin: 0;
+}
 
 #search_it_settings_form .placeholder {
     position: relative;
@@ -184,7 +297,6 @@
     box-shadow: inset 0 1px 1px rgba(0, 0, 0, .05);
 
 }
-
 
 
 body.rex-theme-dark #search_it_sample {

@@ -5,15 +5,15 @@ $buttons = '';
 
 // Einstellungen speichern
 if (rex_post('formsubmit', 'string') == '1') {
-  $this->setConfig(rex_post('config', [
-    ['modus','string'],
-    ['similarwordsmode','string'],
-    ['maxSuggestion','string'],
-    ['autoSubmitForm','int']
-  ]));
-  
-  echo rex_view::success($this->i18n('search_it_autocomplete_config_saved'));
-  
+    $this->setConfig(rex_post('config', [
+        ['modus', 'string'],
+        ['similarwordsmode', 'string'],
+        ['maxSuggestion', 'string'],
+        ['autoSubmitForm', 'int']
+    ]));
+
+    echo rex_view::success($this->i18n('search_it_autocomplete_config_saved'));
+
 }
 
 // modus
@@ -114,7 +114,7 @@ $output = '
 echo $output;
 
 
-$file = rex_file::get(rex_path::plugin('search_it', 'autocomplete','README.md'));
+$file = rex_file::get(rex_path::plugin('search_it', 'autocomplete', 'README.md'));
 $body = rex_markdown::factory()->parse($file);
 $fragment = new rex_fragment();
 $fragment->setVar('title', $this->i18n('search_it_autocomplete_config_install'));
@@ -123,38 +123,38 @@ $content = $fragment->parse('core/page/section.php');
 echo $content;
 
 
-$code = '<link rel="stylesheet" type="text/css" href="/'. substr(rex_url::pluginAssets('search_it', 'autocomplete','jquery.suggest.css'),3).'" media="screen" />
-<script type="text/javascript" src="/'. substr(rex_url::pluginAssets('search_it', 'autocomplete','jquery.suggest.js'),3).'"></script>          
+$code = '<link rel="stylesheet" type="text/css" href="/' . substr(rex_url::pluginAssets('search_it', 'autocomplete', 'jquery.suggest.css'), 3) . '" media="screen" />
+<script type="text/javascript" src="/' . substr(rex_url::pluginAssets('search_it', 'autocomplete', 'jquery.suggest.js'), 3) . '"></script>
 <script type="text/javascript">
   jQuery(document).ready(function() {
     jQuery(function() {
-      jQuery(".search_it-form input[name=search]").suggest("index.php?rex-api-call=search_it_autocomplete_getSimilarWords&rnd=" + Math.random()###AUTOSUBMIT###);      
+      jQuery(".search_it-form input[name=search]").suggest("index.php?rex-api-call=search_it_autocomplete_getSimilarWords&rnd=" + Math.random()###AUTOSUBMIT###);
     });
-  });  
+  });
 </script>';
 
 $code = preg_replace("#[\n]#", '', $code);
 
 
-$plugin = rex_plugin::get('search_it','autocomplete');
-$autoSubmitForm= $plugin->getConfig('autoSubmitForm');
+$plugin = rex_plugin::get('search_it', 'autocomplete');
+$autoSubmitForm = $plugin->getConfig('autoSubmitForm');
 $autoSubmit = '';
 
 if ($autoSubmitForm == true) {
-  
-  $autoSubmit =", {
+
+    $autoSubmit = ", {
         onSelect: function(event, ui) { $('.search_it-form').submit(); return false; }
       }";
 }
 
 $autoSubmit = preg_replace("#[\n]#", '', $autoSubmit);
 
-if(substr(rex::getServer(), -1) == '/')
-  $serverHost = substr(rex::getServer(), 0, -1);
+if (substr(rex::getServer(), -1) == '/')
+    $serverHost = substr(rex::getServer(), 0, -1);
 
 $code = str_replace('###AUTOSUBMIT###', $autoSubmit, $code);
 
-$content = '<div class="rexx-code"><code><pre>' . highlight_string($code, true)  . '</pre></code></div>';
+$content = '<div class="rexx-code"><code><pre>' . highlight_string($code, true) . '</pre></code></div>';
 
 $fragment = new rex_fragment();
 $fragment->setVar('title', $this->i18n('search_it_autocomplete_config_codesnippet'));

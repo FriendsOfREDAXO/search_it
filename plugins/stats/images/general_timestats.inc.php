@@ -29,18 +29,17 @@ ob_clean();
 $plot = new PHPlot(350, 240);
 $plot->SetImageBorderType('none');
 $plot->SetTransparentColor('white');
-$plot->SetMarginsPixels(NULL,NULL,26,NULL);
+$plot->SetMarginsPixels(NULL, NULL, 26, NULL);
 
 # Make sure Y axis starts at 0:
 $plot->SetPlotAreaWorld(NULL, 0, NULL, NULL);
 
-$len = strlen(''.$max);
-$plot->SetYTickIncrement(max(1,ceil($max/pow(10,$len-1))*pow(10,$len-2)));
+$len = strlen('' . $max);
+$plot->SetYTickIncrement(max(1, ceil($max / pow(10, $len - 1)) * pow(10, $len - 2)));
 
 # Main plot title:
 $plot->SetTitle($title);
 $plot->SetFont('title', 3);
-
 
 
 // draw bars

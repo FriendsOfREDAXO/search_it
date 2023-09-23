@@ -1,6 +1,7 @@
 # Modul-Eingabe
 
-Dieses Formular kann bspw. in den `<header>` eines Website-Templates eingebunden werden.
+Dieses Formular kann bspw. in den `<header>` eines Website-Templates eingebunden
+werden.
 
 ## Beispiel-PHP
 
@@ -21,11 +22,14 @@ Dieses Formular kann bspw. in den `<header>` eines Website-Templates eingebunden
 </form>
 ```
 
-> Tipp: Bei mehrsprachigen Websites können die Platzhalter `{{ }}` mit dem Sprog-AddOn übersetzt werden.
+> Tipp: Bei mehrsprachigen Websites können die Platzhalter `{{ }}` mit dem
+> Sprog-AddOn übersetzt werden.
 
 ## Beispiel-CSS
 
-Das Sucheingabe-Formular kann beliebig formatiert und mit Klassen ausgezeichnet werden. Das nachfolgende CSS formatiert das oben vorgegebene Beispiel und blendet den Platzhalter-Text beim Klick in das Such-Eingabefeld aus.
+Das Sucheingabe-Formular kann beliebig formatiert und mit Klassen ausgezeichnet
+werden. Das nachfolgende CSS formatiert das oben vorgegebene Beispiel und
+blendet den Platzhalter-Text beim Klick in das Such-Eingabefeld aus.
 
 ```css
 <style>

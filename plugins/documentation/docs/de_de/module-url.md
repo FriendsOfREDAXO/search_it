@@ -1,6 +1,8 @@
 # Suche über URLs aus dem URL Addon (>= Version 2.0)
 
-Dieses Suchergebnis-Modul gibt Suchergebnisse aus dem URL Addon 2.0 oder größer aus. Um URLs aus dem URL Addon zu indexieren muss in den Einstellungen die Indexierung der URLs aus dem URL Addon aktiviert sein.
+Dieses Suchergebnis-Modul gibt Suchergebnisse aus dem URL Addon 2.0 oder größer
+aus. Um URLs aus dem URL Addon zu indexieren muss in den Einstellungen die
+Indexierung der URLs aus dem URL Addon aktiviert sein.
 
 ## Modulausgabe
 
@@ -65,7 +67,8 @@ if($request) { // Wenn ein Suchbegriff eingegeben wurde
 
 ## CSS
 
-Das Sucheingabe-Formular kann beliebig formatiert und mit Klassen ausgezeichnet werden. Das nachfolgende CSS formatiert das oben vorgegebene Beispiel.
+Das Sucheingabe-Formular kann beliebig formatiert und mit Klassen ausgezeichnet
+werden. Das nachfolgende CSS formatiert das oben vorgegebene Beispiel.
 
 ```css
 <style>

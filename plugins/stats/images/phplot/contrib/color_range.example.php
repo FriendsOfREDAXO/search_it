@@ -27,7 +27,7 @@ $p->SetPlotAreaWorld(0, 0, $x_values, 100);
 $n_data = count_data_sets($data, 'text-data');
 # Make a gradient color map:
 $colors = color_range($p->SetRGBColor('SkyBlue'),
-                      $p->SetRGBColor('DarkGreen'), $n_data);
+    $p->SetRGBColor('DarkGreen'), $n_data);
 $p->SetDataColors($colors);
 $p->SetXTickLabelPos('none');
 $p->SetXTickPos('none');

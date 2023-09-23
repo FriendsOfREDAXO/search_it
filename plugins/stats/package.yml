@@ -1,5 +1,5 @@
 package: search_it/stats
-version: '6.9.8'
+version: '6.9.9'
 author: Friends Of REDAXO
 
 title: 'translate:search_it_stats_plugin_title'
@@ -12,4 +12,4 @@ page:
 
 requires:
     php:
-        extensions: [gd]
+        extensions: [ gd ]

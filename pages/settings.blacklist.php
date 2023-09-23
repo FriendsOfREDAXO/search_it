@@ -11,22 +11,24 @@ if (rex_post('config-submit', 'boolean')) {
     ]);
 
     // aus Komma-Listen arrays machen, bzw. arrays umformen
-    if( !empty($posted_config['blacklist']) ) {
-        $posted_config['blacklist'] = explode(',',$posted_config['blacklist']);
+    if (!empty($posted_config['blacklist'])) {
+        $posted_config['blacklist'] = explode(',', $posted_config['blacklist']);
     } else {
         $posted_config['blacklist'] = [];
     }
 
 
-    $changed = array_keys(array_merge(array_diff_assoc(array_map('serialize',$posted_config),array_map('serialize',$this->getConfig())), array_diff_assoc(array_map('serialize',$this->getConfig()),array_map('serialize',$posted_config))));
-    foreach ( $posted_config as $index=>$val ) {
-        if ( in_array($index, $changed) ){
-            echo rex_view::warning($this->i18n('search_it_settings_saved_warning')); break;
-        } elseif ( is_array($this->getConfig($index)) && is_array($val) ) { // Der Konfig-Wert ist ein Array
-            if ( count(array_merge(
-                array_diff_assoc(array_map('serialize',$this->getConfig($index)), array_map('serialize',$val)),
-                array_diff_assoc(array_map('serialize',$val), array_map('serialize',$this->getConfig($index))) )) > 0 ) {
-                echo rex_view::warning($this->i18n('search_it_settings_saved_warning')); break;
+    $changed = array_keys(array_merge(array_diff_assoc(array_map('serialize', $posted_config), array_map('serialize', $this->getConfig())), array_diff_assoc(array_map('serialize', $this->getConfig()), array_map('serialize', $posted_config))));
+    foreach ($posted_config as $index => $val) {
+        if (in_array($index, $changed)) {
+            echo rex_view::warning($this->i18n('search_it_settings_saved_warning'));
+            break;
+        } elseif (is_array($this->getConfig($index)) && is_array($val)) { // Der Konfig-Wert ist ein Array
+            if (count(array_merge(
+                    array_diff_assoc(array_map('serialize', $this->getConfig($index)), array_map('serialize', $val)),
+                    array_diff_assoc(array_map('serialize', $val), array_map('serialize', $this->getConfig($index))))) > 0) {
+                echo rex_view::warning($this->i18n('search_it_settings_saved_warning'));
+                break;
             }
         }
     }
@@ -45,22 +47,21 @@ $content2 = [];
 $formElements = [];
 
 
-
 $categories = [];
-foreach(search_it_getCategories(false) as $id => $name){
-  $categories[] = array(
-      'value' => $id,
-      'selected' => !empty($this->getConfig('exclude_category_ids')) AND is_array($this->getConfig('exclude_category_ids')) AND in_array($id,$this->getConfig('exclude_category_ids')),
-      'name' => $name.' ('.$id.')'
-  );
+foreach (search_it_getCategories(false) as $id => $name) {
+    $categories[] = array(
+        'value' => $id,
+        'selected' => !empty($this->getConfig('exclude_category_ids')) and is_array($this->getConfig('exclude_category_ids')) and in_array($id, $this->getConfig('exclude_category_ids')),
+        'name' => $name . ' (' . $id . ')'
+    );
 }
 $articles = [];
-foreach(search_it_getArticles() as $id => $name){
-  $articles[] = array(
-      'value' => $id,
-      'selected' => !empty($this->getConfig('exclude_article_ids')) AND is_array($this->getConfig('exclude_article_ids')) AND in_array($id,$this->getConfig('exclude_article_ids')),
-      'name' => $name.' ('.$id.')'
-  );
+foreach (search_it_getArticles() as $id => $name) {
+    $articles[] = array(
+        'value' => $id,
+        'selected' => !empty($this->getConfig('exclude_article_ids')) and is_array($this->getConfig('exclude_article_ids')) and in_array($id, $this->getConfig('exclude_article_ids')),
+        'name' => $name . ' (' . $id . ')'
+    );
 }
 $content2[] = search_it_getSettingsFormSection(
     'search_it_exclude',
@@ -71,7 +72,7 @@ $content2[] = search_it_getSettingsFormSection(
             'id' => 'search_it_settings_exclude_blacklist',
             'name' => 'search_config[blacklist]',
             'label' => $this->i18n('search_it_settings_exclude_blacklist'),
-            'value' => !empty($this->getConfig('blacklist')) ? rex_escape(implode(',',$this->getConfig('blacklist'))) : ''
+            'value' => !empty($this->getConfig('blacklist')) ? rex_escape(implode(',', $this->getConfig('blacklist'))) : ''
         ),
         array(
             'type' => 'multipleselect',
@@ -89,16 +90,13 @@ $content2[] = search_it_getSettingsFormSection(
             'size' => 15,
             'options' => $categories
         )
-    ),'edit'
+    ), 'edit'
 );
-
 
 
 $fragment = new rex_fragment();
 $fragment->setVar('content', $content2, false);
 $content .= $fragment->parse('core/page/grid.php');
-
-
 
 
 $formElements = [];

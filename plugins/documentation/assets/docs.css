@@ -3,6 +3,7 @@
     margin-top: 5px;
     margin-bottom: 20px;
 }
+
 .search_it_documentation h2 {
     font-size: 16px;
     margin-top: 40px;
@@ -13,6 +14,7 @@
     padding: 13px 15px 10px;
     background: #eee;
 }
+
 .search_it_documentation h3 {
     margin-top: 40px;
     margin-bottom: 5px;
@@ -22,10 +24,11 @@
     margin: 20px 0;
     background: #f3f6fb;
 }
+
 .search_it_documentation blockquote h2 {
     margin: -10px -20px 20px;
     background: transparent;
-	border-top: 1px #ccc;
+    border-top: 1px #ccc;
 }
 
 .search_it_documentation ol {
@@ -34,16 +37,19 @@
 
 .search_it_documentation ul {
     margin-bottom: 10px;
-	padding-bottom: 5px;;
+    padding-bottom: 5px;;
     padding-left: 16px;
 }
+
 .search_it_documentation ul li {
     list-style-type: square;
     list-style-position: outside;
 }
+
 .search_it_documentation ul ul {
     padding-top: 5px;
 }
+
 .search_it_documentation ul ul li {
     list-style-type: circle;
     list-style-position: outside;
@@ -68,11 +74,13 @@
     border-bottom: 1px solid #ddd;
     margin: 20px 0 30px;
 }
+
 .search_it_documentation th {
     background: #f7f7f7;
     border-bottom: 2px solid #ddd;
     border-collapse: separate;
 }
+
 .search_it_documentation th,
 .search_it_documentation td {
     border-top: 1px solid #ddd;
@@ -87,31 +95,35 @@
     margin-bottom: 10px;
     padding-left: 0;
 }
+
 .search_it_documentation .yform-docs-navi ul li {
     list-style-type: none;
     background: #eee;
     padding: 0 15px;
     line-height: 40px;
 }
+
 .search_it_documentation .yform-docs-navi ul {
     background: #fff;
     margin-left: -15px;
     margin-right: -15px;
 }
+
 .search_it_documentation .yform-docs-navi ul li li {
     list-style-type: none;
     background: #fff;
     line-height: 30px;
 }
+
 .search_it_documentation .yform-docs-navi ul li li:before {
     font-family: FontAwesome;
     content: '\f0a9';
     margin-right: 10px;
 }
+
 .search_it_documentation .yform-docs-navi ul sup {
     display: none;
 }
-
 
 
 body.rex-theme-dark .search_it_documentation h2 {

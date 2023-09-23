@@ -6,7 +6,7 @@ require_once 'data_table.php';
 
 $data = [];
 for ($i = 0; $i < 20; $i++)
-  $data[] = array('', $i, 2 * $i, $i * $i);
+    $data[] = array('', $i, 2 * $i, $i * $i);
 
 // The $settings array configures the data table:
 $settings = array(

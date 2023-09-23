@@ -1,6 +1,8 @@
 # Einfache Artikel-Suchergebnisse
 
-Dieses Suchergebnis-Modul nimmt einen Suchbegriff mittels GET/POST-Parameter `search` entgegen und gibt gefundene Artikel aus. Es werden keine im Backend gesetzten `Search it`-Einstellungen überschrieben.
+Dieses Suchergebnis-Modul nimmt einen Suchbegriff mittels
+GET/POST-Parameter `search` entgegen und gibt gefundene Artikel aus. Es werden
+keine im Backend gesetzten `Search it`-Einstellungen überschrieben.
 
 ## Modulausgabe (ohne Erläuterungen)
 
@@ -107,7 +109,8 @@ if($request) { // Wenn ein Suchbegriff eingegeben wurde
 
 ## CSS
 
-Das Sucheingabe-Formular kann beliebig formatiert und mit Klassen ausgezeichnet werden. Das nachfolgende CSS formatiert das oben vorgegebene Beispiel.
+Das Sucheingabe-Formular kann beliebig formatiert und mit Klassen ausgezeichnet
+werden. Das nachfolgende CSS formatiert das oben vorgegebene Beispiel.
 
 ```css
 <style>

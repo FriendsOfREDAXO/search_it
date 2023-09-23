@@ -1,6 +1,6 @@
 <?php
 
-rex_sql_table::get(rex::getTable(rex::getTempPrefix().'search_it_index'))
+rex_sql_table::get(rex::getTable(rex::getTempPrefix() . 'search_it_index'))
     ->ensureColumn(new rex_sql_column('id', 'int(11)', false, null, 'auto_increment'))
     ->ensureColumn(new rex_sql_column('fid', 'varchar(191)', true))
     ->ensureColumn(new rex_sql_column('catid', 'int(11)', true))
@@ -23,7 +23,7 @@ rex_sql_table::get(rex::getTable(rex::getTempPrefix().'search_it_index'))
     ->ensure();
 
 
-rex_sql_table::get(rex::getTable(rex::getTempPrefix().'search_it_cache'))
+rex_sql_table::get(rex::getTable(rex::getTempPrefix() . 'search_it_cache'))
     ->ensureColumn(new rex_sql_column('id', 'int(11)', false, null, 'auto_increment'))
     ->ensureColumn(new rex_sql_column('hash', 'char(32)'))
     ->ensureColumn(new rex_sql_column('returnarray', 'longtext', true))
@@ -31,14 +31,14 @@ rex_sql_table::get(rex::getTable(rex::getTempPrefix().'search_it_cache'))
     ->ensureIndex(new rex_sql_index('hash', ['hash']))
     ->ensure();
 
-rex_sql_table::get(rex::getTable(rex::getTempPrefix().'search_it_cacheindex_ids'))
+rex_sql_table::get(rex::getTable(rex::getTempPrefix() . 'search_it_cacheindex_ids'))
     ->ensureColumn(new rex_sql_column('id', 'int(11)', false, null, 'auto_increment'))
     ->ensureColumn(new rex_sql_column('index_id', 'int(11)', true))
     ->ensureColumn(new rex_sql_column('cache_id', 'varchar(255)', true))
     ->setPrimaryKey('id')
     ->ensure();
 
-rex_sql_table::get(rex::getTable(rex::getTempPrefix().'search_it_keywords'))
+rex_sql_table::get(rex::getTable(rex::getTempPrefix() . 'search_it_keywords'))
     ->ensureColumn(new rex_sql_column('id', 'int(11)', false, null, 'auto_increment'))
     ->ensureColumn(new rex_sql_column('keyword', 'varchar(191)'))
     ->ensureColumn(new rex_sql_column('soundex', 'varchar(255)'))

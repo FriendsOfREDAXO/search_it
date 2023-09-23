@@ -23,7 +23,6 @@
 */
 
 
-
 /*
    Fill a color map with a gradient step between two colors.
   Arguments:
@@ -89,15 +88,15 @@ function count_data_sets($data, $data_type)
     foreach ($data as $row)
         if (($n = count($row)) > $max_row) $max_row = $n;
 
-   if ($data_type == 'text-data' || $data_type == 'text-data-yx')
-      return ($max_row - 1);  # Each record is (label Y1 Y2...)
+    if ($data_type == 'text-data' || $data_type == 'text-data-yx')
+        return ($max_row - 1);  # Each record is (label Y1 Y2...)
 
-   if ($data_type == 'data-data' || $data_type == 'data-data-yx')
-      return ($max_row - 2); # Each record is (label X Y1 Y2...)
+    if ($data_type == 'data-data' || $data_type == 'data-data-yx')
+        return ($max_row - 2); # Each record is (label X Y1 Y2...)
 
-   if ($data_type == 'data-data-error')
-      return (($max_row - 2) / 3); # Each record is (label X Y1 Y1+ Y1-...)
+    if ($data_type == 'data-data-error')
+        return (($max_row - 2) / 3); # Each record is (label X Y1 Y1+ Y1-...)
 
-   # Not a recognized data type... Just return something sane.
-   return $max_row;
+    # Not a recognized data type... Just return something sane.
+    return $max_row;
 }

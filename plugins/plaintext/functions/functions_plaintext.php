@@ -1,16 +1,18 @@
 <?php
 
-function search_it_doPlaintext($_ep){
+function search_it_doPlaintext($_ep)
+{
     $subject = $_ep->getSubject();
-    $subject = search_it_getPlaintext($subject, preg_replace('~\s+~ism', ' ', rex_plugin::get('search_it','plaintext')->getConfig('selectors')));
-    return array('text' => $subject, 'process' => !empty(rex_plugin::get('search_it','plaintext')->getConfig('processparent')));
+    $subject = search_it_getPlaintext($subject, preg_replace('~\s+~ism', ' ', rex_plugin::get('search_it', 'plaintext')->getConfig('selectors')));
+    return array('text' => $subject, 'process' => !empty(rex_plugin::get('search_it', 'plaintext')->getConfig('processparent')));
 }
 
 
 // require_once $dir.'/classes/class.simple_html_dom.inc.php';
-function search_it_getPlaintext($_text,$_remove){
+function search_it_getPlaintext($_text, $_remove)
+{
 
-    $pt = rex_plugin::get('search_it','plaintext');
+    $pt = rex_plugin::get('search_it', 'plaintext');
     foreach (explode(',', $pt->getConfig('order')) as $elem) {
         switch ($elem) {
             case 'selectors':
@@ -44,7 +46,7 @@ function search_it_getPlaintext($_text,$_remove){
 
             case 'textile':
                 // strip HTML-tags
-                if (!empty($pt->getConfig('textile')) AND function_exists('rex_textile::parse')) {
+                if (!empty($pt->getConfig('textile')) and function_exists('rex_textile::parse')) {
                     $_text = rex_textile::parse($_text);
                 }
                 break;

@@ -1,10 +1,12 @@
 # Einfache Artikel-Suchergebnisse
 
-Dieses Suchergebnis-Modul nimmt einen Suchbegriff mittels GET/POST-Parameter `search` entgegen und gibt gefundene Medien aus.
+Dieses Suchergebnis-Modul nimmt einen Suchbegriff mittels
+GET/POST-Parameter `search` entgegen und gibt gefundene Medien aus.
 
 ## Search it Einstellungen
 
-In den `Search it`-Einstellungen müssen als Quelle folgende Datenbank-Spalten indexiert werden:
+In den `Search it`-Einstellungen müssen als Quelle folgende Datenbank-Spalten
+indexiert werden:
 
 * `rex_media.title`
 * `rex_media.filename`
@@ -113,10 +115,10 @@ if($request) { // Wenn ein Suchbegriff eingegeben wurde
 </section>
 ```
 
-
 ## CSS
 
-Das Sucheingabe-Formular kann beliebig formatiert und mit Klassen ausgezeichnet werden. Das nachfolgende CSS formatiert das oben vorgegebene Beispiel.
+Das Sucheingabe-Formular kann beliebig formatiert und mit Klassen ausgezeichnet
+werden. Das nachfolgende CSS formatiert das oben vorgegebene Beispiel.
 
 ```css
 <style>

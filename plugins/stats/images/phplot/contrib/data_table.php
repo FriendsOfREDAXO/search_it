@@ -101,13 +101,13 @@ function draw_data_table($img, $settings)
 {
     // Apply defaults, then extract all settings as variables named 'o_*':
     extract(array_merge(array(
-            'color' => array(0, 0, 0),  // Default black
-            'font' => 2,                // Default GD font
-            'position' => array(0, 0),  // Default to upper left corner
-            'width' => 0,               // Default auto width calculation
-            'height' => 0,              // Default auto height calculation
-            'cellpadding' => 4,         // Default line-to-text spacing
-        ), $settings), EXTR_PREFIX_ALL, 'o');
+        'color' => array(0, 0, 0),  // Default black
+        'font' => 2,                // Default GD font
+        'position' => array(0, 0),  // Default to upper left corner
+        'width' => 0,               // Default auto width calculation
+        'height' => 0,              // Default auto height calculation
+        'cellpadding' => 4,         // Default line-to-text spacing
+    ), $settings), EXTR_PREFIX_ALL, 'o');
     list($x, $y) = $o_position; // Expand to separate variables
 
     // Check for mandatory settings:
@@ -144,8 +144,8 @@ function draw_data_table($img, $settings)
 
     // Make sure there are the right number of entries.
     if (count($o_column_widths) != $n_cols
-     || count($o_column_formats) != $n_cols
-     || count($o_column_alignments) != $n_cols) {
+        || count($o_column_formats) != $n_cols
+        || count($o_column_alignments) != $n_cols) {
         trigger_error("draw_data_table error: Mismatch in size of column spec arrays");
         return FALSE; // In case error handler returns
     }
@@ -161,7 +161,7 @@ function draw_data_table($img, $settings)
     // factors are ignored, since each column will be as wide as needed.
     if (empty($o_width)) {
         $o_width = 0;
-        $col = 0; // Index to unskipped columns 
+        $col = 0; // Index to unskipped columns
         for ($i = 0; $i < $n_data_cols; $i++) { // Index to all columns
             if (is_null($o_headers[$i])) continue; // Skip column
             // Find the longest string in this column, post-formatting.
@@ -188,7 +188,7 @@ function draw_data_table($img, $settings)
     // Calculate the column start positions within the table:
     $col_start[0] = 0;
     for ($i = 1; $i < $n_cols; $i++)
-        $col_start[$i] = $col_start[$i-1] + $col_width[$i-1];
+        $col_start[$i] = $col_start[$i - 1] + $col_width[$i - 1];
 
     // Draw the table grid (without outer border)
     $x2 = $x + $o_width - 1;
@@ -211,9 +211,9 @@ function draw_data_table($img, $settings)
         if ($row == 0) $cells = $o_headers; // Header row
         else $cells = $o_data[$row - 1]; // -1 accounts for header row.
 
-        $col = 0; // Index to unskipped columns 
+        $col = 0; // Index to unskipped columns
         for ($i = 0; $i < $n_data_cols; $i++) { // Index to all columns
-           
+
             if (is_null($o_headers[$i])) continue; // NULL header => skip column
 
             if (($cell = $cells[$i]) !== '') { // Empty cell?

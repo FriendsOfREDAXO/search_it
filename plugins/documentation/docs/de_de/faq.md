@@ -2,7 +2,9 @@
 
 ## Mehrsprachigkeit
 
-Search it sucht per Standard in allen Sprachen. Um sprachabhängige Suchen zu erlauben, muss der `search_it`-Klasse die Sprach-ID der Sprache, in der gesucht werden soll, übergeben werden.
+Search it sucht per Standard in allen Sprachen. Um sprachabhängige Suchen zu
+erlauben, muss der `search_it`-Klasse die Sprach-ID der Sprache, in der gesucht
+werden soll, übergeben werden.
 
 **Such-Formular**
 
@@ -18,13 +20,17 @@ $search_it = new search_it(REX_CLANG_ID);
 
 ## Filtern und Sortieren von Suchergebnissen
 
-Das Sortieren von Suchergebnissen ist derzeit noch nicht möglich. Ein passender PR auf GitHub ist jedoch willkommen! Allerdings lassen sich mit ein paar Kniffen dennoch bestimmte Inhalte und Daten von der Indexierung ausschließen.
+Das Sortieren von Suchergebnissen ist derzeit noch nicht möglich. Ein passender
+PR auf GitHub ist jedoch willkommen! Allerdings lassen sich mit ein paar Kniffen
+dennoch bestimmte Inhalte und Daten von der Indexierung ausschließen.
 
 ### In bestimmten Kategorien suchen
 
-Der `search_it`-Klasse kann mitgeteilt werden, auf welche Kategorien und Artikel die Ausgabe der Suchergebnisse beschränkt wird. Diese Artikel und Kategorien müssen zuvor indexiert worden sein.
+Der `search_it`-Klasse kann mitgeteilt werden, auf welche Kategorien und Artikel
+die Ausgabe der Suchergebnisse beschränkt wird. Diese Artikel und Kategorien
+müssen zuvor indexiert worden sein.
 
-**Nur in festgelegten Kategorien suchen** 
+**Nur in festgelegten Kategorien suchen**
 
 ```php
 $search_it = new search_it();
@@ -40,12 +46,15 @@ $search_it->searchInCategories(search_it_getCategories(true, true, array(5))); /
 $result = $search_it->search(rex_request('search', 'string'));
 ```
 
-
 ### Multidomains mit YRewrite, Suche auf Domain eingrenzen
 
-> Wie funktioniert Search it in Kombination mit YRewrite mit verschiedenen Domains?
+> Wie funktioniert Search it in Kombination mit YRewrite mit verschiedenen
+> Domains?
 
-Mit YRewrite können verschiedene Domains in einem System vereint werden. Search it sucht per Standard in allen Domains. Um die Suche auf eine bestimmte Domain zu begrenzen kann im Ausgabemodul die Funktion `searchInCategoryTree()` verwendet werden. Das ganze sieht dann so aus:
+Mit YRewrite können verschiedene Domains in einem System vereint werden. Search
+it sucht per Standard in allen Domains. Um die Suche auf eine bestimmte Domain
+zu begrenzen kann im Ausgabemodul die Funktion `searchInCategoryTree()`
+verwendet werden. Das ganze sieht dann so aus:
 
 ```php
 $search_it = new search_it()
@@ -55,22 +64,31 @@ $search_it->search([Suchbegriff]);
 
 ### Datensätze in Datenbanktabellen filtern
 
+In `Search it` ist es derzeit nicht möglich, eigene Filter-Parameter zu
+definieren.
 
-In `Search it` ist es derzeit nicht möglich, eigene Filter-Parameter zu definieren.
-
-Es ist jedoch möglich, bereits in der MySQL-Tabelle eine `VIEW` zu erstellen, die nur die gewünschten Datensätze enthält. Diese `VIEW` kann dann von `Search it` in den Einstellungen unter `Zusätzliche Datenquellen` als Tabelle indexiert werden.
+Es ist jedoch möglich, bereits in der MySQL-Tabelle eine `VIEW` zu erstellen,
+die nur die gewünschten Datensätze enthält. Diese `VIEW` kann dann
+von `Search it` in den Einstellungen unter `Zusätzliche Datenquellen` als
+Tabelle indexiert werden.
 
 Mögliche Szenarien für eine solche View sind:
 
-* Nur Dateien aus dem Medienpool auflisten, die die Meta-Info `öffentlich` enthalten
+* Nur Dateien aus dem Medienpool auflisten, die die Meta-Info `öffentlich`
+  enthalten
 * Nur Produkte aus einer Produkt-Tabelle, die den status "online" haben
-* Suche in mehreren Datenbanktabellen, die über Relationen mit einander verbunden sind.
+* Suche in mehreren Datenbanktabellen, die über Relationen mit einander
+  verbunden sind.
 
-> **Tipp:** Mit dem REDAXO-AddOn `Adminer` lassen sich die nachfolgenden Schritte direkt aus dem REDAXO-Backend erledigen, ohne sich in `PHPMyAdmin` oder ein anderes DBMS einzuloggen.
+> **Tipp:** Mit dem REDAXO-AddOn `Adminer` lassen sich die nachfolgenden
+> Schritte direkt aus dem REDAXO-Backend erledigen, ohne sich in `PHPMyAdmin` oder
+> ein anderes DBMS einzuloggen.
 
 #### 1. SQL-Abfrage formulieren
 
-Zunächst formulieren wir eine `SELECT`-Abfrage, die nur die gewünschten Datensätze einer Datenbanktabelle übrig lässt. In diesem Beispiel sollen nur Excel-Dateien aus dem Medienpool gefunden werden.
+Zunächst formulieren wir eine `SELECT`-Abfrage, die nur die gewünschten
+Datensätze einer Datenbanktabelle übrig lässt. In diesem Beispiel sollen nur
+Excel-Dateien aus dem Medienpool gefunden werden.
 
 ```sql
 SELECT id, filetype, filename, title
@@ -88,9 +106,12 @@ id  filetype                  filename            title
 
 #### 2. VIEW erstellen
 
-Aus der SELECT-Abfrage wird eine `VIEW` erstellt. Die `VIEW` ist eine Ergebnistabelle und mit den Datensätzen der Original-Tabellen verknüpft. Eine Änderung in der Original-Tabelle wird sofort in der `VIEW` abgebildet.
+Aus der SELECT-Abfrage wird eine `VIEW` erstellt. Die `VIEW` ist eine
+Ergebnistabelle und mit den Datensätzen der Original-Tabellen verknüpft. Eine
+Änderung in der Original-Tabelle wird sofort in der `VIEW` abgebildet.
 
-Aus dem o.g. Beispiel wird nun in der Datenbank eine `VIEW` namens `rex_media_excel_view` erstellt.
+Aus dem o.g. Beispiel wird nun in der Datenbank eine `VIEW`
+namens `rex_media_excel_view` erstellt.
 
 ```sql
 CREATE VIEW rex_media_excel_view AS
@@ -99,19 +120,24 @@ FROM rex_media
 WHERE filetype = "application/vnd.ms-excel"
 ```
 
-Die `VIEW` `rex_media_excel_view` ist jetzt permanent eingerichtet und zugriffsbereit für `Search it`
+Die `VIEW` `rex_media_excel_view` ist jetzt permanent eingerichtet und
+zugriffsbereit für `Search it`
 
 #### 3. Search it konfigurieren
 
-In den `Search it`-Einstellungen des REDAXO-Backends unter `Zusätzliche Datenquellen` kann jetzt `rex_media_excel_view` als Datenquelle angegeben werden. Anschließend muss der Index erneuert werden und ggf. das Suchausgabe-Modul an die Datenbanktabelle angepasst werden, siehe:
+In den `Search it`-Einstellungen des REDAXO-Backends
+unter `Zusätzliche Datenquellen` kann jetzt `rex_media_excel_view` als
+Datenquelle angegeben werden. Anschließend muss der Index erneuert werden und
+ggf. das Suchausgabe-Modul an die Datenbanktabelle angepasst werden, siehe:
 
 * [Aufbau der Suchergebnisse](search_it-result.md)
 * [Erweiterte Suche](module-enhanced.md)
 
-
 ### Module, Blöcke, Artikel oder bestimmte Abschnitte filtern
 
-Das Plaintext-Plugin hat die Möglichkeit, anhand bestimmter Selektoren Inhalte auszuschließen. So werden bspw. `<header>` oder `<footer>` nicht indexiert. Mit diesem Trick können auch ganze Module von der Suche ausschließen.
+Das Plaintext-Plugin hat die Möglichkeit, anhand bestimmter Selektoren Inhalte
+auszuschließen. So werden bspw. `<header>` oder `<footer>` nicht indexiert. Mit
+diesem Trick können auch ganze Module von der Suche ausschließen.
 
 ```html
 <section class="donotsearch">REX_VALUE[1]</section>
@@ -119,13 +145,17 @@ Das Plaintext-Plugin hat die Möglichkeit, anhand bestimmter Selektoren Inhalte 
 
 **Beispiel Plaintext-Selektor:** `section.donotsearch`
 
-Auf dieselbe Weise lassen sich auch Artikel oder Kategorien von der Indexierung ausschließen, indem eine passende Klasse dem `<body>`-Tag zugewiesen wird.
+Auf dieselbe Weise lassen sich auch Artikel oder Kategorien von der Indexierung
+ausschließen, indem eine passende Klasse dem `<body>`-Tag zugewiesen wird.
 
 ## Suchergebnisse hervorheben
 
-Search it kann nicht nur Suchergebnisse innerhalb der Suchergebnis-Liste hervorheben, sondern auch in den betroffnen Artikeln. Dazu muss der `Search Highlighter` in den Einstellungen aktiviert sein.
+Search it kann nicht nur Suchergebnisse innerhalb der Suchergebnis-Liste
+hervorheben, sondern auch in den betroffnen Artikeln. Dazu muss
+der `Search Highlighter` in den Einstellungen aktiviert sein.
 
-Damit die Suche den Suchbegriff an die aufgerufene Seite übergibt, muss der Link in der Suchergebnis-Liste angepasst werden.
+Damit die Suche den Suchbegriff an die aufgerufene Seite übergibt, muss der Link
+in der Suchergebnis-Liste angepasst werden.
 
 ```php
 if($hit['type'] == 'article') {
@@ -139,4 +169,5 @@ if($hit['type'] == 'article') {
 }
 ```
 
-Dadruch wird der Parameter search_highlighter an die Seite übergeben und kann dort ausgelesen werden.
+Dadruch wird der Parameter search_highlighter an die Seite übergeben und kann
+dort ausgelesen werden.

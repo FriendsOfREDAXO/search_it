@@ -2,20 +2,21 @@
 
 - [Beispiel](#beispiel)
 - [Aufbau](#aufbau)
-  - [hits](#hits)
-  - [keywords](#keywords)
-  - [searchterm](#searchterm)
-  - [sql](#sql)
-  - [blacklisted](#blacklisted)
-  - [time](#time)
-  - [count](#count)
-  - [hash](#hash)
-  - [simwordsnewsearch](#simwordsnewsearch)
-  - [simwords](#simwords)
+    - [hits](#hits)
+    - [keywords](#keywords)
+    - [searchterm](#searchterm)
+    - [sql](#sql)
+    - [blacklisted](#blacklisted)
+    - [time](#time)
+    - [count](#count)
+    - [hash](#hash)
+    - [simwordsnewsearch](#simwordsnewsearch)
+    - [simwords](#simwords)
 
 ## Beispiel
 
-Mit jeder Suche gibt `search_it`-Klasse ein Ergebnis-Array mit Suchtreffern zurück.
+Mit jeder Suche gibt `search_it`-Klasse ein Ergebnis-Array mit Suchtreffern
+zurück.
 
 ```text
 Array
@@ -44,27 +45,27 @@ Array
 
 ## Aufbau
 
-
 ### hits
 
-Ein Array der Treffer, wobei jeder Treffer selbst ein Array mit folgendem Inhalt ist:
+Ein Array der Treffer, wobei jeder Treffer selbst ein Array mit folgendem Inhalt
+ist:
 
-Key | Value
------- | ------
-id|die ID des Suchergebnis in der Tabelle `rex_search_it_index`
-fid|die Fremd-ID, von dem Datensatz, der indexiert wurde (z. B. die Artikel-ID)
-table|Datenbank-Tabelle, von der indexiert wurde
-column|das Datenbank-Feld, von der indexiert wurde (NULL, wenn es ein indexierter Artikel ist)
-type|`db_column`, `article` oder `file`
-clang|Sprach-ID
-fileext|Dateiendung (bei Dateisuchen)
-filename|Dateiname (ggf. mit Pfad)
-unchangedtext|der unveränderte Originaltext
-plaintext|der von HTML- und PHP-Tags befreite Text
-teaser|Teaser (Plaintext gekürzt auf die Anzahl der maximalen Teaserzeichen)
-highlightedtext|Text oder Array mit hervorgehobenen Suchbegriffen innerhalb von Textstellen
-article_teaser|wenn eine Datenbankspalte aus der Tabelle `rex_article` indexiert wurde, dann steht hier der Teaser des Artikels
-values|wenn mehrere Spalten der gleichen Tabelle indexiert sind, so stehen deren Werte für jeden Datensatz als Array zur Verfügung.
+ Key             | Value                                                                                                                        
+-----------------|------------------------------------------------------------------------------------------------------------------------------
+ id              | die ID des Suchergebnis in der Tabelle `rex_search_it_index`                                                                 
+ fid             | die Fremd-ID, von dem Datensatz, der indexiert wurde (z. B. die Artikel-ID)                                                  
+ table           | Datenbank-Tabelle, von der indexiert wurde                                                                                   
+ column          | das Datenbank-Feld, von der indexiert wurde (NULL, wenn es ein indexierter Artikel ist)                                      
+ type            | `db_column`, `article` oder `file`                                                                                           
+ clang           | Sprach-ID                                                                                                                    
+ fileext         | Dateiendung (bei Dateisuchen)                                                                                                
+ filename        | Dateiname (ggf. mit Pfad)                                                                                                    
+ unchangedtext   | der unveränderte Originaltext                                                                                                
+ plaintext       | der von HTML- und PHP-Tags befreite Text                                                                                     
+ teaser          | Teaser (Plaintext gekürzt auf die Anzahl der maximalen Teaserzeichen)                                                        
+ highlightedtext | Text oder Array mit hervorgehobenen Suchbegriffen innerhalb von Textstellen                                                  
+ article_teaser  | wenn eine Datenbankspalte aus der Tabelle `rex_article` indexiert wurde, dann steht hier der Teaser des Artikels             
+ values          | wenn mehrere Spalten der gleichen Tabelle indexiert sind, so stehen deren Werte für jeden Datensatz als Array zur Verfügung. 
 
 ### keywords
 
@@ -131,10 +132,12 @@ Vorschlag für ähnliche Suchbegriffe (nur, wenn die Suche kein Ergebnis brachte
 
 ### simwords:
 
-ein Array mit Wörtern, die den Suchbegriffen ähneln, wobei die Schlüssel dieses Arrays die eingegebenen "falschen" Wörter sind und die Werte wiederum ein Array, das wie folgt aufgebaut ist:
+ein Array mit Wörtern, die den Suchbegriffen ähneln, wobei die Schlüssel dieses
+Arrays die eingegebenen "falschen" Wörter sind und die Werte wiederum ein Array,
+das wie folgt aufgebaut ist:
 
-Key | Value
------- | ------
-typedin|noch einmal das "falsche" Wort
-keyword|das "richtige" Schlüsselwort
-count|Anzahl, wie oft das "richtige" Schlüsselwort gefunden wurde
+ Key     | Value                                                       
+---------|-------------------------------------------------------------
+ typedin | noch einmal das "falsche" Wort                              
+ keyword | das "richtige" Schlüsselwort                                
+ count   | Anzahl, wie oft das "richtige" Schlüsselwort gefunden wurde 

@@ -25,7 +25,7 @@ class rex_search_it_command_reindex extends rex_console_command
         $search_it = new search_it();
         $global_return = $search_it->generateIndex();
 
-        if ( $global_return < 4 ) {
+        if ($global_return < 4) {
             echo $io->success(rex_i18n::rawMsg('search_it_generate_done'));
             return 0;
         } else {

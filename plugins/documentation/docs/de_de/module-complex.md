@@ -1,8 +1,13 @@
 # Komplexe Suche
 
-> Hinweis: Dieses Beispiel wurde noch nicht für Search_it portiert. Du kannst helfen, diese Anleitung zu korrigieren: https://github.com/FriendsOfREDAXO/search_it/
+> Hinweis: Dieses Beispiel wurde noch nicht für Search_it portiert. Du kannst
+> helfen, diese Anleitung zu
+> korrigieren: https://github.com/FriendsOfREDAXO/search_it/
 
-Dieses Beispielmodul ähnelt dem Beispiel: Modul zur Suche mit PDF-Dateien, Pagination und Ähnlichkeitssuche. Die Ähnlichkeitssuche sollte aktiviert, sowie bei der Dateisuche die Option "Medienpool indexieren" ausgewählt sein. Außerdem sollte in dem Feld für die Dateiendungen nur "pdf" stehen.
+Dieses Beispielmodul ähnelt dem Beispiel: Modul zur Suche mit PDF-Dateien,
+Pagination und Ähnlichkeitssuche. Die Ähnlichkeitssuche sollte aktiviert, sowie
+bei der Dateisuche die Option "Medienpool indexieren" ausgewählt sein. Außerdem
+sollte in dem Feld für die Dateiendungen nur "pdf" stehen.
 
 Ein erweitertes Suchformular bietet dem Nutzer an, folgende Punkte auszuwählen:
 
@@ -49,7 +54,9 @@ Ein erweitertes Suchformular bietet dem Nutzer an, folgende Punkte auszuwählen:
        
         </form>
 
-In dem Modul zur Präsentation der Suchergebnisse werden die entsprechenden Einstellungen an Search it übergeben, die Suche ausgeführt und letztendlich die Suchergebnisse ausgegeben.
+In dem Modul zur Präsentation der Suchergebnisse werden die entsprechenden
+Einstellungen an Search it übergeben, die Suche ausgeführt und letztendlich die
+Suchergebnisse ausgegeben.
 
         <?php
        

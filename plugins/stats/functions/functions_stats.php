@@ -1,15 +1,17 @@
 <?php
 
-function search_it_stats_storekeywords($_ep){
+function search_it_stats_storekeywords($_ep)
+{
     $_params = $_ep->getSubject();
 
     $stats = new search_it_stats();
     $stats->insert($_params['searchterm'], $_params['count']);
 }
 
-function search_it_stats_addtruncate($_ep){
+function search_it_stats_addtruncate($_ep)
+{
     $subject = $_ep->getSubject();
-    $st = rex_plugin::get('search_it','stats');
+    $st = rex_plugin::get('search_it', 'stats');
 
     if (rex_request('func') == 'truncate') {
         $stats = new search_it_stats();
@@ -21,7 +23,7 @@ function search_it_stats_addtruncate($_ep){
             'searchtermselectmonthcount' => 12
         ));
 
-        $subject = rex_view::success($st->i18n('search_it_stats_truncate_done')).$subject;
+        $subject = rex_view::success($st->i18n('search_it_stats_truncate_done')) . $subject;
     }
 
     $subject .= '<p class="rex-tx1">' . $st->i18n('search_it_stats_truncate') . '</p>
@@ -30,7 +32,8 @@ function search_it_stats_addtruncate($_ep){
     return $subject;
 }
 
-function search_it_getStatSection($_id, $_title, $_content){
+function search_it_getStatSection($_id, $_title, $_content)
+{
     return '<section id="' . $_id . '" class="rex-form-col-1"><legend>' . $_title . '</legend>
 <div class="rex-form-wrapper">
   <div class="rex-form-row">
@@ -42,7 +45,8 @@ function search_it_getStatSection($_id, $_title, $_content){
 </fieldset>';
 }
 
-function search_it_stats_bytesize($_value){
+function search_it_stats_bytesize($_value)
+{
     $units = array(
         'Byte',
         'KByte',

@@ -11,6 +11,7 @@
     margin: 0 0.5em 1em 0.5em;
     list-style-position: inside;
 }
+
 #search_it_stats_maxTopSearchitems,
 #search_it_stats_searchtermselect,
 #search_it_stats_searchtermselectmonthcount {
@@ -19,4 +20,6 @@
     padding: 6px 2px;
 }
 
-#generalstats-list td:first-child { text-align: right; }
+#generalstats-list td:first-child {
+    text-align: right;
+}

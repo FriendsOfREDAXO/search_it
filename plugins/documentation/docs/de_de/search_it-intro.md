@@ -2,7 +2,10 @@
 
 `Search it` ist ein REDAXO 5-AddOn für eine Volltextsuche im Frontend.
 
-Dabei werden Artikel, Medien, Dateien, PDF-Inhalte und Datenbank-Felder in einer DB-Tabelle des AddOns gespeichert und ausgewertet. Suchanfragen können außerdem in einer Cache-Tabelle gespeichert werden. Das spart Serverrechenleistung und führt zur schnelleren Anzeige von Suchergebnissen.
+Dabei werden Artikel, Medien, Dateien, PDF-Inhalte und Datenbank-Felder in einer
+DB-Tabelle des AddOns gespeichert und ausgewertet. Suchanfragen können außerdem
+in einer Cache-Tabelle gespeichert werden. Das spart Serverrechenleistung und
+führt zur schnelleren Anzeige von Suchergebnissen.
 
 ## Systemvoraussetzungen
 
@@ -15,20 +18,26 @@ Dabei werden Artikel, Medien, Dateien, PDF-Inhalte und Datenbank-Felder in einer
 * Volltextsuche für Artikel und beliebige Datenbankspalten mehrsprachenfähig
 * Suche im Originaltext, im Plaintext oder in beiden möglich
 * Suchmodi:
-  * OR (mindestens ein Suchwort muss enthalten sein)
-  * AND (alle Suchworte müssen enthalten sein)
+    * OR (mindestens ein Suchwort muss enthalten sein)
+    * AND (alle Suchworte müssen enthalten sein)
 * Suche mit `LIKE` oder `MATCH AGAINST`
 * Verschiedene Möglichkeiten Suchwörter hervorzuheben
 * Einstellen einer maximalen Trefferanzahl
 * Einstellen der maximalen Zeichenanzahl für den Teaser-Text
-* automatisches (De)Indexieren von Artikeln und Spalten soweit möglich Caching von Suchanfragen
+* automatisches (De)Indexieren von Artikeln und Spalten soweit möglich Caching
+  von Suchanfragen
 * Eingabe von Blacklistwörtern
 * Ausschluss von Artikeln oder Kategorien möglich
 * Ähnliche Wörter werden von der Suche automatisch vorgeschlagen
 * Suchbegriffe können mit Anführungszeichen (") umschlossen werden
-* Suchbegriffe können mit einer beliebigen Anzahl von vorangestellten Pluszeichen (+) höher gewichtet werden (wirkt sich auf die Reihenfolge der Ergebnisse aus)
-* zwei verschieden Arten, um den Suchindex zu erneuern (wenn es Probleme mit der max_execution_time gibt)
-* für Entwickler interessant: über die Methoden der search_it-Klasse kann die Suche verfeinert bzw. für mehrere Module unterschiedlich angepasst werden, außerdem ist z. B. eine Pagination von Suchergebnissen möglich
+* Suchbegriffe können mit einer beliebigen Anzahl von vorangestellten
+  Pluszeichen (+) höher gewichtet werden (wirkt sich auf die Reihenfolge der
+  Ergebnisse aus)
+* zwei verschieden Arten, um den Suchindex zu erneuern (wenn es Probleme mit der
+  max_execution_time gibt)
+* für Entwickler interessant: über die Methoden der search_it-Klasse kann die
+  Suche verfeinert bzw. für mehrere Module unterschiedlich angepasst werden,
+  außerdem ist z. B. eine Pagination von Suchergebnissen möglich
 * Angabe von Kategorien, Artikeln und DB-Spalten, in denen gesucht werden soll
 * Durchsuchen von beliebigen Ordnern mit beliebigen Dateien möglich
 * einfache Konfiguration im Backend
@@ -36,17 +45,22 @@ Dabei werden Artikel, Medien, Dateien, PDF-Inhalte und Datenbank-Felder in einer
 
 ## Plugins
 
-* `Plaintext`: Reduziert Artikel auf reinen Text und entfernt dabei alle HTML-Tags.
-* `Statistik`: Liefert Informationen zur `Search it`-Datenbank und zu den häufigsten Suchanfragen.
+* `Plaintext`: Reduziert Artikel auf reinen Text und entfernt dabei alle
+  HTML-Tags.
+* `Statistik`: Liefert Informationen zur `Search it`-Datenbank und zu den
+  häufigsten Suchanfragen.
 * `Dokumentation`: Zeigt diese Dokumentation an.
 
-> Hinweis: Die Plugins `Reindex` und `Search Highlighter` aus `RexSearch für REDAXO 4` wurden in `Seach it` integriert.
+> Hinweis: Die Plugins `Reindex` und `Search Highlighter`
+> aus `RexSearch für REDAXO 4` wurden in `Seach it` integriert.
 
 ## Erste Schritte
 
 ### Hinweise zur Installation
 
-Die Installation erfolgt über den REDAXO 5 Installer, alternativ gibt es die aktuellste Beta-Version auf [GitHub](https://github.com/friendsofredaxo/search_it).
+Die Installation erfolgt über den REDAXO 5 Installer, alternativ gibt es die
+aktuellste Beta-Version
+auf [GitHub](https://github.com/friendsofredaxo/search_it).
 
 Bei der Installation werden fünf Datenbanktabellen angelegt:
 
@@ -69,12 +83,28 @@ Bei der Installation werden fünf Datenbanktabellen angelegt:
 
 ### Häufige Fehler
 
-* Bleibt die Indextabelle leer, könnte ein .htaccess Zugriffsschutz die Indexierung verhindern.
-* Ggf. verhindert auch das aktivierte `Maintenance`-AddOn die Indexierung. `Search it` indexiert über das Frontend, weshalb das Frontend "offen" sein muss.
-* Bleibt die Indextabelle leer, ist eventuell ein "Minifier" im Einsatz, der HTML-Kommentare aus dem Quellcode entfernt.
-`Search it` benötigt HTML-Kommentare, um die zu indexierenden Inhalte zu markieren. Man kann auf den URL-Parameter 'search_it_build_index' prüfen, z.B. durch `rex_request('search_it_build_index', 'string', false)` - wenn er gesetzt ist, ist es ein Aufruf von `Search it`
-* Findet sich im syslog die Meldung `Warning: You should not use non-secure socket connections while connecting to "my-domain.tld"` so liegt dies daran, das die eigene Domain in den Einstellungen unter System (oder bei Verwendung von des Addons `YRewrite` in den Einstellungen dort) ohne `https://` eingetragen wurde.
+* Bleibt die Indextabelle leer, könnte ein .htaccess Zugriffsschutz die
+  Indexierung verhindern.
+* Ggf. verhindert auch das aktivierte `Maintenance`-AddOn die
+  Indexierung. `Search it` indexiert über das Frontend, weshalb das Frontend "
+  offen" sein muss.
+* Bleibt die Indextabelle leer, ist eventuell ein "Minifier" im Einsatz, der
+  HTML-Kommentare aus dem Quellcode entfernt.
+  `Search it` benötigt HTML-Kommentare, um die zu indexierenden Inhalte zu
+  markieren. Man kann auf den URL-Parameter 'search_it_build_index' prüfen, z.B.
+  durch `rex_request('search_it_build_index', 'string', false)` - wenn er
+  gesetzt ist, ist es ein Aufruf von `Search it`
+* Findet sich im syslog die
+  Meldung `Warning: You should not use non-secure socket connections while connecting to "my-domain.tld"`
+  so liegt dies daran, das die eigene Domain in den Einstellungen unter System (
+  oder bei Verwendung von des Addons `YRewrite` in den Einstellungen dort)
+  ohne `https://` eingetragen wurde.
 
 ### Wo finde ich weitere Hilfe?
 
-Die aktuelle Search it-Version wird in [FriendsOfREDAXO](https://github.com/friendsofredaxo/search_it) gepflegt. Dort können Fragen gestellt und Bugs gemeldet werden (Issues). Fragen können auch im [REDAXO-Forum](www.redaxo.org/de/forum/) oder im [REDAXO-Channel auf Slack](https://friendsofredaxo.slack.com/messages/redaxo/) gestellt werden.
+Die aktuelle Search it-Version wird
+in [FriendsOfREDAXO](https://github.com/friendsofredaxo/search_it) gepflegt.
+Dort können Fragen gestellt und Bugs gemeldet werden (Issues). Fragen können
+auch im [REDAXO-Forum](www.redaxo.org/de/forum/) oder
+im [REDAXO-Channel auf Slack](https://friendsofredaxo.slack.com/messages/redaxo/)
+gestellt werden.

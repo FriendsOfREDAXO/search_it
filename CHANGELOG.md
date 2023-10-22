@@ -1,4 +1,7 @@
 # Changelog
+## Version 6.9.10 (2023-10-21)
+- Security Fix: escape Suchbegriffe
+
 ## Version 6.9.9 (2023-09-23)
 - Fix indexing wenn hinter Proxy ;-)
 - Code Style (CS)

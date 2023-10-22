@@ -114,11 +114,13 @@ $content[] = search_it_getSettingsFormSection(
 
 // top search terms
 $topsearchtermlist = '';
-$topsearchtermselect = '<option value="all" ' . ($this->getConfig('searchtermselect') == 'all' ? ' selected="selected"' : '') . '>' . rex_escape($this->i18n('search_it_stats_searchterm_timestats_title0_all')) . '</option>';
+$topsearchtermselect = '<option value="all" ' . ($this->getConfig('searchtermselect') == 'all' ? ' selected="selected"' : '') . '>' . $this->i18n('search_it_stats_searchterm_timestats_title0_all') . '</option>';
 $topsearchterms = $stats->getTopSearchterms($this->getConfig('maxtopsearchitems'));
 foreach ($topsearchterms as $term) {
     $topsearchtermlist .= '<li class="' . ($term['success'] == '1' ? 'search_it-stats-success text-success' : 'search_it-stats-fail text-danger') . '"><strong>' . rex_escape($term['term']) . '</strong> <em>(' . $term['count'] . ')</em></li>';
-    $topsearchtermselect .= '<option value="_' . rex_escape($term['term']) . '"' . (($this->getConfig('searchtermselect') == '_' . $term['term']) ? ' selected="selected"' : '') . '>' . $this->i18n('search_it_stats_searchterm_timestats_title0_single', rex_escape($term['term'])) . '</option>';
+    $topsearchtermselect .= '<option value="_' . rex_escape($term['term'], 'url') . '"' .
+        ($this->getConfig('searchtermselect') == '_' . rex_escape($term['term'], 'url') ? ' selected="selected"' : '') . '>' .
+        rex_i18n::rawMsg('search_it_stats_searchterm_timestats_title0_single', rex_escape($term['term'])) . '</option>';
 }
 
 if (!empty($topsearchterms)) {
@@ -185,10 +187,10 @@ $searchtermselectmonthcount .= '</select>';
 
 $pre = rex_i18n::rawMsg('search_it_stats_searchterm_timestats_title', $topsearchtermselect, $searchtermselectmonthcount);
 $rest = '<img src="index.php?page=search_it/stats&amp;func=image&amp;image=searchterm_timestats&amp;term='
-    . rex_escape(urlencode($this->getConfig('searchtermselect') == 'all' ? 'all' : $this->getConfig('searchtermselect')))
+    . ($this->getConfig('searchtermselect') == 'all' ? 'all' : $this->getConfig('searchtermselect'))
     . '&amp;monthcount=' . intval($this->getConfig('searchtermselectmonthcount')) . '"  alt="'
-    . $this->i18n('search_it_stats_searchterm_timestats_title', $this->getConfig('searchtermselect') == 'all' ? $this->i18n('search_it_stats_searchterm_timestats_title0_all') : $this->i18n('search_it_stats_searchterm_timestats_title0_single', substr($this->getConfig('searchtermselect'), 1)), intval($this->getConfig('searchtermselectmonthcount'))) . '"'
-    . ' title="' . rex_escape($this->i18n('search_it_stats_searchterm_timestats_title', $this->getConfig('searchtermselect') == 'all' ? $this->i18n('search_it_stats_searchterm_timestats_title0_all') : $this->i18n('search_it_stats_searchterm_timestats_title0_single', substr($this->getConfig('searchtermselect'), 1)), intval($this->getConfig('searchtermselectmonthcount')))) . '" />';
+    . $this->i18n('search_it_stats_searchterm_timestats_title', $this->getConfig('searchtermselect') == 'all' ? $this->i18n('search_it_stats_searchterm_timestats_title0_all') : rex_i18n::rawMsg('search_it_stats_searchterm_timestats_title0_single', substr($this->getConfig('searchtermselect'), 1)), intval($this->getConfig('searchtermselectmonthcount'))) . '"'
+    . ' title="' . $this->i18n('search_it_stats_searchterm_timestats_title', $this->getConfig('searchtermselect') == 'all' ? $this->i18n('search_it_stats_searchterm_timestats_title0_all') : rex_i18n::rawMsg('search_it_stats_searchterm_timestats_title0_single', substr($this->getConfig('searchtermselect'), 1)), intval($this->getConfig('searchtermselectmonthcount'))) . '" />';
 
 $content[] = search_it_getSettingsFormSection(
     'searchterm_timestats',
@@ -276,7 +278,7 @@ $content[] = '</div>';
                                     select = '';
                                 }
                                 jQuery('#search_it_stats_searchtermselect').append(
-                                    jQuery('<option value="_' + item.term + '"' + select + '>').text('"' + item.term + '"')
+                                    jQuery('<option value="_' + encodeURIComponent(item.term) + '"' + select + '>').text(item.term)
                                 );
                             });
 

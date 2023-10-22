@@ -30,11 +30,11 @@ foreach ($stats->getTimestats($term, $this->getConfig('searchtermselectmonthcoun
         $max = $month['count'];
 }
 
-$title = $this->i18n(
+$title = rex_i18n::rawMsg(
     'search_it_stats_searchterm_timestats_title',
     empty($term)
         ? $this->i18n('search_it_stats_searchterm_timestats_title0_all')
-        : $this->i18n(
+        : rex_i18n::rawMsg(
         'search_it_stats_searchterm_timestats_title0_single',
         $term
     ),

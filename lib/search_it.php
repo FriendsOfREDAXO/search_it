@@ -262,7 +262,7 @@ class search_it
 
             if($indexcheck === false)
                 {
-                $return[$langID] = SEARCH_IT_ART_IDNOTFOUND;
+                $return[$langID] = SEARCH_IT_ART_EXCLUDED;
                 continue;
             }
 		

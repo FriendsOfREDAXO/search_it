@@ -254,7 +254,18 @@ class search_it
                 $return[$langID] = SEARCH_IT_ART_IDNOTFOUND;
                 continue;
             }
+            
+            //EP to check if Article should be indexed  
+            $indexcheck = rex_extension::registerPoint(new \rex_extension_point('SEARCH_IT_INDEXARTICLE', true, [
+                'article' => $article
+            ]));
 
+            if($indexcheck === false)
+                {
+                $return[$langID] = SEARCH_IT_ART_IDNOTFOUND;
+                continue;
+            }
+		
             if (is_object($article) and ($article->isOnline() or rex_addon::get('search_it')->getConfig('indexoffline')) and $_id != 0
                 and ($_id != rex_article::getNotfoundArticleId() or $_id == rex_article::getSiteStartArticleId())) {
 

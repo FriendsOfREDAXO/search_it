@@ -256,12 +256,11 @@ class search_it
             }
             
             //EP to check if Article should be indexed  
-            $indexcheck = rex_extension::registerPoint(new \rex_extension_point('SEARCH_IT_INDEXARTICLE', true, [
+            $doindex = rex_extension::registerPoint(new \rex_extension_point('SEARCH_IT_INDEX_ARTICLE', true, [
                 'article' => $article
             ]));
 
-            if($indexcheck === false)
-                {
+            if ($doindex === false) {
                 $return[$langID] = SEARCH_IT_ART_EXCLUDED;
                 continue;
             }

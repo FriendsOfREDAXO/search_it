@@ -94,7 +94,7 @@
             m.bgiframe()
         } catch (y) {
         }
-        C.keypress(a)
+        C.keyup(a)
     }, e.fn.suggest = function (t, s) {
         return t ? (s = s || {}, s.source = t, s.delay = s.delay || 100, s.resultsClass = s.resultsClass || "ac_results", s.selectClass = s.selectClass || "ac_over", s.matchClass = s.matchClass || "ac_match", s.minchars = s.minchars || 2, s.delimiter = s.delimiter || "\n", s.onSelect = s.onSelect || !1, s.maxCacheSize = s.maxCacheSize || 65536, this.each(function () {
             new e.suggest(this, s)
@@ -197,7 +197,7 @@
             m.bgiframe()
         } catch (y) {
         }
-        C.keypress(a)
+        C.keyup(a)
     }, e.fn.suggest = function (t, s) {
         return t ? (s = s || {}, s.source = t, s.delay = s.delay || 100, s.resultsClass = s.resultsClass || "ac_results", s.selectClass = s.selectClass || "ac_over", s.matchClass = s.matchClass || "ac_match", s.minchars = s.minchars || 2, s.delimiter = s.delimiter || "\n", s.onSelect = s.onSelect || !1, s.maxCacheSize = s.maxCacheSize || 65536, this.each(function () {
             new e.suggest(this, s)

@@ -18,8 +18,8 @@ führt zur schnelleren Anzeige von Suchergebnissen.
 * Volltextsuche für Artikel und beliebige Datenbankspalten mehrsprachenfähig
 * Suche im Originaltext, im Plaintext oder in beiden möglich
 * Suchmodi:
-    * OR (mindestens ein Suchwort muss enthalten sein)
-    * AND (alle Suchworte müssen enthalten sein)
+  * OR (mindestens ein Suchwort muss enthalten sein)
+  * AND (alle Suchworte müssen enthalten sein)
 * Suche mit `LIKE` oder `MATCH AGAINST`
 * Verschiedene Möglichkeiten Suchwörter hervorzuheben
 * Einstellen einer maximalen Trefferanzahl
@@ -108,3 +108,10 @@ Dort können Fragen gestellt und Bugs gemeldet werden (Issues). Fragen können
 auch im [REDAXO-Forum](www.redaxo.org/de/forum/) oder
 im [REDAXO-Channel auf Slack](https://friendsofredaxo.slack.com/messages/redaxo/)
 gestellt werden.
+
+## Credits
+
+xong (Robert Rupf)
+tyrant88 (Norbert Micheel)
+alexplusde (Alexander Walther)
+TobiasKrais (Tobias Krais)

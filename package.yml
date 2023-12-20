@@ -1,5 +1,5 @@
 package: search_it
-version: '6.10.1'
+version: '6.10.2'
 author: Friends Of REDAXO
 supportpage: https://github.com/FriendsOfREDAXO/search_it
 
@@ -21,6 +21,13 @@ page:
                 addsources: { title: 'translate:settings_addsources' }
                 blacklist: { title: 'translate:settings_blacklist' }
         test: { title: 'translate:test', icon: rex-icon fa-flask }
+        docs:
+            title: search_it_docs
+            icon: rex-icon fa-info-circle
+            itemclass: pull-right
+            perm: search_it[docs]
+
+
 
 console_commands:
     search_it:reindex: rex_search_it_command_reindex

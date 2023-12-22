@@ -16,7 +16,6 @@ if (!array_key_exists($currenMDFile, $mdFiles)) {
 }
 
 $page = rex_be_controller::getPageObject('search_it/docs');
-
 if (null !== $page) {
     foreach ($mdFiles as $key => $mdFile) {
         $keyWithoudPrio = mb_substr($key, 3);
@@ -30,7 +29,7 @@ if (null !== $page) {
     }
 }
 
-echo rex_view::title($this->i18n('search_it_title'));
+echo rex_view::title($this->i18n('title') . ' <small>(' . $this->getProperty('version') . ')</small>');
 
 [$Toc, $Content] = rex_markdown::factory()->parseWithToc(rex_file::require($mdFiles[$currenMDFile]), 2, 3, [
     rex_markdown::SOFT_LINE_BREAKS => false,
@@ -43,6 +42,6 @@ $fragment->setVar('toc', $Toc, false);
 $content = $fragment->parse('core/page/docs.php');
 
 $fragment = new rex_fragment();
-$fragment->setVar('title', rex_i18n::msg('package_help') . ' ', false);
+//$fragment->setVar('title', rex_i18n::msg('package_help') . ' ', false);
 $fragment->setVar('body', $content, false);
 echo $fragment->parse('core/page/section.php');

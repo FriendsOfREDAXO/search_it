@@ -28,6 +28,7 @@ function search_it_getArticleIds($cats = false)
     return $return;
 }
 
+echo rex_view::title($this->i18n('title') . ' <small>(' . $this->getProperty('version') . ')</small>');
 
 if (!empty(rex_get('do')) and rex_get('do') == 'incremental') {
 

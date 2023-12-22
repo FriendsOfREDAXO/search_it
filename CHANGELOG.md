@@ -1,4 +1,7 @@
 # Changelog
+
+- documentation plugin removed, turned into subpages thx @alexplusde
+
 ## Version 6.10.1 (2023-12-18)
 
 - keypress event replaced by keyup

@@ -1,5 +1,7 @@
 <?php
 
+echo rex_view::title($this->i18n('title') . ' <small>(' . $this->getProperty('version') . ')</small>');
+
 $content = '';
 $buttons = '';
 

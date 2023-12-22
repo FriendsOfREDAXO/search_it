@@ -4,6 +4,7 @@ $content2 = [];
 $formElements = [];
 $dumpstr = '';
 
+echo rex_view::title($this->i18n('title') . ' <small>(' . $this->getProperty('version') . ')</small>');
 
 $buttons = '<button class="btn btn-save" type="submit" name="search_it_test" value="1" ' . rex::getAccesskey($this->i18n('search_it_test_submit'), 'save') . '>' . $this->i18n('search_it_test_submit') . '</button></form>';
 

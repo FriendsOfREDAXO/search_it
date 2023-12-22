@@ -1,4 +1,4 @@
-# Einfache Artikel-Suchergebnisse
+# Einfache Medien-Suchergebnisse
 
 Dieses Suchergebnis-Modul nimmt einen Suchbegriff mittels
 GET/POST-Parameter `search` entgegen und gibt gefundene Medien aus.

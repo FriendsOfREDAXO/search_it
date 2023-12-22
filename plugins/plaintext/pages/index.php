@@ -1,5 +1,7 @@
 <?php
 
+echo rex_view::title($this->i18n('title') . ' <small>(' . $this->getProperty('version') . ')</small>');
+
 if (rex_post('sendit', 'boolean')) {
 
     $posted_config = rex_post('search_it_plaintext', [

@@ -567,27 +567,25 @@ function search_it_config_unserialize($_str)
  */
 function soundex_ger($word)
 {
-    //echo "<br>input: <b>" . $word . "</b>";
-
-    $code = "";
+    $code = '';
     $word = strtolower($word);
 
     if (strlen($word) < 1) {
-        return "";
+        return '';
     }
 
     // Umwandlung: v->f, w->f, j->i, y->i, ph->f, ä->a, ö->o, ü->u, ß->ss, é->e, è->e, ê->e, à->a, á->a, â->a, ë->e
     $word = str_replace(array("ç", "v", "w", "j", "y", "ph", "ä", "ö", "ü", "ß", "é", "è", "ê", "à", "á", "â", "ë"), array("c", "f", "f", "i", "i", "f", "a", "o", "u", "ss", "e", "e", "e", "a", "a", "a", "e"), $word);
-    //echo "<br>optimiert1: <b>" . $word . "</b>";
 
     // Nur Buchstaben (keine Zahlen, keine Sonderzeichen)
     $word = preg_replace('/[^a-zA-Z]/', '', $word);
-    //echo "<br>optimiert2: <b>" . $word . "</b>";
-
 
     $wordlen = strlen($word);
-    $char = str_split($word);
+    if (!$wordlen > 0) {
+        return '';
+    }
 
+    $char = str_split($word);
 
     // Sonderfälle bei Wortanfang (Anlaut)
     if ($char[0] == 'c') {
@@ -722,9 +720,9 @@ function soundex_ger($word)
     //echo "<br>code2: <b>" . $code . "</b><br />";
     // entfernen aller Codes "0" ausser am Anfang
     $codelen = strlen($code);
-    $num = [];
+
     $num = str_split($code);
-    $phoneticcode = $num[0];
+    $phoneticcode = $num[0] ?? 0;
 
     for ($x = 1; $x < $codelen; $x++) {
         if ($num[$x] != "0") {

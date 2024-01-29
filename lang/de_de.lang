@@ -93,7 +93,7 @@ search_it_generate_delete_keywords_confirm = Wirklich alle Keywords löschen?
 search_it_generate_keywords_deleted = Alle Keywords wurden gelöscht
 search_it_generate_inprogress = Index wird erstellt. Es erscheint eine Nachricht, wenn der Index erstellt wurde.
 search_it_generate_done = Index wurde erstellt
-search_it_generate_error = Fehler bei der Indexierung <br> Details im <a href="/redaxo/index.php?page=system/log">REDAXO SystemLog</a>
+search_it_generate_error = Fehler bei der Indexierung <br> Details im <a href="index.php?page=system/log">REDAXO SystemLog</a>
 search_it_generate_cancel = Erstellung des Index abgebrochen
 search_it_generate_duration = Dauer:
 search_it_generate_timeleft = Verbleibend:

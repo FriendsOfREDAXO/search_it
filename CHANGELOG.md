@@ -1,6 +1,7 @@
 # Changelog
 
 - documentation plugin removed, turned into subpages thx @alexplusde
+- Fix Link to SysLog in Backend thx @godsdog
 
 ## Version 6.10.1 (2023-12-18)
 

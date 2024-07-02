@@ -80,7 +80,7 @@ function search_it_getCategories($_ignoreoffline = true, $_onlyIDs = false, $_ca
             if ($_onlyIDs) {
                 $return[] = $cat['id'];
             } else {
-                $return[$cat['id']] = str_repeat('&nbsp;', substr_count($cat['path'], '|') * 2 - 2) . $cat['catname'];
+                $return[$cat['id']] = str_repeat('&nbsp;', mb_substr_count($cat['path'], '|') * 2 - 2) . $cat['catname'];
             }
 
             array_splice($cats, 0, 0, $sql->getArray(sprintf($query, $cat['id'])));
@@ -94,7 +94,7 @@ function search_it_getDirs($_startDir = '', $_getSubdirs = false): array
 {
     $si = rex_addon::get('search_it');
 
-    $startDepth = substr_count($_startDir, '/');
+    $startDepth = mb_substr_count($_startDir, '/');
     if (@is_dir($_SERVER['DOCUMENT_ROOT'] . $_startDir)) {
         $dirs2 = array_diff(scandir($_SERVER['DOCUMENT_ROOT'] . $_startDir), array('.', '..'));
     } else {
@@ -114,7 +114,7 @@ function search_it_getDirs($_startDir = '', $_getSubdirs = false): array
     while (!empty($dirs)) {
         $dir = array_shift($dirs);
 
-        $depth = substr_count($dir, '/') - $startDepth;
+        $depth = mb_substr_count($dir, '/') - $startDepth;
         if (@is_dir($_SERVER['DOCUMENT_ROOT'] . $dir) and $depth <= $si->getConfig('dirdepth')) {
             $return[$_SERVER['DOCUMENT_ROOT'] . $dir] = $dir;
             $subdirs = [];
@@ -143,7 +143,7 @@ function search_it_getFiles($_startDir = '', $_fileexts = [], $_getSubdirs = fal
         $fileextPattern = '~\.([^.]+)$~is';
     }
 
-    $startDepth = substr_count($_startDir, '/');
+    $startDepth = mb_substr_count($_startDir, '/');
     if (@is_dir($_SERVER['DOCUMENT_ROOT'] . $_startDir)) {
         $dirs2 = array_diff(scandir($_SERVER['DOCUMENT_ROOT'] . $_startDir), array('.', '..'));
     } else {
@@ -165,7 +165,7 @@ function search_it_getFiles($_startDir = '', $_fileexts = [], $_getSubdirs = fal
     while (!empty($dirs)) {
         $dir = array_shift($dirs);
 
-        $depth = substr_count($dir, '/') - $startDepth;
+        $depth = mb_substr_count($dir, '/') - $startDepth;
         if (@is_dir($_SERVER['DOCUMENT_ROOT'] . $dir) and $depth <= $si->getConfig('dirdepth')) {
             $subdirs = [];
             foreach (array_diff(scandir($_SERVER['DOCUMENT_ROOT'] . $dir), array('.', '..')) as $subdir) {
@@ -463,7 +463,7 @@ function search_it_config_unserialize($_str)
 {
     $conf = unserialize($_str);
 
-    if (strpos($_str, '\\"') === false) {
+    if (mb_strpos($_str, '\\"') === false) {
         return $conf;
     }
 
@@ -570,7 +570,7 @@ function soundex_ger($word)
     $code = '';
     $word = strtolower($word);
 
-    if (strlen($word) < 1) {
+    if (mb_strlen($word) < 1) {
         return '';
     }
 
@@ -580,12 +580,12 @@ function soundex_ger($word)
     // Nur Buchstaben (keine Zahlen, keine Sonderzeichen)
     $word = preg_replace('/[^a-zA-Z]/', '', $word);
 
-    $wordlen = strlen($word);
+    $wordlen = mb_strlen($word);
     if (!$wordlen > 0) {
         return '';
     }
 
-    $char = str_split($word);
+    $char = mb_str_split($word);
 
     // Sonderfälle bei Wortanfang (Anlaut)
     if ($char[0] == 'c') {
@@ -719,9 +719,9 @@ function soundex_ger($word)
     $code = preg_replace("/(.)\\1+/", "\\1", $code);
     //echo "<br>code2: <b>" . $code . "</b><br />";
     // entfernen aller Codes "0" ausser am Anfang
-    $codelen = strlen($code);
+    $codelen = mb_strlen($code);
 
-    $num = str_split($code);
+    $num = mb_str_split($code);
     $phoneticcode = $num[0] ?? 0;
 
     for ($x = 1; $x < $codelen; $x++) {
@@ -811,7 +811,7 @@ function search_it_getUrlAddOnTableName()
         $allTables = $sql->getTables();
 
         foreach ($allTables as $oneTable) {
-            if (strpos($oneTable, \Url\UrlManagerSql::TABLE_NAME) !== false) {
+            if (mb_strpos($oneTable, \Url\UrlManagerSql::TABLE_NAME) !== false) {
                 $tableName = $oneTable;
                 break;
             }

@@ -1170,7 +1170,7 @@ class search_it
         $return = '';
         $aborted = false;
         foreach ($textArray as $word) {
-            if ((($strlen = strlen($word)) + $i) > $this->maxTeaserChars) {
+            if ((($strlen = mb_strlen($word)) + $i) > $this->maxTeaserChars) {
                 $aborted = true;
                 break;
             }
@@ -1328,7 +1328,7 @@ class search_it
             if ($notBlacklisted) {
                 // whitelisted words get extra weighted
                 $this->searchArray[$count] = array('search' => $word,
-                    'weight' => strlen($plus) + 1 + (array_key_exists($word, $this->whitelist) ? $this->whitelist[$word] : 0),
+                    'weight' => mb_strlen($plus) + 1 + (array_key_exists($word, $this->whitelist) ? $this->whitelist[$word] : 0),
                     'clang' => $this->clang
                 );
                 $count++;
@@ -1870,7 +1870,7 @@ class search_it
                 for ($i = 0; $i < count($Apieces); $i++) {
                     if (preg_match('~(' . implode('|', $search) . ')~isu', $Apieces[$i])) {
                         break;
-                    } elseif (preg_match('~(' . implode('|', $search) . ')~isu', str_replace(['\'', '"'], '', iconv("utf-8", "ascii//TRANSLIT", $Apieces[$i])))) {
+                    } elseif (preg_match('~(' . implode('|', $search) . ')~isu', str_replace(['\'', '"'], '', iconv("utf-8", "ascii//TRANSLIT//IGNORE", $Apieces[$i])))) {
                         break;
                     }
                 }
@@ -1883,11 +1883,11 @@ class search_it
                 preg_match('~^.*?(' . implode('|', $search) . ').{0,' . $this->maxHighlightedTextChars . '}~imsu', $return, $cutted);
                 if (!empty($cutted)) {
                     $needEllipses = false;
-                    if (isset($cutted[1]) && strlen($cutted[1]) != strlen($return)) {
+                    if (isset($cutted[1]) && mb_strlen($cutted[1]) != mb_strlen($return)) {
                         $needEllipses = true;
                     }
 
-                    $return = preg_replace($replace, $this->surroundTags[0] . '$0' . $this->surroundTags[1], substr($cutted[0], 0, strrpos($cutted[0], ' ')));
+                    $return = preg_replace($replace, $this->surroundTags[0] . '$0' . $this->surroundTags[1], mb_substr($cutted[0], 0, mb_strrpos($cutted[0], ' ')));
 
                     if ($needEllipses) {
                         $return .= ' ' . $this->ellipsis;
@@ -1908,7 +1908,6 @@ class search_it
                     $replace[] = '~' . preg_quote($keyword['search'], '~') . '~isu';
                 }
 
-                $strlen = mb_strlen($_text);
                 $positions = [];
                 for ($i = 0; $i < count($tmp_searchArray); $i++) {
                     $hits = [];
@@ -1916,7 +1915,7 @@ class search_it
                     preg_match_all('~((.{0,' . $this->maxHighlightedTextChars . '})' . preg_quote($tmp_searchArray[$i]['search'], '~') . '(.{0,' . $this->maxHighlightedTextChars . '}))~imsu', $_text, $hits, PREG_SET_ORDER);
 
                     foreach ($hits as $hit) {
-                        $offset = strpos($_text, $hit[0], $offset) + 1;
+                        $offset = mb_strpos($_text, $hit[0], $offset) + 1;
                         $currentposition = ceil(intval(($offset - 1) / (2 * $this->maxHighlightedTextChars)));
 
                         if ($this->highlightType == 'array' and !array_key_exists($tmp_searchArray[$i]['search'], $Ahighlighted)) {
@@ -1926,19 +1925,19 @@ class search_it
                         if (trim($hit[1]) != '') {
                             $surroundText = $hit[1];
 
-                            if (strlen($hit[2]) > 0 and false !== strpos($hit[2], ' ')) {
-                                $surroundText = substr($surroundText, strpos($surroundText, ' '));
+                            if (mb_strlen($hit[2]) > 0 and false !== mb_strpos($hit[2], ' ')) {
+                                $surroundText = mb_substr($surroundText, mb_strpos($surroundText, ' '));
                             }
 
-                            if (strlen($hit[3]) > 0 and false !== strpos($hit[3], ' ')) {
-                                $surroundText = substr($surroundText, 0, strrpos($surroundText, ' '));
+                            if (mb_strlen($hit[3]) > 0 and false !== mb_strpos($hit[3], ' ')) {
+                                $surroundText = mb_substr($surroundText, 0, mb_strrpos($surroundText, ' '));
                             }
 
-                            if ($i == 0 and strlen($hit[2]) > 0) {
+                            if ($i == 0 and mb_strlen($hit[2]) > 0) {
                                 $startEllipsis = true;
                             }
 
-                            if ($i == (count($tmp_searchArray) - 1) and strlen($hit[3]) > 0) {
+                            if ($i == (count($tmp_searchArray) - 1) and mb_strlen($hit[3]) > 0) {
                                 $endEllipsis = true;
                             }
 

@@ -1,8 +1,5 @@
 <?php
 
-$curDir = __DIR__;
-//require_once $curDir . '/functions/functions_autocomplete.php';
-
 if (rex::isBackend()) {
 
     rex_view::addCssFile($this->getAssetsUrl('jquery.suggest.css'));

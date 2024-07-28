@@ -1,3 +1,6 @@
+** das PlugIn ist deprecated. Es wird in Version 7 entfernt.
+Bitte in Zukunft die eingebaute autocomplete-Funktion nutzen **
+
 # Installation Autocomplete
 
 Das Plugin stellt das "Suggest"-jQuery-PlugIn für die Autovervollständigung bei

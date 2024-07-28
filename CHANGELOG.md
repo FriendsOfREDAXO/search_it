@@ -1,5 +1,7 @@
 # Changelog
 
+- autocomplete Plugin is deprecated, use the new subpage instead
+- added autocomplete as function without jquery on subpage 
 - documentation plugin removed, turned into subpages thx @alexplusde
 - Fix Link to SysLog in Backend thx @godsdog
 

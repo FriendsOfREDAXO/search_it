@@ -20,6 +20,7 @@ page:
                 result: { title: 'translate:settings_result' }
                 addsources: { title: 'translate:settings_addsources' }
                 blacklist: { title: 'translate:settings_blacklist' }
+        suggest: { title: 'translate:search_it_autocomplete_title', icon: rex-icon fa-commenting }
         test: { title: 'translate:test', icon: rex-icon fa-flask }
         docs:
             title: 'translate:search_it_docs'

@@ -1,0 +1,46 @@
+.ac_results {
+    background-color: white;
+    border: 1px solid #008979;
+    display: none;
+    list-style: outside none none;
+    margin: -1px 0 0;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    z-index: 200;
+    width: 100%;
+    max-width: 1150px;
+}
+
+.ac_results li {
+    color: #333;
+    line-height: 30px;
+    padding: 2px 5px 2px 12px;
+    text-align: left;
+    white-space: nowrap;
+}
+
+body > .ac_results:first-child {
+    background: red;
+}
+
+body > .ac_results:last-child {
+    max-width: 210px !important;
+    z-index: 5000;
+    left: calc(100% - 227px) !important;
+}
+
+.ac_over {
+    background-color: #008979;
+    color: #fff !important;
+    cursor: pointer;
+}
+
+.ac_over .ac_match {
+    color: #fff !important;
+}
+
+.ac_match {
+    color: #333;
+    text-decoration: underline;
+}

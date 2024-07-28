@@ -83,6 +83,33 @@ if (rex_addon::get('search_it')->getConfig('index_url_addon') == true) {
     }
 }
 
+// autocomplete
+if ($this->getConfig('autoComplete') == 1) {
+    if (rex::isBackend()) {
+
+        rex_view::addCssFile($this->getAssetsUrl('suggest.css'));
+        rex_view::addJsFile($this->getAssetsUrl('suggest.js'));
+
+        if (!$this->hasConfig()) {
+            $this->setConfig(array(
+                'modus' => 'keywords',
+                'maxSuggestion' => 10,
+                'similarwordsmode' => '0',
+                'autoSubmitForm' => 1
+            ));
+        }
+    } else {
+        if ($this->getConfig('autoSubmitForm') == 1) {
+            rex_extension::register('OUTPUT_FILTER', function (rex_extension_point $ep) {
+                $subject = $ep->getSubject();
+                return str_replace(['search_it-form', '###AUTOSUBMIT###'],
+                    ['search_it-form search_it-form-autocomplete', ''],
+                    $subject);
+            });
+        }
+    }
+}
+
 if (rex::isBackend() && rex::getUser()) {
     // automatic indexing
     if (rex_addon::get('search_it')->getConfig('automaticindex') == true) {

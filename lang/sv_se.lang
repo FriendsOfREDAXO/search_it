@@ -170,3 +170,26 @@ search_it_docs_module-pagination = Paging
 search_it_docs_module-simsearch = similarity search
 search_it_docs_module-url = URL-AddOn
 search_it_docs_faq = FAQ
+
+
+search_it_autocomplete_title = Autocomplete
+search_it_autocomplete_info = Autocomplete für Search it
+
+search_it_autocomplete_config = Konfiguration
+search_it_autocomplete_config_saved = Einstellungen gespeichert.
+search_it_autocomplete_config_save = Einstellungen speichern
+
+search_it_autocomplete_config_autoComplete = Autovervollständigung aktivieren
+search_it_autocomplete_config_modus = Modus der Ausgabe
+search_it_autocomplete_config_maxSuggestion = Maximale Trefferanzahl
+search_it_autocomplete_config_similarwords_label = Ähnlichkeitssuche
+search_it_autocomplete_config_similarwords_none = Deaktivieren
+search_it_autocomplete_config_similarwords_soundex = Soundex (Allgemein)
+search_it_autocomplete_config_similarwords_metaphone = Metaphone (EN)
+search_it_autocomplete_config_similarwords_cologne = Kölner Phonetik (DE)
+search_it_autocomplete_config_similarwords_all = Alle
+
+search_it_autocomplete_config_autoSubmitForm = Auto Submit Form
+
+search_it_autocomplete_config_install = Installation
+search_it_autocomplete_config_codesnippet = Genererad kod för mallar

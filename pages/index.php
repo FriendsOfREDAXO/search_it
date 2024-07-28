@@ -8,6 +8,4 @@ if (!empty($ajax)) {
     exit;
 }
 
-//echo rex_view::title($this->i18n('title') . ' <small>(' . $this->getProperty('version') . ')</small>');
-
 rex_be_controller::includeCurrentPageSubPath();

@@ -173,6 +173,7 @@ search_it_docs_module-pagination = Paging
 search_it_docs_module-simsearch = similarity search
 search_it_docs_module-url = URL-AddOn
 search_it_docs_faq = FAQ
+search_it_docs_autocomplete = Autocomplete
 
 search_it_autocomplete_title = Autocomplete
 search_it_autocomplete_info = Autocomplete for Search it

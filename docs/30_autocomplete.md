@@ -1,18 +1,18 @@
-# Installation Autocomplete
+# Autocomplete
 
 Es stellt ein "Suggest"-PlugIn für die Autovervollständigung bei
 der Suche im Frontend zur Verfügung und generiert einen Code welcher im Template
 eingebunden werden muss.
 
-## Requirements
+## Vorraussetzungen
 
 * Funktionierendes Suchformular, das die HTML-Klasse "search_it-form",
   sowie ein HTML-Eingabefeld für die Suche mit dem Namen "search" beinhaltet.
 
-## Installation
+## In Betrieb nehmen
 
-1. Autocomplete und aktivieren
-2. Konfiguration im Plugin vornehmen und speichern
+1. Autocomplete aktivieren
+2. Konfiguration vornehmen und speichern
 3. Den generierten Code für das Template herauskopieren und in das Template,
    welches für das Suchfeld verwendet wird, vor dem schließenden `</body>` Tag
    hinzufügen

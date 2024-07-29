@@ -1,6 +1,6 @@
 # Changelog
 
-## Version 6.11.1 (2024-07-29)
+## Version 6.11.2 (2024-07-29)
 - autocomplete Plugin is deprecated, use the new subpage instead
 - added autocomplete as function without jquery on subpage 
 - documentation plugin removed, turned into subpages thx @alexplusde

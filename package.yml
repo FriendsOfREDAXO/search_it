@@ -1,5 +1,5 @@
 package: search_it
-version: '6.11.1'
+version: '6.11.2'
 author: Friends Of REDAXO
 supportpage: https://github.com/FriendsOfREDAXO/search_it
 
@@ -36,9 +36,6 @@ console_commands:
 requires:
     redaxo: '^5.6.0'
     php: '>=7'
-
-system_plugins:
-    - documentation
 
 plugins:
     - plaintext

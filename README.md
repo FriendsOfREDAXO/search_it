@@ -18,11 +18,10 @@ führt zur schnelleren Anzeige von Suchergebnissen.
 
 * `Statistik`: Liefert Informationen zur Search it-Datenbank und zu den
   häufigsten Suchanfragen.
-* `Dokumentation`: Zeigt diese Dokumentation an.
 * `Plaintext`: Erlaubt es zu bestimmen, was in den Index aufgenommen wird
 
 > Hinweis: Die Plugins `Reindex` und `Search Highlighter` aus RexSearch für
-> REDAXO 4 wurden in Seach it integriert.
+> REDAXO 4 wurden in Seach it integriert. Auch das PlugIn `Autocomplete` wurde integriert.
 
 ## Wo finde ich weitere Hilfe?
 
@@ -70,9 +69,9 @@ https://github.com/FriendsOfREDAXO
 ## Credits
 
 Search it basiert
-auf: [RexSearch (Xong) für REDAXO 4](https://github.com/xong/rexsearch)
+auf: [RexSearch (Xong) für REDAXO 4](https://github.com/xong/rexsearch)   
 [Norbert Micheel](https://github.com/tyrant88/) Portierung für R5 und aktiven
-Entwicklung
-[Alexander Walther](https://github.com/skerbis) Dokumentation und Hilfe
-[Tobias Krais](https://github.com/tobiaskrais) URL Addon (>= 2.0) Support
+Entwicklung   
+[Alexander Walther](https://github.com/skerbis) Dokumentation und Hilfe   
+[Tobias Krais](https://github.com/tobiaskrais) URL Addon (>= 2.0) Support    
 [und weitere Entwickler...](https://github.com/FriendsOfREDAXO/search_it/graphs/contributors)

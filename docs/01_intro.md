@@ -49,10 +49,9 @@ führt zur schnelleren Anzeige von Suchergebnissen.
   HTML-Tags.
 * `Statistik`: Liefert Informationen zur `Search it`-Datenbank und zu den
   häufigsten Suchanfragen.
-* `Dokumentation`: Zeigt diese Dokumentation an.
 
 > Hinweis: Die Plugins `Reindex` und `Search Highlighter`
-> aus `RexSearch für REDAXO 4` wurden in `Seach it` integriert.
+> aus `RexSearch für REDAXO 4` wurden in `Seach it` integriert. Auch das PlugIn `Autocomplete` wurde integriert.
 
 ## Erste Schritte
 

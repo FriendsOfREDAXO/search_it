@@ -196,3 +196,18 @@ search_it_autocomplete_config_autoSubmitForm = Auto Submit Form
 
 search_it_autocomplete_config_install = Installation
 search_it_autocomplete_config_codesnippet = Generated code for insert in template
+
+search_it_plaintext_title = Plaintext
+search_it_plaintext = Settings
+search_it_plaintext_description_title = Description
+search_it_plaintext_description = Elements marked with this symbol can be shifted via Drag & Drop to change the order of execution.
+search_it_plaintext_selectors = CSS-selectors, e.g. <code>script,head,header,footer,div.donotsearch</code>
+search_it_plaintext_selectors_label = All matching elements will be removed from plaintext.
+search_it_plaintext_regex = Regular Expressions (row-separated)
+search_it_plaintext_regex_label = Every 1. Line: Regex<br />Every 2. Line: Replacement<br /><br />Example:<br /><code>~<h1>.+</h1>~</code><br /><code>xyz</code>
+search_it_plaintext_striptags = Remove HTML-tags
+search_it_plaintext_striptags_label = Executes the strip_tags()-function.
+search_it_plaintext_textile = parse with textile
+search_it_plaintext_textile_label = Executes the rex_textile::parse()-function.
+search_it_plaintext_processparent = Execute default plaintext conversion
+search_it_plaintext_processparent_label = Executes the default plaintext conversion additionally.

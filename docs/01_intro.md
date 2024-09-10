@@ -107,10 +107,3 @@ Dort können Fragen gestellt und Bugs gemeldet werden (Issues). Fragen können
 auch im [REDAXO-Forum](www.redaxo.org/de/forum/) oder
 im [REDAXO-Channel auf Slack](https://friendsofredaxo.slack.com/messages/redaxo/)
 gestellt werden.
-
-## Credits
-
-xong (Robert Rupf)
-tyrant88 (Norbert Micheel)
-alexplusde (Alexander Walther)
-TobiasKrais (Tobias Krais)

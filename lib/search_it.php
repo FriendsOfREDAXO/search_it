@@ -5,7 +5,7 @@
  * This class is still being tested.
  * Please report errors at http://forum.redaxo.de.
  *
- * @author    Robert Rupf/Norbert Micheel
+ * @author    Friends of REDAXO
  * @package   search_it
  */
 

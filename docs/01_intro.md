@@ -10,7 +10,7 @@ führt zur schnelleren Anzeige von Suchergebnissen.
 ## Systemvoraussetzungen
 
 * `PHP ^7.0`
-* `REDAXO >= 5.5.0`
+* `REDAXO >= 5.6.0`
 * `pdftotext` [optional für das Durchsuchen von pdf-Inhalten, [Link](https://www.xpdfreader.com/pdftotext-man.html)]
 
 ## Features
@@ -104,6 +104,5 @@ Bei der Installation werden fünf Datenbanktabellen angelegt:
 Die aktuelle Search it-Version wird
 in [FriendsOfREDAXO](https://github.com/friendsofredaxo/search_it) gepflegt.
 Dort können Fragen gestellt und Bugs gemeldet werden (Issues). Fragen können
-auch im [REDAXO-Forum](www.redaxo.org/de/forum/) oder
-im [REDAXO-Channel auf Slack](https://friendsofredaxo.slack.com/messages/redaxo/)
+auch im [REDAXO-Channel auf Slack](https://friendsofredaxo.slack.com/messages/redaxo/)
 gestellt werden.

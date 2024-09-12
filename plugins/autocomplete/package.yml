@@ -1,6 +1,6 @@
 package: search_it/autocomplete
 version: '6.11.2'
-author: Manétage
+author: Friends Of REDAXO
 
 title: 'translate:search_it_autocomplete_plugin_title'
 description: 'translate:search_it_autocomplete_plugin'

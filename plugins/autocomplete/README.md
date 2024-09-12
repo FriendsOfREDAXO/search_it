@@ -38,11 +38,12 @@ Verwendung auf eigene Gefahr.
 
 ## Autor
 
-**Manetage** - Ronny Kemmereit / Pascal Schuchmann
-
-* http://www.manetage.de
-
 **Friends Of REDAXO**
 
 * http://www.redaxo.org
 * https://github.com/FriendsOfREDAXO
+
+## Credits
+
+**Manetage** - Ronny Kemmereit / Pascal Schuchmann
+* http://www.manetage.de

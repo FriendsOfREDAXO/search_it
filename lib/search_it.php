@@ -1,18 +1,5 @@
 <?php
-/**
- * Class search_it
- *
- * This class is still being tested.
- * Please report errors at http://forum.redaxo.de.
- *
- * @author    Friends of REDAXO
- * @package   search_it
- */
 
-
-/**
- * @package   search_it
- */
 class search_it
 {
 

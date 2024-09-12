@@ -10,7 +10,7 @@ führt zur schnelleren Anzeige von Suchergebnissen.
 ## Systemvoraussetzungen
 
 * `PHP >= 7.0`
-* `REDAXO >= 5.5`
+* `REDAXO >= 5.6`
 * [`pdftotext`](https://www.xpdfreader.com/pdftotext-man.html) für das
   Durchsuchen von pdf-Inhalten, optional.
 
@@ -55,7 +55,7 @@ anschließend der Index vollständig generiert werden.
 
 ## Lizenz
 
-[MIT Lizenz](https://github.com/FriendsOfREDAXO/search_it/blob/master/LICENSE.md)
+[MIT Lizenz](https://github.com/FriendsOfREDAXO/search_it/blob/master/LICENSE)
 
 ## Autor
 

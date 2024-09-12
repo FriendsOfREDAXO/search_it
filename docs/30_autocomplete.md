@@ -32,9 +32,6 @@ Verwendung auf eigene Gefahr.
 
 ## Autor
 
-**Manetage** - Ronny Kemmereit / Pascal Schuchmann
-Norbert Micheel
-
 **Friends Of REDAXO**
 
 * http://www.redaxo.org

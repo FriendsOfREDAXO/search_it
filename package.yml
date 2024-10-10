@@ -39,7 +39,6 @@ requires:
     php: '>=7'
 
 plugins:
-    - plaintext
     - stats
 
 installer_ignore:

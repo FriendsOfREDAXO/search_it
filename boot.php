@@ -61,6 +61,7 @@ if (rex_request('search_it_build_index', 'string', '') != '') {
 
     });
 }
+
 if (rex_addon::get('search_it')->getConfig('index_url_addon') == true) {
     // automatic indexing of url addon urls: set trigger
     rex_extension::register('URL_TABLE_UPDATED', function () {
@@ -107,6 +108,30 @@ if ($this->getConfig('autoComplete') == 1) {
                     $subject);
             });
         }
+    }
+}
+
+// plaintext
+if ($this->getConfig('plaintext') == 1) {
+    require_once __DIR__ . '/functions/functions_plaintext.php';
+
+    if (rex::isBackend()) {
+
+        rex_extension::register('SEARCH_IT_PLAINTEXT', 'search_it_doPlaintext');
+
+        //set default Values on installation
+        if (!$this->hasConfig()) {
+            $this->setConfig([
+                'order' => 'selectors,regex,textile,striptags',
+                'selectors' => "head,\nscript",
+                'regex' => '',
+                'textile' => true,
+                'striptags' => true,
+                'processparent' => false,
+                'plainText' => false,
+            ]);
+        }
+
     }
 }
 

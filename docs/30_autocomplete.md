@@ -1,4 +1,4 @@
-# Autocomplete
+# Feature Autocomplete
 
 Es stellt ein "Suggest"-PlugIn für die Autovervollständigung bei
 der Suche im Frontend zur Verfügung und generiert einen Code welcher im Template
@@ -22,17 +22,3 @@ eingebunden werden muss.
 5. Optional: CSS und JS Datei in den eigenen Frontend_prozess einbauen ( z.B.
    per Minify oder im Bimmelbam )
 
-## Lizenz
-
-"Autocomplete" von Manétage steht unter MIT Lizenz.
-
-## Rechtliches
-
-Verwendung auf eigene Gefahr.
-
-## Autor
-
-**Friends Of REDAXO**
-
-* http://www.redaxo.org
-* https://github.com/FriendsOfREDAXO

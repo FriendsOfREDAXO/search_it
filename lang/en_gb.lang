@@ -174,6 +174,7 @@ search_it_docs_module-simsearch = similarity search
 search_it_docs_module-url = URL-AddOn
 search_it_docs_faq = FAQ
 search_it_docs_autocomplete = Autocomplete
+search_it_docs_plaintext = Plaintext
 
 search_it_autocomplete_title = Autocomplete
 search_it_autocomplete_info = Autocomplete for Search it
@@ -199,6 +200,7 @@ search_it_autocomplete_config_codesnippet = Generated code for insert in templat
 
 search_it_plaintext_title = Plaintext
 search_it_plaintext = Settings
+search_it_plaintext_config_plaintext = Activate plaintext
 search_it_plaintext_description_title = Description
 search_it_plaintext_description = Elements marked with this symbol can be shifted via Drag & Drop to change the order of execution.
 search_it_plaintext_selectors = CSS-selectors, e.g. <code>script,head,header,footer,div.donotsearch</code>

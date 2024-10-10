@@ -172,7 +172,7 @@ search_it_docs_module-simsearch = similarity search
 search_it_docs_module-url = URL-AddOn
 search_it_docs_faq = FAQ
 search_it_docs_autocomplete = Autocomplete
-
+search_it_docs_plaintext = Plaintext
 
 search_it_autocomplete_title = Autocomplete
 search_it_autocomplete_info = Autocomplete para Search it
@@ -198,6 +198,7 @@ search_it_autocomplete_config_codesnippet = Código gerado para Template
 
 search_it_plaintext_title = Plaintext
 search_it_plaintext = Configurações
+search_it_plaintext_config_plaintext = Activate plaintext
 search_it_plaintext_description_title = Descrição
 search_it_plaintext_description = Elementos marcados com esse símbolo podem ser movidos com Drag & Drop, para modificar a ordem de execução.
 search_it_plaintext_selectors = Seletores CSS, ex: <code>script,head,header,footer,div.donotsearch</code>

@@ -174,6 +174,7 @@ search_it_docs_module-simsearch = Ähnlichkeitssuche
 search_it_docs_module-url = URL-Addon
 search_it_docs_faq = FAQ
 search_it_docs_autocomplete = Autocomplete
+search_it_docs_plaintext = Plaintext
 
 search_it_autocomplete_title = Autocomplete
 search_it_autocomplete_info = Autocomplete für Search it
@@ -198,6 +199,7 @@ search_it_autocomplete_config_install = Installation
 search_it_autocomplete_config_codesnippet = Generierter Code zum Einbinden in Template
 
 search_it_plaintext_title = Plaintext
+search_it_plaintext_config_plaintext = Plaintext aktivieren
 search_it_plaintext = Einstellungen
 search_it_plaintext_description_title = Beschreibung
 search_it_plaintext_description = Elemente mit diesem Symbol können per Drag & Drop verschoben werden, um so die Reihenfolge der Abarbeitung zu beeinflussen.

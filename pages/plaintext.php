@@ -2,29 +2,32 @@
 
 echo rex_view::title($this->i18n('title') . ' <small>(' . $this->getProperty('version') . ')</small>');
 
-if (rex_post('sendit', 'boolean')) {
+$content = [];
+$buttons = '';
 
-    $posted_config = rex_post('search_it_plaintext', [
+// Einstellungen speichern
+if (rex_post('formsubmit', 'string') == '1') {
 
+    $posted_config = rex_post('config', [
         ['order', 'string', 'selectors,regex,textile,striptags'],
         ['selectors', 'string'],
         ['regex', 'string'],
         ['textile', 'bool'],
         ['striptags', 'bool'],
-        ['processparent', 'bool']
-
+        ['processparent', 'bool'],
+        ['plaintext', 'bool']
     ]);
 
-
     $changed = array_keys(array_merge(array_diff_assoc(array_map('serialize', $posted_config), array_map('serialize', $this->getConfig())), array_diff_assoc(array_map('serialize', $this->getConfig()), array_map('serialize', $posted_config))));
-    foreach (array(
+    foreach ([
                  'order',
                  'selectors',
                  'regex',
                  'textile',
                  'striptags',
                  'processparent',
-             ) as $index) {
+                 'plaintext',
+             ] as $index) {
         if (in_array($index, $changed)) {
             echo rex_view::warning($this->i18n('search_it_settings_saved_warning'));
             break;
@@ -38,16 +41,23 @@ if (rex_post('sendit', 'boolean')) {
         }
     }
 
-    // do it
     $this->setConfig($posted_config);
 
-    //tell it
     echo rex_view::success($this->i18n('search_it_settings_saved'));
 
 }
 
 
-$content = [];
+// plaintext
+$formElements = [];
+$n = [];
+$n['label'] = '<label for="search_it_plaintext_plaintext">' . $this->i18n('search_it_plaintext_config_plaintext') . '</label>';
+$n['field'] = '<input type="checkbox" id="search_it_plaintext_plaintext" name="config[plaintext]"' . ($this->getConfig('plaintext') == true ? ' checked="checked"' : '') . ' value="1" />';
+$formElements[] = $n;
+
+$fragment = new rex_fragment();
+$fragment->setVar('elements', $formElements, false);
+$content[] = $fragment->parse('core/form/checkbox.php');
 
 
 $content[] = search_it_getSettingsFormSection(
@@ -60,7 +70,7 @@ $content[] = search_it_getSettingsFormSection(
         ),
         array(
             'type' => 'hidden',
-            'name' => 'search_it_plaintext[order]',
+            'name' => 'config[order]',
             'value' => !empty($this->getConfig('order')) ? rex_escape($this->getConfig('order')) : ''
         )
     ), false, false
@@ -68,7 +78,6 @@ $content[] = search_it_getSettingsFormSection(
 
 
 $content[] = '<div id="sortable-elements">';
-
 foreach (explode(',', $this->getConfig('order') ?? '') as $elem) {
     switch ($elem) {
         case 'selectors':
@@ -79,7 +88,7 @@ foreach (explode(',', $this->getConfig('order') ?? '') as $elem) {
                     array(
                         'type' => 'text',
                         'id' => 'search_it_plaintext_selectors',
-                        'name' => 'search_it_plaintext[selectors]',
+                        'name' => 'config[selectors]',
                         'label' => rex_i18n::msg('search_it_plaintext_selectors_label'),
                         'value' => !empty($this->getConfig('selectors')) ? rex_escape($this->getConfig('selectors')) : ''
                     )
@@ -95,7 +104,7 @@ foreach (explode(',', $this->getConfig('order') ?? '') as $elem) {
                     array(
                         'type' => 'text',
                         'id' => 'search_it_plaintext_regex',
-                        'name' => 'search_it_plaintext[regex]',
+                        'name' => 'config[regex]',
                         'label' => rex_i18n::msg('search_it_plaintext_regex_label'),
                         'value' => !empty($this->getConfig('regex')) ? rex_escape($this->getConfig('regex')) : ''
                     )
@@ -111,7 +120,7 @@ foreach (explode(',', $this->getConfig('order') ?? '') as $elem) {
                     array(
                         'type' => 'checkbox',
                         'id' => 'search_it_plaintext_textile',
-                        'name' => 'search_it_plaintext[textile]',
+                        'name' => 'config[textile]',
                         'label' => $this->i18n('search_it_plaintext_textile_label'),
                         'value' => '1',
                         'checked' => !empty($this->getConfig('textile'))
@@ -128,7 +137,7 @@ foreach (explode(',', $this->getConfig('order') ?? '') as $elem) {
                     array(
                         'type' => 'checkbox',
                         'id' => 'search_it_plaintext_striptags',
-                        'name' => 'search_it_plaintext[striptags]',
+                        'name' => 'config[striptags]',
                         'label' => $this->i18n('search_it_plaintext_striptags_label'),
                         'value' => '1',
                         'checked' => !empty($this->getConfig('striptags'))
@@ -138,7 +147,6 @@ foreach (explode(',', $this->getConfig('order') ?? '') as $elem) {
             break;
     }
 }
-
 $content[] = '</div>';
 
 $content[] = search_it_getSettingsFormSection(
@@ -148,10 +156,10 @@ $content[] = search_it_getSettingsFormSection(
         array(
             'type' => 'checkbox',
             'id' => 'search_it_plaintext_processparent',
-            'name' => 'search_it_plaintext[processparent]',
+            'name' => 'config[processparent]',
             'label' => $this->i18n('search_it_plaintext_processparent_label'),
             'value' => '1',
-            'checked' => !empty($this->getConfig('processparent'))
+            'checked' => $this->getConfig('processparent') == true
         )
     ), 'edit'
 );
@@ -180,7 +188,7 @@ $content[] = search_it_getSettingsFormSection(
                         jQuery('#search_it_plaintext_selectors,#search_it_plaintext_regex,#search_it_plaintext_textile,#search_it_plaintext_striptags').each(function () {
                             order.push(this.name.match(/\[([a-zA-Z]+)\]/)[1]);
                         });
-                        jQuery('input[name="search_it_plaintext[order]"]').attr('value', order.join(','));
+                        jQuery('input[name="config[order]"]').attr('value', order.join(','));
 
                         setTimeout(function () {
                             ondrag = false;
@@ -189,11 +197,12 @@ $content[] = search_it_getSettingsFormSection(
                 });
 
                 jQuery('#sortable-elements .panel-title').each(function () {
-                    jQuery(this).parent().css('cursor', 'move').css('z-index', '10000');
+                    jQuery(this).parent().css('cursor', 'pointer').css('z-index', '10000');
                     var text = jQuery(this).html();
                     jQuery(this).html('')
                         .append(jQuery('<i>').addClass('fa fa-arrows-v').css('padding-right', '18px'))
                         .append(text);
+                    jQuery(this).find('i').css('cursor', 'move');
                 });
 
                 // display links for showing and hiding all sections
@@ -230,9 +239,9 @@ $content[] = search_it_getSettingsFormSection(
 $content = implode("\n", $content);
 
 $formElements = [];
-$n = [];
-$n['field'] = '<button class="btn btn-save rex-form-aligned" type="submit" name="sendit" value="1" ' . rex::getAccesskey($this->i18n('search_it_settings_submitbutton'), 'save') . '>' . $this->i18n('search_it_settings_submitbutton') . '</button>';
+$n['field'] = '<button class="btn btn-save rex-form-aligned" type="submit" name="save" value="' . $this->i18n('search_it_settings_submitbutton') . '">' . $this->i18n('search_it_settings_submitbutton') . '</button>';
 $formElements[] = $n;
+
 $fragment = new rex_fragment();
 $fragment->setVar('flush', true);
 $fragment->setVar('elements', $formElements, false);
@@ -245,5 +254,6 @@ $fragment->setVar('body', $content, false);
 $fragment->setVar('buttons', $buttons, false);
 
 echo '<form method="post" action="' . rex_url::currentBackendPage() . '" id="search_it_plaintext_form">';
+echo '<input type="hidden" name="formsubmit" value="1" />';
 echo $fragment->parse('core/page/section.php');
 echo '</form>';

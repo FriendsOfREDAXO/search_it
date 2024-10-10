@@ -7,6 +7,7 @@ $buttons = '';
 
 // Einstellungen speichern
 if (rex_post('formsubmit', 'string') == '1') {
+
     $this->setConfig(rex_post('config', [
         ['autoComplete', 'int'],
         ['modus', 'string'],
@@ -18,6 +19,7 @@ if (rex_post('formsubmit', 'string') == '1') {
     echo rex_view::success($this->i18n('search_it_autocomplete_config_saved'));
 
 }
+
 
 // autoComplete
 $formElements = [];

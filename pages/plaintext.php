@@ -213,16 +213,14 @@ $content[] = search_it_getSettingsFormSection(
                             .css('font-weight', '900')
                             .css('margin-bottom', '1em').css('padding', '0')
                             .append(
-                                jQuery('<a class="btn btn-success"><?php echo $this->i18n('search_it_settings_show_all'); ?><' + '/a>')
+                                jQuery('<a class="btn btn-default"><?php echo $this->i18n('search_it_settings_show_all'); ?><' + '/a>')
                                     .css('cursor', 'pointer')
-                                    .css('padding', '0 1em')
                                     .click(function () {
                                         jQuery('#sortable-elements .panel-collapse').collapse('show');
                                     })
                             )
                             .append(
-                                jQuery('<a class="btn btn-success"><?php echo $this->i18n('search_it_settings_show_all'); ?><' + '/a>')
-                                    .css('curs><?php echo $this->i18n('search_it_settings_show_none'); ?><' + '/a>')
+                                jQuery('<a class="btn btn-default"><?php echo $this->i18n('search_it_settings_show_none'); ?><' + '/a>')
                                     .css('cursor', 'pointer')
                                     .click(function () {
                                         jQuery('#sortable-elements .panel-collapse').collapse('hide');

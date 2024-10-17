@@ -58,10 +58,8 @@ anschließend der Index vollständig generiert werden.
 [MIT Lizenz](https://github.com/FriendsOfREDAXO/search_it/blob/master/LICENSE)
 
 ## Autor
-
 **Friends Of REDAXO**
-http://www.redaxo.org
-https://github.com/FriendsOfREDAXO
+[Friends Of REDAXO](https://github.com/FriendsOfREDAXO)
 
 ## Credits
 

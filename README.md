@@ -63,10 +63,10 @@ anschließend der Index vollständig generiert werden.
 http://www.redaxo.org
 https://github.com/FriendsOfREDAXO
 
+## Credits
+
 **Projekt-Lead**
 [Norbert Micheel](https://github.com/tyrant88)
-
-## Credits
 
 Search it basiert
 auf: [RexSearch (Xong) für REDAXO 4](https://github.com/xong/rexsearch)   

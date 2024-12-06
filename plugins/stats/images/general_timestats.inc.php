@@ -23,7 +23,7 @@ foreach ($statCounts as $statCount) {
 }
 
 $title = $this->i18n('search_it_stats_general_timestats', 6);
-$title = utf8_decode($title);
+$title = mb_convert_encoding($title, 'ISO-8859-1', 'UTF-8');
 
 ob_clean();
 $plot = new PHPlot(350, 240);

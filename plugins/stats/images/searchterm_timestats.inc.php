@@ -40,7 +40,7 @@ $title = rex_i18n::rawMsg(
     ),
     rex_get('monthcount', 'int')
 );
-$title = utf8_decode($title);
+$title = mb_convert_encoding($title, 'ISO-8859-1', 'UTF-8');
 
 
 ob_clean();

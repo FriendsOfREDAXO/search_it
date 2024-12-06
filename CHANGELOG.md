@@ -1,4 +1,5 @@
 # Changelog
+- remove/replace utf8_encode() in statistik PlugIn for PHP 8.2
 
 ## Version 6.11.2 (2024-07-29)
 - autocomplete Plugin is deprecated, use the new subpage instead

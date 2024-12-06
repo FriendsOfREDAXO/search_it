@@ -8,13 +8,13 @@ $missCount = $stats->getMissCount();
 $successCount = $stats->getSuccessCount();
 
 $title = $this->i18n('search_it_stats_rate_success_failure', "\n", $missCount + $successCount);
-$title = utf8_decode($title);
+$title = mb_convert_encoding($title, 'ISO-8859-1', 'UTF-8');
 
 $lbl_success = $this->i18n('search_it_stats_rate_success_failure_lblsuccess');
-$lbl_success = utf8_decode($lbl_success);
+$lbl_success = mb_convert_encoding($lbl_success, 'ISO-8859-1', 'UTF-8');
 
 $lbl_miss = $this->i18n('search_it_stats_rate_success_failure_lblmiss');
-$lbl_miss = utf8_decode($lbl_miss);
+$lbl_miss = mb_convert_encoding($lbl_miss, 'ISO-8859-1', 'UTF-8');
 
 $data = array(
     array('', $successCount, $missCount, '', '')

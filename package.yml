@@ -1,5 +1,5 @@
 package: search_it
-version: '6.12.1'
+version: '6.12.2'
 author: Friends Of REDAXO
 supportpage: https://github.com/FriendsOfREDAXO/search_it
 
@@ -21,7 +21,7 @@ page:
                 addsources: { title: 'translate:settings_addsources' }
                 blacklist: { title: 'translate:settings_blacklist' }
         suggest: { title: 'translate:search_it_autocomplete_title', icon: rex-icon fa-commenting }
-        plaintext: { title: 'translate:search_it_plaintext_title', icon: rex-icon fa-file-text, perm: search_it[plugin:plaintext] }
+        plaintext: { title: 'translate:search_it_plaintext_title', icon: rex-icon fa-file-text }
         test: { title: 'translate:test', icon: rex-icon fa-flask }
         docs:
             title: 'translate:search_it_docs'

@@ -47,6 +47,7 @@ if (rex_addon::get('search_it')->getConfig('reindex_cols_onforms') == true) {
 }
 if (rex_addon::get('cronjob')->isAvailable() && !rex::isSafeMode()) {
     rex_cronjob_manager::registerType(rex_cronjob_reindex::class);
+    rex_cronjob_manager::registerType(rex_cronjob_clearcache::class);
 }
 
 if (rex_request('search_it_build_index', 'string', '') != '') {

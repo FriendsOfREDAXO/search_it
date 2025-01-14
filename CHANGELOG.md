@@ -1,5 +1,8 @@
 # Changelog
+
+## Version 6.12.1 (2025-01-14)
 - remove/replace utf8_encode() in statistik PlugIn for PHP 8.2
+- cronjob to clear search cache
 
 ## Version 6.11.2 (2024-07-29)
 - autocomplete Plugin is deprecated, use the new subpage instead

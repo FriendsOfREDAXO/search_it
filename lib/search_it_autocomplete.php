@@ -88,7 +88,7 @@ class rex_api_search_it_autocomplete extends rex_api_function
                 if ($similarWordsMode == '1') {
 
                     $sql = sprintf("
-              SELECT keyword FROM `%s` WHERE ( keyword LIKE :keyword OR soundex = :soundex  ) AND (clang = -1 OR clang = :clang) GROUP BY keyword ORDER BY count ",
+              SELECT keyword FROM `%s` WHERE ( keyword LIKE :keyword OR soundex = :soundex  ) AND (clang = -1 OR clang = :clang) GROUP BY keyword ORDER BY keyword LIKE :keyword DESC, count DESC",
                         rex::getTablePrefix() . rex::getTempPrefix() . 'search_it_keywords',
                     );
 
@@ -102,7 +102,7 @@ class rex_api_search_it_autocomplete extends rex_api_function
                 if ($similarWordsMode == '2') {
 
                     $sql = sprintf("
-              SELECT keyword FROM `%s` WHERE ( keyword LIKE :keyword OR metaphone = :metaphone  ) AND (clang = -1 OR clang = :clang) GROUP BY keyword ORDER BY count ",
+              SELECT keyword FROM `%s` WHERE ( keyword LIKE :keyword OR metaphone = :metaphone  ) AND (clang = -1 OR clang = :clang) GROUP BY keyword ORDER BY keyword LIKE :keyword DESC, count DESC ",
                         rex::getTablePrefix() . rex::getTempPrefix() . 'search_it_keywords',
                     );
 
@@ -116,7 +116,7 @@ class rex_api_search_it_autocomplete extends rex_api_function
                 if ($similarWordsMode == '3') {
 
                     $sql = sprintf("
-              SELECT keyword FROM `%s` WHERE ( keyword LIKE :keyword OR colognephone = :soundex_ger  ) AND (clang = -1 OR clang = :clang) GROUP BY keyword ORDER BY count ",
+              SELECT keyword FROM `%s` WHERE ( keyword LIKE :keyword OR colognephone = :soundex_ger  ) AND (clang = -1 OR clang = :clang) GROUP BY keyword ORDER BY keyword LIKE :keyword DESC, count DESC ",
                         rex::getTablePrefix() . rex::getTempPrefix() . 'search_it_keywords',
                     );
 
@@ -130,7 +130,7 @@ class rex_api_search_it_autocomplete extends rex_api_function
                 if ($similarWordsMode == '7') {
 
                     $sql = sprintf("
-              SELECT keyword FROM `%s` WHERE ( keyword LIKE :keyword OR soundex = :soundex OR metaphone = :metaphone OR colognephone = :soundex_ger) AND (clang = -1 OR clang = :clang) GROUP BY keyword ORDER BY count ",
+              SELECT keyword FROM `%s` WHERE ( keyword LIKE :keyword OR soundex = :soundex OR metaphone = :metaphone OR colognephone = :soundex_ger) AND (clang = -1 OR clang = :clang) GROUP BY keyword ORDER BY keyword LIKE :keyword DESC, count DESC ",
                         rex::getTablePrefix() . rex::getTempPrefix() . 'search_it_keywords',
                     );
 

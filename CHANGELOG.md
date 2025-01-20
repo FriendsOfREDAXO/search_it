@@ -1,6 +1,7 @@
 # Changelog
+- sort autosuggest results by like if similarity search is used #257 thx @xong
 
-## Version 6.12.1 (2025-01-14)
+## Version 6.12.2 (2025-01-14)
 - remove/replace utf8_encode() in statistik PlugIn for PHP 8.2
 - cronjob to clear search cache
 

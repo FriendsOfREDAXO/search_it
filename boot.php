@@ -164,6 +164,7 @@ if (rex::isBackend() && rex::getUser()) {
     //set default Values on installation
     if (!$this->hasConfig()) {
         $this->setConfig('limit', [0, 10]);
+        $this->setConfig('maxSuggestion', '10');
     }
     if (strpos(rex_request('page', 'string', ''), 'search_it') !== false) {
         rex_view::addJsFile($this->getAssetsUrl('search_it.js'));

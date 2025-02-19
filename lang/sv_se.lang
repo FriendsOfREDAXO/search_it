@@ -57,6 +57,7 @@ search_it_settings_highlight_array = Som array med varje text som hittats för v
 search_it_settings_highlight_sample = Exempelresultat med sökord
 search_it_settings_search_highlighter = Search highlighter
 search_it_settings_highlighterclass = Om du namnger en CSS-klass här kommer varje sökord att vara omgivet av ett <span> -element med den här klassen när ett sökresultat klickas och visas.
+search_it_settings_highlightertag = Om du vill använda en annan tagg än <span> för att omge sökorden, kan du ange den här.
 
 search_it_settings_similarwords_label = Likhetssökning
 search_it_settings_similarwords_none = Deaktivera

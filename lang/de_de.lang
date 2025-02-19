@@ -57,7 +57,8 @@ search_it_settings_highlight_teaser = Als Teaser, in dem eventuell vorkommende S
 search_it_settings_highlight_array = Als Array mit allen Suchbegriffen und Textstellen
 search_it_settings_highlight_sample = Beispielausgabe bei Sucheingabe
 search_it_settings_search_highlighter = Search Highlighter
-search_it_settings_highlighterclass = Wenn Sie hier eine CSS-Klasse angeben, wird um alle gefundenden Suchbegriffe ein <span> Element mit dieser Klasse gelegt, wenn ein Suchergebnis geklickt wurde und angezeigt wird.
+search_it_settings_highlighterclass = Wenn Sie hier eine CSS-Klasse angeben, wird in einem angezeigten Suchergebnis um alle gefundenden Suchbegriffe ein <span> Element mit dieser Klasse gelegt, um sie hervorzuheben.
+search_it_settings_highlightertag = Hier können Sie ein alternatives HTML-Tag angeben, das für die Hervorhebnung verwendet wird.
 
 search_it_settings_similarwords_label = Ähnlichkeitssuche
 search_it_settings_similarwords_none = Deaktivieren

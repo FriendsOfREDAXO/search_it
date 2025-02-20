@@ -9,7 +9,7 @@ $buttons = '';
 if (rex_post('formsubmit', 'string') == '1') {
 
     $posted_config = rex_post('config', [
-        ['order', 'string', 'selectors,regex,textile,striptags'],
+        ['plainOrder', 'string', 'selectors,regex,textile,striptags'],
         ['selectors', 'string'],
         ['regex', 'string'],
         ['textile', 'bool'],
@@ -20,7 +20,7 @@ if (rex_post('formsubmit', 'string') == '1') {
 
     $changed = array_keys(array_merge(array_diff_assoc(array_map('serialize', $posted_config), array_map('serialize', $this->getConfig())), array_diff_assoc(array_map('serialize', $this->getConfig()), array_map('serialize', $posted_config))));
     foreach ([
-                 'order',
+                 'plainOrder',
                  'selectors',
                  'regex',
                  'textile',
@@ -78,7 +78,7 @@ $content[] = search_it_getSettingsFormSection(
 
 
 $content[] = '<div id="sortable-elements">';
-foreach (explode(',', $this->getConfig('order') ?? '') as $elem) {
+foreach (explode(',', $this->getConfig('plainOrder') ?? '') as $elem) {
     switch ($elem) {
         case 'selectors':
             $content[] = search_it_getSettingsFormSection(

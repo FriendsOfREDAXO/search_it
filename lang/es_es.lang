@@ -57,6 +57,7 @@ search_it_settings_highlight_array = Como una matriz con todos los términos de 
 search_it_settings_highlight_sample = Muestra de salida con entrada de búsqueda
 search_it_settings_search_highlighter = Resaltador de búsqueda
 search_it_settings_highlighterclass = Si especifica una clase de CSS aquí, se colocará un elemento <span> con esta clase alrededor de todos los términos de búsqueda encontrados cuando se haga clic y se muestre un resultado de búsqueda.
+search_it_settings_highlightertag = Etiqueta HTML para el resaltado de búsqueda
 
 search_it_settings_similarwords_label = Búsqueda de similitud
 search_it_settings_similarwords_none = Desactivar

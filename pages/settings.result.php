@@ -11,6 +11,7 @@ if (rex_post('config-submit', 'boolean')) {
         ['maxhighlightchars', 'string'],
         ['highlight', 'string'],
         ['highlighterclass', 'string'],
+        ['highlightertag', 'string'],
 
     ]);
 
@@ -150,6 +151,13 @@ $content2[] = search_it_getSettingsFormSection(
             'name' => 'search_config[highlighterclass]',
             'label' => $this->i18n('search_it_settings_highlighterclass'),
             'value' => !empty($this->getConfig('highlighterclass')) ? $this->getConfig('highlighterclass') : ''
+        ),
+        array(
+            'type' => 'string',
+            'id' => 'search_it_highlightertag',
+            'name' => 'search_config[highlightertag]',
+            'label' => $this->i18n('search_it_settings_highlightertag'),
+            'value' => !empty($this->getConfig('highlightertag')) ? $this->getConfig('highlightertag') : ''
         ),
     ), 'edit'
 );

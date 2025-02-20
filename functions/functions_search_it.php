@@ -743,8 +743,14 @@ function search_it_search_highlighter_output($_ep)
     $suchbegriffe = rex_request('search_highlighter', 'string', '');
 
     $si = rex_addon::get('search_it');
-    $beginn = '<span class=\'' . $si->getConfig('highlighterclass') . '\'>';
-    $ende = '</span>';
+
+    $tag = 'span';
+    if ('' != $si->getConfig('highlightertag')) {
+        $tag = str_replace(['<', '>'], '', $si->getConfig('highlightertag'));
+    }
+    $beginn = '<' . $tag . ' class=\'' . $si->getConfig('highlighterclass') . '\'>';
+    $ende = '</' . $tag . '>';
+
     $tags = array($beginn, $ende);
 
     preg_match('/<body[^>]*>(.*?)<\/body>/is', $subject, $matches);

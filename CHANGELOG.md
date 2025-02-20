@@ -1,5 +1,6 @@
 # Changelog
 - sort autosuggest results by like if similarity search is used #257 thx @xong
+- search highlghter can now use different tag thx @alexwenz
 
 ## Version 6.12.2 (2025-01-14)
 - remove/replace utf8_encode() in statistik PlugIn for PHP 8.2

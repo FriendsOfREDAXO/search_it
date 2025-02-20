@@ -58,6 +58,7 @@ search_it_settings_highlight_array = Array with every found text for every searc
 search_it_settings_highlight_sample = Sample result with search term
 search_it_settings_search_highlighter = Search highlighter
 search_it_settings_highlighterclass = If you name a CSS class here, every found searchword will be surrounded by a <span> element with this class, when a search result is clicked and displayed.
+search_it_settings_highlightertag = If you name a HTML tag here, this tag will be used to surrounded all found search words.
 
 search_it_settings_similarwords_label = Similarity search
 search_it_settings_similarwords_none = Deactivate

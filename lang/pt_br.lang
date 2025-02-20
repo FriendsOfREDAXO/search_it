@@ -57,6 +57,7 @@ search_it_settings_highlight_array = Como um arraz com todas as palavras e passa
 search_it_settings_highlight_sample = Exemplo para pesquisa
 search_it_settings_search_highlighter = Buscar destaque
 search_it_settings_highlighterclass = Se você inserir aqui uma classe CSS, toda o termo de busca encontrado será envolto por um elemento <span> com essa classe, quando um resultado de pesquisa for clicado e exibe.
+search_it_settings_highlightertag = Se você inserir aqui uma tag HTML, todo o termo de busca encontrado será envolto por essa tag, quando um resultado de pesquisa for clicado e exibe.
 
 search_it_settings_similarwords_label = Pesquisa por similiridade
 search_it_settings_similarwords_none = Desativar

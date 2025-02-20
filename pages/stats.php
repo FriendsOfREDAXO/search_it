@@ -8,7 +8,8 @@ if (rex_post('sendit', 'boolean')) {
 
         ['maxtopsearchitems', 'int'],
         ['searchtermselect', 'string'],
-        ['searchtermselectmonthcount', 'int']
+        ['searchtermselectmonthcount', 'int'],
+        ['stats', 'int']
 
     ]);
 
@@ -31,7 +32,7 @@ if (!empty($func)) {
             break;
 
         case 'topsearchterms':
-            require 'ajax.php';
+            require 'stats_ajax.php';
             exit;
             break;
     }
@@ -40,7 +41,20 @@ if (!empty($func)) {
 
 $content = [];
 
-$content[] = search_it_getSettingsFormSection(
+
+$formElements = [];
+$n = [];
+$n['label'] = '<label for="stats">' . $this->i18n('search_it_stats_config_stats') . '</label>';
+$n['field'] = '<input type="checkbox" id="stats" name="search_it_stats[stats]"' . (!empty($this->getConfig('stats')) && $this->getConfig('stats') == '1' ? ' checked="checked"' : '') . ' value="1" />';
+$formElements[] = $n;
+
+$fragment = new rex_fragment();
+$fragment->setVar('elements', $formElements, false);
+$checkbox = $fragment->parse('core/form/checkbox.php');
+
+$content[] = $checkbox;
+
+    $content[] = search_it_getSettingsFormSection(
     'search_it_stats_description',
     $this->i18n('search_it_stats_description_title'),
     array(
@@ -57,157 +71,162 @@ $stats = new search_it_stats();
 #$stats->createTestData();
 #error_reporting(E_ALL);
 
-// general stats
-$sql = rex_sql::factory();
 
-$generalstats = $sql->getArray('SELECT
+if ($this->getConfig('stats') == 1) {
+
+    // general stats
+    $sql = rex_sql::factory();
+
+    $generalstats = $sql->getArray('SELECT
   ((SELECT COUNT(DISTINCT ftable,fid) as count FROM `' . rex::getTablePrefix() . rex::getTempPrefix() . 'search_it_index` WHERE ftable IS NOT NULL) + (SELECT COUNT(DISTINCT fid) as count FROM `' . rex::getTablePrefix() . rex::getTempPrefix() . 'search_it_index` WHERE ftable IS NULL)) AS 010_uniquedatasetcount,
   (SELECT AVG(resultcount) FROM `' . rex::getTablePrefix() . 'search_it_stats_searchterms`) AS 020_averageresultcount,
   (SELECT COUNT(*) FROM `' . rex::getTablePrefix() . 'search_it_stats_searchterms` WHERE resultcount > 0) AS 040_successfullsearchescount,
   (SELECT COUNT(*) FROM `' . rex::getTablePrefix() . 'search_it_stats_searchterms` WHERE resultcount = 0) AS 050_failedsearchescount,
   (SELECT COUNT(DISTINCT term) FROM `' . rex::getTablePrefix() . 'search_it_stats_searchterms`) AS 060_uniquesearchterms'
-);
-$generalstats = $generalstats[0];
-$generalstats['030_searchescount'] = $generalstats['040_successfullsearchescount'] + $generalstats['050_failedsearchescount'];
+    );
+    $generalstats = $generalstats[0];
+    $generalstats['030_searchescount'] = $generalstats['040_successfullsearchescount'] + $generalstats['050_failedsearchescount'];
 
-$generalstats['100_datalength'] = 0;
-$generalstats['110_indexlength'] = 0;
-foreach ($sql->getArray("SHOW TABLE STATUS LIKE '" . rex::getTablePrefix() . rex::getTempPrefix() . "search_it_%'") as $table) {
-    $generalstats['100_datalength'] += $table['Data_length'];
-    $generalstats['110_indexlength'] += $table['Index_length'];
+    $generalstats['100_datalength'] = 0;
+    $generalstats['110_indexlength'] = 0;
+    foreach ($sql->getArray("SHOW TABLE STATUS LIKE '" . rex::getTablePrefix() . rex::getTempPrefix() . "search_it_%'") as $table) {
+        $generalstats['100_datalength'] += $table['Data_length'];
+        $generalstats['110_indexlength'] += $table['Index_length'];
 
-    if ($table['Name'] == rex::getTablePrefix() . rex::getTempPrefix() . 'search_it_index') {
-        $generalstats['080_searchindexdatalength'] = search_it_stats_bytesize($table['Data_length']);
-        $generalstats['090_searchindexindexlength'] = search_it_stats_bytesize($table['Index_length']);
-        $generalstats['005_datasetcount'] = $table['Rows'];
+        if ($table['Name'] == rex::getTablePrefix() . rex::getTempPrefix() . 'search_it_index') {
+            $generalstats['080_searchindexdatalength'] = search_it_stats_bytesize($table['Data_length']);
+            $generalstats['090_searchindexindexlength'] = search_it_stats_bytesize($table['Index_length']);
+            $generalstats['005_datasetcount'] = $table['Rows'];
+        }
+
+        if ($table['Name'] == rex::getTablePrefix() . rex::getTempPrefix() . 'search_it_keywords')
+            $generalstats['070_keywordcount'] = $table['Rows'];
+
+        if ($table['Name'] == rex::getTablePrefix() . rex::getTempPrefix() . 'search_it_cache')
+            $generalstats['075_cachedsearchcount'] = $table['Rows'];
     }
 
-    if ($table['Name'] == rex::getTablePrefix() . rex::getTempPrefix() . 'search_it_keywords')
-        $generalstats['070_keywordcount'] = $table['Rows'];
+    $generalstats['020_averageresultcount'] = number_format($generalstats['020_averageresultcount'] ?? 0, 2, ',', '');
+    $generalstats['100_datalength'] = search_it_stats_bytesize($generalstats['100_datalength']);
+    $generalstats['110_indexlength'] = search_it_stats_bytesize($generalstats['110_indexlength']);
 
-    if ($table['Name'] == rex::getTablePrefix() . rex::getTempPrefix() . 'search_it_cache')
-        $generalstats['075_cachedsearchcount'] = $table['Rows'];
-}
-
-$generalstats['020_averageresultcount'] = number_format($generalstats['020_averageresultcount'] ?? 0, 2, ',', '');
-$generalstats['100_datalength'] = search_it_stats_bytesize($generalstats['100_datalength']);
-$generalstats['110_indexlength'] = search_it_stats_bytesize($generalstats['110_indexlength']);
-
-ksort($generalstats);
+    ksort($generalstats);
 
 
-$table_general = '<table id="generalstats-list" class="table">';
-foreach ($generalstats as $key => $value) {
-    $table_general .= '<tr><td>' . $this->i18n('search_it_stats_generalstats_' . $key) . '</td><td>' . $value . '</td></tr>';
-}
-$table_general .= '</table>';
+    $table_general = '<table id="generalstats-list" class="table">';
+    foreach ($generalstats as $key => $value) {
+        $table_general .= '<tr><td>' . $this->i18n('search_it_stats_generalstats_' . $key) . '</td><td>' . $value . '</td></tr>';
+    }
+    $table_general .= '</table>';
 
-$content[] = search_it_getSettingsFormSection(
-    'generalstats',
-    $this->i18n('search_it_stats_generalstats_title'),
-    array(
+    $content[] = search_it_getSettingsFormSection(
+        'generalstats',
+        $this->i18n('search_it_stats_generalstats_title'),
         array(
-            'type' => 'directoutput',
-            'output' => $table_general
-        )
-    ), 'info', true
-);
+            array(
+                'type' => 'directoutput',
+                'output' => $table_general
+            )
+        ), 'info', true
+    );
 
 
-// top search terms
-$topsearchtermlist = '';
-$topsearchtermselect = '<option value="all" ' . ($this->getConfig('searchtermselect') == 'all' ? ' selected="selected"' : '') . '>' . $this->i18n('search_it_stats_searchterm_timestats_title0_all') . '</option>';
-$topsearchterms = $stats->getTopSearchterms($this->getConfig('maxtopsearchitems'));
-foreach ($topsearchterms as $term) {
-    $topsearchtermlist .= '<li class="' . ($term['success'] == '1' ? 'search_it-stats-success text-success' : 'search_it-stats-fail text-danger') . '"><strong>' . rex_escape($term['term']) . '</strong> <em>(' . $term['count'] . ')</em></li>';
-    $topsearchtermselect .= '<option value="_' . rex_escape($term['term'], 'url') . '"' .
-        ($this->getConfig('searchtermselect') == '_' . rex_escape($term['term'], 'url') ? ' selected="selected"' : '') . '>' .
-        rex_i18n::rawMsg('search_it_stats_searchterm_timestats_title0_single', rex_escape($term['term'])) . '</option>';
-}
+    // top search terms
+    $topsearchtermlist = '';
+    $topsearchtermselect = '<option value="all" ' . ($this->getConfig('searchtermselect') == 'all' ? ' selected="selected"' : '') . '>' . $this->i18n('search_it_stats_searchterm_timestats_title0_all') . '</option>';
+    $topsearchterms = $stats->getTopSearchterms($this->getConfig('maxtopsearchitems'));
+    foreach ($topsearchterms as $term) {
+        $topsearchtermlist .= '<li class="' . ($term['success'] == '1' ? 'search_it-stats-success text-success' : 'search_it-stats-fail text-danger') . '"><strong>' . rex_escape($term['term']) . '</strong> <em>(' . $term['count'] . ')</em></li>';
+        $topsearchtermselect .= '<option value="_' . rex_escape($term['term'], 'url') . '"' .
+            ($this->getConfig('searchtermselect') == '_' . rex_escape($term['term'], 'url') ? ' selected="selected"' : '') . '>' .
+            rex_i18n::rawMsg('search_it_stats_searchterm_timestats_title0_single', rex_escape($term['term'])) . '</option>';
+    }
 
-if (!empty($topsearchterms)) {
-    $topsearchtermlist = '<ol>' . $topsearchtermlist . '</ol>';
-} else {
-    $topsearchtermlist = $this->i18n('search_it_stats_topsearchterms_none');
-}
-$selectMaxTopSearchitems = '<select name="search_it_stats[maxtopsearchitems]" id="search_it_stats_maxTopSearchitems" class="form-control">';
-foreach (array(10, 20, 50, 100, 200, 500, 1000) as $option) {
-    $selectMaxTopSearchitems .= '<option value="' . $option . '"' . (max(intval($this->getConfig('maxtopsearchitems')), 10) == $option ? ' selected="selected"' : '') . '>' . $option . '</option>';
-}
-$selectMaxTopSearchitems .= '</select>';
-$pre = rex_i18n::rawMsg('search_it_stats_topsearchterms_title', $selectMaxTopSearchitems, $stats->getSearchtermCount());
-$pre2 = '<div class="btn-group" role="group"><span class="search_it-stats-all btn btn-default">alle</span> <span class="search_it-stats-success btn btn-success">erfolgreich</span> <span class="search_it-stats-fail btn btn-danger">fehlgeschlagen</span></div>';
+    if (!empty($topsearchterms)) {
+        $topsearchtermlist = '<ol>' . $topsearchtermlist . '</ol>';
+    } else {
+        $topsearchtermlist = $this->i18n('search_it_stats_topsearchterms_none');
+    }
+    $selectMaxTopSearchitems = '<select name="search_it_stats[maxtopsearchitems]" id="search_it_stats_maxTopSearchitems" class="form-control">';
+    foreach (array(10, 20, 50, 100, 200, 500, 1000) as $option) {
+        $selectMaxTopSearchitems .= '<option value="' . $option . '"' . (max(intval($this->getConfig('maxtopsearchitems')), 10) == $option ? ' selected="selected"' : '') . '>' . $option . '</option>';
+    }
+    $selectMaxTopSearchitems .= '</select>';
+    $pre = rex_i18n::rawMsg('search_it_stats_topsearchterms_title', $selectMaxTopSearchitems, $stats->getSearchtermCount());
+    $pre2 = '<div class="btn-group" role="group"><span class="search_it-stats-all btn btn-default">alle</span> <span class="search_it-stats-success btn btn-success">erfolgreich</span> <span class="search_it-stats-fail btn btn-danger">fehlgeschlagen</span></div>';
 
 
-$content[] = search_it_getSettingsFormSection(
-    'topsearchterms',
-    $this->i18n('search_it_stats_topsearchterms_titletitle'),
-    array(
+    $content[] = search_it_getSettingsFormSection(
+        'topsearchterms',
+        $this->i18n('search_it_stats_topsearchterms_titletitle'),
         array(
-            'type' => 'directoutput',
-            'output' => $pre,
-        ),
-        array(
-            'type' => 'directoutput',
-            'output' => $pre2
-        ),
-        array(
-            'type' => 'directoutput',
-            'output' => $topsearchtermlist
-        )
-    ), 'info', true
-);
+            array(
+                'type' => 'directoutput',
+                'output' => $pre,
+            ),
+            array(
+                'type' => 'directoutput',
+                'output' => $pre2
+            ),
+            array(
+                'type' => 'directoutput',
+                'output' => $topsearchtermlist
+            )
+        ), 'info', true
+    );
 
 
-$content[] = search_it_getSettingsFormSection(
-    'general',
-    $this->i18n('search_it_stats_general_title'),
-    array(
+    $content[] = search_it_getSettingsFormSection(
+        'general',
+        $this->i18n('search_it_stats_general_title'),
         array(
-            'type' => 'directoutput',
-            'output' => '
+            array(
+                'type' => 'directoutput',
+                'output' => '
                           <img src="index.php?page=search_it/stats&amp;func=image&amp;image=rate_success_failure" alt="' . rex_escape($this->i18n('search_it_stats_rate_success_failure', ' ')) . '" title="' . rex_escape($this->i18n('search_it_stats_rate_success_failure', ' ', $stats->getMissCount() + $stats->getSuccessCount())) . '" />
                           <img src="index.php?page=search_it/stats&amp;func=image&amp;image=general_timestats" alt="' . rex_escape($this->i18n('search_it_stats_general_timestats', 6)) . '" title="' . rex_escape($this->i18n('search_it_stats_general_timestats', 6)) . '" />
                         '
-        )
-    ), 'info', true
+            )
+        ), 'info', true
+    );
 
-);
 
+    // stats for searchterms over time
+    if (!empty($topsearchtermselect)) {
+        $topsearchtermselect = '<select name="search_it_stats[searchtermselect]" id="search_it_stats_searchtermselect" class="form-control" >' . $topsearchtermselect . '</select>';
+    } else {
+        $topsearchtermselect = $this->i18n('search_it_stats_searchterm_timestats_title0');
+    }
+    $searchtermselectmonthcount = '<select name="search_it_stats[searchtermselectmonthcount]" id="search_it_stats_searchtermselectmonthcount" class="form-control" >';
+    foreach (array(6, 9, 12, 15, 18, 21, 24) as $option) {
+        $searchtermselectmonthcount .= '<option value="' . $option . '"' . ((intval($this->getConfig('searchtermselectmonthcount')) == $option) ? ' selected="selected"' : '') . '>' . $option . '</option>';
+    }
+    $searchtermselectmonthcount .= '</select>';
 
-// stats for searchterms over time
-if (!empty($topsearchtermselect)) {
-    $topsearchtermselect = '<select name="search_it_stats[searchtermselect]" id="search_it_stats_searchtermselect" class="form-control" >' . $topsearchtermselect . '</select>';
-} else {
-    $topsearchtermselect = $this->i18n('search_it_stats_searchterm_timestats_title0');
-}
-$searchtermselectmonthcount = '<select name="search_it_stats[searchtermselectmonthcount]" id="search_it_stats_searchtermselectmonthcount" class="form-control" >';
-foreach (array(6, 9, 12, 15, 18, 21, 24) as $option) {
-    $searchtermselectmonthcount .= '<option value="' . $option . '"' . ((intval($this->getConfig('searchtermselectmonthcount')) == $option) ? ' selected="selected"' : '') . '>' . $option . '</option>';
-}
-$searchtermselectmonthcount .= '</select>';
+    $pre = rex_i18n::rawMsg('search_it_stats_searchterm_timestats_title', $topsearchtermselect, $searchtermselectmonthcount);
+    $rest = '<img src="index.php?page=search_it/stats&amp;func=image&amp;image=searchterm_timestats&amp;term='
+        . ($this->getConfig('searchtermselect') == 'all' ? 'all' : $this->getConfig('searchtermselect'))
+        . '&amp;monthcount=' . intval($this->getConfig('searchtermselectmonthcount')) . '"  alt="'
+        . $this->i18n('search_it_stats_searchterm_timestats_title', $this->getConfig('searchtermselect') == 'all' ? $this->i18n('search_it_stats_searchterm_timestats_title0_all') : rex_i18n::rawMsg('search_it_stats_searchterm_timestats_title0_single', substr($this->getConfig('searchtermselect'), 1)), intval($this->getConfig('searchtermselectmonthcount'))) . '"'
+        . ' title="' . $this->i18n('search_it_stats_searchterm_timestats_title', $this->getConfig('searchtermselect') == 'all' ? $this->i18n('search_it_stats_searchterm_timestats_title0_all') : rex_i18n::rawMsg('search_it_stats_searchterm_timestats_title0_single', substr($this->getConfig('searchtermselect'), 1)), intval($this->getConfig('searchtermselectmonthcount'))) . '" />';
 
-$pre = rex_i18n::rawMsg('search_it_stats_searchterm_timestats_title', $topsearchtermselect, $searchtermselectmonthcount);
-$rest = '<img src="index.php?page=search_it/stats&amp;func=image&amp;image=searchterm_timestats&amp;term='
-    . ($this->getConfig('searchtermselect') == 'all' ? 'all' : $this->getConfig('searchtermselect'))
-    . '&amp;monthcount=' . intval($this->getConfig('searchtermselectmonthcount')) . '"  alt="'
-    . $this->i18n('search_it_stats_searchterm_timestats_title', $this->getConfig('searchtermselect') == 'all' ? $this->i18n('search_it_stats_searchterm_timestats_title0_all') : rex_i18n::rawMsg('search_it_stats_searchterm_timestats_title0_single', substr($this->getConfig('searchtermselect'), 1)), intval($this->getConfig('searchtermselectmonthcount'))) . '"'
-    . ' title="' . $this->i18n('search_it_stats_searchterm_timestats_title', $this->getConfig('searchtermselect') == 'all' ? $this->i18n('search_it_stats_searchterm_timestats_title0_all') : rex_i18n::rawMsg('search_it_stats_searchterm_timestats_title0_single', substr($this->getConfig('searchtermselect'), 1)), intval($this->getConfig('searchtermselectmonthcount'))) . '" />';
-
-$content[] = search_it_getSettingsFormSection(
-    'searchterm_timestats',
-    $this->i18n('search_it_stats_searchterm_timestats_titletitle'),
-    array(
+    $content[] = search_it_getSettingsFormSection(
+        'searchterm_timestats',
+        $this->i18n('search_it_stats_searchterm_timestats_titletitle'),
         array(
-            'type' => 'directoutput',
-            'output' => $pre
-        ),
-        array(
-            'type' => 'directoutput',
-            'output' => $rest
-        )
-    ), 'info', true
-);
+            array(
+                'type' => 'directoutput',
+                'output' => $pre
+            ),
+            array(
+                'type' => 'directoutput',
+                'output' => $rest
+            )
+        ), 'info', true
+    );
+}
+
+
 $content[] = '</div>';
 ?>
     <script type="text/javascript">

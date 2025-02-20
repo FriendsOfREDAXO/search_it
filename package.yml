@@ -1,5 +1,5 @@
 package: search_it
-version: '6.12.2'
+version: '6.13.1'
 author: Friends Of REDAXO
 supportpage: https://github.com/FriendsOfREDAXO/search_it
 
@@ -22,6 +22,7 @@ page:
                 blacklist: { title: 'translate:settings_blacklist' }
         suggest: { title: 'translate:search_it_autocomplete_title', icon: rex-icon fa-commenting }
         plaintext: { title: 'translate:search_it_plaintext_title', icon: rex-icon fa-file-text }
+        stats: { title: 'translate:search_it_stats_plugin_title', icon: rex-icon fa-bar-chart }
         test: { title: 'translate:test', icon: rex-icon fa-flask }
         docs:
             title: 'translate:search_it_docs'
@@ -38,9 +39,8 @@ console_commands:
 requires:
     redaxo: '^5.6.0'
     php: '>=7'
-
-plugins:
-    - stats
+    php_extensions:
+        - gd
 
 installer_ignore:
     - .github

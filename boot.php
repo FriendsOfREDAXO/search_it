@@ -92,14 +92,6 @@ if ($this->getConfig('autoComplete') == 1) {
         rex_view::addCssFile($this->getAssetsUrl('suggest.css'));
         rex_view::addJsFile($this->getAssetsUrl('suggest.js'));
 
-        if (!$this->hasConfig()) {
-            $this->setConfig(array(
-                'modus' => 'keywords',
-                'maxSuggestion' => 10,
-                'similarwordsmode' => '0',
-                'autoSubmitForm' => 1
-            ));
-        }
     } else {
         if ($this->getConfig('autoSubmitForm') == 1) {
             rex_extension::register('OUTPUT_FILTER', function (rex_extension_point $ep) {
@@ -117,22 +109,21 @@ if ($this->getConfig('plaintext') == 1) {
     require_once __DIR__ . '/functions/functions_plaintext.php';
 
     if (rex::isBackend()) {
-
         rex_extension::register('SEARCH_IT_PLAINTEXT', 'search_it_doPlaintext');
+    }
+}
 
-        //set default Values on installation
-        if (!$this->hasConfig()) {
-            $this->setConfig([
-                'order' => 'selectors,regex,textile,striptags',
-                'selectors' => "head,\nscript",
-                'regex' => '',
-                'textile' => true,
-                'striptags' => true,
-                'processparent' => false,
-                'plainText' => false,
-            ]);
-        }
+// stats
+require_once __DIR__ . '/functions/functions_stats.php';
 
+if ($this->getConfig('stats') == 1) {
+    if (rex_request('search_it_test', 'string', '') == '') {
+        rex_extension::register('SEARCH_IT_SEARCH_EXECUTED', 'search_it_stats_storekeywords');
+    }
+    if (rex::isBackend()) {
+        rex_extension::register('SEARCH_IT_PAGE_MAINTENANCE', 'search_it_stats_addtruncate');
+
+        rex_view::addCssFile($this->getAssetsUrl('stats.css'));
     }
 }
 
@@ -161,13 +152,31 @@ if (rex::isBackend() && rex::getUser()) {
 
     }
 
-    //set default Values on installation
-    if (!$this->hasConfig()) {
-        $this->setConfig('limit', [0, 10]);
-        $this->setConfig('maxSuggestion', '10');
-    }
     if (strpos(rex_request('page', 'string', ''), 'search_it') !== false) {
         rex_view::addJsFile($this->getAssetsUrl('search_it.js'));
         rex_view::addCssFile($this->getAssetsUrl('search_it.css'));
+    }
+
+    //set default Values on installation
+    if (!$this->hasConfig()) {
+        $this->setConfig(array(
+            'modus' => 'keywords',
+            'maxSuggestion' => 10,
+            'similarwordsmode' => '0',
+            'autoSubmitForm' => 1,
+            'order' => 'selectors,regex,textile,striptags',
+            'selectors' => "head,\nscript",
+            'regex' => '',
+            'textile' => true,
+            'striptags' => true,
+            'processparent' => false,
+            'plainText' => false,
+            'maxtopsearchitems' => 10,
+            'searchtermselect' => '',
+            'searchtermselectmonthcount' => 12,
+            'stats' => 0,
+            'limit' => [0, 10],
+            'maxSuggestion' => '10'
+        ));
     }
 }

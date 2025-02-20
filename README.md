@@ -16,11 +16,7 @@ führt zur schnelleren Anzeige von Suchergebnissen.
 
 ## Plugins
 
-* `Statistik`: Liefert Informationen zur Search it-Datenbank und zu den
-  häufigsten Suchanfragen.
-* `Plaintext`: Erlaubt es zu bestimmen, was in den Index aufgenommen wird
-
-> Hinweis: Die Plugins `Reindex` und `Search Highlighter` aus RexSearch für
+> Hinweis: Die Plugins `Plaintext`, `Statistik`, `Reindex` und `Search Highlighter` aus RexSearch für
 > REDAXO 4 wurden in Seach it integriert. Auch das PlugIn `Autocomplete` wurde integriert.
 
 ## Wo finde ich weitere Hilfe?

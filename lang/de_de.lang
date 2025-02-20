@@ -58,7 +58,7 @@ search_it_settings_highlight_array = Als Array mit allen Suchbegriffen und Texts
 search_it_settings_highlight_sample = Beispielausgabe bei Sucheingabe
 search_it_settings_search_highlighter = Search Highlighter
 search_it_settings_highlighterclass = Wenn Sie hier eine CSS-Klasse angeben, wird in einem angezeigten Suchergebnis um alle gefundenden Suchbegriffe ein <span> Element mit dieser Klasse gelegt, um sie hervorzuheben.
-search_it_settings_highlightertag = Hier können Sie ein alternatives HTML-Tag angeben, das für die Hervorhebnung verwendet wird.
+search_it_settings_highlightertag = Hier können Sie ein alternatives HTML-Tag wie z.B. <mark> angeben, das für die Hervorhebnung verwendet wird.
 
 search_it_settings_similarwords_label = Ähnlichkeitssuche
 search_it_settings_similarwords_none = Deaktivieren
@@ -215,3 +215,44 @@ search_it_plaintext_textile = Textile parsen
 search_it_plaintext_textile_label = Führt die Funktion rex_textile::parse() aus.
 search_it_plaintext_processparent = Standard-Plaintext-Konvertierung durchführen
 search_it_plaintext_processparent_label = Führt die Plaintext-Konvertierung von Search it zusätzlich aus.
+
+search_it_stats_title = Statistik
+search_it_stats_config_stats = Statistik aktivieren
+search_it_stats_plugin_title = Statistik
+search_it_stats_plugin_info = Statistiken über die Suche
+search_it_stats_truncate = Achtung, das Löschen der Statistik kann nicht rückgängig gemacht werden.
+search_it_stats_truncate_button = Statistik löschen
+search_it_stats_truncate_done = Statistik gelöscht
+search_it_stats_truncate_confirm = Möchten Sie wirklich alle Statistikdaten löschen?
+
+search_it_stats_generalstats_title = Allgemeine Statistiken
+search_it_stats_generalstats_005_datasetcount = Anzahl indexierter Datensätze:
+search_it_stats_generalstats_010_uniquedatasetcount = Anzahl eindeutiger Datensätze im Suchindex (z. B. werden Artikel gruppiert):
+search_it_stats_generalstats_020_averageresultcount = Durchschnittliche Anzahl von Ergebnissen je durchgeführter Suche:
+search_it_stats_generalstats_030_searchescount = Durchgeführte Suchen:
+search_it_stats_generalstats_040_successfullsearchescount = Anzahl erfolgreicher Suchen:
+search_it_stats_generalstats_050_failedsearchescount = Anzahl fehlgeschlagener Suchen:
+search_it_stats_generalstats_060_uniquesearchterms = Anzahl unterschiedlicher Suchbegriffe:
+search_it_stats_generalstats_070_keywordcount = Anzahl unterschiedlicher, im Suchindex vorhandener Begriffe:
+search_it_stats_generalstats_075_cachedsearchcount = Anzahl im Cache vorgehaltener Suchen:
+search_it_stats_generalstats_080_searchindexdatalength = Größe des Index der Suchindex-Tabelle (search_it_index):
+search_it_stats_generalstats_090_searchindexindexlength = Größe der Daten der Suchindex-Tabelle (search_it_index):
+search_it_stats_generalstats_100_datalength = Größe der Indexe aller Search it-Tabellen:
+search_it_stats_generalstats_110_indexlength = Größe der Daten aller Search it-Tabellen:
+
+search_it_stats_topsearchterms_titletitle = Häufigste Suchbegriffe
+search_it_stats_topsearchterms_title = Die {0} häufigsten Suchbegriffe (insgesamt {1} unterschiedliche Suchbegriffe)
+search_it_stats_topsearchterms_none = Noch keine Suchbegriffe vorhanden.
+
+search_it_stats_general_title = Allgemeine grafische Übersicht
+search_it_stats_rate_success_failure = Erfolgreiche/fehlgeschlagene Suchen{0}(insgesamt {1} Suchen durchgeführt)
+search_it_stats_rate_success_failure_lblsuccess = Erfolgreich
+search_it_stats_rate_success_failure_lblmiss = Fehlgeschlagen
+search_it_stats_general_timestats = Anzahl der Suchen der letzten {0} Monate
+search_it_stats_general_timestats_count = Anzahl Suchen
+search_it_stats_general_timestats_countcumu = kumulierte Anzahl
+
+search_it_stats_searchterm_timestats_titletitle = Suchverlauf
+search_it_stats_searchterm_timestats_title = Übersicht für {0} über die letzten {1} Monate
+search_it_stats_searchterm_timestats_title0_all = alle Suchbegriffe
+search_it_stats_searchterm_timestats_title0_single = {0}

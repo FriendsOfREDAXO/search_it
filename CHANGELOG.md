@@ -1,6 +1,10 @@
 # Changelog
+
+## Version 6.13.1 (2025-02-20)
 - sort autosuggest results by like if similarity search is used #257 thx @xong
 - search highlghter can now use different tag thx @alexwenz
+- stats Plugin is deprecated, use the new subpage instead
+- Fix default settings for former plugins
 
 ## Version 6.12.2 (2025-01-14)
 - remove/replace utf8_encode() in statistik PlugIn for PHP 8.2

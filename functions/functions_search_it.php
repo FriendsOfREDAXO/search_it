@@ -735,7 +735,7 @@ function soundex_ger($word)
 
 
 // ex search highlighter plugin
-function search_it_search_highlighter_output($_ep)
+function search_it_search_highlighter_output($_ep): string
 {
 
     $subject = $_ep->getSubject();
@@ -762,7 +762,7 @@ function search_it_search_highlighter_output($_ep)
 
 }
 
-function search_it_search_highlighter_getHighlightedText($_subject, $_searchString, $_tags)
+function search_it_search_highlighter_getHighlightedText($_subject, $_searchString, $_tags): string
 {
     preg_match_all('~(?:(\+*)"([^"]*)")|(?:(\+*)(\S+))~is', $_searchString, $matches, PREG_SET_ORDER);
 
@@ -797,7 +797,7 @@ function search_it_search_highlighter_getHighlightedText($_subject, $_searchStri
  * Prüft ob das URL Addon in der kompatiblen Version verfügbar ist.
  * @return bool
  */
-function search_it_isUrlAddOnAvailable()
+function search_it_isUrlAddOnAvailable(): bool
 {
     return (rex_addon::get('url')->isAvailable() && rex_string::versionCompare(\rex_addon::get('url')->getVersion(), '1.5', '>='));
 }
@@ -806,7 +806,7 @@ function search_it_isUrlAddOnAvailable()
  * Ermittelt den Namen der Tabelle des URL Addons
  * @return string
  */
-function search_it_getUrlAddOnTableName()
+function search_it_getUrlAddOnTableName(): ?string
 {
 
     if (search_it_isUrlAddOnAvailable()) {
@@ -825,10 +825,11 @@ function search_it_getUrlAddOnTableName()
 
         return $tableName;
     }
+    return  null;
 }
 
 // ex reindex plugin
-function search_it_reindex_cols($_ep)
+function search_it_reindex_cols($_ep): bool
 {
     if ($_ep->getSubject() instanceof Exception) {
         return $_ep->getSubject();

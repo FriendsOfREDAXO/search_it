@@ -1,5 +1,4 @@
 <?php
-
 class search_it_stats
 {
     var $sql;
@@ -10,13 +9,13 @@ class search_it_stats
         $this->flushSQL();
     }
 
-    function flushSQL()
+    function flushSQL(): void
     {
         $this->sql->flushValues();
         $this->sql->setTable(rex::getTablePrefix() . 'search_it_stats_searchterms');
     }
 
-    function insert($_searchterm, $_resultcount, $_time = false)
+    function insert($_searchterm, $_resultcount, $_time = false): void
     {
         $this->flushSQL();
 
@@ -35,12 +34,12 @@ class search_it_stats
         $this->sql->insert();
     }
 
-    function truncate()
+    function truncate(): void
     {
         $this->sql->setQuery('TRUNCATE ' . rex::getTablePrefix() . 'search_it_stats_searchterms');
     }
 
-    function getTopSearchterms($_count, $_getonly = 0)
+    function getTopSearchterms($_count, $_getonly = 0): array
     {
         $this->flushSQL();
 
@@ -65,7 +64,7 @@ class search_it_stats
         return $return;
     }
 
-    function getSuccessCount()
+    function getSuccessCount(): int
     {
         $this->flushSQL();
         $this->sql->setWhere('resultcount > 0 LIMIT 1');
@@ -74,7 +73,7 @@ class search_it_stats
         return intval($return[0]['success']);
     }
 
-    function getMissCount()
+    function getMissCount(): int
     {
         $this->flushSQL();
         $this->sql->setWhere('resultcount = 0 LIMIT 1');
@@ -83,7 +82,7 @@ class search_it_stats
         return intval($return[0]['miss']);
     }
 
-    function getCount($_count = 6)
+    function getCount($_count = 6): array
     {
         $this->flushSQL();
         $this->sql->setWhere('1 GROUP BY y, m ORDER BY y DESC, m DESC LIMIT ' . $_count);
@@ -114,7 +113,7 @@ class search_it_stats
         return array_reverse($return);
     }
 
-    function getSearchtermCount()
+    function getSearchtermCount(): int
     {
         $this->flushSQL();
         $this->sql->select('COUNT(DISTINCT term) as count');
@@ -122,7 +121,7 @@ class search_it_stats
         return intval($return[0]['count']);
     }
 
-    function getTimestats($_term = '', $_count = 12)
+    function getTimestats($_term = '', $_count = 12): array
     {
         $this->flushSQL();
         if (!empty($_term))
@@ -157,7 +156,7 @@ class search_it_stats
         return array_reverse($return);
     }
 
-    function getSearchCount()
+    function getSearchCount(): int
     {
         $this->flushSQL();
         $this->sql->select('COUNT(*) as count');
@@ -165,7 +164,7 @@ class search_it_stats
         return intval($return[0]['count']);
     }
 
-    function createTestData()
+    function createTestData(): void
     {
         $this->flushSQL();
         $str = '

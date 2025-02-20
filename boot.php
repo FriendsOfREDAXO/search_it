@@ -85,6 +85,71 @@ if (rex_addon::get('search_it')->getConfig('index_url_addon') == true) {
     }
 }
 
+if (rex::isBackend() && rex::getUser()) {
+    // automatic indexing
+    if (rex_addon::get('search_it')->getConfig('automaticindex') == true) {
+        $extensionPoints = array(
+            'ART_DELETED',
+            'ART_META_UPDATED',
+            'ART_STATUS',
+            'ART_ADDED',
+            'ART_UPDATED',
+            'CAT_DELETED',
+            'CAT_STATUS',
+            'CAT_ADDED',
+            'CAT_UPDATED',
+            'MEDIA_ADDED',
+            'MEDIA_UPDATED',
+            'MEDIA_DELETED',
+            'SLICE_ADDED',
+            'SLICE_DELETED',
+            'SLICE_UPDATED',
+        );
+        rex_extension::register($extensionPoints, 'search_it_handle_extensionpoint');
+    }
+
+    if (strpos(rex_request('page', 'string', ''), 'search_it') !== false) {
+        rex_view::addJsFile($this->getAssetsUrl('search_it.js'));
+        rex_view::addCssFile($this->getAssetsUrl('search_it.css'));
+    }
+
+    //set default Values on installation
+    if (!$this->hasConfig('modus')) {
+        $this->setConfig(array(
+            'modus' => 'keywords',
+            'maxSuggestion' => 10,
+            'similarwordsmode' => '0',
+            'autoSubmitForm' => 1
+        ));
+    }
+    if (!$this->hasConfig('plainOrder')) {
+        $this->setConfig([
+            'plainOrder' => 'selectors,regex,textile,striptags',
+            'selectors' => "head,\nscript",
+            'regex' => '',
+            'textile' => true,
+            'striptags' => true,
+            'processparent' => false,
+            'plainText' => false,
+        ]);
+    }
+    if (!$this->hasConfig('stats')) {
+        $this->setConfig(array(
+            'maxtopsearchitems' => 10,
+            'searchtermselect' => '',
+            'searchtermselectmonthcount' => 12,
+            'stats' => 0,
+        ));
+    }
+    if (!$this->hasConfig('limit')) {
+        $this->setConfig(array(
+            'limit' => [0, 10],
+            'maxSuggestion' => '10'
+        ));
+    }
+}
+
+// former plugins
 // autocomplete
 if ($this->getConfig('autoComplete') == 1) {
     if (rex::isBackend()) {
@@ -114,8 +179,9 @@ if ($this->getConfig('plaintext') == 1) {
 }
 
 // stats
-require_once __DIR__ . '/functions/functions_stats.php';
-
+if (!rex_plugin::get('search_it', 'stats')->isAvailable()) {
+    require_once __DIR__ . '/functions/functions_stats.php';
+}
 if ($this->getConfig('stats') == 1) {
     if (rex_request('search_it_test', 'string', '') == '') {
         rex_extension::register('SEARCH_IT_SEARCH_EXECUTED', 'search_it_stats_storekeywords');
@@ -124,59 +190,5 @@ if ($this->getConfig('stats') == 1) {
         rex_extension::register('SEARCH_IT_PAGE_MAINTENANCE', 'search_it_stats_addtruncate');
 
         rex_view::addCssFile($this->getAssetsUrl('stats.css'));
-    }
-}
-
-if (rex::isBackend() && rex::getUser()) {
-    // automatic indexing
-    if (rex_addon::get('search_it')->getConfig('automaticindex') == true) {
-        $extensionPoints = array(
-            'ART_DELETED',
-            'ART_META_UPDATED',
-            'ART_STATUS',
-            'ART_ADDED',
-            'ART_UPDATED',
-            'CAT_DELETED',
-            'CAT_STATUS',
-            'CAT_ADDED',
-            'CAT_UPDATED',
-            'MEDIA_ADDED',
-            'MEDIA_UPDATED',
-            'MEDIA_DELETED',
-            'SLICE_ADDED',
-            'SLICE_DELETED',
-            'SLICE_UPDATED',
-        );
-
-        rex_extension::register($extensionPoints, 'search_it_handle_extensionpoint');
-
-    }
-
-    if (strpos(rex_request('page', 'string', ''), 'search_it') !== false) {
-        rex_view::addJsFile($this->getAssetsUrl('search_it.js'));
-        rex_view::addCssFile($this->getAssetsUrl('search_it.css'));
-    }
-
-    //set default Values on installation
-    if (!$this->hasConfig()) {
-        $this->setConfig(array(
-            'modus' => 'keywords',
-            'maxSuggestion' => 10,
-            'similarwordsmode' => '0',
-            'autoSubmitForm' => 1,
-            'order' => 'selectors,regex,textile,striptags',
-            'selectors' => "head,\nscript",
-            'regex' => '',
-            'textile' => true,
-            'striptags' => true,
-            'processparent' => false,
-            'plainText' => false,
-            'maxtopsearchitems' => 10,
-            'searchtermselect' => '',
-            'searchtermselectmonthcount' => 12,
-            'stats' => 0,
-            'limit' => [0, 10],
-            'maxSuggestion' => '10'
-        ));
     }
 }

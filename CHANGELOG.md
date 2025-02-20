@@ -1,6 +1,6 @@
 # Changelog
 
-## Version 6.13.1 (2025-02-20)
+## Version 6.13.2 (2025-02-20)
 - sort autosuggest results by like if similarity search is used #257 thx @xong
 - search highlghter can now use different tag thx @alexwenz
 - stats Plugin is deprecated, use the new subpage instead

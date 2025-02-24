@@ -247,7 +247,7 @@ $buttons = $fragment->parse('core/form/submit.php');
 
 $fragment = new rex_fragment();
 $fragment->setVar('title', $this->i18n('search_it_plaintext_title'), '');
-$fragment->setVar('class', 'info', false);
+$fragment->setVar('class', 'edit', false);
 $fragment->setVar('body', $content, false);
 $fragment->setVar('buttons', $buttons, false);
 

@@ -54,25 +54,24 @@ $checkbox = $fragment->parse('core/form/checkbox.php');
 
 $content[] = $checkbox;
 
-    $content[] = search_it_getSettingsFormSection(
-    'search_it_stats_description',
-    $this->i18n('search_it_stats_description_title'),
-    array(
-        array(
-            'type' => 'directoutput',
-            'output' => ''
-        )
-    ), false, false
-);
-
-$content[] = '<div id="stats_elements">';
-
-$stats = new search_it_stats();
-#$stats->createTestData();
-#error_reporting(E_ALL);
-
-
 if ($this->getConfig('stats') == 1) {
+    $content[] = search_it_getSettingsFormSection(
+        'search_it_stats_description',
+        $this->i18n('search_it_stats_description_title'),
+        array(
+            array(
+                'type' => 'directoutput',
+                'output' => ''
+            )
+        ), false, false
+    );
+
+    $content[] = '<div id="stats_elements">';
+
+    $stats = new search_it_stats();
+    #$stats->createTestData();
+    #error_reporting(E_ALL);
+
 
     // general stats
     $sql = rex_sql::factory();
@@ -224,10 +223,8 @@ if ($this->getConfig('stats') == 1) {
             )
         ), 'info', true
     );
-}
 
-
-$content[] = '</div>';
+    $content[] = '</div>';
 ?>
     <script type="text/javascript">
         // <![CDATA[
@@ -348,6 +345,7 @@ $content[] = '</div>';
         // ]]>
     </script>
 <?php
+}
 $content = implode("\n", $content);
 
 $formElements = [];

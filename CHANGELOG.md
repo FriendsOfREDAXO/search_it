@@ -1,5 +1,6 @@
 # Changelog
 - Fix backend config Forms for plaintext and stats
+- Fix some warnings in former plaintext plugin
 
 ## Version 6.13.2 (2025-02-20)
 - sort autosuggest results by like if similarity search is used #257 thx @xong

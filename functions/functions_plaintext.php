@@ -3,7 +3,7 @@
 function search_it_doPlaintext($_ep): array
 {
     $subject = $_ep->getSubject();
-    $subject = search_it_getPlaintext($subject, preg_replace('~\s+~ism', ' ', rex_plugin::get('search_it', 'plaintext')->getConfig('selectors')));
+    $subject = search_it_getPlaintext($subject, preg_replace('~\s+~ism', ' ', rex_plugin::get('search_it', 'plaintext')->getConfig('selectors') ?? ''));
     return array('text' => $subject, 'process' => !empty(rex_plugin::get('search_it', 'plaintext')->getConfig('processparent')));
 }
 
@@ -13,7 +13,7 @@ function search_it_getPlaintext($_text, $_remove): string
 {
 
     $pt = rex_plugin::get('search_it', 'plaintext');
-    foreach (explode(',', $pt->getConfig('order')) as $elem) {
+    foreach (explode(',', ($pt->getConfig('order') ?? '')) as $elem) {
         switch ($elem) {
             case 'selectors':
                 // remove elements selected by css-selectors

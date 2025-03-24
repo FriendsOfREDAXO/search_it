@@ -1,8 +1,9 @@
 package: search_it
-version: '6.13.2'
+version: '6.14.1'
 author: Friends Of REDAXO
 supportpage: https://github.com/FriendsOfREDAXO/search_it
 
+mysql_insert_chunk_size: 100
 
 page:
     title: 'translate:title'

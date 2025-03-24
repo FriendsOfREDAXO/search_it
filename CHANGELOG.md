@@ -1,4 +1,8 @@
 # Changelog
+
+## Version 6.14.1 (2025-03-24)
+- add missing simple_html_dom lib
+- insert keywords in chunks in keyword table (deadlock prevention)
 - Fix backend config Forms for plaintext and stats
 - Fix some warnings in former plaintext plugin
 

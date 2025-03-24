@@ -49,6 +49,7 @@ class search_it
     private $blacklisted = [];
     private $excludeIDs = [];
 
+    private $mysqlInsertChunkSize = 100;
 
     function __construct($_clang = false, $_loadSettings = true, $_useStopwords = true)
     {
@@ -100,6 +101,8 @@ class search_it
             include rex_path::addon('search_it', '/lang/stopwords.php');
             $this->stopwords = $german_stopwords;
         }
+
+        $this->mysqlInsertChunkSize = rex_addon::get('search_it')->getProperty('mysql_insert_chunk_size', 100);
     }
 
     private static function getTablePrefix()
@@ -2133,18 +2136,21 @@ class search_it
         }
 
         if (!empty($simWords)) {
-            $simWordsSQL->setQuery(
-                sprintf("
-              INSERT INTO `%s`
-              (keyword, soundex, metaphone, colognephone, clang)
-              VALUES
-              %s
-              ON DUPLICATE KEY UPDATE count = count + %d",
-                    self::getTempTablePrefix() . 'search_it_keywords',
-                    implode(',', $simWords),
-                    $_doCount ? 1 : 0
-                )
-            );
+            $simWordsTeile = array_chunk($simWords, $this->mysqlInsertChunkSize);
+            foreach ($simWordsTeile as $simWordsTeil) {
+                $simWordsSQL->setQuery(
+                    sprintf("
+                      INSERT INTO `%s`
+                      (keyword, soundex, metaphone, colognephone, clang)
+                      VALUES
+                      %s
+                      ON DUPLICATE KEY UPDATE count = count + %d",
+                        self::getTempTablePrefix() . 'search_it_keywords',
+                        implode(',', $simWordsTeil),
+                        $_doCount ? 1 : 0
+                    )
+                );
+            }
         }
     }
 

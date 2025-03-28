@@ -11,7 +11,7 @@ function search_it_stats_storekeywords($_ep)
 function search_it_stats_addtruncate($_ep)
 {
     $subject = $_ep->getSubject();
-    $st = rex_plugin::get('search_it', 'stats');
+    $st = rex_addon::get('search_it');
 
     if (rex_request('func') == 'truncate') {
         $stats = new search_it_stats();

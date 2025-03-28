@@ -1,5 +1,8 @@
 # Changelog
 
+## Version 6.14.2 (2025-03-28)
+- Fix plaintext function thx @olien
+
 ## Version 6.14.1 (2025-03-24)
 - add missing simple_html_dom lib
 - insert keywords in chunks in keyword table (deadlock prevention)

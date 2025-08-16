@@ -50,6 +50,7 @@ class search_it
     private $excludeIDs = [];
 
     private $mysqlInsertChunkSize = 100;
+    private $maxSearchTerms = 10;
 
     function __construct($_clang = false, $_loadSettings = true, $_useStopwords = true)
     {
@@ -80,6 +81,7 @@ class search_it
 
             $this->setBlacklist(is_array(rex_addon::get('search_it')->getConfig('blacklist')) ? rex_addon::get('search_it')->getConfig('blacklist') : []);
             $this->setExcludeIDs(is_array(rex_addon::get('search_it')->getConfig('exclude_article_ids')) ? rex_addon::get('search_it')->getConfig('exclude_article_ids') : []);
+            $this->maxSearchTerms = (int)(rex_addon::get('search_it')->getConfig('max_search_terms') ?: 10);
             if (is_array(rex_addon::get('search_it')->getConfig('exclude_category_ids'))) {
                 $ids = [];
                 foreach (rex_addon::get('search_it')->getConfig('exclude_category_ids') as $catID) {
@@ -1259,6 +1261,16 @@ class search_it
     /* search */
 
     /**
+     * Sets the maximum number of search terms to prevent extremely long SQL queries.
+     *
+     * @param int $_maxSearchTerms Maximum number of search terms (default: 10)
+     */
+    public function setMaxSearchTerms($_maxSearchTerms): void
+    {
+        $this->maxSearchTerms = max(1, (int)$_maxSearchTerms);
+    }
+
+    /**
      * Sets search string.
      *
      * Expects a string.
@@ -1316,6 +1328,11 @@ class search_it
             }
 
             if ($notBlacklisted) {
+                // Limit search terms to prevent extremely long SQL queries in similarity search
+                if ($count >= $this->maxSearchTerms) {
+                    break;
+                }
+                
                 // whitelisted words get extra weighted
                 $this->searchArray[$count] = array('search' => $word,
                     'weight' => mb_strlen($plus) + 1 + (array_key_exists($word, $this->whitelist) ? $this->whitelist[$word] : 0),

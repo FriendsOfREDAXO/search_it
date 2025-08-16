@@ -4,6 +4,7 @@ author: Friends Of REDAXO
 supportpage: https://github.com/FriendsOfREDAXO/search_it
 
 mysql_insert_chunk_size: 100
+max_search_terms: 10
 
 page:
     title: 'translate:title'

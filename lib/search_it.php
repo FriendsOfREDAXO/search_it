@@ -1923,12 +1923,27 @@ class search_it
                                 $surroundText = mb_substr($surroundText, 0, mb_strrpos($surroundText, ' '));
                             }
 
+                            // Check if there's significant text before the captured surrounding text
                             if ($i == 0 and mb_strlen($hit[2]) > 0) {
-                                $startEllipsis = true;
+                                // Find where the captured surrounding text starts in the original text
+                                $surroundStart = mb_strpos($_text, $hit[0]);
+                                // Only show ellipsis if there's significant text before the captured area
+                                // or if the text before the search term within the captured area is substantial
+                                if ($surroundStart > 10 || mb_strlen($hit[2]) > 15) {
+                                    $startEllipsis = true;
+                                }
                             }
 
+                            // Check if there's significant text after the captured surrounding text
                             if ($i == (count($tmp_searchArray) - 1) and mb_strlen($hit[3]) > 0) {
-                                $endEllipsis = true;
+                                // Find where the captured surrounding text ends in the original text
+                                $surroundEnd = mb_strpos($_text, $hit[0]) + mb_strlen($hit[0]);
+                                $textLength = mb_strlen($_text);
+                                // Only show ellipsis if there's significant text after the captured area
+                                // or if the text after the search term within the captured area is substantial
+                                if ($surroundEnd < $textLength - 10 || mb_strlen($hit[3]) > 15) {
+                                    $endEllipsis = true;
+                                }
                             }
 
                             if ($this->highlightType == 'array') {

@@ -490,7 +490,20 @@ class search_it
 
                 if (strpos($scanurl, 'http') === false) {
                     // URL addon multidomain site return server name in url
-                    $scanurl = $server . '/' . ltrim(str_replace(['../', './'], '', $scanurl), "/");
+                    // Fix for subfolder installations: Check if URL already contains server path to avoid duplication
+                    $server_path = parse_url($server, PHP_URL_PATH);
+                    
+                    if ($server_path && strpos($scanurl, $server_path) === 0) {
+                        // If scanurl already starts with the server path, just add the scheme and host
+                        $server_without_path = parse_url($server, PHP_URL_SCHEME) . '://' . parse_url($server, PHP_URL_HOST);
+                        if (parse_url($server, PHP_URL_PORT)) {
+                            $server_without_path .= ':' . parse_url($server, PHP_URL_PORT);
+                        }
+                        $scanurl = $server_without_path . $scanurl;
+                    } else {
+                        // Original logic for cases where scanurl doesn't include the server path
+                        $scanurl = $server . '/' . ltrim(str_replace(['../', './'], '', $scanurl), "/");
+                    }
                 }
 
                 $scan_socket = $this->prepareSocket($scanurl);

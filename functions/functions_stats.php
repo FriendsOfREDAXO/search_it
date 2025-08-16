@@ -4,7 +4,7 @@ function search_it_stats_storekeywords($_ep)
 {
     $_params = $_ep->getSubject();
 
-    $stats = new search_it_stats();
+    $stats = new \FriendsOfREDAXO\SearchIt\SearchItStats();
     $stats->insert($_params['searchterm'], $_params['count']);
 }
 
@@ -14,7 +14,7 @@ function search_it_stats_addtruncate($_ep)
     $st = rex_addon::get('search_it');
 
     if (rex_request('func') == 'truncate') {
-        $stats = new search_it_stats();
+        $stats = new \FriendsOfREDAXO\SearchIt\SearchItStats();
         $stats->truncate();
 
         $st->setConfig(array(

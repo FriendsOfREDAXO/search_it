@@ -1,14 +1,14 @@
 <?php
 switch ($ajax) {
     case 'deleteindex':
-        $delete = new search_it();
+        $delete = new \FriendsOfREDAXO\SearchIt\SearchIt();
         $delete->deleteIndex();
         echo 1;
         break;
 
     case 'generate':
         // index column or article or file
-        $search_it = new search_it();
+        $search_it = new \FriendsOfREDAXO\SearchIt\SearchIt();
         switch (rex_get('type')) {
             case 'art':
                 foreach ($search_it->indexArticle($_id = intval(rex_get('id'))) as $langID => $article) {
@@ -145,7 +145,7 @@ switch ($ajax) {
 Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
 Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi.
 EOT;
-        $search_it = new search_it();
+        $search_it = new \FriendsOfREDAXO\SearchIt\SearchIt();
         $search_it->setSearchString('"velit esse" accusam');
         $search_it->setHighlightType(rex_get('type'));
         $search_it->parseSearchString('"velit esse" accusam');

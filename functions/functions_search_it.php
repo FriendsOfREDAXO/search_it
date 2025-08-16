@@ -192,7 +192,7 @@ function search_it_handle_extensionpoint($_ep): void
     $_params = $_ep->getParams();
     $_subject = $_ep->getSubject();
     $includeColumns = is_array(rex_addon::get('search_it')->getConfig('include')) ? rex_addon::get('search_it')->getConfig('include') : [];
-    $search_it = new search_it();
+    $search_it = new \FriendsOfREDAXO\SearchIt\SearchIt();
 
     switch ($_ep->getName()) {
         // delete article from index
@@ -838,7 +838,7 @@ function search_it_reindex_cols($_ep): bool
     $_params = $_ep->getParams();
 
     $includeColumns = is_array(rex_addon::get('search_it')->getConfig('include')) ? rex_addon::get('search_it')->getConfig('include') : [];
-    $search_it = new search_it;
+    $search_it = new \FriendsOfREDAXO\SearchIt\SearchIt();
 
     $didcol = false;
     $did = false;

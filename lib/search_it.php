@@ -1,6 +1,8 @@
 <?php
 
-class search_it
+namespace FriendsOfREDAXO\SearchIt;
+
+class SearchIt
 {
 
     private $searchString = '';

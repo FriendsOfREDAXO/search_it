@@ -34,8 +34,8 @@ page:
 
 
 console_commands:
-    search_it:reindex: rex_search_it_command_reindex
-    search_it:clearCache: rex_search_it_command_clearcache
+    search_it:reindex: FriendsOfREDAXO\SearchIt\Command\Reindex
+    search_it:clearCache: FriendsOfREDAXO\SearchIt\Command\ClearCache
 
 requires:
     redaxo: '^5.6.0'

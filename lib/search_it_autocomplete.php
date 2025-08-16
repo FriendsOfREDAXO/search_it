@@ -1,6 +1,8 @@
 <?php
 
-class rex_api_search_it_autocomplete extends rex_api_function
+namespace FriendsOfREDAXO\SearchIt\Api;
+
+class SearchItAutocomplete extends \rex_api_function
 {
     protected $published = true;
 
@@ -22,7 +24,7 @@ class rex_api_search_it_autocomplete extends rex_api_function
 
             if ($modus == "highlightedtext" || $modus == "articlename") {
 
-                $search_it = new search_it();
+                $search_it = new \FriendsOfREDAXO\SearchIt\SearchIt();
                 //$search_it->similarwordsMode = false; //keine speichern der keywords pro eingabe
                 $search_it->setMaxHighlightedTextChars(20);
                 //$search_it->ellipsis = '';

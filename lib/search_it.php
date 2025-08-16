@@ -405,9 +405,11 @@ class search_it
                     $articleData['values'] = serialize($additionalValues);
                 }
 
-                foreach (preg_split('~[[:punct:][:space:]]+~ismu', $plaintext) as $keyword) {
-                    if ($this->significantCharacterCount <= mb_strlen($keyword, 'UTF-8')) {
-                        $keywords[] = array('search' => $keyword, 'clang' => $langID);
+                if (is_string($plaintext)) {
+                    foreach (preg_split('~[[:punct:][:space:]]+~ismu', $plaintext) as $keyword) {
+                        if ($this->significantCharacterCount <= mb_strlen($keyword, 'UTF-8')) {
+                            $keywords[] = array('search' => $keyword, 'clang' => $langID);
+                        }
                     }
                 }
 
@@ -886,9 +888,11 @@ class search_it
                     $indexData['plaintext'] = $plaintext;
                     $indexData['lastindexed'] = date(DATE_W3C, time());
 
-                    foreach (preg_split('~[[:punct:][:space:]]+~ismu', $plaintext) as $keyword) {
-                        if ($this->significantCharacterCount <= mb_strlen($keyword, 'UTF-8')) {
-                            $keywords[] = array('search' => $keyword, 'clang' => is_null($indexData['clang']) ? false : $indexData['clang']);
+                    if (is_string($plaintext)) {
+                        foreach (preg_split('~[[:punct:][:space:]]+~ismu', $plaintext) as $keyword) {
+                            if ($this->significantCharacterCount <= mb_strlen($keyword, 'UTF-8')) {
+                                $keywords[] = array('search' => $keyword, 'clang' => is_null($indexData['clang']) ? false : $indexData['clang']);
+                            }
                         }
                     }
 
@@ -1155,18 +1159,20 @@ class search_it
     private function getTeaserText($_text)
     {
         $i = 0;
-        $textArray = preg_split('~\s+~siu', $_text, $this->maxTeaserChars);
+        $textArray = is_string($_text) ? preg_split('~\s+~siu', $_text, $this->maxTeaserChars) : [];
 
         $return = '';
         $aborted = false;
-        foreach ($textArray as $word) {
-            if ((($strlen = mb_strlen($word)) + $i) > $this->maxTeaserChars) {
-                $aborted = true;
-                break;
-            }
+        if (is_array($textArray)) {
+            foreach ($textArray as $word) {
+                if ((($strlen = mb_strlen($word)) + $i) > $this->maxTeaserChars) {
+                    $aborted = true;
+                    break;
+                }
 
-            $return .= $word . ' ';
-            $i += $strlen + 1;
+                $return .= $word . ' ';
+                $i += $strlen + 1;
+            }
         }
 
         if ($aborted) {

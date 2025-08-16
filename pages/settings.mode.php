@@ -18,6 +18,7 @@ if (rex_post('config-submit', 'boolean')) {
         ['automaticindex', 'bool'],
         ['reindex_cols_onforms', 'bool'],
         ['index_url_addon', 'bool'],
+        ['ignore_404_warnings', 'bool'],
 
         ['index_without_ssl_verification', 'bool'],
         ['index_host', 'string'],
@@ -56,6 +57,7 @@ $content3 = [];
 
 // URL Addon Checkbox
 $url_checkbox = [];
+$ignore_404_checkbox = [];
 if (search_it_isUrlAddOnAvailable()) {
     $url_checkbox = [
         'type' => 'checkbox',
@@ -64,6 +66,15 @@ if (search_it_isUrlAddOnAvailable()) {
         'label' => $this->i18n('search_it_settings_index_url_addon_label'),
         'value' => '1',
         'checked' => $this->getConfig('index_url_addon')
+    ];
+    
+    $ignore_404_checkbox = [
+        'type' => 'checkbox',
+        'id' => 'search_it_ignore_404_warnings',
+        'name' => 'search_config[ignore_404_warnings]',
+        'label' => $this->i18n('search_it_settings_ignore_404_warnings_label'),
+        'value' => '1',
+        'checked' => $this->getConfig('ignore_404_warnings')
     ];
 }
 // SSL verify
@@ -108,6 +119,8 @@ $content = search_it_getSettingsFormSection(
             'checked' => $this->getConfig('reindex_cols_onforms')
         ],
         $url_checkbox
+        ,
+        $ignore_404_checkbox
         ,
         $ssl_verify
         ,

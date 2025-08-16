@@ -325,7 +325,9 @@ class search_it
                                 rex_logger::factory()->log('Warning', rex_i18n::msg('search_it_generate_article_http_error') . ' ' . $scanurl . PHP_EOL . $response_text);
                             } else if ($response->getStatusCode() == '404') {
                                 $return[$langID] = SEARCH_IT_ART_404;
-                                rex_logger::factory()->log('Warning', rex_i18n::msg('search_it_generate_article_404_error') . ' ' . $scanurl . PHP_EOL . $response_text);
+                                if (!rex_addon::get('search_it')->getConfig('ignore_404_warnings')) {
+                                    rex_logger::factory()->log('Warning', rex_i18n::msg('search_it_generate_article_404_error') . ' ' . $scanurl . PHP_EOL . $response_text);
+                                }
                             } else {
                                 rex_logger::factory()->log('Warning', rex_i18n::msg('search_it_generate_article_http_error') . ' ' . $scanurl . PHP_EOL . $response_text);
                                 $return[$langID] = SEARCH_IT_ART_NOTOK;
@@ -536,7 +538,9 @@ class search_it
                         rex_logger::factory()->log('Warning', rex_i18n::msg('search_it_generate_article_http_error') . ' ' . $scanurl . PHP_EOL . $response_text);
                     } else if ($response->getStatusCode() == '404') {
                         $return[$clang_id] = SEARCH_IT_URL_404;
-                        rex_logger::factory()->log('Warning', rex_i18n::msg('search_it_generate_article_404_error') . ' ' . $scanurl . PHP_EOL . $response_text);
+                        if (!rex_addon::get('search_it')->getConfig('ignore_404_warnings')) {
+                            rex_logger::factory()->log('Warning', rex_i18n::msg('search_it_generate_article_404_error') . ' ' . $scanurl . PHP_EOL . $response_text);
+                        }
                     } else {
                         rex_logger::factory()->log('Warning', rex_i18n::msg('search_it_generate_article_http_error') . ' ' . $scanurl . PHP_EOL . $response_text);
                         $return[$clang_id] = SEARCH_IT_URL_NOTOK;

@@ -282,6 +282,13 @@ class search_it
                         }
                         //rex_logger::factory()->log('Warning','Indexierungs-URL: '.$scanurl);
 
+                        // Check if URL uses a valid HTTP/HTTPS scheme before attempting socket connection
+                        if (!$this->isValidHttpScheme($scanurl)) {
+                            rex_logger::factory()->info('Search_it: Skipping indexing of article ' . $_id . ' with non-HTTP scheme URL: ' . $scanurl);
+                            $return[$langID] = SEARCH_IT_ART_EXCLUDED;
+                            continue;
+                        }
+
                         $scan_socket = $this->prepareSocket($scanurl);
                         $response = $scan_socket->doGet();
                         $redircount = 0;
@@ -491,6 +498,13 @@ class search_it
                 if (strpos($scanurl, 'http') === false) {
                     // URL addon multidomain site return server name in url
                     $scanurl = $server . '/' . ltrim(str_replace(['../', './'], '', $scanurl), "/");
+                }
+
+                // Check if URL uses a valid HTTP/HTTPS scheme before attempting socket connection
+                if (!$this->isValidHttpScheme($scanurl)) {
+                    rex_logger::factory()->info('Search_it: Skipping indexing of URL with non-HTTP scheme: ' . $scanurl);
+                    $return[$clang_id] = SEARCH_IT_URL_EXCLUDED;
+                    return $return;
                 }
 
                 $scan_socket = $this->prepareSocket($scanurl);
@@ -2582,6 +2596,17 @@ class search_it
         $return['time'] = microtime(true) - $startTime;
 
         return $return;
+    }
+
+    /**
+     * Check if URL uses a valid HTTP or HTTPS scheme for socket connections
+     * @param string $url The URL to check
+     * @return bool True if URL has http:// or https:// scheme, false otherwise
+     */
+    private function isValidHttpScheme(string $url): bool
+    {
+        $scheme = parse_url($url, PHP_URL_SCHEME);
+        return in_array(strtolower($scheme ?? ''), ['http', 'https']);
     }
 
     private function prepareSocket(string $scanurl)

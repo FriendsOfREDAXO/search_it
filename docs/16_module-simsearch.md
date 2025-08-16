@@ -10,6 +10,13 @@ Sollte eine Suche keine Ergebnisse liefern, füllt Search it das Result-Array mi
 eventuell gefundenen ähnlichen Wörtern und macht auch einen Vorschlag, wie der
 neue Suchbegriff aussehen könnte.
 
+> **Wichtig:** Wenn Sie die Ähnlichkeitssuche erst nachträglich aktivieren, 
+> nachdem bereits ein Index existiert, können die phonetischen Werte für 
+> bestehende Schlagwörter fehlen. In diesem Fall sollten Sie entweder den 
+> kompletten Index neu aufbauen oder die Methode `regenerateKeywords()` 
+> verwenden, um die Schlagwörter mit den aktuellen Ähnlichkeitssuche-
+> Einstellungen zu regenerieren.
+
 > Tipp: Um die Ähnlichkeitssuche effektiv einsetzen zu können, empfiehlt es
 > sich, die Suche selbst mit richtigen Schlagwörtern zu füttern. Dadurch sind
 > erste Suchwörter indexiert und die Ähnlichkeitssuche kann bei einer falschen
@@ -65,3 +72,17 @@ if($request) { // Wenn ein Suchbegriff eingegeben wurde
     }
 }
 ```
+
+## Schlagwörter neu generieren
+
+Falls Sie die Ähnlichkeitssuche nachträglich aktiviert haben, können Sie die 
+Schlagwörter mit den aktuellen Einstellungen neu generieren:
+
+```php
+$search_it = new search_it();
+$search_it->regenerateKeywords();
+```
+
+Diese Methode liest alle existierenden Schlagwörter aus dem Index, löscht die 
+Schlagwort-Tabelle und erstellt sie mit den aktuellen Ähnlichkeitssuche-
+Einstellungen neu.

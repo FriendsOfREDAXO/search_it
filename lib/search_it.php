@@ -2138,16 +2138,34 @@ class search_it
         if (!empty($simWords)) {
             $simWordsTeile = array_chunk($simWords, $this->mysqlInsertChunkSize);
             foreach ($simWordsTeile as $simWordsTeil) {
+                // Build ON DUPLICATE KEY UPDATE clause to also update phonetic fields when similarity search is enabled
+                $updateClauses = ['count = count + ' . ($_doCount ? 1 : 0)];
+                
+                // Update soundex field if similarity search mode includes soundex and current field is empty
+                if ($this->similarwordsMode & SEARCH_IT_SIMILARWORDS_SOUNDEX) {
+                    $updateClauses[] = 'soundex = IF(soundex = \'\', VALUES(soundex), soundex)';
+                }
+                
+                // Update metaphone field if similarity search mode includes metaphone and current field is empty
+                if ($this->similarwordsMode & SEARCH_IT_SIMILARWORDS_METAPHONE) {
+                    $updateClauses[] = 'metaphone = IF(metaphone = \'\', VALUES(metaphone), metaphone)';
+                }
+                
+                // Update colognephone field if similarity search mode includes colognephone and current field is empty
+                if ($this->similarwordsMode & SEARCH_IT_SIMILARWORDS_COLOGNEPHONE) {
+                    $updateClauses[] = 'colognephone = IF(colognephone = \'\', VALUES(colognephone), colognephone)';
+                }
+                
                 $simWordsSQL->setQuery(
                     sprintf("
                       INSERT INTO `%s`
                       (keyword, soundex, metaphone, colognephone, clang)
                       VALUES
                       %s
-                      ON DUPLICATE KEY UPDATE count = count + %d",
+                      ON DUPLICATE KEY UPDATE %s",
                         self::getTempTablePrefix() . 'search_it_keywords',
                         implode(',', $simWordsTeil),
-                        $_doCount ? 1 : 0
+                        implode(', ', $updateClauses)
                     )
                 );
             }
@@ -2158,6 +2176,30 @@ class search_it
     {
         $kw_sql = rex_sql::factory();
         $kw_sql->setQuery(sprintf('TRUNCATE TABLE `%s`', self::getTempTablePrefix() . 'search_it_keywords'));
+    }
+
+    /**
+     * Regenerates all keywords with current similarity search settings.
+     * This is useful when similarity search modes are changed after initial indexing.
+     */
+    public function regenerateKeywords(): void
+    {
+        // Get all existing keywords from the index
+        $sql = rex_sql::factory();
+        $sql->setQuery(sprintf('SELECT DISTINCT keyword FROM `%s`', self::getTempTablePrefix() . 'search_it_keywords'));
+        
+        $keywords = [];
+        foreach ($sql->getArray() as $row) {
+            $keywords[] = ['search' => $row['keyword'], 'clang' => false];
+        }
+        
+        if (!empty($keywords)) {
+            // Delete existing keywords
+            $this->deleteKeywords();
+            
+            // Re-store keywords with current similarity settings
+            $this->storeKeywords($keywords, false);
+        }
     }
 
 

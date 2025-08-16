@@ -255,8 +255,8 @@ class search_it
                 continue;
             }
 
-            if (is_object($article) and ($article->isOnline() or (rex_addon::get('search_it')->getConfig('indexoffline') AND 0 === $article->getValue('status'))) and $_id != 0
-                and ($_id != rex_article::getNotfoundArticleId() or $_id == rex_article::getSiteStartArticleId())) {
+            if ($article !== null && is_object($article) && ($article->isOnline() || (rex_addon::get('search_it')->getConfig('indexoffline') && 0 === $article->getValue('status'))) && $_id != 0
+                && ($_id != rex_article::getNotfoundArticleId() || $_id == rex_article::getSiteStartArticleId())) {
 
                 if (!$dont_use_socket) {
                     try {
@@ -405,9 +405,11 @@ class search_it
                     $articleData['values'] = serialize($additionalValues);
                 }
 
-                foreach (preg_split('~[[:punct:][:space:]]+~ismu', $plaintext) as $keyword) {
-                    if ($this->significantCharacterCount <= mb_strlen($keyword, 'UTF-8')) {
-                        $keywords[] = array('search' => $keyword, 'clang' => $langID);
+                if (is_string($plaintext)) {
+                    foreach (preg_split('~[[:punct:][:space:]]+~ismu', $plaintext) as $keyword) {
+                        if ($this->significantCharacterCount <= mb_strlen($keyword, 'UTF-8')) {
+                            $keywords[] = array('search' => $keyword, 'clang' => $langID);
+                        }
                     }
                 }
 
@@ -462,7 +464,7 @@ class search_it
         $article = rex_article::get($article_id, $clang_id);
         if (is_null($article)) {
             $return[$clang_id] = SEARCH_IT_ART_IDNOTFOUND;
-        } else if (is_object($article) and ($article->isOnline() or rex_addon::get('search_it')->getConfig('indexoffline'))) {
+        } else if ($article !== null && is_object($article) && ($article->isOnline() || rex_addon::get('search_it')->getConfig('indexoffline'))) {
             try {
 
                 $index_host = rex_addon::get('search_it')->getConfig('index_host');
@@ -490,7 +492,20 @@ class search_it
 
                 if (strpos($scanurl, 'http') === false) {
                     // URL addon multidomain site return server name in url
-                    $scanurl = $server . '/' . ltrim(str_replace(['../', './'], '', $scanurl), "/");
+                    // Fix for subfolder installations: Check if URL already contains server path to avoid duplication
+                    $server_path = parse_url($server, PHP_URL_PATH);
+                    
+                    if ($server_path && strpos($scanurl, $server_path) === 0) {
+                        // If scanurl already starts with the server path, just add the scheme and host
+                        $server_without_path = parse_url($server, PHP_URL_SCHEME) . '://' . parse_url($server, PHP_URL_HOST);
+                        if (parse_url($server, PHP_URL_PORT)) {
+                            $server_without_path .= ':' . parse_url($server, PHP_URL_PORT);
+                        }
+                        $scanurl = $server_without_path . $scanurl;
+                    } else {
+                        // Original logic for cases where scanurl doesn't include the server path
+                        $scanurl = $server . '/' . ltrim(str_replace(['../', './'], '', $scanurl), "/");
+                    }
                 }
 
                 $scan_socket = $this->prepareSocket($scanurl);
@@ -886,9 +901,11 @@ class search_it
                     $indexData['plaintext'] = $plaintext;
                     $indexData['lastindexed'] = date(DATE_W3C, time());
 
-                    foreach (preg_split('~[[:punct:][:space:]]+~ismu', $plaintext) as $keyword) {
-                        if ($this->significantCharacterCount <= mb_strlen($keyword, 'UTF-8')) {
-                            $keywords[] = array('search' => $keyword, 'clang' => is_null($indexData['clang']) ? false : $indexData['clang']);
+                    if (is_string($plaintext)) {
+                        foreach (preg_split('~[[:punct:][:space:]]+~ismu', $plaintext) as $keyword) {
+                            if ($this->significantCharacterCount <= mb_strlen($keyword, 'UTF-8')) {
+                                $keywords[] = array('search' => $keyword, 'clang' => is_null($indexData['clang']) ? false : $indexData['clang']);
+                            }
                         }
                     }
 
@@ -1155,18 +1172,20 @@ class search_it
     private function getTeaserText($_text)
     {
         $i = 0;
-        $textArray = preg_split('~\s+~siu', $_text, $this->maxTeaserChars);
+        $textArray = is_string($_text) ? preg_split('~\s+~siu', $_text, $this->maxTeaserChars) : [];
 
         $return = '';
         $aborted = false;
-        foreach ($textArray as $word) {
-            if ((($strlen = mb_strlen($word)) + $i) > $this->maxTeaserChars) {
-                $aborted = true;
-                break;
-            }
+        if (is_array($textArray)) {
+            foreach ($textArray as $word) {
+                if ((($strlen = mb_strlen($word)) + $i) > $this->maxTeaserChars) {
+                    $aborted = true;
+                    break;
+                }
 
-            $return .= $word . ' ';
-            $i += $strlen + 1;
+                $return .= $word . ' ';
+                $i += $strlen + 1;
+            }
         }
 
         if ($aborted) {

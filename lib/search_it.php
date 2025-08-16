@@ -316,6 +316,13 @@ class search_it
 
                             $scanurl .= (strpos($scanurl, '?') !== false ? '&' : '?') . 'search_it_build_index=redirect';
                             //rex_logger::factory()->log('Warning','Redirect von '.$lastscanurl.' zu '.$scanurl.', '.$response->getHeader());
+                            
+                            // Check if redirect URL uses a valid HTTP/HTTPS scheme
+                            if (!$this->isValidHttpScheme($scanurl)) {
+                                rex_logger::factory()->info('Search_it: Stopping redirect follow for article ' . $_id . ' - redirect to non-HTTP scheme URL: ' . $scanurl);
+                                break; // Stop following redirects if we hit a non-HTTP scheme
+                            }
+                            
                             $scan_socket = $this->prepareSocket($scanurl);
                             $response = $scan_socket->doGet();
 
@@ -535,6 +542,13 @@ class search_it
 
                     $scanurl .= (strpos($scanurl, '?') !== false ? '&' : '?') . 'search_it_build_index=redirect';
                     //rex_logger::factory()->log('Warning','Redirect von '.$lastscanurl.' zu '.$scanurl.', '.$response->getHeader());
+                    
+                    // Check if redirect URL uses a valid HTTP/HTTPS scheme
+                    if (!$this->isValidHttpScheme($scanurl)) {
+                        rex_logger::factory()->info('Search_it: Stopping redirect follow for URL - redirect to non-HTTP scheme URL: ' . $scanurl);
+                        break; // Stop following redirects if we hit a non-HTTP scheme
+                    }
+                    
                     $scan_socket = $this->prepareSocket($scanurl);
                     $response = $scan_socket->doGet();
                 }

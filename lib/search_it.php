@@ -48,6 +48,7 @@ class search_it
     private $blacklist = [];
     private $blacklisted = [];
     private $excludeIDs = [];
+    private $blacklistIDs = [];
 
     private $mysqlInsertChunkSize = 100;
 
@@ -1414,6 +1415,51 @@ class search_it
     }
 
     /**
+     * Sets array of IDs for search exclusion (blacklisting)
+     */
+    private function setBlacklistIDs($_blacklistIDs, $_reset = false): void
+    {
+        if ($_reset) {
+            $this->blacklistIDs = [];
+        }
+        if (array_key_exists('articles', $_blacklistIDs)) {
+            if (!array_key_exists('articles', $this->blacklistIDs)) {
+                $this->blacklistIDs['articles'] = [];
+            }
+            foreach ($_blacklistIDs['articles'] as $id) {
+                if ($id = intval($id)) {
+                    $this->blacklistIDs['articles'][] = $id;
+                    $this->hashMe .= 'ba' . $id;
+                }
+            }
+        }
+
+        if (array_key_exists('categories', $_blacklistIDs)) {
+            if (!array_key_exists('categories', $this->blacklistIDs)) {
+                $this->blacklistIDs['categories'] = [];
+            }
+            foreach ($_blacklistIDs['categories'] as $id) {
+                if ($id = intval($id)) {
+                    $this->blacklistIDs['categories'][] = $id;
+                    $this->hashMe .= 'bc' . $id;
+                }
+            }
+        }
+
+        if (array_key_exists('filecategories', $_blacklistIDs)) {
+            if (!array_key_exists('filecategories', $this->blacklistIDs)) {
+                $this->blacklistIDs['filecategories'] = [];
+            }
+            foreach ($_blacklistIDs['filecategories'] as $id) {
+                if ($id = intval($id)) {
+                    $this->blacklistIDs['filecategories'][] = $id;
+                    $this->hashMe .= 'bf' . $id;
+                }
+            }
+        }
+    }
+
+    /**
      * if IDs are set to filter search, you can tell Search it to search any article anyway
      *
      * @param bool $_bool
@@ -1496,6 +1542,68 @@ class search_it
     public function searchInFileCategories($_ids): void
     {
         $this->setSearchInIDs(array('filecategories' => $_ids));
+    }
+
+    /**
+     * Sets the IDs of the articles which should be excluded from search results.
+     *
+     * Expects an array with the IDs as parameters.
+     */
+    public function blacklistArticles($_ids): void
+    {
+        $this->setBlacklistIDs(array('articles' => $_ids));
+    }
+
+    /**
+     * Sets the IDs of the categories which should be excluded from search results.
+     *
+     * Expects an array with the IDs as parameters.
+     */
+    public function blacklistCategories($_ids): void
+    {
+        $this->setBlacklistIDs(array('categories' => $_ids));
+    }
+
+    /**
+     * Sets an ID of a category tree to be excluded from search results.
+     * All articles in the category and its subcategories will be excluded.
+     *
+     * Expects a category ID as parameter.
+     */
+    public function blacklistCategoryTree($_id): void
+    {
+        $subcats = self::getChildList($_id);
+        $this->setBlacklistIDs(array('categories' => $subcats));
+    }
+
+    /**
+     * Alias for blacklistCategoryTree - excludes a category tree from search results.
+     *
+     * Expects a category ID as parameter.
+     */
+    public function blacklistIDTree($_id): void
+    {
+        $this->blacklistCategoryTree($_id);
+    }
+
+    /**
+     * Generic method to exclude specific article IDs from search results.
+     *
+     * Expects an array with the article IDs as parameters.
+     */
+    public function blacklistIDs($_ids): void
+    {
+        $this->blacklistArticles($_ids);
+    }
+
+    /**
+     * Sets the IDs of the mediapool-categories which should be excluded from search results.
+     *
+     * Expects an array with the IDs as parameters.
+     */
+    public function blacklistFileCategories($_ids): void
+    {
+        $this->setBlacklistIDs(array('filecategories' => $_ids));
     }
 
     /**
@@ -2416,6 +2524,25 @@ class search_it
 
         if (!empty($this->where)) {
             $where .= ' AND (' . $this->where . ')';
+        }
+
+        // Add blacklist exclusions
+        $AwhereToExclude = [];
+
+        if (array_key_exists('articles', $this->blacklistIDs) and count($this->blacklistIDs['articles'])) {
+            $AwhereToExclude[] = "(texttype = 'article' AND fid NOT IN (" . implode(',', $this->blacklistIDs['articles']) . "))";
+        }
+
+        if (array_key_exists('categories', $this->blacklistIDs) and count($this->blacklistIDs['categories'])) {
+            $AwhereToExclude[] = "NOT (catid IN (" . implode(',', $this->blacklistIDs['categories']) . ") AND ftable = '" . self::getTablePrefix() . "article')";
+        }
+
+        if (array_key_exists('filecategories', $this->blacklistIDs) and count($this->blacklistIDs['filecategories'])) {
+            $AwhereToExclude[] = "NOT (catid IN (" . implode(',', $this->blacklistIDs['filecategories']) . ") AND ftable = '" . self::getTablePrefix() . "media')";
+        }
+
+        if (count($AwhereToExclude)) {
+            $where .= ' AND (' . implode(' AND ', $AwhereToExclude) . ')';
         }
 
         // build ORDER-BY-String

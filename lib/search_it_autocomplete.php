@@ -75,7 +75,7 @@ class rex_api_search_it_autocomplete extends rex_api_function
                 if ($similarWordsMode == '0') {
 
                     $sql = sprintf("
-              SELECT keyword FROM `%s` WHERE ( keyword LIKE :keyword ) AND (clang = -1 OR clang = :clang) GROUP BY keyword ORDER BY count ",
+              SELECT keyword FROM `%s` WHERE ( keyword LIKE :keyword ) AND (clang = -1 OR clang = :clang) GROUP BY keyword ORDER BY keyword LIKE :keyword DESC, count DESC ",
                         rex::getTablePrefix() . rex::getTempPrefix() . 'search_it_keywords',
                     );
 

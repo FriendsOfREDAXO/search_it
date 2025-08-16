@@ -2113,7 +2113,16 @@ class search_it
     }
 
 
-    /* keywords */
+    /**
+     * Store keywords with deadlock retry mechanism.
+     * 
+     * This method stores search keywords in the database with retry logic
+     * to handle MySQL deadlocks that can occur during concurrent search operations.
+     * Deadlocks are automatically retried with exponential backoff.
+     * 
+     * @param array $_keywords Array of keywords to store
+     * @param bool $_doCount Whether to increment the count
+     */
     private function storeKeywords($_keywords, $_doCount = true): void
     {
         // store similar words
@@ -2138,8 +2147,7 @@ class search_it
         if (!empty($simWords)) {
             $simWordsTeile = array_chunk($simWords, $this->mysqlInsertChunkSize);
             foreach ($simWordsTeile as $simWordsTeil) {
-                $simWordsSQL->setQuery(
-                    sprintf("
+                $query = sprintf("
                       INSERT INTO `%s`
                       (keyword, soundex, metaphone, colognephone, clang)
                       VALUES
@@ -2148,8 +2156,35 @@ class search_it
                         self::getTempTablePrefix() . 'search_it_keywords',
                         implode(',', $simWordsTeil),
                         $_doCount ? 1 : 0
-                    )
                 );
+
+                // Retry logic for deadlock handling
+                $maxRetries = 3;
+                $retryCount = 0;
+                $baseDelay = 100; // Start with 100ms
+
+                while ($retryCount < $maxRetries) {
+                    try {
+                        $simWordsSQL->setQuery($query);
+                        break; // Success, exit retry loop
+                    } catch (rex_sql_exception $e) {
+                        // Check if this is a deadlock error (MySQL error code 1213)
+                        if (strpos($e->getMessage(), '1213') !== false || strpos($e->getMessage(), 'Deadlock') !== false) {
+                            $retryCount++;
+                            if ($retryCount >= $maxRetries) {
+                                // Log the error after max retries
+                                rex_logger::factory()->error('Search_it deadlock error after ' . $maxRetries . ' retries: ' . $e->getMessage());
+                                throw $e; // Re-throw the exception after max retries
+                            }
+                            // Exponential backoff with jitter
+                            $delay = $baseDelay * pow(2, $retryCount - 1) + rand(0, 50);
+                            usleep($delay * 1000); // Convert to microseconds
+                        } else {
+                            // Not a deadlock error, re-throw immediately
+                            throw $e;
+                        }
+                    }
+                }
             }
         }
     }

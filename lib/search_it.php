@@ -255,8 +255,8 @@ class search_it
                 continue;
             }
 
-            if (is_object($article) and ($article->isOnline() or (rex_addon::get('search_it')->getConfig('indexoffline') AND 0 === $article->getValue('status'))) and $_id != 0
-                and ($_id != rex_article::getNotfoundArticleId() or $_id == rex_article::getSiteStartArticleId())) {
+            if ($article !== null && is_object($article) && ($article->isOnline() || (rex_addon::get('search_it')->getConfig('indexoffline') && 0 === $article->getValue('status'))) && $_id != 0
+                && ($_id != rex_article::getNotfoundArticleId() || $_id == rex_article::getSiteStartArticleId())) {
 
                 if (!$dont_use_socket) {
                     try {
@@ -462,7 +462,7 @@ class search_it
         $article = rex_article::get($article_id, $clang_id);
         if (is_null($article)) {
             $return[$clang_id] = SEARCH_IT_ART_IDNOTFOUND;
-        } else if (is_object($article) and ($article->isOnline() or rex_addon::get('search_it')->getConfig('indexoffline'))) {
+        } else if ($article !== null && is_object($article) && ($article->isOnline() || rex_addon::get('search_it')->getConfig('indexoffline'))) {
             try {
 
                 $index_host = rex_addon::get('search_it')->getConfig('index_host');

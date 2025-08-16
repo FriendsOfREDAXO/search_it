@@ -22,6 +22,7 @@ class search_it
     private $cache = true;
     private $cachedArray = [];
     private $searchInIDs = [];
+    private $doNotSearchInIDs = [];
     private $searchAllArticlesAnyway = false;
     private $whitelist = [];
 
@@ -1414,6 +1415,70 @@ class search_it
     }
 
     /**
+     * Sets array of IDs for search exclusion
+     */
+    private function setDoNotSearchInIDs($_doNotSearchInIDs, $_reset = false): void
+    {
+        if ($_reset) {
+            $this->doNotSearchInIDs = [];
+        }
+        if (array_key_exists('articles', $_doNotSearchInIDs)) {
+            if (!array_key_exists('articles', $this->doNotSearchInIDs)) {
+                $this->doNotSearchInIDs['articles'] = [];
+            }
+            foreach ($_doNotSearchInIDs['articles'] as $id) {
+                if ($id = intval($id)) {
+                    $this->doNotSearchInIDs['articles'][] = $id;
+                    $this->hashMe .= 'na' . $id;
+                }
+            }
+        }
+
+        if (array_key_exists('categories', $_doNotSearchInIDs)) {
+            if (!array_key_exists('categories', $this->doNotSearchInIDs)) {
+                $this->doNotSearchInIDs['categories'] = [];
+            }
+            foreach ($_doNotSearchInIDs['categories'] as $id) {
+                if ($id = intval($id)) {
+                    $this->doNotSearchInIDs['categories'][] = $id;
+                    $this->hashMe .= 'nc' . $id;
+                }
+            }
+        }
+
+        if (array_key_exists('filecategories', $_doNotSearchInIDs)) {
+            if (!array_key_exists('filecategories', $this->doNotSearchInIDs)) {
+                $this->doNotSearchInIDs['filecategories'] = [];
+            }
+            foreach ($_doNotSearchInIDs['filecategories'] as $id) {
+                if ($id = intval($id)) {
+                    $this->doNotSearchInIDs['filecategories'][] = $id;
+                    $this->hashMe .= 'nf' . $id;
+                }
+            }
+        }
+
+        if (array_key_exists('db_columns', $_doNotSearchInIDs)) {
+            if (!array_key_exists('db_columns', $this->doNotSearchInIDs)) {
+                $this->doNotSearchInIDs['db_columns'] = [];
+            }
+            foreach ($_doNotSearchInIDs['db_columns'] as $table => $columnArray) {
+                $this->hashMe .= 'n' . $table;
+                $tmp = [];
+                foreach ($columnArray as $column) {
+                    $tmp[] = $column;
+                    $this->hashMe .= 'n' . $column;
+                }
+                if (!array_key_exists($table, $this->doNotSearchInIDs['db_columns'])) {
+                    $this->doNotSearchInIDs['db_columns'][$table] = $tmp;
+                } else {
+                    $this->doNotSearchInIDs['db_columns'][$table] = array_merge($this->doNotSearchInIDs['db_columns'][$table], $tmp);
+                }
+            }
+        }
+    }
+
+    /**
      * if IDs are set to filter search, you can tell Search it to search any article anyway
      *
      * @param bool $_bool
@@ -1507,6 +1572,36 @@ class search_it
     public function searchInDbColumn($_table, $_column): void
     {
         $this->setSearchinIDs(array('db_columns' => array($_table => array($_column))));
+    }
+
+    /**
+     * Sets the IDs of the articles which should be excluded from search.
+     *
+     * Expects an array with the IDs as parameters.
+     */
+    public function doNotSearchInArticles($_ids): void
+    {
+        $this->setDoNotSearchInIDs(array('articles' => $_ids));
+    }
+
+    /**
+     * Sets the IDs of the categories which should be excluded from search.
+     *
+     * Expects an array with the IDs as parameters.
+     */
+    public function doNotSearchInCategories($_ids): void
+    {
+        $this->setDoNotSearchInIDs(array('categories' => $_ids));
+    }
+
+    /**
+     * Sets the IDs of the mediapool-categories which should be excluded from search.
+     *
+     * Expects an array with the IDs as parameters.
+     */
+    public function doNotSearchInFileCategories($_ids): void
+    {
+        $this->setDoNotSearchInIDs(array('filecategories' => $_ids));
     }
 
     /**
@@ -2412,6 +2507,25 @@ class search_it
             } else {
                 $where .= ' AND (' . implode(' AND ', $AwhereToSearch) . ')';
             }
+        }
+
+        // Handle exclusions (doNotSearchIn)
+        $AwhereNotToSearch = [];
+
+        if (array_key_exists('articles', $this->doNotSearchInIDs) and count($this->doNotSearchInIDs['articles'])) {
+            $AwhereNotToSearch[] = "(texttype != 'article' OR fid NOT IN (" . implode(',', $this->doNotSearchInIDs['articles']) . "))";
+        }
+
+        if (array_key_exists('categories', $this->doNotSearchInIDs) and count($this->doNotSearchInIDs['categories'])) {
+            $AwhereNotToSearch[] = "(ftable != '" . self::getTablePrefix() . "article' OR catid NOT IN (" . implode(',', $this->doNotSearchInIDs['categories']) . "))";
+        }
+
+        if (array_key_exists('filecategories', $this->doNotSearchInIDs) and count($this->doNotSearchInIDs['filecategories'])) {
+            $AwhereNotToSearch[] = "(ftable != '" . self::getTablePrefix() . "media' OR catid NOT IN (" . implode(',', $this->doNotSearchInIDs['filecategories']) . "))";
+        }
+
+        if (count($AwhereNotToSearch)) {
+            $where .= ' AND (' . implode(' AND ', $AwhereNotToSearch) . ')';
         }
 
         if (!empty($this->where)) {

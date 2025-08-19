@@ -137,6 +137,9 @@ class search_it
         $global_return = 0;
         $art_sql = rex_sql::factory();
         $art_sql->setTable(self::getTablePrefix() . 'article');
+        if (count($this->excludeIDs) > 0) {
+            $art_sql->setWhere('NOT id IN (' . implode(',', $this->excludeIDs) . ')');
+        }
         if ($art_sql->select('id,clang_id')) {
             foreach ($art_sql->getArray() as $art) {
                 $returns = $this->indexArticle($art['id'], $art['clang_id']);
@@ -270,7 +273,7 @@ class search_it
                             $scanparts = parse_url($index_host);
                         }
 
-                        if (rex_addon::get("yrewrite") && rex_addon::get("yrewrite")->isAvailable() && !isset($scanparts['host'])) {
+                        if (rex_addon::get("yrewrite")->isAvailable() && rex_yrewrite::getDomainByArticleId($_id)->getName() != 'default' && !isset($scanparts['host'])) {
                             $scanurl = rex_yrewrite::getFullUrlByArticleId($_id, $langID, array('search_it_build_index' => 'do-it-with-yrewrite'), '&');
                             if (isset($scanparts['port']) && $scanparts['port'] != '') {
                                 $scanurl = str_replace(parse_url($scanurl, PHP_URL_HOST), parse_url($scanurl, PHP_URL_HOST) . ':' . $scanparts['port'], $scanurl);
@@ -475,7 +478,7 @@ class search_it
                     $scanparts = parse_url($index_host);
                 }
 
-                if (rex_addon::get("yrewrite") && rex_addon::get('yrewrite')->isAvailable() && !isset($scanparts['host'])) {
+                if (rex_addon::get('yrewrite')->isAvailable() && rex_yrewrite::getDomainByArticleId($article_id)->getName() != 'default' &&  !isset($scanparts['host'])) {
                     $hit_domain = rex_yrewrite::getDomainByArticleId($article_id, $clang_id);
                     $server = rtrim($hit_domain->getUrl(), "/");
                     $search_it_build_index = "do-it-url-with-yrewrite";

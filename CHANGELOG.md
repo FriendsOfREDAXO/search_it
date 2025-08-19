@@ -1,4 +1,5 @@
 # Changelog
+- index even with no domain entered in yrewrite
 
 ## Version 6.14.2 (2025-03-28)
 - Fix plaintext function thx @olien

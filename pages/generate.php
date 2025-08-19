@@ -219,7 +219,7 @@ if (!empty(rex_get('do')) and rex_get('do') == 'incremental') {
                 break;
 
             case 'full':
-                $index = new search_it();
+                $index = new \FriendsOfREDAXO\SearchIt\SearchIt();
                 $global_return = $index->generateIndex();
                 if ($global_return < 4) {
                     echo rex_view::success($this->i18n('search_it_generate_done'));

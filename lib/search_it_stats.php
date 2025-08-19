@@ -1,5 +1,8 @@
 <?php
-class search_it_stats
+
+namespace FriendsOfREDAXO\SearchIt;
+
+class SearchItStats
 {
     var $sql;
 

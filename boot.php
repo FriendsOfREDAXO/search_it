@@ -46,8 +46,8 @@ if (rex_addon::get('search_it')->getConfig('reindex_cols_onforms') == true) {
     rex_extension::register('REX_FORM_DELETED', 'search_it_reindex_cols');
 }
 if (rex_addon::get('cronjob')->isAvailable() && !rex::isSafeMode()) {
-    rex_cronjob_manager::registerType(rex_cronjob_reindex::class);
-    rex_cronjob_manager::registerType(rex_cronjob_clearcache::class);
+    rex_cronjob_manager::registerType(\FriendsOfREDAXO\SearchIt\Cronjob\Reindex::class);
+    rex_cronjob_manager::registerType(\FriendsOfREDAXO\SearchIt\Cronjob\ClearCache::class);
 }
 
 if (rex_request('search_it_build_index', 'string', '') != '') {
@@ -74,7 +74,7 @@ if (rex_addon::get('search_it')->getConfig('index_url_addon') == true) {
         // automatic indexing of url addon urls: set trigger
         rex_extension::register('RESPONSE_SHUTDOWN', function () {
             if (rex_config::has('search_it', 'update_urls') && rex::isBackend()) {
-                $search_it = new search_it();
+                $search_it = new \FriendsOfREDAXO\SearchIt\SearchIt();
                 $search_it->unindexDeletedURLs();
                 $search_it->indexNewURLs();
                 $search_it->indexUpdatedURLs();

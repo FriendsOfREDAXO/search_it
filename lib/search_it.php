@@ -449,6 +449,7 @@ class search_it
     {
         $return = [];
         $keywords = [];
+        $scanurl = '';
 
         $delete = rex_sql::factory();
         $where = ['ftable' => $this->urlAddOnTableName, 'fid' => $url_hash];
@@ -528,7 +529,6 @@ class search_it
                 if ($response->isOk()) {
                     $articleText = $response->getBody();
                 } else {
-                    $articleText = '';
                     !is_null($response) ? $response_text = $response->getStatusCode() . ' - ' . $response->getStatusMessage() : $response_text = '';
                     if ($response->isRedirection()) {
                         $return[$clang_id] = SEARCH_IT_URL_REDIRECT;

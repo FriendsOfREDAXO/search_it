@@ -50,6 +50,7 @@ class search_it
     private $excludeIDs = [];
 
     private $mysqlInsertChunkSize = 100;
+    private $maxSearchTerms = 10;
 
     function __construct($_clang = false, $_loadSettings = true, $_useStopwords = true)
     {
@@ -80,6 +81,7 @@ class search_it
 
             $this->setBlacklist(is_array(rex_addon::get('search_it')->getConfig('blacklist')) ? rex_addon::get('search_it')->getConfig('blacklist') : []);
             $this->setExcludeIDs(is_array(rex_addon::get('search_it')->getConfig('exclude_article_ids')) ? rex_addon::get('search_it')->getConfig('exclude_article_ids') : []);
+            $this->maxSearchTerms = (int)(rex_addon::get('search_it')->getConfig('max_search_terms') ?: 10);
             if (is_array(rex_addon::get('search_it')->getConfig('exclude_category_ids'))) {
                 $ids = [];
                 foreach (rex_addon::get('search_it')->getConfig('exclude_category_ids') as $catID) {
@@ -285,6 +287,13 @@ class search_it
                         }
                         //rex_logger::factory()->log('Warning','Indexierungs-URL: '.$scanurl);
 
+                        // Check if URL uses a valid HTTP/HTTPS scheme before attempting socket connection
+                        if (!$this->isValidHttpScheme($scanurl)) {
+                            rex_logger::factory()->info('Search_it: Skipping indexing of article ' . $_id . ' with non-HTTP scheme URL: ' . $scanurl);
+                            $return[$langID] = SEARCH_IT_ART_EXCLUDED;
+                            continue;
+                        }
+
                         $scan_socket = $this->prepareSocket($scanurl);
                         $response = $scan_socket->doGet();
                         $redircount = 0;
@@ -312,6 +321,13 @@ class search_it
 
                             $scanurl .= (strpos($scanurl, '?') !== false ? '&' : '?') . 'search_it_build_index=redirect';
                             //rex_logger::factory()->log('Warning','Redirect von '.$lastscanurl.' zu '.$scanurl.', '.$response->getHeader());
+                            
+                            // Check if redirect URL uses a valid HTTP/HTTPS scheme
+                            if (!$this->isValidHttpScheme($scanurl)) {
+                                rex_logger::factory()->info('Search_it: Stopping redirect follow for article ' . $_id . ' - redirect to non-HTTP scheme URL: ' . $scanurl);
+                                break; // Stop following redirects if we hit a non-HTTP scheme
+                            }
+                            
                             $scan_socket = $this->prepareSocket($scanurl);
                             $response = $scan_socket->doGet();
 
@@ -497,6 +513,13 @@ class search_it
                     $scanurl = $server . '/' . ltrim(str_replace(['../', './'], '', $scanurl), "/");
                 }
 
+                // Check if URL uses a valid HTTP/HTTPS scheme before attempting socket connection
+                if (!$this->isValidHttpScheme($scanurl)) {
+                    rex_logger::factory()->info('Search_it: Skipping indexing of URL with non-HTTP scheme: ' . $scanurl);
+                    $return[$clang_id] = SEARCH_IT_URL_EXCLUDED;
+                    return $return;
+                }
+
                 $scan_socket = $this->prepareSocket($scanurl);
                 $response = $scan_socket->doGet();
                 $redircount = 0;
@@ -525,6 +548,13 @@ class search_it
 
                     $scanurl .= (strpos($scanurl, '?') !== false ? '&' : '?') . 'search_it_build_index=redirect';
                     //rex_logger::factory()->log('Warning','Redirect von '.$lastscanurl.' zu '.$scanurl.', '.$response->getHeader());
+                    
+                    // Check if redirect URL uses a valid HTTP/HTTPS scheme
+                    if (!$this->isValidHttpScheme($scanurl)) {
+                        rex_logger::factory()->info('Search_it: Stopping redirect follow for URL - redirect to non-HTTP scheme URL: ' . $scanurl);
+                        break; // Stop following redirects if we hit a non-HTTP scheme
+                    }
+                    
                     $scan_socket = $this->prepareSocket($scanurl);
                     $response = $scan_socket->doGet();
                 }
@@ -1262,6 +1292,16 @@ class search_it
     /* search */
 
     /**
+     * Sets the maximum number of search terms to prevent extremely long SQL queries.
+     *
+     * @param int $_maxSearchTerms Maximum number of search terms (default: 10)
+     */
+    public function setMaxSearchTerms($_maxSearchTerms): void
+    {
+        $this->maxSearchTerms = max(1, (int)$_maxSearchTerms);
+    }
+
+    /**
      * Sets search string.
      *
      * Expects a string.
@@ -1319,6 +1359,11 @@ class search_it
             }
 
             if ($notBlacklisted) {
+                // Limit search terms to prevent extremely long SQL queries in similarity search
+                if ($count >= $this->maxSearchTerms) {
+                    break;
+                }
+                
                 // whitelisted words get extra weighted
                 $this->searchArray[$count] = array('search' => $word,
                     'weight' => mb_strlen($plus) + 1 + (array_key_exists($word, $this->whitelist) ? $this->whitelist[$word] : 0),
@@ -2585,6 +2630,17 @@ class search_it
         $return['time'] = microtime(true) - $startTime;
 
         return $return;
+    }
+
+    /**
+     * Check if URL uses a valid HTTP or HTTPS scheme for socket connections
+     * @param string $url The URL to check
+     * @return bool True if URL has http:// or https:// scheme, false otherwise
+     */
+    private function isValidHttpScheme(string $url): bool
+    {
+        $scheme = parse_url($url, PHP_URL_SCHEME);
+        return in_array(strtolower($scheme ?? ''), ['http', 'https']);
     }
 
     private function prepareSocket(string $scanurl)

@@ -20,7 +20,7 @@ function search_it_getArticles($cats = false, $sort = 'id'): array
     if (!empty($whereCats)) {
         $query .= ' AND (' . implode(' OR ', $whereCats) . ' OR (id IN (' . implode(',', $cats) . ')))';
     }
-    $query .= ' GROUP BY id ORDER BY ' . $sortd;
+    $query .= ' GROUP BY id ORDER BY ' . $sort;
 
     $sql = rex_sql::factory();
     foreach ($sql->getArray($query) as $art) {
@@ -790,6 +790,16 @@ function search_it_search_highlighter_getHighlightedText($_subject, $_searchStri
 
     $all = preg_replace('~(?<!<|' . $hidemask . ')(' . implode('|', $searchterms) . ')(?![^<]*\>)~ims', $_tags[0] . '$1' . $_tags[1], $all);
     $all = str_replace($hidemask, '', $all);
+
+    // Second stage: Remove highlights that appear inside script and style tags
+    $all = preg_replace_callback('~(<(script|style)[^>]*>)(.*?)(</\2>)~is',
+        function ($match) use ($_tags) {
+            // Remove highlight tags from inside script/style content
+            $content = str_replace([$_tags[0], $_tags[1]], '', $match[3]);
+            return $match[1] . $content . $match[4];
+        },
+        $all);
+
     return $all;
 }
 

@@ -1,6 +1,6 @@
 <?php
 
-function search_it_getArticles($cats = false): array
+function search_it_getArticles($cats = false, $sort = 'id'): array
 {
     $si = rex_addon::get('search_it');
 
@@ -20,7 +20,7 @@ function search_it_getArticles($cats = false): array
     if (!empty($whereCats)) {
         $query .= ' AND (' . implode(' OR ', $whereCats) . ' OR (id IN (' . implode(',', $cats) . ')))';
     }
-    $query .= ' GROUP BY id ORDER BY id';
+    $query .= ' GROUP BY id ORDER BY ' . $sortd;
 
     $sql = rex_sql::factory();
     foreach ($sql->getArray($query) as $art) {

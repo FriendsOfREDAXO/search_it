@@ -58,7 +58,7 @@ foreach (search_it_getCategories(false) as $id => $name) {
     );
 }
 $articles = [];
-foreach (search_it_getArticles() as $id => $name) {
+foreach (search_it_getArticles(false, 'name') as $id => $name) {
     $articles[] = array(
         'value' => $id,
         'selected' => !empty($this->getConfig('exclude_article_ids')) and is_array($this->getConfig('exclude_article_ids')) and in_array($id, $this->getConfig('exclude_article_ids')),

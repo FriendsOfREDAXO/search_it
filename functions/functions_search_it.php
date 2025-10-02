@@ -809,7 +809,7 @@ function search_it_search_highlighter_getHighlightedText($_subject, $_searchStri
  */
 function search_it_isUrlAddOnAvailable(): bool
 {
-    return (rex_addon::get('url')->isAvailable() && rex_string::versionCompare(\rex_addon::get('url')->getVersion(), '1.5', '>='));
+    return (rex_addon::get('url')->isAvailable() && rex_version::compare(\rex_addon::get('url')->getVersion(), '1.5', '>='));
 }
 
 /**

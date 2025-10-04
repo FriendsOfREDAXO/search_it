@@ -126,87 +126,89 @@ if (!empty(rex_get('do')) and rex_get('do') == 'incremental') {
     ?>
     <script type="text/javascript">
         // <![CDATA[
-        var globalcount = 0;
-        var indexArray = new Array();
-        var quotient = 0;
-        var maxProgressbarWidth = jQuery('#search_it_generate_inprogress').width();
-        var startTime = new Date();
-        var h, m, s, duration, average, timeleft;
+        (function ($) {
+            var globalcount = 0;
+            var indexArray = new Array();
+            var quotient = 0;
+            var maxProgressbarWidth = jQuery('#search_it_generate_inprogress').width();
+            var startTime = new Date();
+            var h, m, s, duration, average, timeleft;
 
-        <?php echo $js_output; ?>
+            <?= $js_output ?>
 
-        function index(type, data) {
-            var url;
-            if (type === 'art') {
-                url = 'index.php?page=search_it&ajax=generate&do=incremental&type=art&id=' + data;
-            } else if (type === 'url') {
-                url = 'index.php?page=search_it&ajax=generate&do=incremental&type=url&url_hash=' + data;
-            } else if (type === 'col') {
-                url = 'index.php?page=search_it&ajax=generate&do=incremental&type=col&t=' + data[0] + '&c=' + data[1] + '&s=' + data[2] + '&w=' + data[3];
-            } else if (type === 'file') {
-                url = 'index.php?page=search_it&ajax=generate&do=incremental&type=file&name=' + data;
-            } else if (type === 'mediapool') {
-                url = 'index.php?page=search_it&ajax=generate&do=incremental&type=mediapool&name=' + data[0] + '&file_id=' + data[1] + '&category_id=' + data[2];
+            function index(type, data) {
+                var url;
+                if (type === 'art') {
+                    url = 'index.php?page=search_it&ajax=generate&do=incremental&type=art&id=' + data;
+                } else if (type === 'url') {
+                    url = 'index.php?page=search_it&ajax=generate&do=incremental&type=url&url_hash=' + data;
+                } else if (type === 'col') {
+                    url = 'index.php?page=search_it&ajax=generate&do=incremental&type=col&t=' + data[0] + '&c=' + data[1] + '&s=' + data[2] + '&w=' + data[3];
+                } else if (type === 'file') {
+                    url = 'index.php?page=search_it&ajax=generate&do=incremental&type=file&name=' + data;
+                } else if (type === 'mediapool') {
+                    url = 'index.php?page=search_it&ajax=generate&do=incremental&type=mediapool&name=' + data[0] + '&file_id=' + data[1] + '&category_id=' + data[2];
+                }
+
+                jQuery.get(url, {}, function (data) {
+                    jQuery('#search_it_generate_log').prepend(data);
+                    globalcount++;
+
+                    quotient = globalcount / <?php echo $globalcount; ?>;
+
+                    currentDuration = (new Date()) - startTime;
+                    durationSeconds = Math.floor(currentDuration / 1000);
+                    h = Math.floor(durationSeconds / 3600);
+                    m = Math.floor((durationSeconds - (h * 3600)) / 60);
+                    s = (durationSeconds - h * 3600 - m * 60) % 60;
+                    duration = (('' + h).length === 1 ? '0' : '') + h + ':' + (('' + m).length === 1 ? '0' : '') + m + ':' + (('' + s).length === 1 ? '0' : '') + s;
+
+                    average = Math.floor(currentDuration / globalcount * (<?php echo $globalcount; ?> -globalcount) / 1000);
+                    h = Math.floor(average / 3600);
+                    m = Math.floor((average - (h * 3600)) / 60);
+                    s = (average - h * 3600 - m * 60) % 60;
+                    timeleft = (('' + h).length === 1 ? '0' : '') + h + ':' + (('' + m).length === 1 ? '0' : '') + m + ':' + (('' + s).length === 1 ? '0' : '') + s;
+
+                    jQuery('#search_it_generate_progressbar')
+                        .css('background-position', (Math.floor(quotient * maxProgressbarWidth) - 5000) + 'px 0')
+                        .html(globalcount + '/' + <?php echo $globalcount; ?> +
+                                ' <span class="duration"><?php echo $this->i18n('search_it_generate_duration'); ?>' + duration + '<' + '/span>' +
+                            ' <span class="timeleft"><?php echo $this->i18n('search_it_generate_timeleft'); ?>' + timeleft + '<' + '/span>' +
+                            ' <span class="percentage">' + Math.floor(quotient * 100) + '%<' + '/span>');
+
+                    if (globalcount === <?php echo $globalcount; ?>) {
+                        jQuery('#search_it_generate_inprogress').hide();
+                        jQuery('#search_it_generate_done').show();
+                        jQuery('#search_it_generate_log').addClass('index-done');
+                    } else {
+                        index(indexArray[globalcount][0], indexArray[globalcount][1]);
+                    }
+                });
             }
 
-            jQuery.get(url, {}, function (data) {
-                jQuery('#search_it_generate_log').prepend(data);
-                globalcount++;
+            <?php if($globalcount > 0) { ?>
+            if (confirm('<?php echo $this->i18n('search_it_generate_incremental_confirm'); ?>')) {
+                var del = new Image();
+                del.src = 'index.php?page=search_it&ajax=deleteindex';
 
-                quotient = globalcount / <?php echo $globalcount; ?>;
-
-                currentDuration = (new Date()) - startTime;
-                durationSeconds = Math.floor(currentDuration / 1000);
-                h = Math.floor(durationSeconds / 3600);
-                m = Math.floor((durationSeconds - (h * 3600)) / 60);
-                s = (durationSeconds - h * 3600 - m * 60) % 60;
-                duration = (('' + h).length === 1 ? '0' : '') + h + ':' + (('' + m).length === 1 ? '0' : '') + m + ':' + (('' + s).length === 1 ? '0' : '') + s;
-
-                average = Math.floor(currentDuration / globalcount * (<?php echo $globalcount; ?> -globalcount) / 1000);
-                h = Math.floor(average / 3600);
-                m = Math.floor((average - (h * 3600)) / 60);
-                s = (average - h * 3600 - m * 60) % 60;
-                timeleft = (('' + h).length === 1 ? '0' : '') + h + ':' + (('' + m).length === 1 ? '0' : '') + m + ':' + (('' + s).length === 1 ? '0' : '') + s;
-
-                jQuery('#search_it_generate_progressbar')
-                    .css('background-position', (Math.floor(quotient * maxProgressbarWidth) - 5000) + 'px 0')
-                    .html(globalcount + '/' + <?php echo $globalcount; ?> +
-                            ' <span class="duration"><?php echo $this->i18n('search_it_generate_duration'); ?>' + duration + '<' + '/span>' +
-                        ' <span class="timeleft"><?php echo $this->i18n('search_it_generate_timeleft'); ?>' + timeleft + '<' + '/span>' +
-                        ' <span class="percentage">' + Math.floor(quotient * 100) + '%<' + '/span>');
-
-                if (globalcount === <?php echo $globalcount; ?>) {
-                    jQuery('#search_it_generate_inprogress').hide();
-                    jQuery('#search_it_generate_done').show();
-                    jQuery('#search_it_generate_log').addClass('index-done');
-                } else {
-                    index(indexArray[globalcount][0], indexArray[globalcount][1]);
-                }
-            });
-        }
-
-        <?php if($globalcount > 0) { ?>
-        if (confirm('<?php echo $this->i18n('search_it_generate_incremental_confirm'); ?>')) {
-            var del = new Image();
-            del.src = 'index.php?page=search_it&ajax=deleteindex';
-
-            index(indexArray[0][0], indexArray[0][1]);
-        } else {
+                index(indexArray[0][0], indexArray[0][1]);
+            } else {
+                jQuery('#search_it_generate_inprogress').hide();
+                jQuery('#search_it_generate_cancel').show();
+                jQuery('#search_it_generate_log').addClass('index-done');
+            }
+            <?php } else { ?>
             jQuery('#search_it_generate_inprogress').hide();
-            jQuery('#search_it_generate_cancel').show();
-            jQuery('#search_it_generate_log').addClass('index-done');
-        }
-        <?php } else { ?>
-        jQuery('#search_it_generate_inprogress').hide();
-        jQuery('#search_it_generate_done').show();
-        <?php } ?>
+            jQuery('#search_it_generate_done').show();
+            <?php } ?>
 
-        jQuery('#search_it_generate_header').after(
-            jQuery('<div>')
-                .attr('id', 'search_it_generate_progressbar')
-                //.attr('class','alert alert-warning')
-                .html('0/0 <span class="duration"><?php echo $this->i18n('search_it_generate_duration'); ?>00:00:00<' + '/span> <span class="timeleft"><?php echo $this->i18n('search_it_generate_timeleft'); ?>00:00:00<' + '/span> <span class="percentage">0%<' + '/span>')
-        );
+            jQuery('#search_it_generate_header').after(
+                jQuery('<div>')
+                    .attr('id', 'search_it_generate_progressbar')
+                    //.attr('class','alert alert-warning')
+                    .html('0/0 <span class="duration"><?php echo $this->i18n('search_it_generate_duration'); ?>00:00:00<' + '/span> <span class="timeleft"><?php echo $this->i18n('search_it_generate_timeleft'); ?>00:00:00<' + '/span> <span class="percentage">0%<' + '/span>')
+            );
+        }(jQuery));
         // ]]>
     </script>
     <?php

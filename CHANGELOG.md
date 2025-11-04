@@ -1,5 +1,9 @@
 # Changelog
-- index even with no domain entered in yrewrite
+
+## Version 6.14.3 (2025-11-04)
+- Fix index_url to use correct language thx @anveno @tbaddade
+- Add js closure
+- Index even with no domain entered in yrewrite
 
 ## Version 6.14.2 (2025-03-28)
 - Fix plaintext function thx @olien

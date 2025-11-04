@@ -215,7 +215,7 @@ class search_it
         if ($_clang === false) {
             $langs = rex_clang::getAll();
         } else {
-            $langs = array(rex_clang::get($_clang));
+            $langs = [rex_clang::get($_clang)];
         }
 
         if ($dont_use_socket) {
@@ -321,13 +321,13 @@ class search_it
 
                             $scanurl .= (strpos($scanurl, '?') !== false ? '&' : '?') . 'search_it_build_index=redirect';
                             //rex_logger::factory()->log('Warning','Redirect von '.$lastscanurl.' zu '.$scanurl.', '.$response->getHeader());
-                            
+
                             // Check if redirect URL uses a valid HTTP/HTTPS scheme
                             if (!$this->isValidHttpScheme($scanurl)) {
                                 rex_logger::factory()->info('Search_it: Stopping redirect follow for article ' . $_id . ' - redirect to non-HTTP scheme URL: ' . $scanurl);
                                 break; // Stop following redirects if we hit a non-HTTP scheme
                             }
-                            
+
                             $scan_socket = $this->prepareSocket($scanurl);
                             $response = $scan_socket->doGet();
 
@@ -506,7 +506,7 @@ class search_it
                 }
 
                 $url_profile = \Url\Profile::get($profile_id);
-                $scanurl = rex_getUrl('', '', [$url_profile->getNamespace() => $data_id, 'search_it_build_index' => $search_it_build_index], '&');
+                $scanurl = rex_getUrl('', $clang_id, [$url_profile->getNamespace() => $data_id, 'search_it_build_index' => $search_it_build_index], '&');
 
                 if (strpos($scanurl, 'http') === false) {
                     // URL addon multidomain site return server name in url
@@ -548,13 +548,13 @@ class search_it
 
                     $scanurl .= (strpos($scanurl, '?') !== false ? '&' : '?') . 'search_it_build_index=redirect';
                     //rex_logger::factory()->log('Warning','Redirect von '.$lastscanurl.' zu '.$scanurl.', '.$response->getHeader());
-                    
+
                     // Check if redirect URL uses a valid HTTP/HTTPS scheme
                     if (!$this->isValidHttpScheme($scanurl)) {
                         rex_logger::factory()->info('Search_it: Stopping redirect follow for URL - redirect to non-HTTP scheme URL: ' . $scanurl);
                         break; // Stop following redirects if we hit a non-HTTP scheme
                     }
-                    
+
                     $scan_socket = $this->prepareSocket($scanurl);
                     $response = $scan_socket->doGet();
                 }
@@ -1363,7 +1363,7 @@ class search_it
                 if ($count >= $this->maxSearchTerms) {
                     break;
                 }
-                
+
                 // whitelisted words get extra weighted
                 $this->searchArray[$count] = array('search' => $word,
                     'weight' => mb_strlen($plus) + 1 + (array_key_exists($word, $this->whitelist) ? $this->whitelist[$word] : 0),

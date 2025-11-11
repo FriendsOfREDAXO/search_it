@@ -280,6 +280,10 @@ class search_it
                             if (isset($scanparts['port']) && $scanparts['port'] != '') {
                                 $scanurl = str_replace(parse_url($scanurl, PHP_URL_HOST), parse_url($scanurl, PHP_URL_HOST) . ':' . $scanparts['port'], $scanurl);
                             }
+                            $fragment = parse_url($scanurl, PHP_URL_FRAGMENT);
+                            if ($fragment !== null) {
+                                $scanurl = str_replace('#' . $fragment, '', $scanurl) . '#' . $fragment;
+                            }
                         } else {
                             $scanhost = ($scanparts['scheme'] ?? parse_url(rex::getServer(), PHP_URL_SCHEME)) . '://' . ($scanparts['host'] ?? parse_url(rex::getServer(), PHP_URL_HOST));
                             $scanhost .= isset($scanparts['port']) ? ':' . $scanparts['port'] : '';

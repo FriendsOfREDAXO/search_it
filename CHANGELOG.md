@@ -1,5 +1,8 @@
 # Changelog
 
+## Version 6.14.4 (2025-11-11)
+- Fix scanurl - remove hashes / fragments in url thx @ynamite
+
 ## Version 6.14.3 (2025-11-04)
 - Fix index_url to use correct language thx @anveno @tbaddade
 - Add js closure

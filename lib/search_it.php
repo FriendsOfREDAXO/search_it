@@ -282,7 +282,7 @@ class search_it
                             }
                             $fragment = parse_url($scanurl, PHP_URL_FRAGMENT);
                             if ($fragment !== null) {
-                                $scanurl = str_replace('#' . $fragment, '', $scanurl) . '#' . $fragment;
+                                $scanurl = str_replace('#' . $fragment, '', $scanurl);
                             }
                         } else {
                             $scanhost = ($scanparts['scheme'] ?? parse_url(rex::getServer(), PHP_URL_SCHEME)) . '://' . ($scanparts['host'] ?? parse_url(rex::getServer(), PHP_URL_HOST));

@@ -6,14 +6,7 @@
  */
 $addon = rex_addon::get('search_it');
 
-if ($addon->pluginExists('reindex')) {
-    rex_dir::delete($addon->getPlugin('reindex')->getPath());
-    //echo rex_view::warning($addon->i18n('search_it_settings_plugin_deleted'));
-}
-if ($addon->pluginExists('search_highlighter')) {
-    rex_dir::delete($addon->getPlugin('search_highlighter')->getPath());
-    //echo rex_view::warning($addon->i18n('search_it_settings_plugin_deleted'));
-}
+rex_dir::delete(rex_path::addon('search_it','plugins'),true);
 
 if (rex_sql_table::get(rex::getTable('search_it_cacheindex_ids'))->exists() && !rex_sql_table::get(rex::getTable(rex::getTempPrefix() . 'search_it_cacheindex_ids'))->exists()) {
     rex_sql_table::get(rex::getTable('search_it_cacheindex_ids'))->setName(rex::getTable(rex::getTempPrefix() . 'search_it_cacheindex_ids'))->alter();

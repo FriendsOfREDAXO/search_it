@@ -2436,26 +2436,22 @@ class search_it
         }
 
         if (array_key_exists('categories', $this->searchInIDs) and count($this->searchInIDs['categories'])) {
-            $AwhereToSearch[] = "(catid IN (" . implode(',', $this->searchInIDs['categories']) . ") AND ftable = '" . self::getTablePrefix() . "article')";
+            $AwhereToSearch[] = "(ISNULL(catid) OR (catid IN (" . implode(',', $this->searchInIDs['categories']) . ") AND ftable = '" . self::getTablePrefix() . "article'))";
         }
 
         if (array_key_exists('filecategories', $this->searchInIDs) and count($this->searchInIDs['filecategories'])) {
-            $AwhereToSearch[] = "(catid IN (" . implode(',', $this->searchInIDs['filecategories']) . ") AND ftable = '" . self::getTablePrefix() . "media')";
+            $AwhereToSearch[] = "(ISNULL(catid) OR (catid IN (" . implode(',', $this->searchInIDs['filecategories']) . ") AND ftable = '" . self::getTablePrefix() . "media'))";
         }
 
         if (array_key_exists('db_columns', $this->searchInIDs) and count($this->searchInIDs['db_columns'])) {
-            $AwhereToSearch[] = "texttype = 'db_column'";
-
             $Acolumns = [];
-
             foreach ($this->searchInIDs['db_columns'] as $table => $colArray) {
                 foreach ($colArray as $column) {
-                    //$Acolumns[] = sprintf("(ftable = '%s' AND fcolumn = '%s' %s)", $table, $column, $strsearchAllArticlesAnyway);
                     $Acolumns[] = sprintf("(ftable = '%s' AND fcolumn = '%s')", $table, $column);
                 }
             }
 
-            $AwhereToSearch[] = '(' . implode(' OR ', $Acolumns) . ')';
+            $AwhereToSearch[] = '(texttype != "db_column" OR ' . implode(' OR ', $Acolumns) . ')';
         }
 
         if (count($AwhereToSearch)) {

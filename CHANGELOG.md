@@ -1,4 +1,6 @@
 # Changelog
+## Version 6.14.5 (2026-01-04)
+- Fix searchInIds logic thx @thorol
 - Delete all plugIns
 
 ## Version 6.14.4 (2025-11-11)

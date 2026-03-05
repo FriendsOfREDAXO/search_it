@@ -4,36 +4,39 @@ use FriendsOfRedaxo\SearchIt\SearchIt;
 use FriendsOfRedaxo\SearchIt\Cronjob\Reindex;
 use FriendsOfRedaxo\SearchIt\Cronjob\ClearCache;
 
+/**
+ * @deprecated Use SearchIt::ART_*, SearchIt::URL_*, SearchIt::FILE_*, SearchIt::SIMILARWORDS_* instead.
+ */
 if (!defined('SEARCH_IT_ART_EXCLUDED')) {
-    define('SEARCH_IT_ART_EXCLUDED', 0);
-    define('SEARCH_IT_ART_IDNOTFOUND', 1);
-    define('SEARCH_IT_ART_GENERATED', 2);
-    define('SEARCH_IT_ART_REDIRECT', 3);
-    define('SEARCH_IT_ART_ERROR', 4);
-    define('SEARCH_IT_ART_NOTOK', 5);
-    define('SEARCH_IT_ART_404', 6);
+    define('SEARCH_IT_ART_EXCLUDED', SearchIt::ART_EXCLUDED);
+    define('SEARCH_IT_ART_IDNOTFOUND', SearchIt::ART_IDNOTFOUND);
+    define('SEARCH_IT_ART_GENERATED', SearchIt::ART_GENERATED);
+    define('SEARCH_IT_ART_REDIRECT', SearchIt::ART_REDIRECT);
+    define('SEARCH_IT_ART_ERROR', SearchIt::ART_ERROR);
+    define('SEARCH_IT_ART_NOTOK', SearchIt::ART_NOTOK);
+    define('SEARCH_IT_ART_404', SearchIt::ART_404);
 
-    define('SEARCH_IT_URL_EXCLUDED', 0);
-    define('SEARCH_IT_URL_GENERATED', 2);
-    define('SEARCH_IT_URL_REDIRECT', 3);
-    define('SEARCH_IT_URL_ERROR', 4);
-    define('SEARCH_IT_URL_NOTOK', 5);
-    define('SEARCH_IT_URL_404', 6);
+    define('SEARCH_IT_URL_EXCLUDED', SearchIt::URL_EXCLUDED);
+    define('SEARCH_IT_URL_GENERATED', SearchIt::URL_GENERATED);
+    define('SEARCH_IT_URL_REDIRECT', SearchIt::URL_REDIRECT);
+    define('SEARCH_IT_URL_ERROR', SearchIt::URL_ERROR);
+    define('SEARCH_IT_URL_NOTOK', SearchIt::URL_NOTOK);
+    define('SEARCH_IT_URL_404', SearchIt::URL_404);
 
-    define('SEARCH_IT_FILE_NOEXIST', 0);
-    define('SEARCH_IT_FILE_XPDFERR_OPENSRC', 1);
-    define('SEARCH_IT_FILE_XPDFERR_OPENDEST', 2);
-    define('SEARCH_IT_FILE_XPDFERR_PERM', 3);
-    define('SEARCH_IT_FILE_XPDFERR_OTHER', 4);
-    define('SEARCH_IT_FILE_FORBIDDEN_EXTENSION', 5);
-    define('SEARCH_IT_FILE_GENERATED', 6);
-    define('SEARCH_IT_FILE_EMPTY', 7);
+    define('SEARCH_IT_FILE_NOEXIST', SearchIt::FILE_NOEXIST);
+    define('SEARCH_IT_FILE_XPDFERR_OPENSRC', SearchIt::FILE_XPDFERR_OPENSRC);
+    define('SEARCH_IT_FILE_XPDFERR_OPENDEST', SearchIt::FILE_XPDFERR_OPENDEST);
+    define('SEARCH_IT_FILE_XPDFERR_PERM', SearchIt::FILE_XPDFERR_PERM);
+    define('SEARCH_IT_FILE_XPDFERR_OTHER', SearchIt::FILE_XPDFERR_OTHER);
+    define('SEARCH_IT_FILE_FORBIDDEN_EXTENSION', SearchIt::FILE_FORBIDDEN_EXTENSION);
+    define('SEARCH_IT_FILE_GENERATED', SearchIt::FILE_GENERATED);
+    define('SEARCH_IT_FILE_EMPTY', SearchIt::FILE_EMPTY);
 
-    define('SEARCH_IT_SIMILARWORDS_NONE', 0);
-    define('SEARCH_IT_SIMILARWORDS_SOUNDEX', 1);
-    define('SEARCH_IT_SIMILARWORDS_METAPHONE', 2);
-    define('SEARCH_IT_SIMILARWORDS_COLOGNEPHONE', 4);
-    define('SEARCH_IT_SIMILARWORDS_ALL', 7);
+    define('SEARCH_IT_SIMILARWORDS_NONE', SearchIt::SIMILARWORDS_NONE);
+    define('SEARCH_IT_SIMILARWORDS_SOUNDEX', SearchIt::SIMILARWORDS_SOUNDEX);
+    define('SEARCH_IT_SIMILARWORDS_METAPHONE', SearchIt::SIMILARWORDS_METAPHONE);
+    define('SEARCH_IT_SIMILARWORDS_COLOGNEPHONE', SearchIt::SIMILARWORDS_COLOGNEPHONE);
+    define('SEARCH_IT_SIMILARWORDS_ALL', SearchIt::SIMILARWORDS_ALL);
 }
 
 $curDir = __DIR__;

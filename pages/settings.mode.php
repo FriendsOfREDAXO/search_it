@@ -208,28 +208,28 @@ $content3[] = search_it_getSettingsFormSection(
             'label' => $this->i18n('search_it_settings_similarwords_label'),
             'options' => array(
                 array(
-                    'value' => SEARCH_IT_SIMILARWORDS_NONE,
-                    'selected' => $this->getConfig('similarwordsmode') == SEARCH_IT_SIMILARWORDS_NONE,
+                    'value' => \FriendsOfRedaxo\SearchIt\SearchIt::SIMILARWORDS_NONE,
+                    'selected' => $this->getConfig('similarwordsmode') == \FriendsOfRedaxo\SearchIt\SearchIt::SIMILARWORDS_NONE,
                     'name' => $this->i18n('search_it_settings_similarwords_none')
                 ),
                 array(
-                    'value' => SEARCH_IT_SIMILARWORDS_SOUNDEX,
-                    'selected' => $this->getConfig('similarwordsmode') == SEARCH_IT_SIMILARWORDS_SOUNDEX,
+                    'value' => \FriendsOfRedaxo\SearchIt\SearchIt::SIMILARWORDS_SOUNDEX,
+                    'selected' => $this->getConfig('similarwordsmode') == \FriendsOfRedaxo\SearchIt\SearchIt::SIMILARWORDS_SOUNDEX,
                     'name' => $this->i18n('search_it_settings_similarwords_soundex')
                 ),
                 array(
-                    'value' => SEARCH_IT_SIMILARWORDS_METAPHONE,
-                    'selected' => $this->getConfig('similarwordsmode') == SEARCH_IT_SIMILARWORDS_METAPHONE,
+                    'value' => \FriendsOfRedaxo\SearchIt\SearchIt::SIMILARWORDS_METAPHONE,
+                    'selected' => $this->getConfig('similarwordsmode') == \FriendsOfRedaxo\SearchIt\SearchIt::SIMILARWORDS_METAPHONE,
                     'name' => $this->i18n('search_it_settings_similarwords_metaphone')
                 ),
                 array(
-                    'value' => SEARCH_IT_SIMILARWORDS_COLOGNEPHONE,
-                    'selected' => $this->getConfig('similarwordsmode') == SEARCH_IT_SIMILARWORDS_COLOGNEPHONE,
+                    'value' => \FriendsOfRedaxo\SearchIt\SearchIt::SIMILARWORDS_COLOGNEPHONE,
+                    'selected' => $this->getConfig('similarwordsmode') == \FriendsOfRedaxo\SearchIt\SearchIt::SIMILARWORDS_COLOGNEPHONE,
                     'name' => $this->i18n('search_it_settings_similarwords_cologne')
                 ),
                 array(
-                    'value' => SEARCH_IT_SIMILARWORDS_ALL,
-                    'selected' => $this->getConfig('similarwordsmode') == SEARCH_IT_SIMILARWORDS_ALL,
+                    'value' => \FriendsOfRedaxo\SearchIt\SearchIt::SIMILARWORDS_ALL,
+                    'selected' => $this->getConfig('similarwordsmode') == \FriendsOfRedaxo\SearchIt\SearchIt::SIMILARWORDS_ALL,
                     'name' => $this->i18n('search_it_settings_similarwords_all')
                 )
             )

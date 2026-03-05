@@ -17,25 +17,25 @@ switch ($ajax) {
                     $msgtext .= '(ID=<strong>' . $_id . '</strong>,<strong>' . rex_clang::get($langID)->getName() . '</strong>) ';
 
                     switch ($article) {
-                        case SEARCH_IT_ART_ERROR:
+                        case \FriendsOfRedaxo\SearchIt\SearchIt::ART_ERROR:
                             echo '<p class="text-primary">' . $msgtext . $this->i18n('search_it_generate_article_socket_error') . '</p>';
                             break;
-                        case SEARCH_IT_ART_EXCLUDED:
+                        case \FriendsOfRedaxo\SearchIt\SearchIt::ART_EXCLUDED:
                             echo '<p class="text-primary">' . $msgtext . $this->i18n('search_it_generate_article_excluded') . '</p>';
                             break;
-                        case SEARCH_IT_ART_404:
+                        case \FriendsOfRedaxo\SearchIt\SearchIt::ART_404:
                             echo '<p class="text-primary">' . $msgtext . $this->i18n('search_it_generate_article_404_error') . '</p>';
                             break;
-                        case SEARCH_IT_ART_NOTOK:
+                        case \FriendsOfRedaxo\SearchIt\SearchIt::ART_NOTOK:
                             echo '<p class="text-primary">' . $msgtext . $this->i18n('search_it_generate_article_http_error') . '</p>';
                             break;
-                        case SEARCH_IT_ART_IDNOTFOUND:
+                        case \FriendsOfRedaxo\SearchIt\SearchIt::ART_IDNOTFOUND:
                             echo '<p class="text-info">' . $msgtext . $this->i18n('search_it_generate_article_id_not_found') . '</p>';
                             break;
-                        case SEARCH_IT_ART_REDIRECT:
+                        case \FriendsOfRedaxo\SearchIt\SearchIt::ART_REDIRECT:
                             echo '<p class="text-primary">' . $msgtext . $this->i18n('search_it_generate_article_redirect') . '</p>';
                             break;
-                        case SEARCH_IT_ART_GENERATED:
+                        case \FriendsOfRedaxo\SearchIt\SearchIt::ART_GENERATED:
                             echo '<p class="text-success">' . $msgtext . $this->i18n('search_it_generate_article_done') . '</p>';
                             break;
                     }
@@ -53,25 +53,25 @@ switch ($ajax) {
                             $msgtext = '<em><a target="_blank" href="' . $url_sql->getValue('url') . '">' . rex_escape($url_info["title"]) . '</a></em> (URL Addon) ';
 
                             switch ($url) {
-                                case SEARCH_IT_URL_ERROR:
+                                case \FriendsOfRedaxo\SearchIt\SearchIt::URL_ERROR:
                                     echo '<p class="text-primary">' . $msgtext . $this->i18n('search_it_generate_article_socket_error') . '</p>';
                                     break;
-                                case SEARCH_IT_URL_EXCLUDED:
+                                case \FriendsOfRedaxo\SearchIt\SearchIt::URL_EXCLUDED:
                                     echo '<p class="text-primary">' . $msgtext . $this->i18n('search_it_generate_url_excluded') . '</p>';
                                     break;
-                                case SEARCH_IT_URL_404:
+                                case \FriendsOfRedaxo\SearchIt\SearchIt::URL_404:
                                     echo '<p class="text-primary">' . $msgtext . $this->i18n('search_it_generate_article_404_error') . '</p>';
                                     break;
-                                case SEARCH_IT_URL_NOTOK:
+                                case \FriendsOfRedaxo\SearchIt\SearchIt::URL_NOTOK:
                                     echo '<p class="text-primary">' . $msgtext . $this->i18n('search_it_generate_article_http_error') . '</p>';
                                     break;
-                                case SEARCH_IT_ART_IDNOTFOUND:
+                                case \FriendsOfRedaxo\SearchIt\SearchIt::ART_IDNOTFOUND:
                                     echo '<p class="text-info">' . $msgtext . $this->i18n('search_it_generate_article_id_not_found') . '</p>';
                                     break;
-                                case SEARCH_IT_URL_REDIRECT:
+                                case \FriendsOfRedaxo\SearchIt\SearchIt::URL_REDIRECT:
                                     echo '<p class="text-primary">' . $msgtext . $this->i18n('search_it_generate_article_redirect') . '</p>';
                                     break;
-                                case SEARCH_IT_URL_GENERATED:
+                                case \FriendsOfRedaxo\SearchIt\SearchIt::URL_GENERATED:
                                     echo '<p class="text-success">' . $msgtext . $this->i18n('search_it_generate_article_done') . '</p>';
                                     break;
                             }
@@ -99,35 +99,35 @@ switch ($ajax) {
                 }
 
                 switch ($return) {
-                    case SEARCH_IT_FILE_FORBIDDEN_EXTENSION:
+                    case \FriendsOfRedaxo\SearchIt\SearchIt::FILE_FORBIDDEN_EXTENSION:
                         echo '<p class="text-info">' . $additionalOutput . ' <strong>"' . rex_escape(rex_get('name')) . '"</strong> ' . $this->i18n('search_it_generate_media_forbidden_extension', $count) . '</p>';
                         break;
 
-                    case SEARCH_IT_FILE_NOEXIST:
+                    case \FriendsOfRedaxo\SearchIt\SearchIt::FILE_NOEXIST:
                         echo '<p class="text-info">' . $additionalOutput . ' <strong>"' . rex_escape(rex_get('name')) . '"</strong> ' . $this->i18n('search_it_generate_media_doesnt_exist') . '</p>';
                         break;
 
-                    case SEARCH_IT_FILE_XPDFERR_OPENSRC:
+                    case \FriendsOfRedaxo\SearchIt\SearchIt::FILE_XPDFERR_OPENSRC:
                         echo '<p class="text-info">' . $additionalOutput . ': <strong>"' . rex_escape(rex_get('name')) . '"</strong> ' . $this->i18n('search_it_generate_media_error_pdf') . '</p>';
                         break;
 
-                    case SEARCH_IT_FILE_XPDFERR_OPENDEST:
+                    case \FriendsOfRedaxo\SearchIt\SearchIt::FILE_XPDFERR_OPENDEST:
                         echo '<p class="text-info">' . $additionalOutput . ': <strong>"' . rex_escape(rex_get('name')) . '"</strong> ' . $this->i18n('search_it_generate_media_error_output') . '</p>';
                         break;
 
-                    case SEARCH_IT_FILE_XPDFERR_PERM:
+                    case \FriendsOfRedaxo\SearchIt\SearchIt::FILE_XPDFERR_PERM:
                         echo '<p class="text-error">' . $additionalOutput . ': <strong>"' . rex_escape(rex_get('name')) . '"</strong> ' . $this->i18n('search_it_generate_media_error_permissions') . '</p>';
                         break;
 
-                    case SEARCH_IT_FILE_XPDFERR_OTHER:
+                    case \FriendsOfRedaxo\SearchIt\SearchIt::FILE_XPDFERR_OTHER:
                         echo '<p class="text-error">' . $additionalOutput . ': <strong>"' . rex_escape(rex_get('name')) . '"</strong> ' . $this->i18n('search_it_generate_media_error_pdf2') . '</p>';
                         break;
 
-                    case SEARCH_IT_FILE_EMPTY:
+                    case \FriendsOfRedaxo\SearchIt\SearchIt::FILE_EMPTY:
                         echo '<p class="text-error">' . $additionalOutput . ' <strong>"' . rex_escape(rex_get('name')) . '"</strong> ' . $this->i18n('search_it_generate_media_empty') . '</p>';
                         break;
 
-                    case SEARCH_IT_FILE_GENERATED:
+                    case \FriendsOfRedaxo\SearchIt\SearchIt::FILE_GENERATED:
                         echo '<p class="text-info">' . $additionalOutput . ' <strong>"' . rex_escape(rex_get('name')) . '"</strong> ' . $this->i18n('search_it_generate_media_done') . '</p>';
                         break;
                 }

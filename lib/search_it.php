@@ -26,6 +26,39 @@ use rex_yrewrite;
 
 class SearchIt
 {
+    // Article index status codes
+    public const ART_EXCLUDED = 0;
+    public const ART_IDNOTFOUND = 1;
+    public const ART_GENERATED = 2;
+    public const ART_REDIRECT = 3;
+    public const ART_ERROR = 4;
+    public const ART_NOTOK = 5;
+    public const ART_404 = 6;
+
+    // URL index status codes
+    public const URL_EXCLUDED = 0;
+    public const URL_GENERATED = 2;
+    public const URL_REDIRECT = 3;
+    public const URL_ERROR = 4;
+    public const URL_NOTOK = 5;
+    public const URL_404 = 6;
+
+    // File index status codes
+    public const FILE_NOEXIST = 0;
+    public const FILE_XPDFERR_OPENSRC = 1;
+    public const FILE_XPDFERR_OPENDEST = 2;
+    public const FILE_XPDFERR_PERM = 3;
+    public const FILE_XPDFERR_OTHER = 4;
+    public const FILE_FORBIDDEN_EXTENSION = 5;
+    public const FILE_GENERATED = 6;
+    public const FILE_EMPTY = 7;
+
+    // Similar words modes (bitmask)
+    public const SIMILARWORDS_NONE = 0;
+    public const SIMILARWORDS_SOUNDEX = 1;
+    public const SIMILARWORDS_METAPHONE = 2;
+    public const SIMILARWORDS_COLOGNEPHONE = 4;
+    public const SIMILARWORDS_ALL = 7;
 
     private $searchString = '';
     private $hashMe = '';

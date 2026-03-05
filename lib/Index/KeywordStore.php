@@ -49,9 +49,9 @@ class KeywordStore
                 $simWords[] = sprintf(
                     "(%s, %s, %s, %s, %s)",
                     $simWordsSQL->escape($keyword['search']),
-                    $simWordsSQL->escape((($this->similarwordsMode & SearchIt::SIMILARWORDS_SOUNDEX) && !is_numeric(soundex($keyword['search']))) ? soundex($keyword['search']) : ''),
-                    $simWordsSQL->escape((($this->similarwordsMode & SearchIt::SIMILARWORDS_METAPHONE) && !is_numeric(metaphone($keyword['search']))) ? metaphone($keyword['search']) : ''),
-                    $simWordsSQL->escape((($this->similarwordsMode & SearchIt::SIMILARWORDS_COLOGNEPHONE) && !is_numeric(ColognePhonetic::encode($keyword['search']))) ? ColognePhonetic::encode($keyword['search']) : ''),
+                    $simWordsSQL->escape((($this->similarwordsMode & SearchIt::SIMILARWORDS_SOUNDEX) && soundex($keyword['search']) !== '0000') ? soundex($keyword['search']) : ''),
+                    $simWordsSQL->escape((($this->similarwordsMode & SearchIt::SIMILARWORDS_METAPHONE) && metaphone($keyword['search']) !== '') ? metaphone($keyword['search']) : ''),
+                    $simWordsSQL->escape((($this->similarwordsMode & SearchIt::SIMILARWORDS_COLOGNEPHONE) && ColognePhonetic::encode($keyword['search']) !== '') ? ColognePhonetic::encode($keyword['search']) : ''),
                     (isset($keyword['clang']) && $keyword['clang'] !== false) ? (int) $keyword['clang'] : '-1'
                 );
             }

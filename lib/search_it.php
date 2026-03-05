@@ -2201,15 +2201,15 @@ class SearchIt
             foreach ($this->searchArray as $keyword) {
                 if (!is_numeric($keyword['search'])) {
                     $sounds = [];
-                    if (($this->similarwordsMode & self::SIMILARWORDS_SOUNDEX) && !is_numeric(soundex($keyword['search']))) {
+                    if (($this->similarwordsMode & self::SIMILARWORDS_SOUNDEX) && soundex($keyword['search']) !== '0000') {
                         $sounds[] = 'soundex = ' . $simWordsSQL->escape(soundex($keyword['search']));
                     }
 
-                    if (($this->similarwordsMode & self::SIMILARWORDS_METAPHONE) && !is_numeric(metaphone($keyword['search']))) {
+                    if (($this->similarwordsMode & self::SIMILARWORDS_METAPHONE) && metaphone($keyword['search']) !== '') {
                         $sounds[] = 'metaphone = ' . $simWordsSQL->escape(metaphone($keyword['search']));
                     }
 
-                    if (($this->similarwordsMode & self::SIMILARWORDS_COLOGNEPHONE) && !is_numeric(ColognePhonetic::encode($keyword['search']))) {
+                    if (($this->similarwordsMode & self::SIMILARWORDS_COLOGNEPHONE) && ColognePhonetic::encode($keyword['search']) !== '') {
                         $sounds[] = 'colognephone = ' . $simWordsSQL->escape(ColognePhonetic::encode($keyword['search']));
                     }
                     if (!empty($sounds)) {

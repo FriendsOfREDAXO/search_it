@@ -121,34 +121,36 @@ class SearchIt
 
         if ($_loadSettings) {
 
-            $this->setCaseInsensitive(rex_addon::get('search_it')->getConfig('ci'));
+            $si = rex_addon::get('search_it');
 
-            $this->setLogicalMode(rex_addon::get('search_it')->getConfig('logicalmode'));
-            $this->setTextMode(rex_addon::get('search_it')->getConfig('textmode'));
-            $this->similarwordsMode = intval(rex_addon::get('search_it')->getConfig('similarwordsmode'));
-            $this->similarwords = (bool)$this->similarwordsMode;
-            $this->similarwordsPermanent = rex_addon::get('search_it')->getConfig('similarwords_permanent');
-            $this->setSearchMode(rex_addon::get('search_it')->getConfig('searchmode'));
+            $this->setCaseInsensitive((bool) ($si->getConfig('ci') ?? true));
 
-            $this->setSurroundTags(rex_addon::get('search_it')->getConfig('surroundtags'));
-            $this->setLimit(rex_addon::get('search_it')->getConfig('limit'));
-            $this->setMaxTeaserChars(rex_addon::get('search_it')->getConfig('maxteaserchars'));
-            if (rex_addon::get('search_it')->getConfig('maxhighlightchars') > 0) {
-                $this->setMaxHighlightedTextChars(rex_addon::get('search_it')->getConfig('maxhighlightchars'));
+            $this->setLogicalMode((string) ($si->getConfig('logicalmode') ?? 'and'));
+            $this->setTextMode((string) ($si->getConfig('textmode') ?? 'plain'));
+            $this->similarwordsMode = intval($si->getConfig('similarwordsmode'));
+            $this->similarwords = (bool) $this->similarwordsMode;
+            $this->similarwordsPermanent = (bool) $si->getConfig('similarwords_permanent');
+            $this->setSearchMode((string) ($si->getConfig('searchmode') ?? 'like'));
+
+            $this->setSurroundTags($si->getConfig('surroundtags') ?? ['<mark>', '</mark>']);
+            $this->setLimit($si->getConfig('limit') ?? [0, 10]);
+            $this->setMaxTeaserChars((int) ($si->getConfig('maxteaserchars') ?? 200));
+            if (($si->getConfig('maxhighlightchars') ?? 0) > 0) {
+                $this->setMaxHighlightedTextChars((int) $si->getConfig('maxhighlightchars'));
             }
-            $this->setHighlightType(rex_addon::get('search_it')->getConfig('highlight'));
+            $this->setHighlightType((string) ($si->getConfig('highlight') ?? 'surroundtext'));
 
-            $this->includeColumns = is_array(rex_addon::get('search_it')->getConfig('include')) ? rex_addon::get('search_it')->getConfig('include') : [];
-            $this->fileExtensions = rex_addon::get('search_it')->getConfig('fileextensions');
-            $this->indexMediapool = rex_addon::get('search_it')->getConfig('indexmediapool');
-            $this->fileDirectories = is_array(rex_addon::get('search_it')->getConfig('indexfolders')) ? rex_addon::get('search_it')->getConfig('indexfolders') : [];
+            $this->includeColumns = is_array($si->getConfig('include')) ? $si->getConfig('include') : [];
+            $this->fileExtensions = $si->getConfig('fileextensions') ?? [];
+            $this->indexMediapool = (bool) $si->getConfig('indexmediapool');
+            $this->fileDirectories = is_array($si->getConfig('indexfolders')) ? $si->getConfig('indexfolders') : [];
 
-            $this->setBlacklist(is_array(rex_addon::get('search_it')->getConfig('blacklist')) ? rex_addon::get('search_it')->getConfig('blacklist') : []);
-            $this->setExcludeIDs(is_array(rex_addon::get('search_it')->getConfig('exclude_article_ids')) ? rex_addon::get('search_it')->getConfig('exclude_article_ids') : []);
-            $this->maxSearchTerms = (int)(rex_addon::get('search_it')->getConfig('max_search_terms') ?: 10);
-            if (is_array(rex_addon::get('search_it')->getConfig('exclude_category_ids'))) {
+            $this->setBlacklist(is_array($si->getConfig('blacklist')) ? $si->getConfig('blacklist') : []);
+            $this->setExcludeIDs(is_array($si->getConfig('exclude_article_ids')) ? $si->getConfig('exclude_article_ids') : []);
+            $this->maxSearchTerms = (int) ($si->getConfig('max_search_terms') ?: 10);
+            if (is_array($si->getConfig('exclude_category_ids'))) {
                 $ids = [];
-                foreach (rex_addon::get('search_it')->getConfig('exclude_category_ids') as $catID) {
+                foreach ($si->getConfig('exclude_category_ids') as $catID) {
                     foreach (ArticleHelper::getArticles(array($catID)) as $id => $name) {
                         $ids[] = $id;
                     }

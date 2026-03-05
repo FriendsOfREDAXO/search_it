@@ -1,5 +1,8 @@
 <?php
 
+// Backward compatibility class aliases
+require_once __DIR__ . '/lib/aliases.php';
+
 use FriendsOfRedaxo\SearchIt\SearchIt;
 use FriendsOfRedaxo\SearchIt\Cronjob\Reindex;
 use FriendsOfRedaxo\SearchIt\Cronjob\ClearCache;

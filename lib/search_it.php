@@ -64,59 +64,58 @@ class SearchIt
     public const SIMILARWORDS_COLOGNEPHONE = 4;
     public const SIMILARWORDS_ALL = 7;
 
-    private $searchString = '';
-    private $hashMe = '';
-    private $clang = false;
-    private $ellipsis;
-    private $urlAddOnTableName;
-    private $significantCharacterCount = 3;
-    private $stopwords = [];
-    private $errormessages = '';
+    private string $searchString = '';
+    private string $hashMe = '';
+    private int|false $clang = false;
+    private string $ellipsis;
+    private string $urlAddOnTableName;
+    private int $significantCharacterCount = 3;
+    private array $stopwords = [];
+    private string $errormessages = '';
 
-    private $ci = true;
-    private $where = '';
-    private $groupBy = true;
-    private $order = ['RELEVANCE_SEARCH_IT' => 'DESC'];
+    private bool $ci = true;
+    private string $where = '';
+    private bool $groupBy = true;
+    private array $order = ['RELEVANCE_SEARCH_IT' => 'DESC'];
 
-    private $searchArray = [];
-    private $searchHtmlEntities = false;
-    private $cache = true;
-    private $cachedArray = [];
-    private $searchInIDs = [];
-    private $searchAllArticlesAnyway = false;
-    private $whitelist = [];
-
+    private array $searchArray = [];
+    private bool $searchHtmlEntities = false;
+    private bool $cache = true;
+    private array $cachedArray = [];
+    private array $searchInIDs = [];
+    private bool $searchAllArticlesAnyway = false;
+    private array $whitelist = [];
 
     /* config values */
-    private $logicalMode = ' AND ';
-    private $textMode = 'plain';
-    private $similarwords = false;
-    private $similarwordsMode = 0;
-    private $similarwordsPermanent = false;
-    private $searchMode = 'like';
+    private string $logicalMode = ' AND ';
+    private string $textMode = 'plain';
+    private bool $similarwords = false;
+    private int $similarwordsMode = 0;
+    private bool $similarwordsPermanent = false;
+    private string $searchMode = 'like';
 
-    private $surroundTags = array('<mark>', '</mark>');
-    private $limit = [0, 10];
-    private $maxTeaserChars = 200;
-    private $maxHighlightedTextChars = 100;
-    private $highlightType = 'surroundtext';
+    private array $surroundTags = ['<mark>', '</mark>'];
+    private array $limit = [0, 10];
+    private int $maxTeaserChars = 200;
+    private int $maxHighlightedTextChars = 100;
+    private string $highlightType = 'surroundtext';
 
-    private $includeColumns = [];
-    private $fileExtensions = [];
-    private $indexMediapool = false;
-    private $fileDirectories = [];
+    private array $includeColumns = [];
+    private array $fileExtensions = [];
+    private bool $indexMediapool = false;
+    private array $fileDirectories = [];
 
-    private $blacklist = [];
-    private $blacklisted = [];
-    private $excludeIDs = [];
+    private array $blacklist = [];
+    private array $blacklisted = [];
+    private array $excludeIDs = [];
 
-    private $mysqlInsertChunkSize = 100;
-    private $maxSearchTerms = 10;
+    private int $mysqlInsertChunkSize = 100;
+    private int $maxSearchTerms = 10;
 
     private SearchCache $searchCache;
     private KeywordStore $keywordStore;
 
-    function __construct($_clang = false, $_loadSettings = true, $_useStopwords = true)
+    public function __construct(int|false $_clang = false, bool $_loadSettings = true, bool $_useStopwords = true)
     {
         $this->searchCache = new SearchCache();
 
@@ -179,7 +178,7 @@ class SearchIt
         );
     }
 
-    private static function getTablePrefix()
+    private static function getTablePrefix(): string
     {
         static $tablePrefix = null;
         if ($tablePrefix == null) {
@@ -188,7 +187,7 @@ class SearchIt
         return $tablePrefix;
     }
 
-    private static function getTempTablePrefix()
+    private static function getTempTablePrefix(): string
     {
         static $tempTablePrefix = null;
         if ($tempTablePrefix == null) {
@@ -281,7 +280,7 @@ class SearchIt
      *
      * @return int
      */
-    public function indexArticle($_id, $_clang = false, $clearCache = false)
+    public function indexArticle(int $_id, int|false $_clang = false, bool $clearCache = false): array
     {
         $dont_use_socket = true == rex_config::get('search_it', 'dont_use_socket');
         if ($_clang === false) {
@@ -302,7 +301,7 @@ class SearchIt
             $langID = $lang->getId();
 
             if (in_array($_id, $this->excludeIDs)) {
-                $return[$langID] = \SEARCH_IT_ART_EXCLUDED;
+                $return[$langID] = self::ART_EXCLUDED;
                 continue;
             }
 
@@ -318,7 +317,7 @@ class SearchIt
             // index article
             $article = rex_article::get(intval($_id), $langID);
             if (is_null($article)) {
-                $return[$langID] = \SEARCH_IT_ART_IDNOTFOUND;
+                $return[$langID] = self::ART_IDNOTFOUND;
                 continue;
             }
 
@@ -328,7 +327,7 @@ class SearchIt
             ]));
 
             if ($doindex === false) {
-                $return[$langID] = \SEARCH_IT_ART_EXCLUDED;
+                $return[$langID] = self::ART_EXCLUDED;
                 continue;
             }
 
@@ -366,7 +365,7 @@ class SearchIt
                         // Check if URL uses a valid HTTP/HTTPS scheme before attempting socket connection
                         if (!$this->isValidHttpScheme($scanurl)) {
                             rex_logger::factory()->info('Search_it: Skipping indexing of article ' . $_id . ' with non-HTTP scheme URL: ' . $scanurl);
-                            $return[$langID] = \SEARCH_IT_ART_EXCLUDED;
+                            $return[$langID] = self::ART_EXCLUDED;
                             continue;
                         }
 
@@ -415,15 +414,15 @@ class SearchIt
                             $articleText = '';
                             !is_null($response) ? $response_text = $response->getStatusCode() . ' - ' . $response->getStatusMessage() : $response_text = '';
                             if ($response->isRedirection()) {
-                                $return[$langID] = \SEARCH_IT_ART_REDIRECT;
+                                $return[$langID] = self::ART_REDIRECT;
                                 $response_text = rex_i18n::msg('search_it_generate_article_redirect');
                                 rex_logger::factory()->log('Warning', rex_i18n::msg('search_it_generate_article_http_error') . ' ' . $scanurl . PHP_EOL . $response_text);
                             } else if ($response->getStatusCode() == '404') {
-                                $return[$langID] = \SEARCH_IT_ART_404;
+                                $return[$langID] = self::ART_404;
                                 rex_logger::factory()->log('Warning', rex_i18n::msg('search_it_generate_article_404_error') . ' ' . $scanurl . PHP_EOL . $response_text);
                             } else {
                                 rex_logger::factory()->log('Warning', rex_i18n::msg('search_it_generate_article_http_error') . ' ' . $scanurl . PHP_EOL . $response_text);
-                                $return[$langID] = \SEARCH_IT_ART_NOTOK;
+                                $return[$langID] = self::ART_NOTOK;
                             }
                             continue;
                         }
@@ -431,7 +430,7 @@ class SearchIt
                     } catch (rex_socket_exception $e) {
                         $articleText = '';
                         rex_logger::factory()->error(rex_i18n::msg('search_it_generate_article_socket_error') . ': ' . $scanurl . PHP_EOL . $e->getMessage());
-                        $return[$langID] = \SEARCH_IT_ART_ERROR;
+                        $return[$langID] = self::ART_ERROR;
                         continue;
 
                     }
@@ -452,13 +451,13 @@ class SearchIt
                     if (!file_exists($article_content_file)) {
                         $generated = rex_content_service::generateArticleContent($_id, $langID);
                         if ($generated !== true) {
-                            $return[$langID] = \SEARCH_IT_ART_IDNOTFOUND;
+                            $return[$langID] = self::ART_IDNOTFOUND;
                             continue;
                         }
                     }
 
                     if (file_exists($article_content_file) and preg_match('~(header\s*\(\s*["\']\s*Location\s*:)|(rex_redirect\s*\()~isu', rex_file::get($article_content_file))) {
-                        $return[$langID] = \SEARCH_IT_ART_REDIRECT;
+                        $return[$langID] = self::ART_REDIRECT;
                         continue;
                     }
 
@@ -512,7 +511,7 @@ class SearchIt
                 $insert->setValues($articleData);
                 $insert->insert();
 
-                $return[$langID] = \SEARCH_IT_ART_GENERATED;
+                $return[$langID] = self::ART_GENERATED;
             }
         }
 
@@ -540,7 +539,7 @@ class SearchIt
      *
      * @return int
      */
-    public function indexURL($url_hash, $article_id, $clang_id, $profile_id, $data_id, $clearCache = false): array
+    public function indexURL(string $url_hash, int $article_id, int $clang_id, int $profile_id, int $data_id, bool $clearCache = false): array
     {
         $return = [];
         $keywords = [];
@@ -557,7 +556,7 @@ class SearchIt
         // index article
         $article = rex_article::get($article_id, $clang_id);
         if (is_null($article)) {
-            $return[$clang_id] = \SEARCH_IT_ART_IDNOTFOUND;
+            $return[$clang_id] = self::ART_IDNOTFOUND;
         } else if (is_object($article) and ($article->isOnline() or rex_addon::get('search_it')->getConfig('indexoffline'))) {
             try {
 
@@ -592,7 +591,7 @@ class SearchIt
                 // Check if URL uses a valid HTTP/HTTPS scheme before attempting socket connection
                 if (!$this->isValidHttpScheme($scanurl)) {
                     rex_logger::factory()->info('Search_it: Skipping indexing of URL with non-HTTP scheme: ' . $scanurl);
-                    $return[$clang_id] = \SEARCH_IT_URL_EXCLUDED;
+                    $return[$clang_id] = self::URL_EXCLUDED;
                     return $return;
                 }
 
@@ -640,15 +639,15 @@ class SearchIt
                 } else {
                     !is_null($response) ? $response_text = $response->getStatusCode() . ' - ' . $response->getStatusMessage() : $response_text = '';
                     if ($response->isRedirection()) {
-                        $return[$clang_id] = \SEARCH_IT_URL_REDIRECT;
+                        $return[$clang_id] = self::URL_REDIRECT;
                         $response_text = rex_i18n::msg('search_it_generate_article_redirect');
                         rex_logger::factory()->log('Warning', rex_i18n::msg('search_it_generate_article_http_error') . ' ' . $scanurl . PHP_EOL . $response_text);
                     } else if ($response->getStatusCode() == '404') {
-                        $return[$clang_id] = \SEARCH_IT_URL_404;
+                        $return[$clang_id] = self::URL_404;
                         rex_logger::factory()->log('Warning', rex_i18n::msg('search_it_generate_article_404_error') . ' ' . $scanurl . PHP_EOL . $response_text);
                     } else {
                         rex_logger::factory()->log('Warning', rex_i18n::msg('search_it_generate_article_http_error') . ' ' . $scanurl . PHP_EOL . $response_text);
-                        $return[$clang_id] = \SEARCH_IT_URL_NOTOK;
+                        $return[$clang_id] = self::URL_NOTOK;
                     }
                     return $return;
                 }
@@ -656,7 +655,7 @@ class SearchIt
             } catch (rex_socket_exception $e) {
                 $articleText = '';
                 rex_logger::factory()->error(rex_i18n::msg('search_it_generate_article_socket_error') . ' ' . $scanurl . PHP_EOL . $e->getMessage());
-                $return[$clang_id] = \SEARCH_IT_URL_ERROR;
+                $return[$clang_id] = self::URL_ERROR;
             }
 
             // regex time
@@ -713,7 +712,7 @@ class SearchIt
                 $this->deleteCache();
             }
 
-            $return[$clang_id] = \SEARCH_IT_URL_GENERATED;
+            $return[$clang_id] = self::URL_GENERATED;
 
             $this->storeKeywords($keywords, false);
         }
@@ -782,7 +781,7 @@ class SearchIt
      * @param int $_id
      * @param mixed $_clang
      */
-    public function unindexArticle($_id, $_clang = false): void
+    public function unindexArticle(int $_id, int|false $_clang = false): void
     {
         // exclude article
         $art_sql = rex_sql::factory();
@@ -845,7 +844,7 @@ class SearchIt
      *
      * @param string $url_hash
      */
-    public function unindexURL($url_hash): void
+    public function unindexURL(string $url_hash): void
     {
         // exclude url
         $art_sql = rex_sql::factory();
@@ -882,7 +881,7 @@ class SearchIt
      *
      * @return int
      */
-    public function indexColumn($_table, $_column, $_idcol = false, $_id = false, $_start = false, $_count = false, $clearCache = false): int
+    public function indexColumn(string $_table, string $_column, string|false $_idcol = false, int|false $_id = false, int|false $_start = false, int|false $_count = false, bool $clearCache = false): int
     {
         $sqltest = rex_sql_table::get($_table);
         if (!$sqltest->exists()) {
@@ -1042,7 +1041,7 @@ class SearchIt
 
     /**
      * Indexes a certain file.
-     * Returns \SEARCH_IT_FILE_GENERATED or an error code.
+     * Returns self::FILE_GENERATED or an error code.
      *
      * @param string $_filename
      * @param mixed $_clang
@@ -1051,7 +1050,7 @@ class SearchIt
      *
      * @return int
      */
-    public function indexFile($_filename, $_doPlaintext = false, $_clang = false, $_fid = false, $_catid = false, $clearCache = false): int
+    public function indexFile(string $_filename, bool $_doPlaintext = false, int|false $_clang = false, int|false $_fid = false, int|false $_catid = false, bool $clearCache = false): int
     {
         // $_filename comes with path but needs to be stripped of first slash
         // extract file-extension
@@ -1061,7 +1060,7 @@ class SearchIt
 
         // check file-extension
         if ((!in_array($fileext, $this->fileExtensions) and !empty($this->fileExtensions))) {
-            return \SEARCH_IT_FILE_FORBIDDEN_EXTENSION;
+            return self::FILE_FORBIDDEN_EXTENSION;
         }
 
         // delete cache
@@ -1106,20 +1105,20 @@ class SearchIt
 
                     if ($return > 0) {
                         if ($return == 1) {
-                            $error = \SEARCH_IT_FILE_XPDFERR_OPENSRC;
+                            $error = self::FILE_XPDFERR_OPENSRC;
                         }
                         if ($return == 2) {
-                            $error = \SEARCH_IT_FILE_XPDFERR_OPENDEST;
+                            $error = self::FILE_XPDFERR_OPENDEST;
                         }
                         if ($return == 3) {
-                            $error = \SEARCH_IT_FILE_XPDFERR_PERM;
+                            $error = self::FILE_XPDFERR_PERM;
                         }
                         if ($return == 99) {
-                            $error = \SEARCH_IT_FILE_XPDFERR_OTHER;
+                            $error = self::FILE_XPDFERR_OTHER;
                         }
                     } else {
                         if (false === $text = @file_get_contents($tempFile)) {
-                            $error = \SEARCH_IT_FILE_NOEXIST;
+                            $error = self::FILE_NOEXIST;
                         } else {
                             $xpdf = true;
                         }
@@ -1131,7 +1130,7 @@ class SearchIt
                 if (!$xpdf) {
                     // if xpdf returned an error, try pdf2txt via php
                     if (false === $pdfContent = @rex_file::get(rex_path::frontend($_filename))) {
-                        $error = \SEARCH_IT_FILE_NOEXIST;
+                        $error = self::FILE_NOEXIST;
                     } else {
                         $text = PdfConverter::directConvert($pdfContent);
                         $error = false;
@@ -1141,7 +1140,7 @@ class SearchIt
                 if ($error !== false) {
                     return $error;
                 } elseif (trim($text) == '') {
-                    return \SEARCH_IT_FILE_EMPTY;
+                    return self::FILE_EMPTY;
                 }
 
                 $plaintext = $this->getPlaintext($text);
@@ -1152,7 +1151,7 @@ class SearchIt
             case 'html':
             case 'php':
                 if (false === $text = @rex_file::get(rex_path::frontend($_filename))) {
-                    return \SEARCH_IT_FILE_NOEXIST;
+                    return self::FILE_NOEXIST;
                 }
 
                 $plaintext = $this->getPlaintext($text);
@@ -1161,7 +1160,7 @@ class SearchIt
             // other filetype
             default:
                 if (false === $text = @rex_file::get(rex_path::frontend($_filename))) {
-                    return \SEARCH_IT_FILE_NOEXIST;
+                    return self::FILE_NOEXIST;
                 }
 
         }
@@ -1224,7 +1223,7 @@ class SearchIt
             $this->deleteCache();
         }
 
-        return \SEARCH_IT_FILE_GENERATED;
+        return self::FILE_GENERATED;
     }
 
     /**
@@ -1234,7 +1233,7 @@ class SearchIt
      *
      * @return string
      */
-    private function getPlaintext($_text)
+    private function getPlaintext(string $_text): string
     {
         $process = true;
         $extensionReturn = rex_extension::registerPoint(new rex_extension_point('SEARCH_IT_PLAINTEXT', $_text));
@@ -1261,7 +1260,7 @@ class SearchIt
      *
      * @return string
      */
-    private function getTeaserText($_text)
+    private function getTeaserText(string $_text): string
     {
         $i = 0;
         $textArray = preg_split('~\s+~siu', $_text, $this->maxTeaserChars);
@@ -1289,7 +1288,7 @@ class SearchIt
      * In some cases there is no id for the field fid in the index table (like media files). Therefore Search it counts into the negative.
      *
      */
-    private static function getMinFID()
+    private static function getMinFID(): int
     {
         $minfid_sql = rex_sql::factory();
         $minfid_result = $minfid_sql->getArray('SELECT MIN(CONVERT(fid, SIGNED)) as minfid FROM `' . self::getTempTablePrefix() . 'search_it_index' . '`');
@@ -1298,7 +1297,7 @@ class SearchIt
         return ($minfid < 0) ? --$minfid : -1;
     }
 
-    private static function getMaxFID($_table)
+    private static function getMaxFID(string $_table): int
     {
         $maxfid_sql = rex_sql::factory();
         $maxfid_result = $maxfid_sql->getArray('SELECT MAX(CONVERT(fid, SIGNED)) as maxfid FROM `' . self::getTempTablePrefix() . 'search_it_index' . '` WHERE ftable = "' . $_table . '" ');
@@ -1323,7 +1322,7 @@ class SearchIt
      * Deletes the search index for given type
      * @param string $texttype Index text type
      */
-    public function deleteIndexForType($texttype): void
+    public function deleteIndexForType(string $texttype): void
     {
         $sql = rex_sql::factory();
         $query = 'SELECT id FROM ' . self::getTempTablePrefix() . 'search_it_index WHERE texttype = ?;';
@@ -1342,7 +1341,7 @@ class SearchIt
      *
      * Expects an array with the IDs as parameters.
      */
-    private function setExcludeIDs($_ids): void
+    private function setExcludeIDs(array $_ids): void
     {
         foreach ($_ids as $key => $id) {
             $this->excludeIDs[] = intval($id);
@@ -1356,7 +1355,7 @@ class SearchIt
      *
      * Expects an array with the words as parameters.
      */
-    public function setBlacklist($_words): void
+    public function setBlacklist(array $_words): void
     {
         foreach ($_words as $key => $word) {
             $this->blacklist[] = $tmpkey = (string)($this->ci ? strtolower($word) : $word);
@@ -1372,7 +1371,7 @@ class SearchIt
      *
      * @param int $_maxSearchTerms Maximum number of search terms (default: 10)
      */
-    public function setMaxSearchTerms($_maxSearchTerms): void
+    public function setMaxSearchTerms(int $_maxSearchTerms): void
     {
         $this->maxSearchTerms = max(1, (int)$_maxSearchTerms);
     }
@@ -1382,7 +1381,7 @@ class SearchIt
      *
      * Expects a string.
      */
-    public function setSearchString($_searchString): void
+    public function setSearchString(string $_searchString): void
     {
         $this->searchString = $_searchString;
     }
@@ -1396,7 +1395,7 @@ class SearchIt
      *
      * @return int
      */
-    public function parseSearchString($_searchString): int
+    public function parseSearchString(string $_searchString): int
     {
         // reset searchArray
         $this->searchArray = [];
@@ -1464,7 +1463,7 @@ class SearchIt
      *
      *
      */
-    public function addWhitelist($_whitelist): void
+    public function addWhitelist(array $_whitelist): void
     {
         foreach ($_whitelist as $word => $weight) {
             $key = (string)($this->ci ? strtolower($word) : $word);
@@ -1476,7 +1475,7 @@ class SearchIt
     /**
      * Sets array of IDs for search restriction
      */
-    private function setSearchInIDs($_searchInIDs, $_reset = false): void
+    private function setSearchInIDs(array $_searchInIDs, bool $_reset = false): void
     {
         if ($_reset) {
             $this->searchInIDs = [];
@@ -1544,7 +1543,7 @@ class SearchIt
      *
      * @ignore
      */
-    public function setSearchAllArticlesAnyway($_bool = false): void
+    public function setSearchAllArticlesAnyway(bool $_bool = false): void
     {
         $this->searchAllArticlesAnyway = $_bool;
         $this->hashMe .= $_bool;
@@ -1557,7 +1556,7 @@ class SearchIt
      *
      * @ignore
      */
-    public function doSearchArticles($_bool = false): void
+    public function doSearchArticles(bool $_bool = false): void
     {
         $this->searchAllArticlesAnyway = $_bool;
         $this->hashMe .= $_bool;
@@ -1568,7 +1567,7 @@ class SearchIt
      *
      * Expects an array with the IDs as parameters.
      */
-    public function searchInArticles($_ids): void
+    public function searchInArticles(array $_ids): void
     {
         $this->setSearchInIDs(array('articles' => $_ids));
     }
@@ -1578,7 +1577,7 @@ class SearchIt
      *
      * Expects an array with the IDs as parameters.
      */
-    public function searchInCategories($_ids): void
+    public function searchInCategories(array $_ids): void
     {
         $this->setSearchInIDs(array('categories' => $_ids));
     }
@@ -1588,7 +1587,7 @@ class SearchIt
      *
      * Expects an ID as parameter.
      */
-    public function searchInCategoryTree($_id): void
+    public function searchInCategoryTree(int $_id): void
     {
         $subcats = self::getChildList($_id);
         $this->setSearchInIDs(array('categories' => $subcats));
@@ -1599,7 +1598,7 @@ class SearchIt
      *
      * Expects a category ID as parameter.
      */
-    private function getChildList($_id): array
+    private function getChildList(int $_id): array
     {
         $subs = rex_category::get($_id)->getChildren();
         $childlist = [];
@@ -1617,7 +1616,7 @@ class SearchIt
      *
      * Expects an array with the IDs as parameters.
      */
-    public function searchInFileCategories($_ids): void
+    public function searchInFileCategories(array $_ids): void
     {
         $this->setSearchInIDs(array('filecategories' => $_ids));
     }
@@ -1628,7 +1627,7 @@ class SearchIt
      * @param string $_table
      * @param string $_column
      */
-    public function searchInDbColumn($_table, $_column): void
+    public function searchInDbColumn(string $_table, string $_column): void
     {
         $this->setSearchinIDs(array('db_columns' => array($_table => array($_column))));
     }
@@ -1638,7 +1637,7 @@ class SearchIt
      *
      * Expects a string suitable as SQL WHERE condition.
      */
-    public function setWhere($_where): void
+    public function setWhere(string $_where): void
     {
         $this->where = $_where;
         $this->hashMe .= $_where;
@@ -1655,7 +1654,7 @@ class SearchIt
      *
      * @return bool
      */
-    public function setOrder($_order, $put_first = false): bool
+    public function setOrder(array $_order, bool $put_first = false): bool
     {
         if (!is_array($_order)) {
             $this->errormessages = 'Wrong parameter. Expecting an array';
@@ -1690,7 +1689,7 @@ class SearchIt
      *
      * @ignore
      */
-    public function doGroupBy($_bool = true): void
+    public function doGroupBy(bool $_bool = true): void
     {
         $this->groupBy = $_bool;
         $this->hashMe .= $_bool;
@@ -1703,7 +1702,7 @@ class SearchIt
      *
      * @ignore
      */
-    public function setCaseInsensitive($_ci = true): void
+    public function setCaseInsensitive(bool $_ci = true): void
     {
         $this->ci = (bool)$_ci;
     }
@@ -1715,7 +1714,7 @@ class SearchIt
      *
      *
      */
-    private function setClang($_clang): void
+    private function setClang(int|false $_clang): void
     {
         if ($_clang === false) {
             $this->clang = false;
@@ -1737,7 +1736,7 @@ class SearchIt
      *
      * @return bool
      */
-    public function setLogicalMode($_logicalMode = ''): bool
+    public function setLogicalMode(string $_logicalMode = ''): bool
     {
         switch (strtolower($_logicalMode ?? '')) {
             case 'and':
@@ -1773,7 +1772,7 @@ class SearchIt
      *
      * @return bool
      */
-    public function setTextMode($_textMode = ''): bool
+    public function setTextMode(string $_textMode = ''): bool
     {
         switch (strtolower($_textMode ?? '')) {
             case 'html':
@@ -1814,7 +1813,7 @@ class SearchIt
      *
      * @return bool
      */
-    public function setSearchMode($_searchMode = ''): bool
+    public function setSearchMode(string $_searchMode = ''): bool
     {
         switch (strtolower($_searchMode ?? '')) {
             case 'like':
@@ -1834,7 +1833,7 @@ class SearchIt
     /**
      * Sets similarwordsmode
      */
-    public function setSimilarWordsMode($_mode): void
+    public function setSimilarWordsMode(int $_mode): void
     {
         $this->similarwordsMode = intval($_mode);
     }
@@ -1849,7 +1848,7 @@ class SearchIt
      * Expects either the start- and the end-tag
      * or an array with both tags.
      */
-    public function setSurroundTags($_tags, $_endtag = false): void
+    public function setSurroundTags(array|string $_tags, string|false $_endtag = false): void
     {
         if (is_array($_tags) and $_endtag === false) {
             $this->surroundTags = $_tags;
@@ -1871,7 +1870,7 @@ class SearchIt
      * setLimit(20);          // maximum of 20 results starting with the first result
      * setLimit(array(0,20)); // maximum of 20 results starting with the first result
      */
-    public function setLimit($_limit, $_countLimit = false): void
+    public function setLimit(array|int $_limit, int|false $_countLimit = false): void
     {
         if (is_array($_limit) and $_countLimit === false) {
             $this->limit = [(int)$_limit[0], (int)$_limit[1]];
@@ -1892,7 +1891,7 @@ class SearchIt
      *
      * @param int $_count
      */
-    public function setMaxTeaserChars($_count): void
+    public function setMaxTeaserChars(int $_count): void
     {
         if (empty($_count) || !is_numeric($_count)) {
             $_count = 200;
@@ -1905,7 +1904,7 @@ class SearchIt
      * Sets the maximum count of letters around an found search term in the highlighted text.
      * @param int $_count
      */
-    public function setMaxHighlightedTextChars($_count): void
+    public function setMaxHighlightedTextChars(int $_count): void
     {
         if (empty($_count) || !is_numeric($_count)) {
             $_count = 100;
@@ -1921,7 +1920,7 @@ class SearchIt
      *
      * @return bool
      */
-    public function setHighlightType($_type): bool
+    public function setHighlightType(string $_type): bool
     {
         switch ($_type) {
             case 'sentence':
@@ -1950,7 +1949,7 @@ class SearchIt
      *
      * @return mixed
      */
-    public function getHighlightedText($_text)
+    public function getHighlightedText(string $_text): string|array
     {
         $tmp_searchArray = $this->searchArray;
 
@@ -2126,7 +2125,7 @@ class SearchIt
         );
     }
 
-    public function deleteCache($_indexIds = false): void
+    public function deleteCache(array|false $_indexIds = false): void
     {
         $this->searchCache->deleteCache($_indexIds);
     }
@@ -2152,7 +2151,7 @@ class SearchIt
      *
      * @return array
      */
-    function search($_search): array
+    public function search(string $_search): array
     {
         $startTime = microtime(true);
 
@@ -2199,15 +2198,15 @@ class SearchIt
             foreach ($this->searchArray as $keyword) {
                 if (!is_numeric($keyword['search'])) {
                     $sounds = [];
-                    if ($this->similarwordsMode && \SEARCH_IT_SIMILARWORDS_SOUNDEX && !is_numeric(soundex($keyword['search']))) {
+                    if (($this->similarwordsMode & self::SIMILARWORDS_SOUNDEX) && !is_numeric(soundex($keyword['search']))) {
                         $sounds[] = 'soundex = ' . $simWordsSQL->escape(soundex($keyword['search']));
                     }
 
-                    if ($this->similarwordsMode && \SEARCH_IT_SIMILARWORDS_METAPHONE && !is_numeric(metaphone($keyword['search']))) {
+                    if (($this->similarwordsMode & self::SIMILARWORDS_METAPHONE) && !is_numeric(metaphone($keyword['search']))) {
                         $sounds[] = 'metaphone = ' . $simWordsSQL->escape(metaphone($keyword['search']));
                     }
 
-                    if ($this->similarwordsMode && \SEARCH_IT_SIMILARWORDS_COLOGNEPHONE && !is_numeric(ColognePhonetic::encode($keyword['search']))) {
+                    if (($this->similarwordsMode & self::SIMILARWORDS_COLOGNEPHONE) && !is_numeric(ColognePhonetic::encode($keyword['search']))) {
                         $sounds[] = 'colognephone = ' . $simWordsSQL->escape(ColognePhonetic::encode($keyword['search']));
                     }
                     if (!empty($sounds)) {

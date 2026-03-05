@@ -8,6 +8,19 @@ use FriendsOfRedaxo\SearchIt\Plaintext\PlaintextConverter;
 use FriendsOfRedaxo\SearchIt\Search\Highlighter;
 
 /**
+ * Backward compatibility class aliases.
+ * @deprecated Use the namespaced classes instead.
+ */
+class_alias(SearchIt::class, 'search_it');
+class_alias(FriendsOfRedaxo\SearchIt\Api\Autocomplete::class, 'rex_api_search_it_autocomplete');
+class_alias(FriendsOfRedaxo\SearchIt\Stats\Statistics::class, 'search_it_stats');
+class_alias(FriendsOfRedaxo\SearchIt\Pdf\PdfConverter::class, 'pdf2txt');
+class_alias(Reindex::class, 'rex_cronjob_reindex');
+class_alias(ClearCache::class, 'rex_cronjob_clearcache');
+class_alias(FriendsOfRedaxo\SearchIt\Console\ReindexCommand::class, 'rex_search_it_command_reindex');
+class_alias(FriendsOfRedaxo\SearchIt\Console\ClearCacheCommand::class, 'rex_search_it_command_clearcache');
+
+/**
  * @deprecated Use SearchIt::ART_*, SearchIt::URL_*, SearchIt::FILE_*, SearchIt::SIMILARWORDS_* instead.
  */
 if (!defined('SEARCH_IT_ART_EXCLUDED')) {
@@ -203,16 +216,3 @@ if ($this->getConfig('stats') == 1) {
         rex_view::addCssFile($this->getAssetsUrl('stats.css'));
     }
 }
-
-/**
- * Backward compatibility class aliases.
- * @deprecated Use the namespaced classes instead.
- */
-class_alias(SearchIt::class, 'search_it');
-class_alias(FriendsOfRedaxo\SearchIt\Api\Autocomplete::class, 'rex_api_search_it_autocomplete');
-class_alias(FriendsOfRedaxo\SearchIt\Stats\Statistics::class, 'search_it_stats');
-class_alias(FriendsOfRedaxo\SearchIt\Pdf\PdfConverter::class, 'pdf2txt');
-class_alias(Reindex::class, 'rex_cronjob_reindex');
-class_alias(ClearCache::class, 'rex_cronjob_clearcache');
-class_alias(FriendsOfRedaxo\SearchIt\Console\ReindexCommand::class, 'rex_search_it_command_reindex');
-class_alias(FriendsOfRedaxo\SearchIt\Console\ClearCacheCommand::class, 'rex_search_it_command_clearcache');

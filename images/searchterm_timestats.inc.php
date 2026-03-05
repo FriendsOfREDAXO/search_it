@@ -65,6 +65,6 @@ $plot->SetPlotType('bars');
 $plot->SetDataType('text-data');
 $plot->SetDataValues($bardata);
 $plot->SetDataColors(array('#14568a', '#2c8ce0', '#dfe9e9'));
-$plot->SetShading(ceil(48 / $this->getConfig('searchtermselectmonthcount')));
+$plot->SetShading(ceil(48 / max(1, (int) $this->getConfig('searchtermselectmonthcount'))));
 $plot->DrawGraph();
 

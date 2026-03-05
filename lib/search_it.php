@@ -19,6 +19,7 @@ use rex_path;
 use rex_request;
 use rex_socket;
 use rex_sql;
+use rex_sql_table;
 use rex_yrewrite;
 use FriendsOfRedaxo\SearchIt\Helper\ArticleHelper;
 use FriendsOfRedaxo\SearchIt\Helper\ColognePhonetic;

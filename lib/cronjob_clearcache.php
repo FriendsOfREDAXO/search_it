@@ -1,6 +1,13 @@
 <?php
 
-class rex_cronjob_clearcache extends rex_cronjob
+namespace FriendsOfRedaxo\SearchIt\Cronjob;
+
+use FriendsOfRedaxo\SearchIt\SearchIt;
+use rex_addon;
+use rex_cronjob;
+use rex_i18n;
+
+class ClearCache extends rex_cronjob
 {
     public function execute()
     {
@@ -9,7 +16,7 @@ class rex_cronjob_clearcache extends rex_cronjob
 
             //$message = $this->getParam('action').':'."\n";
 
-            $search_it = new search_it();
+            $search_it = new SearchIt();
 
             $search_it->deleteCache();
 

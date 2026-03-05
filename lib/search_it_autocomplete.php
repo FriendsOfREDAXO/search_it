@@ -1,6 +1,17 @@
 <?php
 
-class rex_api_search_it_autocomplete extends rex_api_function
+namespace FriendsOfRedaxo\SearchIt\Api;
+
+use FriendsOfRedaxo\SearchIt\SearchIt;
+use rex_api_function;
+use rex_addon;
+use rex_clang;
+use rex_article;
+use rex_request;
+use rex_sql;
+use rex;
+
+class Autocomplete extends rex_api_function
 {
     protected $published = true;
 
@@ -22,7 +33,7 @@ class rex_api_search_it_autocomplete extends rex_api_function
 
             if ($modus == "highlightedtext" || $modus == "articlename") {
 
-                $search_it = new search_it();
+                $search_it = new SearchIt();
                 //$search_it->similarwordsMode = false; //keine speichern der keywords pro eingabe
                 $search_it->setMaxHighlightedTextChars(20);
                 //$search_it->ellipsis = '';
@@ -122,7 +133,7 @@ class rex_api_search_it_autocomplete extends rex_api_function
 
                     $params = [
                         'keyword' => str_replace(['_', '%'], ['\_', '\%'], $q) . '%',
-                        'soundex_ger' => soundex_ger($q),
+                        'soundex_ger' => \soundex_ger($q),
                         'clang' => rex_clang::getCurrentId(),
                     ];
                 }
@@ -138,7 +149,7 @@ class rex_api_search_it_autocomplete extends rex_api_function
                         'keyword' => str_replace(['_', '%'], ['\_', '\%'], $q) . '%',
                         'soundex' => soundex($q),
                         'metaphone' => metaphone($q),
-                        'soundex_ger' => soundex_ger($q),
+                        'soundex_ger' => \soundex_ger($q),
                         'clang' => rex_clang::getCurrentId(),
                     ];
                 }

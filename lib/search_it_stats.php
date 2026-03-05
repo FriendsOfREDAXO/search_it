@@ -1,5 +1,11 @@
 <?php
-class search_it_stats
+
+namespace FriendsOfRedaxo\SearchIt\Stats;
+
+use rex;
+use rex_sql;
+
+class Statistics
 {
     var $sql;
 

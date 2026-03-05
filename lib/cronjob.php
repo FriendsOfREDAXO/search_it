@@ -1,6 +1,15 @@
 <?php
 
-class rex_cronjob_reindex extends rex_cronjob
+namespace FriendsOfRedaxo\SearchIt\Cronjob;
+
+use FriendsOfRedaxo\SearchIt\SearchIt;
+use rex_addon;
+use rex_cronjob;
+use rex_i18n;
+use rex_sql;
+use rex;
+
+class Reindex extends rex_cronjob
 {
     public function execute()
     {
@@ -9,7 +18,7 @@ class rex_cronjob_reindex extends rex_cronjob
 
             //$message = $this->getParam('action').':'."\n";
 
-            $search_it = new search_it();
+            $search_it = new SearchIt();
             $includeColumns = is_array(rex_addon::get('search_it')->getConfig('include')) ? rex_addon::get('search_it')->getConfig('include') : [];
             switch ($this->getParam('action')) {
                 case 2:
@@ -40,7 +49,7 @@ class rex_cronjob_reindex extends rex_cronjob
 
                 case 4:
                     // URLs neu indexieren
-                    if (rex_addon::get('search_it')->getConfig('index_url_addon') && search_it_isUrlAddOnAvailable()) {
+                    if (rex_addon::get('search_it')->getConfig('index_url_addon') && \search_it_isUrlAddOnAvailable()) {
                         $search_it->unindexDeletedURLs();
                         $search_it->indexNewURLs();
                         $search_it->indexUpdatedURLs();

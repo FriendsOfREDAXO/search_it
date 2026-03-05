@@ -1,16 +1,14 @@
 <?php
 
+namespace FriendsOfRedaxo\SearchIt\Console;
+
+use FriendsOfRedaxo\SearchIt\SearchIt;
+use rex_console_command;
+use rex_i18n;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-/**
- * @package redaxo\be-style
- *
- * @author bloep
- *
- * @internal
- */
-class rex_search_it_command_clearcache extends rex_console_command
+class ClearCacheCommand extends rex_console_command
 {
     protected function configure()
     {
@@ -22,7 +20,7 @@ class rex_search_it_command_clearcache extends rex_console_command
         $io = $this->getStyle($input, $output);
         $io->title('search_it clear cache');
 
-        $search_it = new search_it();
+        $search_it = new SearchIt();
         $global_return = $search_it->deleteCache();
 
         if ($global_return < 4) {

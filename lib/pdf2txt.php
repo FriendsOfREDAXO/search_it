@@ -1,6 +1,8 @@
 <?php
 
-class pdf2txt
+namespace FriendsOfRedaxo\SearchIt\Pdf;
+
+class PdfConverter
 {
     var $src;
     var $dest;

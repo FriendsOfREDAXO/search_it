@@ -3,6 +3,9 @@
 use FriendsOfRedaxo\SearchIt\SearchIt;
 use FriendsOfRedaxo\SearchIt\Cronjob\Reindex;
 use FriendsOfRedaxo\SearchIt\Cronjob\ClearCache;
+use FriendsOfRedaxo\SearchIt\EventHandler;
+use FriendsOfRedaxo\SearchIt\Plaintext\PlaintextConverter;
+use FriendsOfRedaxo\SearchIt\Search\Highlighter;
 
 /**
  * @deprecated Use SearchIt::ART_*, SearchIt::URL_*, SearchIt::FILE_*, SearchIt::SIMILARWORDS_* instead.
@@ -43,15 +46,15 @@ $curDir = __DIR__;
 require_once $curDir . '/functions/functions_search_it.php';
 
 if (rex_request('search_highlighter', 'string', '') != '' && rex_addon::get('search_it')->getConfig('highlighterclass') != '') {
-    rex_extension::register('OUTPUT_FILTER', 'search_it_search_highlighter_output');
+    rex_extension::register('OUTPUT_FILTER', [Highlighter::class, 'outputFilter']);
 }
 
 if (rex_addon::get('search_it')->getConfig('reindex_cols_onforms') == true) {
-    rex_extension::register('REX_FORM_SAVED', 'search_it_reindex_cols');
-    rex_extension::register('REX_YFORM_SAVED', 'search_it_reindex_cols');
-    rex_extension::register('YFORM_SAVED', 'search_it_reindex_cols');
-    rex_extension::register('YFORM_DATA_DELETED', 'search_it_reindex_cols');
-    rex_extension::register('REX_FORM_DELETED', 'search_it_reindex_cols');
+    rex_extension::register('REX_FORM_SAVED', [EventHandler::class, 'reindexColumns']);
+    rex_extension::register('REX_YFORM_SAVED', [EventHandler::class, 'reindexColumns']);
+    rex_extension::register('YFORM_SAVED', [EventHandler::class, 'reindexColumns']);
+    rex_extension::register('YFORM_DATA_DELETED', [EventHandler::class, 'reindexColumns']);
+    rex_extension::register('REX_FORM_DELETED', [EventHandler::class, 'reindexColumns']);
 }
 if (rex_addon::get('cronjob')->isAvailable() && !rex::isSafeMode()) {
     rex_cronjob_manager::registerType(Reindex::class);
@@ -113,7 +116,7 @@ if (rex::isBackend() && rex::getUser()) {
             'SLICE_DELETED',
             'SLICE_UPDATED',
         );
-        rex_extension::register($extensionPoints, 'search_it_handle_extensionpoint');
+        rex_extension::register($extensionPoints, [EventHandler::class, 'handleExtensionPoint']);
     }
 
     if (strpos(rex_request('page', 'string', ''), 'search_it') !== false) {
@@ -182,7 +185,7 @@ if ($this->getConfig('plaintext') == 1) {
     require_once __DIR__ . '/functions/functions_plaintext.php';
 
     if (rex::isBackend()) {
-        rex_extension::register('SEARCH_IT_PLAINTEXT', 'search_it_doPlaintext');
+        rex_extension::register('SEARCH_IT_PLAINTEXT', [PlaintextConverter::class, 'extensionPointHandler']);
     }
 }
 

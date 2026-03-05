@@ -10,6 +10,7 @@ use rex_article;
 use rex_request;
 use rex_sql;
 use rex;
+use FriendsOfRedaxo\SearchIt\Helper\ColognePhonetic;
 
 class Autocomplete extends rex_api_function
 {
@@ -133,7 +134,7 @@ class Autocomplete extends rex_api_function
 
                     $params = [
                         'keyword' => str_replace(['_', '%'], ['\_', '\%'], $q) . '%',
-                        'soundex_ger' => \soundex_ger($q),
+                        'soundex_ger' => ColognePhonetic::encode($q),
                         'clang' => rex_clang::getCurrentId(),
                     ];
                 }
@@ -149,7 +150,7 @@ class Autocomplete extends rex_api_function
                         'keyword' => str_replace(['_', '%'], ['\_', '\%'], $q) . '%',
                         'soundex' => soundex($q),
                         'metaphone' => metaphone($q),
-                        'soundex_ger' => \soundex_ger($q),
+                        'soundex_ger' => ColognePhonetic::encode($q),
                         'clang' => rex_clang::getCurrentId(),
                     ];
                 }

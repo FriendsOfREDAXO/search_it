@@ -8,6 +8,7 @@ use rex_cronjob;
 use rex_i18n;
 use rex_sql;
 use rex;
+use FriendsOfRedaxo\SearchIt\Helper\UrlAddon;
 
 class Reindex extends rex_cronjob
 {
@@ -49,7 +50,7 @@ class Reindex extends rex_cronjob
 
                 case 4:
                     // URLs neu indexieren
-                    if (rex_addon::get('search_it')->getConfig('index_url_addon') && \search_it_isUrlAddOnAvailable()) {
+                    if (rex_addon::get('search_it')->getConfig('index_url_addon') && UrlAddon::isAvailable()) {
                         $search_it->unindexDeletedURLs();
                         $search_it->indexNewURLs();
                         $search_it->indexUpdatedURLs();

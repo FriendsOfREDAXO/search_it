@@ -23,6 +23,10 @@ use rex_sql;
 use rex_url;
 use rex_view;
 use rex_yrewrite;
+use FriendsOfRedaxo\SearchIt\Helper\ArticleHelper;
+use FriendsOfRedaxo\SearchIt\Helper\ColognePhonetic;
+use FriendsOfRedaxo\SearchIt\Helper\FileHelper;
+use FriendsOfRedaxo\SearchIt\Helper\UrlAddon;
 
 class SearchIt
 {
@@ -142,7 +146,7 @@ class SearchIt
             if (is_array(rex_addon::get('search_it')->getConfig('exclude_category_ids'))) {
                 $ids = [];
                 foreach (rex_addon::get('search_it')->getConfig('exclude_category_ids') as $catID) {
-                    foreach (\search_it_getArticles(array($catID)) as $id => $name) {
+                    foreach (ArticleHelper::getArticles(array($catID)) as $id => $name) {
                         $ids[] = $id;
                     }
                     $this->setExcludeIDs($ids);
@@ -151,7 +155,7 @@ class SearchIt
         }
 
         $this->setClang($_clang);
-        $this->urlAddOnTableName = \search_it_getUrlAddOnTableName();
+        $this->urlAddOnTableName = UrlAddon::getTableName();
 
         $this->ellipsis = rex_i18n::msg('search_it_ellipsis');
 
@@ -211,7 +215,7 @@ class SearchIt
         }
 
         // index url 2 addon URLs
-        if (rex_addon::get('search_it')->getConfig('index_url_addon') && \search_it_isUrlAddOnAvailable()) {
+        if (rex_addon::get('search_it')->getConfig('index_url_addon') && UrlAddon::isAvailable()) {
             $url_sql = rex_sql::factory();
             $url_sql->setTable($this->urlAddOnTableName);
             if ($url_sql->select('url_hash, article_id, clang_id, profile_id, data_id')) {
@@ -246,7 +250,7 @@ class SearchIt
 
         // index files
         foreach ($this->fileDirectories as $dir) {
-            foreach (\search_it_getFiles($dir, $this->fileExtensions) as $filename) {
+            foreach (FileHelper::getFiles($dir, $this->fileExtensions) as $filename) {
                 //$filename is a full path with dir
                 $this->indexFile(substr($filename, 1));
             }
@@ -715,9 +719,9 @@ class SearchIt
         $global_return = 0;
 
         // index url 2 addon URLs
-        if (rex_addon::get('search_it')->getConfig('index_url_addon') && \search_it_isUrlAddOnAvailable()) {
+        if (rex_addon::get('search_it')->getConfig('index_url_addon') && UrlAddon::isAvailable()) {
             $sql = rex_sql::factory();
-            $sql->setQuery("SELECT url.url_hash, url.article_id, url.clang_id, url.profile_id, url.data_id FROM `" . \search_it_getUrlAddOnTableName() . "` as url "
+            $sql->setQuery("SELECT url.url_hash, url.article_id, url.clang_id, url.profile_id, url.data_id FROM `" . UrlAddon::getTableName() . "` as url "
                 . "LEFT JOIN `" . self::getTempTablePrefix() . "search_it_index` AS search_it ON url.url_hash = search_it.fid "
                 . "WHERE search_it.fid IS NULL;");
 
@@ -742,9 +746,9 @@ class SearchIt
         $global_return = 0;
 
         // index url 2 addon URLs
-        if (rex_addon::get('search_it')->getConfig('index_url_addon') && \search_it_isUrlAddOnAvailable()) {
+        if (rex_addon::get('search_it')->getConfig('index_url_addon') && UrlAddon::isAvailable()) {
             $sql = rex_sql::factory();
-            $sql->setQuery("SELECT url.url_hash, url.article_id, url.clang_id, url.profile_id, url.data_id FROM `" . \search_it_getUrlAddOnTableName() . "` as url "
+            $sql->setQuery("SELECT url.url_hash, url.article_id, url.clang_id, url.profile_id, url.data_id FROM `" . UrlAddon::getTableName() . "` as url "
                 . "LEFT JOIN `" . self::getTempTablePrefix() . "search_it_index` AS search_it ON url.url_hash = search_it.fid "
                 . "WHERE search_it.lastindexed < url.lastmod;");
 
@@ -799,13 +803,13 @@ class SearchIt
      */
     public function unindexDeletedURLs(): void
     {
-        if (!\search_it_isUrlAddOnAvailable()) {
+        if (!UrlAddon::isAvailable()) {
             return;
         }
 
         $sql = rex_sql::factory();
         $sql->setQuery("SELECT search_it.id FROM `" . self::getTempTablePrefix() . "search_it_index` AS search_it "
-            . "LEFT JOIN `" . \search_it_getUrlAddOnTableName() . "` as url ON search_it.fid = url.url_hash "
+            . "LEFT JOIN `" . UrlAddon::getTableName() . "` as url ON search_it.fid = url.url_hash "
             . "WHERE texttype = 'url' AND url.id IS NULL;");
 
         $unindexIds = [];
@@ -2238,7 +2242,7 @@ class SearchIt
                     $simWordsSQL->escape($keyword['search']),
                     $simWordsSQL->escape((($this->similarwordsMode & \SEARCH_IT_SIMILARWORDS_SOUNDEX) && !is_numeric(soundex($keyword['search']))) ? soundex($keyword['search']) : ''),
                     $simWordsSQL->escape((($this->similarwordsMode & \SEARCH_IT_SIMILARWORDS_METAPHONE) && !is_numeric(metaphone($keyword['search']))) ? metaphone($keyword['search']) : ''),
-                    $simWordsSQL->escape((($this->similarwordsMode & \SEARCH_IT_SIMILARWORDS_COLOGNEPHONE) && !is_numeric(\soundex_ger($keyword['search']))) ? \soundex_ger($keyword['search']) : ''),
+                    $simWordsSQL->escape((($this->similarwordsMode & \SEARCH_IT_SIMILARWORDS_COLOGNEPHONE) && !is_numeric(ColognePhonetic::encode($keyword['search']))) ? ColognePhonetic::encode($keyword['search']) : ''),
                     (isset($keyword['clang']) and $keyword['clang'] !== false) ? (int)$keyword['clang'] : '-1'
                 );
             }
@@ -2332,8 +2336,8 @@ class SearchIt
                         $sounds[] = 'metaphone = ' . $simWordsSQL->escape(metaphone($keyword['search']));
                     }
 
-                    if ($this->similarwordsMode && \SEARCH_IT_SIMILARWORDS_COLOGNEPHONE && !is_numeric(\soundex_ger($keyword['search']))) {
-                        $sounds[] = 'colognephone = ' . $simWordsSQL->escape(\soundex_ger($keyword['search']));
+                    if ($this->similarwordsMode && \SEARCH_IT_SIMILARWORDS_COLOGNEPHONE && !is_numeric(ColognePhonetic::encode($keyword['search']))) {
+                        $sounds[] = 'colognephone = ' . $simWordsSQL->escape(ColognePhonetic::encode($keyword['search']));
                     }
                     if (!empty($sounds)) {
                         $simwordQuerys[] = sprintf("
@@ -2485,7 +2489,7 @@ class SearchIt
             $AwhereToSearch[] = "(fid IN (" . implode(',', $this->searchInIDs['articles']) . "))";
         }
 
-        if (rex_addon::get('search_it')->getConfig('index_url_addon') && \search_it_isUrlAddOnAvailable()) {
+        if (rex_addon::get('search_it')->getConfig('index_url_addon') && UrlAddon::isAvailable()) {
             if (array_key_exists('url', $this->searchInIDs) and count($this->searchInIDs['url'])) {
                 $AwhereToSearch[] = "texttype = 'url'";
                 $AwhereToSearch[] = "(fid IN (" . implode(',', $this->searchInIDs['url']) . "))";

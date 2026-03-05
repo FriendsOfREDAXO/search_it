@@ -486,7 +486,7 @@ class SearchIt
                         }
                     }
 
-                    $articleData['values'] = serialize($additionalValues);
+                    $articleData['values'] = json_encode($additionalValues);
                 }
 
                 foreach (preg_split('~[[:punct:][:space:]]+~ismu', $plaintext) as $keyword) {
@@ -684,7 +684,7 @@ class SearchIt
                     }
                 }
 
-                $articleData['values'] = serialize($additionalValues);
+                $articleData['values'] = json_encode($additionalValues);
             }
 
             foreach (preg_split('~[[:punct:][:space:]]+~ismu', $plaintext) as $keyword) {
@@ -977,7 +977,7 @@ class SearchIt
                             $additionalValues[$col] = $row[$col];
                         }
                     }
-                    $indexData['values'] = serialize($additionalValues);
+                    $indexData['values'] = json_encode($additionalValues);
 
                     $indexData['unchangedtext'] = (string)$row[$_column];
                     $plaintext = $this->getPlaintext($row[$_column]);
@@ -2106,7 +2106,7 @@ class SearchIt
         $results = $sql->getArray('SELECT returnarray FROM ' . self::getTempTablePrefix() . 'search_it_cache WHERE hash = :hash', ['hash' => $this->cacheHash($_search)]);
 
         foreach ($results as $value) {
-            return false !== ($this->cachedArray = unserialize($value['returnarray']));
+            return false !== ($this->cachedArray = json_decode($value['returnarray'], true));
         }
 
         return false;
@@ -2631,7 +2631,7 @@ class SearchIt
             $return['hits'][$i]['teaser'] = $this->getTeaserText($hit['plaintext']);
             $return['hits'][$i]['highlightedtext'] = $this->getHighlightedText($hit['plaintext']);
             $return['hits'][$i]['article_teaser'] = $hit['teaser'];
-            $return['hits'][$i]['values'] = search_it_config_unserialize($hit['values']);
+            $return['hits'][$i]['values'] = json_decode($hit['values'], true) ?: unserialize($hit['values']);
             $return['hits'][$i]['filename'] = $hit['filename'];
             $return['hits'][$i]['fileext'] = $hit['fileext'];
             $i++;
@@ -2682,7 +2682,7 @@ class SearchIt
             }
             // and not test =1 ??? oder doch mit cache?
             if ($this->cache) {
-                $this->cacheSearch(serialize($return), $indexIds);
+                $this->cacheSearch(json_encode($return), $indexIds);
             }
         }
         // EP registrieren

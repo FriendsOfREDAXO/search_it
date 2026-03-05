@@ -9,34 +9,25 @@ use rex_i18n;
 
 class ClearCache extends rex_cronjob
 {
-    public function execute()
+    public function execute(): bool
     {
-
         if (rex_addon::get('search_it')->isAvailable()) {
-
-            //$message = $this->getParam('action').':'."\n";
-
             $search_it = new SearchIt();
-
             $search_it->deleteCache();
-
-
-
-            //if ( $message != '' ) { $this->setMessage($message); }
             return true;
         }
+
         $this->setMessage('Search it is not installed');
         return false;
     }
 
-    public function getTypeName()
+    public function getTypeName(): string
     {
         return rex_i18n::msg('search_it_generate_delete_cache');
     }
 
-    public function getParamFields()
+    public function getParamFields(): array
     {
-        $fields = [];
-        return $fields;
+        return [];
     }
 }

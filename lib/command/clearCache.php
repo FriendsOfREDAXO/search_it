@@ -10,26 +10,20 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class ClearCacheCommand extends rex_console_command
 {
-    protected function configure()
+    protected function configure(): void
     {
         $this->setDescription(rex_i18n::rawMsg('search_it_generate_delete_cache'));
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = $this->getStyle($input, $output);
         $io->title('search_it clear cache');
 
         $search_it = new SearchIt();
-        $global_return = $search_it->deleteCache();
+        $search_it->deleteCache();
 
-        if ($global_return < 4) {
-            echo $io->success(rex_i18n::rawMsg('search_it_generate_cache_deleted'));
-            return 0;
-        } else {
-            echo $io->error(rex_i18n::rawMsg('search_it_generate_cache_deleted_error'));
-        }
-
-        return 1;
+        $io->success(rex_i18n::rawMsg('search_it_generate_cache_deleted'));
+        return 0;
     }
 }

@@ -25,6 +25,9 @@ if (rex_post('config-submit', 'boolean')) {
     ]);
 
     $changed = array_keys(array_merge(array_diff_assoc(array_map('serialize', $posted_config), array_map('serialize', $this->getConfig())), array_diff_assoc(array_map('serialize', $this->getConfig()), array_map('serialize', $posted_config))));
+    if (in_array('similarwordsmode', $changed)) {
+        echo rex_view::warning($this->i18n('search_it_settings_saved_warning_similarwords'));
+    }
     foreach (array(
                  'similarwordsmode',
                  'indexoffline',
@@ -32,7 +35,7 @@ if (rex_post('config-submit', 'boolean')) {
         if (in_array($index, $changed)) {
             echo rex_view::warning($this->i18n('search_it_settings_saved_warning'));
             break;
-        } elseif (is_array($this->getConfig($index)) && is_array($posted_config[$index])) { // Der Konfig-Wert ist ein Array
+        } elseif (is_array($this->getConfig($index)) && is_array($posted_config[$index])) {
             if (count(array_merge(
                     array_diff_assoc(array_map('serialize', $this->getConfig($index)), array_map('serialize', $val)),
                     array_diff_assoc(array_map('serialize', $val), array_map('serialize', $this->getConfig($index))))) > 0) {

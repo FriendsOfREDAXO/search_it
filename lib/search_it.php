@@ -206,6 +206,11 @@ class SearchIt
      */
     public function generateIndex(): int
     {
+        // auto-clean keyword index if similarwords settings changed
+        if ($this->needsKeywordReindex()) {
+            $this->deleteKeywords();
+        }
+
         // delete old index
         $this->deleteIndex();
 
@@ -2144,6 +2149,38 @@ class SearchIt
     public function deleteKeywords(): void
     {
         $this->keywordStore->deleteKeywords();
+    }
+
+    /**
+     * Checks if the keyword index columns match the current similarwords settings.
+     * Returns true if keywords should be rebuilt (e.g. colognephone column empty but mode requires it).
+     */
+    public function needsKeywordReindex(): bool
+    {
+        $sql = rex_sql::factory();
+        $count = $sql->getArray('SELECT COUNT(*) as cnt FROM `' . self::getTempTablePrefix() . 'search_it_keywords` WHERE keyword != ""');
+        $total = (int) ($count[0]['cnt'] ?? 0);
+
+        if ($total === 0) {
+            return false; // no keywords at all, will be built during indexing
+        }
+
+        $checks = [
+            self::SIMILARWORDS_SOUNDEX => 'soundex',
+            self::SIMILARWORDS_METAPHONE => 'metaphone',
+            self::SIMILARWORDS_COLOGNEPHONE => 'colognephone',
+        ];
+
+        foreach ($checks as $flag => $column) {
+            if ($this->similarwordsMode & $flag) {
+                $filled = $sql->getArray('SELECT COUNT(*) as cnt FROM `' . self::getTempTablePrefix() . 'search_it_keywords` WHERE `' . $column . '` != ""');
+                if ((int) ($filled[0]['cnt'] ?? 0) === 0) {
+                    return true; // column should be filled but is empty
+                }
+            }
+        }
+
+        return false;
     }
 
 

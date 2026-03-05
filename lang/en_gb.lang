@@ -78,6 +78,7 @@ search_it_settings_include = Include database tables
 search_it_settings_submitbutton = Save settings
 search_it_settings_saved = Settings saved
 search_it_settings_saved_warning = The search index has to be rebuilt.
+search_it_settings_saved_warning_similarwords = Similarity search settings have been changed. The keyword index will be automatically rebuilt on next reindex.
 
 search_it_generate_actions_title = Actions
 search_it_generate_full = Generate complete index

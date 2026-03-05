@@ -15,18 +15,18 @@ use rex_extension_point;
 use rex_file;
 use rex_i18n;
 use rex_logger;
-use rex_media;
 use rex_path;
 use rex_request;
 use rex_socket;
 use rex_sql;
-use rex_url;
-use rex_view;
 use rex_yrewrite;
 use FriendsOfRedaxo\SearchIt\Helper\ArticleHelper;
 use FriendsOfRedaxo\SearchIt\Helper\ColognePhonetic;
 use FriendsOfRedaxo\SearchIt\Helper\FileHelper;
 use FriendsOfRedaxo\SearchIt\Helper\UrlAddon;
+use FriendsOfRedaxo\SearchIt\Cache\SearchCache;
+use FriendsOfRedaxo\SearchIt\Helper\SocketHelper;
+use FriendsOfRedaxo\SearchIt\Index\KeywordStore;
 
 class SearchIt
 {
@@ -113,8 +113,12 @@ class SearchIt
     private $mysqlInsertChunkSize = 100;
     private $maxSearchTerms = 10;
 
+    private SearchCache $searchCache;
+    private KeywordStore $keywordStore;
+
     function __construct($_clang = false, $_loadSettings = true, $_useStopwords = true)
     {
+        $this->searchCache = new SearchCache();
 
         if ($_loadSettings) {
 
@@ -166,6 +170,13 @@ class SearchIt
         }
 
         $this->mysqlInsertChunkSize = rex_addon::get('search_it')->getProperty('mysql_insert_chunk_size', 100);
+
+        $this->keywordStore = new KeywordStore(
+            $this->similarwordsMode,
+            $this->blacklist,
+            $this->stopwords,
+            $this->mysqlInsertChunkSize
+        );
     }
 
     private static function getTablePrefix()
@@ -2091,186 +2102,46 @@ class SearchIt
 
 
 
-    /* caching */
-    /**
-     * Returns if a search term is already cached.
-     * The cached result will be stored in $this->cachedArray.
-     *
-     * @param string $_search
-     *
-     * @return bool
-     */
+    /* caching - delegated to SearchCache */
+
     private function isCached($_search): bool
     {
-        $sql = rex_sql::factory();
-        $results = $sql->getArray('SELECT returnarray FROM ' . self::getTempTablePrefix() . 'search_it_cache WHERE hash = :hash', ['hash' => $this->cacheHash($_search)]);
-
-        foreach ($results as $value) {
-            return false !== ($this->cachedArray = json_decode($value['returnarray'], true));
-        }
-
-        return false;
+        return $this->searchCache->isCached(
+            $this->cacheHash($_search),
+            $this->cachedArray
+        );
     }
 
-    /**
-     * Calculates the cache hash.
-     *
-     * @param string $_searchString
-     *
-     * @return string
-     */
     private function cacheHash($_searchString): string
     {
-        return md5($_searchString . $this->hashMe);
+        return $this->searchCache->cacheHash($_searchString, $this->hashMe);
     }
 
-    /**
-     * Stores a search result in the cache.
-     *
-     * @param string $_result
-     * @param array $_indexIds
-     *
-     * @return bool
-     */
     private function cacheSearch($_result, $_indexIds): bool
     {
-        $sql = rex_sql::factory();
-        $sql->setTable(self::getTempTablePrefix() . 'search_it_cache');
-        $sql->setValues([
-                'hash' => $this->cacheHash($this->searchString),
-                'returnarray' => $_result
-            ]
+        return $this->searchCache->cacheSearch(
+            $this->cacheHash($this->searchString),
+            $_result,
+            $_indexIds
         );
-        $sql->insert();
-        $lastId = $sql->getLastId();
-
-        $Ainsert = [];
-        foreach ($_indexIds as $id) {
-            $Ainsert[] = sprintf('(%d,%d)', $id, $lastId);
-        }
-
-        if (isset($Ainsert) && implode(',', $Ainsert) != '') {
-            $sql2 = rex_sql::factory();
-
-            try {
-                $sql2->setQuery(
-                    sprintf(
-                        'INSERT INTO `%s` (index_id,cache_id) VALUES %s;',
-                        self::getTempTablePrefix() . 'search_it_cacheindex_ids',
-                        implode(',', $Ainsert)
-                    )
-                );
-                return true;
-            } catch (rex_sql_exception $e) {
-                $error = $e->getMessage();
-                echo rex_warning($error);
-                return false;
-            }
-
-        }
-
-        return false;
     }
 
-    /**
-     * Truncates the cache or deletes all data that are concerned with the given index-ids.
-     *
-     * @param mixed $_indexIds
-     */
     public function deleteCache($_indexIds = false): void
     {
-        if ($_indexIds === false) {
-            // delete entire search-cache
-            $delete = rex_sql::factory();
-            if ($delete->inTransaction()) {
-                $delete->setQuery('DELETE FROM ' . self::getTempTablePrefix() . 'search_it_cacheindex_ids');
-                $delete->setQuery('DELETE FROM ' . self::getTempTablePrefix() . 'search_it_cache');
-            } else {
-                $delete->setQuery('TRUNCATE ' . self::getTempTablePrefix() . 'search_it_cacheindex_ids');
-                $delete->setQuery('TRUNCATE ' . self::getTempTablePrefix() . 'search_it_cache');
-            }
-        } elseif (is_array($_indexIds) and !empty($_indexIds)) {
-            $sql = rex_sql::factory();
-
-            $query = sprintf('
-            SELECT cache_id
-            FROM %s
-            WHERE index_id IN (%s)',
-                self::getTempTablePrefix() . 'search_it_cacheindex_ids',
-                implode(',', array_map('intval', $_indexIds))
-            );
-
-            $deleteIds = [0];
-            foreach ($sql->getArray($query) as $cacheId) {
-                $deleteIds[] = (int)$cacheId['cache_id'];
-            }
-
-            // delete from search-cache where indexed IDs exist
-            $delete = rex_sql::factory();
-            $delete->setTable(self::getTempTablePrefix() . 'search_it_cache');
-            $delete->setWhere('id IN (' . implode(',', $deleteIds) . ')');
-            $delete->delete();
-
-            // delete the cache-ID and index-ID
-            $delete2 = rex_sql::factory();
-            $delete2->setTable(self::getTempTablePrefix() . 'search_it_cacheindex_ids');
-            $delete2->setWhere('cache_id IN (' . implode(',', $deleteIds) . ')');
-            $delete2->delete();
-
-            // delete all cached searches which had no result (because now they maybe will have)
-            $delete3 = rex_sql::factory();
-            $delete3->setTable(self::getTempTablePrefix() . 'search_it_cache');
-            $delete3->setWhere(sprintf('id NOT IN (SELECT cache_id FROM `%s`)', self::getTempTablePrefix() . 'search_it_cacheindex_ids'));
-            $delete3->delete();
-        }
+        $this->searchCache->deleteCache($_indexIds);
     }
 
 
-    /* keywords */
+    /* keywords - delegated to KeywordStore */
+
     private function storeKeywords($_keywords, $_doCount = true): void
     {
-        // store similar words
-        $simWordsSQL = rex_sql::factory();
-        $simWords = [];
-        foreach ($_keywords as $keyword) {
-            if (!in_array(mb_strtolower($keyword['search'], 'UTF-8'), $this->blacklist) &&
-                !in_array(mb_strtolower($keyword['search'], 'UTF-8'), $this->stopwords) &&
-                !is_numeric($keyword['search'])
-            ) {
-                $simWords[] = sprintf(
-                    "(%s, %s, %s, %s, %s)",
-                    $simWordsSQL->escape($keyword['search']),
-                    $simWordsSQL->escape((($this->similarwordsMode & \SEARCH_IT_SIMILARWORDS_SOUNDEX) && !is_numeric(soundex($keyword['search']))) ? soundex($keyword['search']) : ''),
-                    $simWordsSQL->escape((($this->similarwordsMode & \SEARCH_IT_SIMILARWORDS_METAPHONE) && !is_numeric(metaphone($keyword['search']))) ? metaphone($keyword['search']) : ''),
-                    $simWordsSQL->escape((($this->similarwordsMode & \SEARCH_IT_SIMILARWORDS_COLOGNEPHONE) && !is_numeric(ColognePhonetic::encode($keyword['search']))) ? ColognePhonetic::encode($keyword['search']) : ''),
-                    (isset($keyword['clang']) and $keyword['clang'] !== false) ? (int)$keyword['clang'] : '-1'
-                );
-            }
-        }
-
-        if (!empty($simWords)) {
-            $simWordsTeile = array_chunk($simWords, $this->mysqlInsertChunkSize);
-            foreach ($simWordsTeile as $simWordsTeil) {
-                $simWordsSQL->setQuery(
-                    sprintf("
-                      INSERT INTO `%s`
-                      (keyword, soundex, metaphone, colognephone, clang)
-                      VALUES
-                      %s
-                      ON DUPLICATE KEY UPDATE count = count + %d",
-                        self::getTempTablePrefix() . 'search_it_keywords',
-                        implode(',', $simWordsTeil),
-                        $_doCount ? 1 : 0
-                    )
-                );
-            }
-        }
+        $this->keywordStore->storeKeywords($_keywords, $_doCount);
     }
 
     public function deleteKeywords(): void
     {
-        $kw_sql = rex_sql::factory();
-        $kw_sql->setQuery(sprintf('TRUNCATE TABLE `%s`', self::getTempTablePrefix() . 'search_it_keywords'));
+        $this->keywordStore->deleteKeywords();
     }
 
 
@@ -2693,32 +2564,15 @@ class SearchIt
         return $return;
     }
 
-    /**
-     * Check if URL uses a valid HTTP or HTTPS scheme for socket connections
-     * @param string $url The URL to check
-     * @return bool True if URL has http:// or https:// scheme, false otherwise
-     */
+    /* socket helpers - delegated to SocketHelper */
+
     private function isValidHttpScheme(string $url): bool
     {
-        $scheme = parse_url($url, PHP_URL_SCHEME);
-        return in_array(strtolower($scheme ?? ''), ['http', 'https']);
+        return SocketHelper::isValidHttpScheme($url);
     }
 
     private function prepareSocket(string $scanurl)
     {
-        $socket = rex_socket::factoryURL($scanurl);
-        if (rex_version::compare(rex::getVersion(), '5.13', '>=')) {
-            $socket->setOptions([
-                'ssl' => [
-                    'verify_peer' => false,
-                    'verify_peer_name' => false
-                ]
-            ]);
-        }
-        if (rex_addon::get('search_it')->getConfig('htaccess_user') != '' && rex_addon::get('search_it')->getConfig('htaccess_pass') != '') {
-            $socket->addBasicAuthorization(rex_addon::get('search_it')->getConfig('htaccess_user'), rex_addon::get('search_it')->getConfig('htaccess_pass'));
-        }
-
-        return $socket;
+        return SocketHelper::prepareSocket($scanurl);
     }
 }

@@ -57,3 +57,14 @@ rex_sql_table::get(rex::getTablePrefix() . 'search_it_stats_searchterms')
     ->ensureColumn(new rex_sql_column('resultcount', 'int(11)', false, '0'))
     ->setPrimaryKey('id')
     ->ensure();
+
+// v7 Migration: Cronjob-Typen auf Namespace-Klassen umstellen
+$sql = rex_sql::factory();
+$sql->setQuery('UPDATE ' . rex::getTable('cronjob') . ' SET type = :new WHERE type = :old', [
+    'old' => 'rex_cronjob_Reindex',
+    'new' => FriendsOfRedaxo\SearchIt\Cronjob\Reindex::class,
+]);
+$sql->setQuery('UPDATE ' . rex::getTable('cronjob') . ' SET type = :new WHERE type = :old', [
+    'old' => 'rex_cronjob_ClearCache',
+    'new' => FriendsOfRedaxo\SearchIt\Cronjob\ClearCache::class,
+]);

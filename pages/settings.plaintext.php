@@ -149,20 +149,16 @@ foreach (explode(',', $this->getConfig('plainOrder') ?? '') as $elem) {
 }
 $content[] = '</div>';
 
-$content[] = search_it_getSettingsFormSection(
-    'search_it_plaintext_processparent_fieldset',
-    $this->i18n('search_it_plaintext_processparent'),
-    array(
-        array(
-            'type' => 'checkbox',
-            'id' => 'search_it_plaintext_processparent',
-            'name' => 'config[processparent]',
-            'label' => $this->i18n('search_it_plaintext_processparent_label'),
-            'value' => '1',
-            'checked' => $this->getConfig('processparent') == true
-        )
-    ), 'edit'
-);
+// processparent Checkbox direkt in die obere Box
+$formElements = [];
+$n = [];
+$n['label'] = '<label for="search_it_plaintext_processparent">' . $this->i18n('search_it_plaintext_processparent_label') . '</label>';
+$n['field'] = '<input type="checkbox" id="search_it_plaintext_processparent" name="config[processparent]"' . ($this->getConfig('processparent') == true ? ' checked="checked"' : '') . ' value="1" />';
+$formElements[] = $n;
+
+$fragment = new rex_fragment();
+$fragment->setVar('elements', $formElements, false);
+$content[] = $fragment->parse('core/form/checkbox.php');
 
 
 ?>
@@ -251,7 +247,11 @@ $fragment->setVar('class', 'edit', false);
 $fragment->setVar('body', $content, false);
 $fragment->setVar('buttons', $buttons, false);
 
-echo '<form method="post" action="' . rex_url::currentBackendPage() . '" id="search_it_plaintext_form">';
-echo '<input type="hidden" name="formsubmit" value="1" />';
-echo $fragment->parse('core/page/section.php');
-echo '</form>';
+$sectionHtml = '<form method="post" action="' . rex_url::currentBackendPage() . '" id="search_it_plaintext_form">'
+    . '<input type="hidden" name="formsubmit" value="1" />'
+    . $fragment->parse('core/page/section.php')
+    . '</form>';
+
+$gridFragment = new rex_fragment();
+$gridFragment->setVar('content', [$sectionHtml, ''], false);
+echo $gridFragment->parse('core/page/grid.php');

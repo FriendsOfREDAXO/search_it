@@ -109,73 +109,75 @@ $fragment->setVar('body', $content1, false);
 $content3[] = $fragment->parse('core/page/section.php');
 
 
-$options = array(
-    array(
-        'value' => '',
-        'name' => '',
-        'selected' => false,
-        'id' => 'search_it_optiondummy'
-    )
-);
-if (!empty($this->getConfig('indexfolders'))) {
-    foreach ($this->getConfig('indexfolders') as $relative) {
-        $options[] = array(
-            'value' => $relative,
-            'name' => $relative,
-            'selected' => true
-        );
-    }
-}
+$dirdepth_options = [];
 foreach (range(1, 30) as $depth) {
-    $dirdepth_options[] = array(
+    $dirdepth_options[] = [
         'value' => $depth,
         'name' => $depth,
-        'selected' => $this->getConfig('dirdepth') == $depth
-    );
+        'selected' => $this->getConfig('dirdepth') == $depth,
+    ];
 }
+
+// Alle Verzeichnisse bis zur konfigurierten Tiefe laden
+$savedFolders = is_array($this->getConfig('indexfolders')) ? $this->getConfig('indexfolders') : [];
+$configuredDepth = (int) $this->getConfig('dirdepth');
+$allDirs = $configuredDepth > 0
+    ? \FriendsOfRedaxo\SearchIt\Helper\FileHelper::getDirs('', true)
+    : \FriendsOfRedaxo\SearchIt\Helper\FileHelper::getDirs('', false);
+$folderOptions = [];
+foreach ($allDirs as $absolute => $relative) {
+    $depth = max(0, substr_count($relative, '/') - 1);
+    $indent = str_repeat('··', $depth);
+    $folderOptions[] = [
+        'value' => $relative,
+        'name' => ($indent !== '' ? $indent . ' ' : '') . basename($relative),
+        'selected' => in_array($relative, $savedFolders),
+    ];
+}
+
 $content3[] = search_it_getSettingsFormSection(
     'search_it_files',
     $this->i18n('search_it_settings_fileext_header'),
-    array(
-        array(
+    [
+        [
             'type' => 'string',
             'id' => 'search_it_settings_fileext_label',
             'name' => 'search_config[fileextensions]',
             'label' => rex_i18n::rawMsg('search_it_settings_fileext_label'),
-            'value' => !empty($this->getConfig('fileextensions')) ? rex_escape(implode(',', $this->getConfig('fileextensions'))) : ''
-        ),
-        array(
+            'value' => !empty($this->getConfig('fileextensions')) ? rex_escape(implode(',', $this->getConfig('fileextensions'))) : '',
+        ],
+        [
             'type' => 'directoutput',
-            'output' => '<div class="rex-form-row"></div>'
-        ),
-        array(
+            'output' => '<div class="rex-form-row"></div>',
+        ],
+        [
             'type' => 'checkbox',
             'id' => 'search_it_settings_file_mediapool',
             'name' => 'search_config[indexmediapool]',
             'label' => $this->i18n('search_it_settings_file_mediapool'),
             'value' => '1',
-            'checked' => !empty($this->getConfig('indexmediapool'))
-        ),
-        array(
-            'type' => 'directoutput',
-            'output' => '<div class="rex-form-row"><br><label>' . $this->i18n('search_it_settings_additional_folders_label') . '</label></div>'
-        ),
-        array(
+            'checked' => !empty($this->getConfig('indexmediapool')),
+        ],
+        [
             'type' => 'select',
             'id' => 'search_it_settings_file_dirdepth',
             'name' => 'search_config[dirdepth]',
             'label' => $this->i18n('search_it_settings_file_dirdepth_label'),
-            'options' => $dirdepth_options
-        ),
-        array(
+            'options' => $dirdepth_options,
+        ],
+        [
+            'type' => 'directoutput',
+            'output' => $configuredDepth === 0 ? '<p class="help-block">' . $this->i18n('search_it_settings_folders_hint_dirdepth') . '</p>' : '',
+        ],
+        [
             'type' => 'multipleselect',
             'id' => 'search_it_settings_folders',
             'name' => 'search_config[indexfolders][]',
             'label' => $this->i18n('search_it_settings_folders_label'),
-            'size' => 10,
-            'options' => $options
-        )
-    ), 'edit'
+            'size' => 15,
+            'options' => $folderOptions,
+        ],
+    ], 'edit'
 );
 
 $fragment = new rex_fragment();

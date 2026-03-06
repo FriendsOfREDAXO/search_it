@@ -55,7 +55,8 @@ Einstellungen an Search it übergeben, die Suche ausgeführt und letztendlich di
 Suchergebnisse ausgegeben.
 
         <?php
-       
+        use FriendsOfRedaxo\SearchIt\SearchIt;
+
           $searchterm = rex_request('searchterm', 'string', '');
           $logicalmode = rex_request('logicalmode', 'string', 'and');
           $showmax = rex_request('resultcount', 'int', 10);
@@ -63,11 +64,11 @@ Suchergebnisse ausgegeben.
           $traverseSubcats = rex_request('subcats', 'bool', false);
        
           if(!empty($searchterm)){
-            $search_it = new search_it();
-            $search_it->setLimit(array($start = rex_get('start', 'int', 0), $showmax));
+            $search_it = new SearchIt();
+            $search_it->setLimit([$start = rex_get('start', 'int', 0), $showmax]);
             $search_it->setLogicalMode($logicalmode);
             if($traverseSubcats){
-              $search_it->searchInCategories(a587_getCategories(true, true, $searchinIDs));
+              $search_it->searchInCategories(search_it_getCategories(true, true, $searchinIDs));
             } else {
               $search_it->searchInCategories($searchinIDs);
             }

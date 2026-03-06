@@ -68,7 +68,7 @@ if ($this->getConfig('stats') == 1) {
 
     $content[] = '<div id="stats_elements">';
 
-    $stats = new search_it_stats();
+    $stats = new \FriendsOfRedaxo\SearchIt\Stats\Statistics();
     #$stats->createTestData();
     #error_reporting(E_ALL);
 

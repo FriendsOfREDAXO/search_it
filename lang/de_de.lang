@@ -78,6 +78,7 @@ search_it_settings_include = Datenbankspalten in die Suche einschließen
 search_it_settings_submitbutton = Einstellungen speichern
 search_it_settings_saved = Einstellungen wurden gespeichert
 search_it_settings_saved_warning = Der Suchindex muss erneuert werden.
+search_it_settings_saved_warning_similarwords = Die Ähnlichkeitssuche wurde geändert. Der Keyword-Index wird beim nächsten Reindex automatisch neu aufgebaut.
 
 search_it_generate_actions_title = Aktionen
 search_it_generate_full = Index vollständig erstellen
@@ -177,6 +178,7 @@ search_it_docs_module-url = URL-Addon
 search_it_docs_faq = FAQ
 search_it_docs_autocomplete = Autocomplete
 search_it_docs_plaintext = Plaintext
+search_it_docs_stats = Statistik
 
 search_it_autocomplete_title = Autocomplete
 search_it_autocomplete_info = Autocomplete für Search it

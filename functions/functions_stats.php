@@ -1,27 +1,35 @@
 <?php
 
+/**
+ * @deprecated Use Statistics class instead.
+ */
+
+use FriendsOfRedaxo\SearchIt\Stats\Statistics;
+
+/** @deprecated */
 function search_it_stats_storekeywords($_ep)
 {
     $_params = $_ep->getSubject();
 
-    $stats = new search_it_stats();
+    $stats = new Statistics();
     $stats->insert($_params['searchterm'], $_params['count']);
 }
 
+/** @deprecated */
 function search_it_stats_addtruncate($_ep)
 {
     $subject = $_ep->getSubject();
     $st = rex_addon::get('search_it');
 
     if (rex_request('func') == 'truncate') {
-        $stats = new search_it_stats();
+        $stats = new Statistics();
         $stats->truncate();
 
-        $st->setConfig(array(
+        $st->setConfig([
             'maxtopsearchitems' => 10,
             'searchtermselect' => '',
-            'searchtermselectmonthcount' => 12
-        ));
+            'searchtermselectmonthcount' => 12,
+        ]);
 
         $subject = rex_view::success($st->i18n('search_it_stats_truncate_done')) . $subject;
     }
@@ -32,6 +40,7 @@ function search_it_stats_addtruncate($_ep)
     return $subject;
 }
 
+/** @deprecated */
 function search_it_getStatSection($_id, $_title, $_content)
 {
     return '<section id="' . $_id . '" class="rex-form-col-1"><legend>' . $_title . '</legend>
@@ -45,16 +54,10 @@ function search_it_getStatSection($_id, $_title, $_content)
 </fieldset>';
 }
 
+/** @deprecated */
 function search_it_stats_bytesize($_value)
 {
-    $units = array(
-        'Byte',
-        'KByte',
-        'MByte',
-        'GByte',
-        'TByte',
-        'PByte'
-    );
+    $units = ['Byte', 'KByte', 'MByte', 'GByte', 'TByte', 'PByte'];
 
     $i = 0;
     if ($_value > 0) {

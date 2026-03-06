@@ -48,7 +48,7 @@ $fragment->setVar('class', 'info');
 $fragment->setVar('title', $this->i18n('search_it_test_result'));
 
 if ($request = rex_request('search_it_test_keywords', 'string')) {
-    $search_it = new search_it();
+    $search_it = new \FriendsOfRedaxo\SearchIt\SearchIt();
     $result = $search_it->search($request);
 
     ob_start();

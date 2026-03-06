@@ -105,49 +105,37 @@ $formElements[] = $n;
 $fragment = new rex_fragment();
 $fragment->setVar('elements', $formElements, false);
 $buttons = $fragment->parse('core/form/submit.php');
-$buttons = '
-<fieldset class="rex-form-action">
-    ' . $buttons . '
-</fieldset>
-';
 
-
-// Ausgabe Formular
+// Linke Spalte: Einstellungen
 $fragment = new rex_fragment();
 $fragment->setVar('class', 'edit');
 $fragment->setVar('title', $this->i18n('search_it_autocomplete_config'));
 $fragment->setVar('body', $content, false);
 $fragment->setVar('buttons', $buttons, false);
-$output = $fragment->parse('core/page/section.php');
+$colLeft = '<form action="' . rex_url::currentBackendPage() . '" method="post">
+<input type="hidden" name="formsubmit" value="1" />'
+    . $fragment->parse('core/page/section.php')
+    . '</form>';
 
-$output = '
-<form action="' . rex_url::currentBackendPage() . '" method="post">
-<input type="hidden" name="formsubmit" value="1" />
-    ' . $output . '
-</form>
-';
-
-echo $output;
-
-
+// Rechte Spalte: Installation + Code-Snippet
 $file = rex_file::get(rex_path::addOn('search_it', 'docs/30_autocomplete.md'));
 $body = rex_markdown::factory()->parse($file);
-$fragment = new rex_fragment();
-$fragment->setVar('title', $this->i18n('search_it_autocomplete_config_install'));
-$fragment->setVar('body', $body, false);
-$content = $fragment->parse('core/page/section.php');
-echo $content;
-
 
 $code = '<link rel="stylesheet" type="text/css" href="/' . substr(rex_url::addOnAssets('search_it', 'suggest.css'), 3) . '" media="screen" />
 <script type="text/javascript" src="/' . substr(rex_url::addOnAssets('search_it', 'suggest.js'), 3) . '"></script>';
 $code = preg_replace("#[\n]#", '', $code);
+$codeHtml = highlight_string($code, true);
 
-$content = '<div class="rexx-code"><code><pre>' . highlight_string($code, true) . '</pre></code></div>';
+$colRightBody = $body
+    . '<h3>' . $this->i18n('search_it_autocomplete_config_codesnippet') . '</h3>' . $codeHtml;
 
 $fragment = new rex_fragment();
-$fragment->setVar('title', $this->i18n('search_it_autocomplete_config_codesnippet'));
-$fragment->setVar('body', $content, false);
+$fragment->setVar('class', 'default');
+$fragment->setVar('title', $this->i18n('search_it_autocomplete_config_install'));
+$fragment->setVar('body', $colRightBody, false);
+$colRight = $fragment->parse('core/page/section.php');
 
-echo $fragment->parse('core/page/section.php');
-
+// Grid: 2 Spalten
+$fragment = new rex_fragment();
+$fragment->setVar('content', [$colLeft, $colRight], false);
+echo $fragment->parse('core/page/grid.php');

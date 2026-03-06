@@ -66,35 +66,48 @@ foreach (search_it_getArticles(false, 'name') as $id => $name) {
     );
 }
 $content2[] = search_it_getSettingsFormSection(
-    'search_it_exclude',
-    $this->i18n('search_it_settings_exclude'),
-    array(
-        array(
+    'search_it_exclude_blacklist',
+    $this->i18n('search_it_settings_exclude_blacklist'),
+    [
+        [
             'type' => 'text',
             'id' => 'search_it_settings_exclude_blacklist',
             'name' => 'search_config[blacklist]',
-            'label' => $this->i18n('search_it_settings_exclude_blacklist'),
-            'value' => !empty($this->getConfig('blacklist')) ? rex_escape(implode(',', $this->getConfig('blacklist'))) : ''
-        ),
-        array(
+            'label' => '',
+            'value' => !empty($this->getConfig('blacklist')) ? rex_escape(implode(',', $this->getConfig('blacklist'))) : '',
+        ],
+    ], 'edit'
+);
+
+$content2[] = search_it_getSettingsFormSection(
+    'search_it_exclude_articles',
+    $this->i18n('search_it_settings_exclude_articles'),
+    [
+        [
             'type' => 'multipleselect',
             'id' => 'search_it_exclude_article_ids',
             'name' => 'search_config[exclude_article_ids][]',
-            'label' => $this->i18n('search_it_settings_exclude_articles'),
+            'label' => '',
             'size' => 15,
-            'options' => $articles
-        ),
-        array(
+            'options' => $articles,
+        ],
+    ], 'edit'
+);
+
+$content2[] = search_it_getSettingsFormSection(
+    'search_it_exclude_categories',
+    $this->i18n('search_it_settings_exclude_categories'),
+    [
+        [
             'type' => 'multipleselect',
             'id' => 'search_it_exclude_category_ids',
             'name' => 'search_config[exclude_category_ids][]',
-            'label' => $this->i18n('search_it_settings_exclude_categories'),
+            'label' => '',
             'size' => 15,
-            'options' => $categories
-        )
-    ), 'edit'
+            'options' => $categories,
+        ],
+    ], 'edit'
 );
-
 
 $fragment = new rex_fragment();
 $fragment->setVar('content', $content2, false);

@@ -8,6 +8,8 @@ search_it_infotext = Search AddOn
 search_it_reindex = Search it: reindex
 
 search_it_settings_mode = Index and Search mode
+search_it_settings_index = Indexing
+search_it_settings_searchmode = Search
 search_it_settings_result = Search result
 search_it_settings_addsources = Additional data sources
 search_it_settings_blacklist = Blacklist
@@ -29,14 +31,18 @@ search_it_settings_automaticindex_label = Index and deindex articles automatical
 search_it_settings_reindex_cols_onforms_label = Reindex all columns, if tables are changed through YForm or form
 search_it_settings_index_url_addon_label = Index URL addon (version >=2) URLs
 search_it_settings_index_without_ssl_verification_label = Don't verify SSL certificate (useful at local development while using self-signed certificats)
-search_it_settings_index_host_label = Should indexing be done via a special host[:port]? (Please specify only if absolutely necessary)
+search_it_settings_index_special_title = Special
+search_it_settings_dont_use_socket_active = The setting <code>dont_use_socket</code> is active. Indexing is done without HTTP connection, so HTTP Auth and Index URL have no effect.
+search_it_settings_index_url_title = Index URL
+search_it_settings_index_host_label = Host[:Port]
+search_it_settings_index_host_desc = Should indexing be done via a special host[:port]? (Please specify only if absolutely necessary)
 
 search_it_settings_http_authbasic = HTTP Basic AUTH (.htaccess protection)
 search_it_settings_http_auth_desc = If the website i s protected through HTTP Basic Auth, you can put a valid login here, in order to allow indexing
 search_it_settings_htaccess_user = Username
 search_it_settings_htaccess_pass = Password
 
-search_it_settings_searchmode = MySQL search mode
+search_it_settings_searchmode_label = MySQL search mode
 search_it_settings_searchmode_like = LIKE (finds subwords, but is slower)
 search_it_settings_searchmode_match = MATCH AGAINST (finds only complete words, but is faster)
 
@@ -133,6 +139,7 @@ search_it_settings_additional_folders_label = And / or choose other folders:
 search_it_settings_file_dirdepth_label = Directory depth
 search_it_settings_folders_label = Include following directories
 search_it_settings_folders_dirselect_label = Select Subdirectories of depth %DEPTH%
+search_it_settings_folders_hint_dirdepth = Please select a directory depth first and save to display subdirectories.
 
 search_it_settings_show_all = Show all
 search_it_settings_show_none = Hide all

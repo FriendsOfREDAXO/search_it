@@ -10,35 +10,10 @@ if (rex_post('config-submit', 'boolean')) {
         ['similarwordsmode', 'string'],
         ['similarwords_permanent', 'bool'],
         ['searchmode', 'string'],
-
-        ['htaccess_user', 'string'],
-        ['htaccess_pass', 'string'],
-
-        ['indexoffline', 'bool'],
-        ['automaticindex', 'bool'],
-        ['reindex_cols_onforms', 'bool'],
-        ['index_url_addon', 'bool'],
-
-        ['index_without_ssl_verification', 'bool'],
-        ['index_host', 'string'],
-
     ]);
 
     $changed = array_keys(array_merge(array_diff_assoc(array_map('serialize', $posted_config), array_map('serialize', $this->getConfig())), array_diff_assoc(array_map('serialize', $this->getConfig()), array_map('serialize', $posted_config))));
     $warnings = [];
-    foreach (['similarwordsmode', 'indexoffline'] as $index) {
-        if (in_array($index, $changed)) {
-            $warnings[] = $this->i18n('search_it_settings_saved_warning');
-            break;
-        } elseif (is_array($this->getConfig($index)) && is_array($posted_config[$index])) {
-            if (count(array_merge(
-                    array_diff_assoc(array_map('serialize', $this->getConfig($index)), array_map('serialize', $val)),
-                    array_diff_assoc(array_map('serialize', $val), array_map('serialize', $this->getConfig($index))))) > 0) {
-                $warnings[] = $this->i18n('search_it_settings_saved_warning');
-                break;
-            }
-        }
-    }
     if (in_array('similarwordsmode', $changed)) {
         $warnings[] = $this->i18n('search_it_settings_saved_warning_similarwords');
     }
@@ -54,111 +29,7 @@ if (rex_post('config-submit', 'boolean')) {
 
 }
 
-
-$content = '';
 $content3 = [];
-
-// URL Addon Checkbox
-$url_checkbox = [];
-if (search_it_isUrlAddOnAvailable()) {
-    $url_checkbox = [
-        'type' => 'checkbox',
-        'id' => 'search_it_index_url_addon',
-        'name' => 'search_config[index_url_addon]',
-        'label' => $this->i18n('search_it_settings_index_url_addon_label'),
-        'value' => '1',
-        'checked' => $this->getConfig('index_url_addon')
-    ];
-}
-// SSL verify
-$ssl_verify = [];
-if (rex_version::compare(rex::getVersion(), '5.13', '>=')) {
-    $ssl_verify = [
-        'type' => 'checkbox',
-        'id' => 'search_it_index_without_ssl_verification',
-        'name' => 'search_config[index_without_ssl_verification]',
-        'label' => $this->i18n('search_it_settings_index_without_ssl_verification_label'),
-        'value' => '1',
-        'checked' => $this->getConfig('index_without_ssl_verification')
-    ];
-}
-
-$content = search_it_getSettingsFormSection(
-    'search_it_index',
-    $this->i18n('search_it_settings_title_indexmode'),
-    [
-        [
-            'type' => 'checkbox',
-            'id' => 'search_it_indexoffline',
-            'name' => 'search_config[indexoffline]',
-            'label' => $this->i18n('search_it_settings_indexoffline'),
-            'value' => '1',
-            'checked' => $this->getConfig('indexoffline')
-        ],
-        [
-            'type' => 'checkbox',
-            'id' => 'search_it_automaticindex',
-            'name' => 'search_config[automaticindex]',
-            'label' => $this->i18n('search_it_settings_automaticindex_label'),
-            'value' => '1',
-            'checked' => $this->getConfig('automaticindex')
-        ],
-        [
-            'type' => 'checkbox',
-            'id' => 'search_it_reindex_cols_onforms',
-            'name' => 'search_config[reindex_cols_onforms]',
-            'label' => $this->i18n('search_it_settings_reindex_cols_onforms_label'),
-            'value' => '1',
-            'checked' => $this->getConfig('reindex_cols_onforms')
-        ],
-        $url_checkbox
-        ,
-        $ssl_verify
-        ,
-        [
-            'type' => 'string',
-            'id' => 'search_it_index_host',
-            'name' => 'search_config[index_host]',
-            'label' => $this->i18n('search_it_settings_index_host_label'),
-            'value' => !empty($this->getConfig('index_host')) ? rex_escape($this->getConfig('index_host')) : '',
-        ],
-    ], 'edit'
-);
-
-$content .= search_it_getSettingsFormSection(
-    'search_it_index',
-    $this->i18n('search_it_settings_http_authbasic'),
-    array(
-        array(
-            'type' => 'directoutput',
-            'output' => '<strong>' . $this->i18n('search_it_settings_http_auth_desc') . '</strong>',
-            'where' => 'center'
-        ),
-        array(
-            'type' => 'string',
-            'id' => 'search_it_htaccess_user',
-            'name' => 'search_config[htaccess_user]',
-            'label' => $this->i18n('search_it_settings_htaccess_user'),
-            'value' => !empty($this->getConfig('htaccess_user')) ? rex_escape($this->getConfig('htaccess_user')) : '',
-        ),
-        array(
-            'type' => 'password',
-            'id' => 'search_it_htaccess_pass',
-            'name' => 'search_config[htaccess_pass]',
-            'label' => $this->i18n('search_it_settings_htaccess_pass'),
-            'value' => !empty($this->getConfig('htaccess_pass')) ? rex_escape($this->getConfig('htaccess_pass')) : '',
-        ),
-        /*array(
-            'type' => 'checkbox',
-            'id' => 'search_it_reindex_cols_onforms',
-            'name' => 'search_config[reindex_cols_onforms]',
-            'label' => $this->i18n('search_it_settings_reindex_cols_onforms_label'),
-            'value' => '1',
-            'checked' => $this->getConfig('reindex_cols_onforms')
-        )*/
-    ), 'edit'
-);
-$content3[] = $content;
 
 $content3[] = search_it_getSettingsFormSection(
     'search_it_modi',
@@ -250,7 +121,7 @@ $content3[] = search_it_getSettingsFormSection(
             'type' => 'select',
             'id' => 'search_it_searchmode',
             'name' => 'search_config[searchmode]',
-            'label' => $this->i18n('search_it_settings_searchmode'),
+            'label' => $this->i18n('search_it_settings_searchmode_label'),
             'options' => array(
                 array(
                     'value' => 'like',
@@ -266,6 +137,9 @@ $content3[] = search_it_getSettingsFormSection(
         )
     ), 'edit'
 );
+
+// Leere zweite Spalte damit es nicht über die ganze Breite geht
+$content3[] = '';
 
 $fragment = new rex_fragment();
 $fragment->setVar('content', $content3, false);

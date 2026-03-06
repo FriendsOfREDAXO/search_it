@@ -179,3 +179,21 @@ if($hit['type'] == 'article') {
 
 Dadruch wird der Parameter search_highlighter an die Seite übergeben und kann
 dort ausgelesen werden.
+
+## Indexierung ohne HTTP-Verbindung (dont_use_socket)
+
+In manchen Hosting-Umgebungen kann der Server sich selbst nicht per HTTP erreichen (z.B. hinter einem Reverse Proxy, in Docker-Containern oder bei speziellen Firewall-Konfigurationen). In diesen Fällen schlägt die Indexierung fehl, da Search it normalerweise Artikel per HTTP abruft.
+
+Für solche Umgebungen kann die Indexierung auf einen direkten PHP-Modus umgestellt werden, der ohne HTTP-Verbindung arbeitet:
+
+```php
+rex_config::set('search_it', 'dont_use_socket', true);
+```
+
+Zum Deaktivieren:
+
+```php
+rex_config::remove('search_it', 'dont_use_socket');
+```
+
+Wenn `dont_use_socket` aktiv ist, haben die Einstellungen für HTTP Auth und Index-URL keine Wirkung.

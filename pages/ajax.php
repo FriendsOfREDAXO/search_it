@@ -160,30 +160,4 @@ EOT;
         }
         break;
 
-    case 'getdirs':
-
-        $str = stripslashes(rex_request('startdirs', 'string', '[]'));
-
-        $startdirs = explode('","', substr($str, 2, -2));
-        $dirs = [];
-        if (!empty($startdirs)) {
-
-            if (is_array($startdirs)) {
-                foreach ($startdirs as $dir) {
-                    foreach (search_it_getDirs(str_replace('\\"', '"', $dir)) as $absolute => $relative) {
-                        $dirs[] = '"' . addcslashes($relative, '"/\\') . '"';
-                    }
-                }
-            } else {
-                foreach (search_it_getDirs(str_replace('\\"', '"', $startdirs)) as $absolute => $relative) {
-                    $dirs[] = '"' . addcslashes($relative, '"/\\') . '"';
-                }
-            }
-        } else {
-            foreach (search_it_getDirs() as $absolute => $relative) {
-                $dirs[] = '"' . addcslashes($relative, '"/\\') . '"';
-            }
-        }
-        echo '[' . implode(',', $dirs) . ']';
-        break;
 }

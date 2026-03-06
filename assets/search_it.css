@@ -4,10 +4,6 @@
 }
 
 
-#search_it_files .loading {
-    background: url(loading_lightblue.gif) no-repeat center transparent;
-    padding: 6px 20px;
-}
 
 #search_it_generate_log {
     max-height: 350px;
@@ -105,155 +101,22 @@
 
 
 #search_it_settings_folders {
-    color: #14568A;
-    background: #fff;
-    font-weight: 900;
+    font-family: monospace;
+    font-size: 13px;
 }
 
-#search_it_settings_folders .options {
-    color: #fff;
-    background: #000;
-}
-
-#search_it_optiondummy {
+#search_it_exclude_blacklist dt,
+#search_it_exclude_articles dt,
+#search_it_exclude_categories dt {
     display: none;
 }
 
-.subdirselect, .subdirselectlabel {
-    display: block;
-    margin-top: 1em;
-}
-
-#subdirs_0, #subdirs_1, #subdirs_2, #subdirs_3, #subdirs_4, #subdirs_5, #subdirs_6, #subdirs_7, #subdirs_8, #subdirs_9, #subdirs_10, #subdirs_11, #subdirs_12, #subdirs_13, #subdirs_14, #subdirs_15, #subdirs_16, #subdirs_17, #subdirs_18, #subdirs_19, #subdirs_20, #subdirs_21, #subdirs_22, #subdirs_23, #subdirs_24, #subdirs_25, #subdirs_26, #subdirs_27, #subdirs_28, #subdirs_29, #subdirs_30 {
-    background: no-repeat center transparent;
-}
-
-#subdirs_0 {
-    background-image: url(0.png);
-}
-
-#subdirs_1 {
-    background-image: url(1.png);
-}
-
-#subdirs_2 {
-    background-image: url(2.png);
-}
-
-#subdirs_3 {
-    background-image: url(3.png);
-}
-
-#subdirs_4 {
-    background-image: url(4.png);
-}
-
-#subdirs_5 {
-    background-image: url(5.png);
-}
-
-#subdirs_6 {
-    background-image: url(6.png);
-}
-
-#subdirs_7 {
-    background-image: url(7.png);
-}
-
-#subdirs_8 {
-    background-image: url(8.png);
-}
-
-#subdirs_9 {
-    background-image: url(9.png);
-}
-
-#subdirs_10 {
-    background-image: url(10.png);
-}
-
-#subdirs_11 {
-    background-image: url(11.png);
-}
-
-#subdirs_12 {
-    background-image: url(12.png);
-}
-
-#subdirs_13 {
-    background-image: url(13.png);
-}
-
-#subdirs_14 {
-    background-image: url(14.png);
-}
-
-#subdirs_15 {
-    background-image: url(15.png);
-}
-
-#subdirs_16 {
-    background-image: url(16.png);
-}
-
-#subdirs_17 {
-    background-image: url(17.png);
-}
-
-#subdirs_18 {
-    background-image: url(18.png);
-}
-
-#subdirs_19 {
-    background-image: url(19.png);
-}
-
-#subdirs_20 {
-    background-image: url(20.png);
-}
-
-#subdirs_21 {
-    background-image: url(21.png);
-}
-
-#subdirs_22 {
-    background-image: url(22.png);
-}
-
-#subdirs_23 {
-    background-image: url(23.png);
-}
-
-#subdirs_24 {
-    background-image: url(24.png);
-}
-
-#subdirs_25 {
-    background-image: url(25.png);
-}
-
-#subdirs_26 {
-    background-image: url(26.png);
-}
-
-#subdirs_27 {
-    background-image: url(27.png);
-}
-
-#subdirs_28 {
-    background-image: url(28.png);
-}
-
-#subdirs_29 {
-    background-image: url(29.png);
-}
-
-#subdirs_30 {
-    background-image: url(30.png);
-}
-
-#search_it_plaintext_description {
-    height: 24px;
+#search_it_exclude_blacklist dd,
+#search_it_exclude_articles dd,
+#search_it_exclude_categories dd {
+    margin-left: 0;
+    float: none;
+    width: 100%;
 }
 
 #search_it_plaintext_description dd {
@@ -307,12 +170,6 @@ body.rex-theme-dark #search_it_sample {
 
 body.rex-theme-dark #search_it_settings_folders {
     color: rgba(255, 255, 255, 0.75);
-    background-color: rgba(27, 35, 44, 0.8);
-    border-color: rgba(21, 28, 34, 0.8);
-}
-
-body.rex-theme-dark #search_it_settings_folders option {
-    color: rgba(255, 255, 255, 0.75);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -324,12 +181,6 @@ body.rex-theme-dark #search_it_settings_folders option {
     }
 
     body.rex-has-theme:not(.rex-theme-light) #search_it_settings_folders {
-        color: rgba(255, 255, 255, 0.75);
-        background-color: rgba(27, 35, 44, 0.8);
-        border-color: rgba(21, 28, 34, 0.8);
-    }
-
-    body.rex-has-theme:not(.rex-theme-light) #search_it_settings_folders option {
         color: rgba(255, 255, 255, 0.75);
     }
 }

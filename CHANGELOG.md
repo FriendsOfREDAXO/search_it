@@ -1,4 +1,23 @@
 # Changelog
+## Version 7.0.1 (2026-03-06)
+
+### UI-Modernisierung
+- Einstellungen in separate Tabs aufgeteilt: Indexierung, Suche, Ergebnis, Datenquellen, Blacklist, Autocomplete, Plaintext
+- Autocomplete und Plaintext von eigenen Seiten unter Einstellungen verschoben
+- Mehrspaltige Layouts für bessere Übersicht (Indexierung, Blacklist)
+- Verzeichnisauswahl: Cascading-JS durch einfaches `<select multiple>` ersetzt
+- Alte PNG-/GIF-Assets für Verzeichnisauswahl entfernt (~31 Dateien)
+
+### Bugfixes
+- Fehlende `use`-Statements in search_it.php: `rex_content_service`, `rex_dir`, `rex_socket_exception`, `rex_sql_exception` — Exceptions wurden im Namespace nicht korrekt gefangen
+- `parse_url()`-Probleme mit Index-URL behoben (PHP 8.1+ gibt `false` bei leerem String zurück)
+- `tempnam()`-Notice behoben: Cache-Verzeichnis wird jetzt vor Nutzung erstellt
+- Cronjob-Migration: DB-Einträge mit alten Klassennamen (`rex_cronjob_Reindex`, `rex_cronjob_ClearCache`) werden bei Installation auf Namespace-Klassen aktualisiert
+- "Spezial"-Box in Indexierung wird ausgeblendet wenn `dont_use_socket` aktiv ist
+
+### Dokumentation
+- `dont_use_socket`-Option in FAQ dokumentiert (für Umgebungen ohne HTTP-Loopback)
+
 ## Version 7.0.0 (2026-03-06)
 
 ### ⚠️ Breaking Changes

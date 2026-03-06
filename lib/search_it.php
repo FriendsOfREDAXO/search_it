@@ -7,9 +7,11 @@ use rex;
 use rex_addon;
 use rex_article;
 use rex_article_content;
+use rex_content_service;
 use rex_category;
 use rex_clang;
 use rex_config;
+use rex_dir;
 use rex_extension;
 use rex_extension_point;
 use rex_file;
@@ -18,7 +20,9 @@ use rex_logger;
 use rex_path;
 use rex_request;
 use rex_socket;
+use rex_socket_exception;
 use rex_sql;
+use rex_sql_exception;
 use rex_sql_table;
 use rex_yrewrite;
 use FriendsOfRedaxo\SearchIt\Helper\ArticleHelper;
@@ -330,7 +334,7 @@ class SearchIt
             }
 
             //EP to check if Article should be indexed
-            $doindex = rex_extension::registerPoint(new \rex_extension_point('SEARCH_IT_INDEX_ARTICLE', true, [
+            $doindex = rex_extension::registerPoint(new rex_extension_point('SEARCH_IT_INDEX_ARTICLE', true, [
                 'article' => $article
             ]));
 
@@ -344,14 +348,18 @@ class SearchIt
 
                 if (!$dont_use_socket) {
                     try {
-                        $index_host = rex_addon::get('search_it')->getConfig('index_host');
-                        if (!isset($index_host)) {
-                            $index_host = '';
-                        }
-                        if (substr($index_host, 0, 1) == ':') {
-                            $scanparts['port'] = trim($index_host, ':');
-                        } else {
-                            $scanparts = parse_url($index_host);
+                        $index_host = trim((string) rex_addon::get('search_it')->getConfig('index_host'));
+                        $scanparts = [];
+                        if ($index_host !== '') {
+                            if (substr($index_host, 0, 1) === ':') {
+                                $scanparts['port'] = trim($index_host, ':');
+                            } elseif (!str_contains($index_host, '://')) {
+                                // Einfacher Hostname oder host:port ohne Schema — http:// nur zum Parsen
+                                $scanparts = parse_url('http://' . $index_host) ?: [];
+                                unset($scanparts['scheme']);
+                            } else {
+                                $scanparts = parse_url($index_host) ?: [];
+                            }
                         }
 
                         if (rex_addon::get("yrewrite")->isAvailable() && rex_yrewrite::getDomainByArticleId($_id)->getName() != 'default' && !isset($scanparts['host'])) {
@@ -1106,7 +1114,9 @@ class SearchIt
                 $error = false;
 
                 if (function_exists('exec')) {
-                    $tempFile = tempnam(rex_path::cache() . 'addons/mediapool/', 'search_it');
+                    $tempDir = rex_path::cache() . 'addons/mediapool/';
+                    rex_dir::create($tempDir);
+                    $tempFile = tempnam($tempDir, 'search_it');
                     $encoding = 'UTF-8';
                     //echo 'pdftotext ' . escapeshellarg(rex_path::frontend($_filename)) . ' ' . escapeshellarg($tempFile) . ' -enc ' . $encoding;
                     exec('pdftotext  -enc ' . $encoding . ' ' . escapeshellarg(rex_path::frontend($_filename)) . ' ' . escapeshellarg($tempFile), $dummy, $return);

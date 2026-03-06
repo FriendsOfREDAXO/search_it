@@ -7,6 +7,9 @@ Indexierung der URLs aus dem URL Addon aktiviert sein.
 ## Modulausgabe
 
 ```php
+use FriendsOfRedaxo\SearchIt\SearchIt;
+use FriendsOfRedaxo\SearchIt\Helper\UrlAddon;
+
 $article_id = rex_article::getCurrentId();
 $request = rex_request('search', 'string', false);
 
@@ -16,7 +19,7 @@ if($request) { // Wenn ein Suchbegriff eingegeben wurde
 	print '<section class="search_it-hits">';
 
 	// Init search and execute
-    $search_it = new search_it();
+    $search_it = new SearchIt();
     $result = $search_it->search($request);
 
 	echo '<h2 class="search_it-headline">Suchergebnisse</h2>';
@@ -27,7 +30,7 @@ if($request) { // Wenn ein Suchbegriff eingegeben wurde
 			if($hit['type'] == 'url') {
 				// url hits
 				$url_sql = rex_sql::factory();
-				$url_sql->setTable(search_it_getUrlAddOnTableName());
+				$url_sql->setTable(UrlAddon::getTableName());
 				$url_sql->setWhere(['url_hash' => $hit['fid']]);
 				if ($url_sql->select('article_id, clang_id, profile_id, data_id, seo')) {
 					if($url_sql->getRows() > 0) {

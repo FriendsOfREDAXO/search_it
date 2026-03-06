@@ -21,11 +21,13 @@ Außerdem sollte das maximale Trefferlimit auf 20 gestellt werden.
 <section class="search_it-modul">
     <p class="search_it-demotitle">[search_it] Suchergebnisse - Bildersuche</p>
     <?php
+use FriendsOfRedaxo\SearchIt\SearchIt;
+
 $server = rtrim(rex::getServer(),"/");
 $request = rex_request('search', 'string', false);
 
 if($request) {
-    $search_it = new search_it();
+    $search_it = new SearchIt();
     $search_it->searchInDbColumn(rex::getTablePrefix().'media','title');
     $search_it->searchInDbColumn(rex::getTablePrefix().'media','filename');
     $search_it->searchInDbColumn(rex::getTablePrefix().'media','fileext');
@@ -71,11 +73,13 @@ if($request) {
 <section class="search_it-modul">
     <p class="search_it-demotitle">[search_it] Suchergebnisse - Bildersuche</p>
     <?php
+use FriendsOfRedaxo\SearchIt\SearchIt;
+
 $server = rtrim(rex::getServer(),"/"); // Aktuelle Website-Adresse ohne Slash am Ende;
 $request = rex_request('search', 'string', false); // GET/POST-Anfrage: Casting als String
 
 if($request) { // Wenn ein Suchbegriff eingegeben wurde
-    $search_it = new search_it(); // Suche initialisieren
+    $search_it = new SearchIt(); // Suche initialisieren
     $search_it->searchInDbColumn(rex::getTablePrefix().'media','title');
     $search_it->searchInDbColumn(rex::getTablePrefix().'media','filename');
     $search_it->searchInDbColumn(rex::getTablePrefix().'media','fileext');

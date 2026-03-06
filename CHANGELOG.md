@@ -15,21 +15,8 @@
 - Verbesserte Warnmeldung beim Ändern der Ähnlichkeitssuche-Einstellungen
 
 ### Architektur
-- Monolith-Klasse aufgeteilt in spezialisierte Klassen:
-  - `Cache\SearchCache` — Such-Cache-Verwaltung
-  - `Index\KeywordStore` — Keyword-Speicherung für Ähnlichkeitssuche
-  - `Helper\SocketHelper` — HTTP-Socket-Erstellung für Indexierung
-  - `Helper\ArticleHelper` — Artikel-/Kategorie-Listen
-  - `Helper\ColognePhonetic` — Kölner Phonetik
-  - `Helper\FileHelper` — Datei-/Verzeichnis-Listen
-  - `Helper\FormBuilder` — Einstellungsformulare
-  - `Helper\UrlAddon` — URL-Addon-Integration
-  - `EventHandler` — Extension-Point-Handler
-  - `Plaintext\PlaintextConverter` — HTML-zu-Plaintext-Konvertierung
-  - `Search\Highlighter` — Frontend-Such-Highlighter
+- Monolith-Klasse aufgeteilt in spezialisierte Klassen
 - `simple_html_dom.php` (1268 Zeilen) durch nativen PHP-Code ersetzt (`DOMDocument`/`DOMXPath`)
-- Typed Properties und Type Hints für alle Klassen und Methoden
-- `define()` Konstanten durch Klassen-Konstanten ersetzt
 - `serialize()`/`unserialize()` durch `json_encode()`/`json_decode()` ersetzt (mit Fallback für Altdaten)
 
 ### Bugfixes

@@ -35,7 +35,7 @@ werden.
 ## Einstellungen
 
 > Tipp: Die hier definierten Sucheinstellungen können auch direkt an
-> der `search_it`-Klasse vorgenommen bzw. überschrieben werden, um mehrere Suchen
+> der `SearchIt`-Klasse vorgenommen bzw. überschrieben werden, um mehrere Suchen
 > auf einer Seite umzusetzen.
 
 <a name="einstellungen-suchmodus"></a>
@@ -214,7 +214,7 @@ Inhalt als Text vorliegt, wird eine Volltextsuche im PDF ermöglicht.
 Schließt Begriffe, Artikel und Kategorien standardmäßig von der Suche aus.
 
 > Hinweis: Diese Einstellungen betreffen nur die Suchergebnisse und können in
-> der `search_it`-Klasse überschrieben werden. Begriffe, Kategorien und Artikel
+> der `SearchIt`-Klasse überschrieben werden. Begriffe, Kategorien und Artikel
 > werden trotzdem bei der Indexierung berücksichtigt.
 
  Option                  | Erläuterung                                                               
@@ -240,5 +240,5 @@ Schließt Begriffe, Artikel und Kategorien standardmäßig von der Suche aus.
  HTML-Tags entfernen                          | Wendet die Funktion `strip_tags()` auf den Plaintext an.                                                                                                                                                    
  Standard-Plaintext-Konvertierung durchführen | Führt die Plaintext-Konvertierung von Search it zusätzlich aus.                                                                                                                                             
 
-> Hinweis: Um die Einstellungen des Plaintext-AddOns zu übernehmen, muss die
+> Hinweis: Um geänderte Plaintext-Einstellungen zu übernehmen, muss die
 > Indexierung erneut ausgeführt werden.

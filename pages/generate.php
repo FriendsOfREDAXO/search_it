@@ -221,7 +221,7 @@ if (!empty(rex_get('do')) and rex_get('do') == 'incremental') {
                 break;
 
             case 'full':
-                $index = new search_it();
+                $index = new \FriendsOfRedaxo\SearchIt\SearchIt();
                 $global_return = $index->generateIndex();
                 if ($global_return < 4) {
                     echo rex_view::success($this->i18n('search_it_generate_done'));
@@ -231,13 +231,13 @@ if (!empty(rex_get('do')) and rex_get('do') == 'incremental') {
                 break;
 
             case 'deletecache':
-                $index = new search_it();
+                $index = new \FriendsOfRedaxo\SearchIt\SearchIt();
                 $index->deleteCache();
                 echo rex_view::success($this->i18n('search_it_generate_cache_deleted'));
                 break;
 
             case 'deletekeywords':
-                $index = new search_it();
+                $index = new \FriendsOfRedaxo\SearchIt\SearchIt();
                 $index->deleteKeywords();
                 echo rex_view::success($this->i18n('search_it_generate_keywords_deleted'));
                 break;

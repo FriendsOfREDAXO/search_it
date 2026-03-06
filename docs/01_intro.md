@@ -9,7 +9,7 @@ führt zur schnelleren Anzeige von Suchergebnissen.
 
 ## Systemvoraussetzungen
 
-* `PHP ^7.0`
+* `PHP >= 8.1`
 * `REDAXO >= 5.6.0`
 * `pdftotext` [optional für das Durchsuchen von pdf-Inhalten, [Link](https://www.xpdfreader.com/pdftotext-man.html)]
 
@@ -35,7 +35,7 @@ führt zur schnelleren Anzeige von Suchergebnissen.
   Ergebnisse aus)
 * zwei verschieden Arten, um den Suchindex zu erneuern (wenn es Probleme mit der
   max_execution_time gibt)
-* für Entwickler interessant: über die Methoden der search_it-Klasse kann die
+* für Entwickler interessant: über die Methoden der SearchIt-Klasse kann die
   Suche verfeinert bzw. für mehrere Module unterschiedlich angepasst werden,
   außerdem ist z. B. eine Pagination von Suchergebnissen möglich
 * Angabe von Kategorien, Artikeln und DB-Spalten, in denen gesucht werden soll
@@ -43,15 +43,9 @@ führt zur schnelleren Anzeige von Suchergebnissen.
 * einfache Konfiguration im Backend
 * einstellbar, wer das AddOn konfigurieren darf.
 
-## Plugins
+## Features (ehemals Plugins)
 
-* `Plaintext`: Reduziert Artikel auf reinen Text und entfernt dabei alle
-  HTML-Tags.
-* `Statistik`: Liefert Informationen zur `Search it`-Datenbank und zu den
-  häufigsten Suchanfragen.
-
-> Hinweis: Die Plugins `Reindex` und `Search Highlighter`
-> aus `RexSearch für REDAXO 4` wurden in `Seach it` integriert. Auch das PlugIn `Autocomplete` wurde integriert.
+Die ehemaligen Plugins `Plaintext`, `Statistik`, `Autocomplete`, `Reindex` und `Search Highlighter` sind seit Version 7.0 vollständig in Search it integriert und werden über die Einstellungen konfiguriert.
 
 ## Erste Schritte
 
@@ -71,12 +65,12 @@ Bei der Installation werden fünf Datenbanktabellen angelegt:
 ### Installationsschritte
 
 1. Installation des aktuellen Release über GitHub oder den REDAXO-Installer
-2. `Search it`-AddOn und Plugins aktivieren
-3. Einstellungen von `Search it` festlegen [(Hilfe)](search_it-settings.md)
+2. `Search it`-AddOn aktivieren
+3. Einstellungen von `Search it` festlegen
 4. Indexierung starten
 5. Suchergebnis-Artikel anlegen
-6. Suchfeld-Modul / Suchfeld-Template hinzufügen [(Hilfe)](module-form.md)
-7. Suchergebnis-Modul hinzufügen [(Hilfe)](module-simple.md)
+6. Suchfeld-Modul / Suchfeld-Template hinzufügen
+7. Suchergebnis-Modul hinzufügen
 
 ## Support
 

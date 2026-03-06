@@ -9,20 +9,15 @@ führt zur schnelleren Anzeige von Suchergebnissen.
 
 ## Systemvoraussetzungen
 
-* `PHP >= 7.0`
+* `PHP >= 8.1`
 * `REDAXO >= 5.6`
 * [`pdftotext`](https://www.xpdfreader.com/pdftotext-man.html) für das
   Durchsuchen von pdf-Inhalten, optional.
 
-## Plugins
-
-> Hinweis: Die Plugins `Plaintext`, `Statistik`, `Reindex` und `Search Highlighter` aus RexSearch für
-> REDAXO 4 wurden in Seach it integriert. Auch das PlugIn `Autocomplete` wurde integriert.
-
 ## Wo finde ich weitere Hilfe?
 
-Search it verfügt über ein umfangreiches Dokumentations-Plugin im Backend, das
-auch Beispiel Module für die Suche enthält.
+Search it verfügt über eine umfangreiche Dokumentation im Backend, die
+auch Beispiel-Module für die Suche enthält.
 Fragen können auch
 im [REDAXO-Channel auf Slack](https://friendsofredaxo.slack.com/messages/redaxo/)
 gestellt werden.
@@ -63,9 +58,9 @@ anschließend der Index vollständig generiert werden.
 [Norbert Micheel](https://github.com/tyrant88)
 
 Search it basiert
-auf: [RexSearch (Xong) für REDAXO 4](https://github.com/xong/rexsearch)   
-[Norbert Micheel](https://github.com/tyrant88/) Portierung für R5 und aktiven
-Entwicklung   
-[Alexander Walther](https://github.com/skerbis) Dokumentation und Hilfe   
-[Tobias Krais](https://github.com/tobiaskrais) URL Addon (>= 2.0) Support    
+auf: [RexSearch (Xong) für REDAXO 4](https://github.com/xong/rexsearch)
+[Norbert Micheel](https://github.com/tyrant88/) Portierung für R5 und aktive
+Entwicklung
+[Alexander Walther](https://github.com/skerbis) Dokumentation und Hilfe
+[Tobias Krais](https://github.com/tobiaskrais) URL Addon (>= 2.0) Support
 [und weitere Entwickler...](https://github.com/FriendsOfREDAXO/search_it/graphs/contributors)

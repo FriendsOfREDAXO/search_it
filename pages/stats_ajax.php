@@ -1,5 +1,5 @@
 <?php
-$stats = new search_it_stats();
+$stats = new \FriendsOfRedaxo\SearchIt\Stats\Statistics();
 
 $this->setConfig('maxtopsearchitems', rex_request('count', 'int', 10));
 

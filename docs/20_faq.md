@@ -3,7 +3,7 @@
 ## Mehrsprachigkeit
 
 Search it sucht per Standard in allen Sprachen. Um sprachabhängige Suchen zu
-erlauben, muss der `search_it`-Klasse die Sprach-ID der Sprache, in der gesucht
+erlauben, muss der `SearchIt`-Klasse die Sprach-ID der Sprache, in der gesucht
 werden soll, übergeben werden.
 
 **Such-Formular**
@@ -15,7 +15,9 @@ werden soll, übergeben werden.
 **Suchergebnis-Ausgabe**
 
 ```php
-$search_it = new search_it(REX_CLANG_ID);
+use FriendsOfRedaxo\SearchIt\SearchIt;
+
+$search_it = new SearchIt(REX_CLANG_ID);
 ```
 
 ## Filtern und Sortieren von Suchergebnissen
@@ -33,16 +35,20 @@ müssen zuvor indexiert worden sein.
 **Nur in festgelegten Kategorien suchen**
 
 ```php
-$search_it = new search_it();
-$search_it->searchInCategories(array(5,6,13));
+use FriendsOfRedaxo\SearchIt\SearchIt;
+
+$search_it = new SearchIt();
+$search_it->searchInCategories([5, 6, 13]);
 $result = $search_it->search(rex_request('search', 'string'));
 ```
 
 **Ab einer festgelegten Kategorie rekursiv suchen**
 
 ```php
-$search_it = new search_it();
-$search_it->searchInCategories(search_it_getCategories(true, true, array(5))); // 5 = id der Kategorie
+use FriendsOfRedaxo\SearchIt\SearchIt;
+
+$search_it = new SearchIt();
+$search_it->searchInCategoryTree(5); // 5 = ID der Kategorie, sucht rekursiv
 $result = $search_it->search(rex_request('search', 'string'));
 ```
 
@@ -57,9 +63,11 @@ zu begrenzen kann im Ausgabemodul die Funktion `searchInCategoryTree()`
 verwendet werden. Das ganze sieht dann so aus:
 
 ```php
-$search_it = new search_it()
+use FriendsOfRedaxo\SearchIt\SearchIt;
+
+$search_it = new SearchIt();
 $search_it->searchInCategoryTree(rex_yrewrite::getCurrentDomain()->getMountId());
-$search_it->search([Suchbegriff]);
+$result = $search_it->search($suchbegriff);
 ```
 
 ### Datensätze in Datenbanktabellen filtern
@@ -135,7 +143,7 @@ ggf. das Suchausgabe-Modul an die Datenbanktabelle angepasst werden, siehe:
 
 ### Module, Blöcke, Artikel oder bestimmte Abschnitte filtern
 
-Das Plaintext-Plugin hat die Möglichkeit, anhand bestimmter Selektoren Inhalte
+Die Plaintext-Funktion hat die Möglichkeit, anhand bestimmter Selektoren Inhalte
 auszuschließen. So werden bspw. `<header>` oder `<footer>` nicht indexiert. Mit
 diesem Trick können auch ganze Module von der Suche ausschließen.
 

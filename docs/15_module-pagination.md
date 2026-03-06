@@ -5,6 +5,8 @@ sinnvoll oder notwendig sein.
 
 ```php
 <?php
+use FriendsOfRedaxo\SearchIt\SearchIt;
+
 $article_id = rex_article::getCurrentId();
 $request = rex_request('search', 'string', false);
 $limit = 10; // Anzahl Treffer pro Seite
@@ -16,7 +18,7 @@ if($request) { // Wenn ein Suchbegriff eingegeben wurde
     print '<section class="search_it-hits">';
 
     // Init search and execute
-    $search_it = new search_it();
+    $search_it = new SearchIt();
     $search_it->setLimit($start, $limit);
     $result = $search_it->search($request);
 

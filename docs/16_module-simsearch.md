@@ -23,6 +23,8 @@ neue Suchbegriff aussehen könnte.
 
 ```php
 <?php
+use FriendsOfRedaxo\SearchIt\SearchIt;
+
 $request = rex_request('search', 'string', false);
 $article = rex_article::getCurrent();
 $sim_limit = 10; // Maximales Limit ähnlicher Suchbegriffe
@@ -31,7 +33,7 @@ if($request) { // Wenn ein Suchbegriff eingegeben wurde
     $server = rtrim(rex::getServer(), "/");
 
     // Suche wie initieren und ausführen
-    $search_it = new search_it();
+    $search_it = new SearchIt();
     $result = $search_it->search($request);
 
     if($result['count']) {

@@ -1,53 +1,77 @@
 <?php
+
+use FriendsOfRedaxo\SearchIt\SearchIt;
+use FriendsOfRedaxo\SearchIt\Cronjob\Reindex;
+use FriendsOfRedaxo\SearchIt\Cronjob\ClearCache;
+use FriendsOfRedaxo\SearchIt\EventHandler;
+use FriendsOfRedaxo\SearchIt\Plaintext\PlaintextConverter;
+use FriendsOfRedaxo\SearchIt\Search\Highlighter;
+
+/**
+ * Backward compatibility class aliases.
+ * @deprecated Use the namespaced classes instead.
+ */
+class_alias(SearchIt::class, 'search_it');
+rex_api_function::register('search_it_autocomplete', FriendsOfRedaxo\SearchIt\Api\Autocomplete::class);
+class_alias(FriendsOfRedaxo\SearchIt\Stats\Statistics::class, 'search_it_stats');
+class_alias(FriendsOfRedaxo\SearchIt\Pdf\PdfConverter::class, 'pdf2txt');
+class_alias(Reindex::class, 'rex_cronjob_Reindex');
+class_alias(ClearCache::class, 'rex_cronjob_ClearCache');
+class_alias(FriendsOfRedaxo\SearchIt\Console\ReindexCommand::class, 'rex_search_it_command_reindex');
+class_alias(FriendsOfRedaxo\SearchIt\Console\ClearCacheCommand::class, 'rex_search_it_command_clearcache');
+
+/**
+ * @deprecated Use SearchIt::ART_*, SearchIt::URL_*, SearchIt::FILE_*, SearchIt::SIMILARWORDS_* instead.
+ */
 if (!defined('SEARCH_IT_ART_EXCLUDED')) {
-    define('SEARCH_IT_ART_EXCLUDED', 0);
-    define('SEARCH_IT_ART_IDNOTFOUND', 1);
-    define('SEARCH_IT_ART_GENERATED', 2);
-    define('SEARCH_IT_ART_REDIRECT', 3);
-    define('SEARCH_IT_ART_ERROR', 4);
-    define('SEARCH_IT_ART_NOTOK', 5);
-    define('SEARCH_IT_ART_404', 6);
+    define('SEARCH_IT_ART_EXCLUDED', SearchIt::ART_EXCLUDED);
+    define('SEARCH_IT_ART_IDNOTFOUND', SearchIt::ART_IDNOTFOUND);
+    define('SEARCH_IT_ART_GENERATED', SearchIt::ART_GENERATED);
+    define('SEARCH_IT_ART_REDIRECT', SearchIt::ART_REDIRECT);
+    define('SEARCH_IT_ART_ERROR', SearchIt::ART_ERROR);
+    define('SEARCH_IT_ART_NOTOK', SearchIt::ART_NOTOK);
+    define('SEARCH_IT_ART_404', SearchIt::ART_404);
 
-    define('SEARCH_IT_URL_EXCLUDED', 0);
-    define('SEARCH_IT_URL_GENERATED', 2);
-    define('SEARCH_IT_URL_REDIRECT', 3);
-    define('SEARCH_IT_URL_ERROR', 4);
-    define('SEARCH_IT_URL_NOTOK', 5);
-    define('SEARCH_IT_URL_404', 6);
+    define('SEARCH_IT_URL_EXCLUDED', SearchIt::URL_EXCLUDED);
+    define('SEARCH_IT_URL_GENERATED', SearchIt::URL_GENERATED);
+    define('SEARCH_IT_URL_REDIRECT', SearchIt::URL_REDIRECT);
+    define('SEARCH_IT_URL_ERROR', SearchIt::URL_ERROR);
+    define('SEARCH_IT_URL_NOTOK', SearchIt::URL_NOTOK);
+    define('SEARCH_IT_URL_404', SearchIt::URL_404);
 
-    define('SEARCH_IT_FILE_NOEXIST', 0);
-    define('SEARCH_IT_FILE_XPDFERR_OPENSRC', 1);
-    define('SEARCH_IT_FILE_XPDFERR_OPENDEST', 2);
-    define('SEARCH_IT_FILE_XPDFERR_PERM', 3);
-    define('SEARCH_IT_FILE_XPDFERR_OTHER', 4);
-    define('SEARCH_IT_FILE_FORBIDDEN_EXTENSION', 5);
-    define('SEARCH_IT_FILE_GENERATED', 6);
-    define('SEARCH_IT_FILE_EMPTY', 7);
+    define('SEARCH_IT_FILE_NOEXIST', SearchIt::FILE_NOEXIST);
+    define('SEARCH_IT_FILE_XPDFERR_OPENSRC', SearchIt::FILE_XPDFERR_OPENSRC);
+    define('SEARCH_IT_FILE_XPDFERR_OPENDEST', SearchIt::FILE_XPDFERR_OPENDEST);
+    define('SEARCH_IT_FILE_XPDFERR_PERM', SearchIt::FILE_XPDFERR_PERM);
+    define('SEARCH_IT_FILE_XPDFERR_OTHER', SearchIt::FILE_XPDFERR_OTHER);
+    define('SEARCH_IT_FILE_FORBIDDEN_EXTENSION', SearchIt::FILE_FORBIDDEN_EXTENSION);
+    define('SEARCH_IT_FILE_GENERATED', SearchIt::FILE_GENERATED);
+    define('SEARCH_IT_FILE_EMPTY', SearchIt::FILE_EMPTY);
 
-    define('SEARCH_IT_SIMILARWORDS_NONE', 0);
-    define('SEARCH_IT_SIMILARWORDS_SOUNDEX', 1);
-    define('SEARCH_IT_SIMILARWORDS_METAPHONE', 2);
-    define('SEARCH_IT_SIMILARWORDS_COLOGNEPHONE', 4);
-    define('SEARCH_IT_SIMILARWORDS_ALL', 7);
+    define('SEARCH_IT_SIMILARWORDS_NONE', SearchIt::SIMILARWORDS_NONE);
+    define('SEARCH_IT_SIMILARWORDS_SOUNDEX', SearchIt::SIMILARWORDS_SOUNDEX);
+    define('SEARCH_IT_SIMILARWORDS_METAPHONE', SearchIt::SIMILARWORDS_METAPHONE);
+    define('SEARCH_IT_SIMILARWORDS_COLOGNEPHONE', SearchIt::SIMILARWORDS_COLOGNEPHONE);
+    define('SEARCH_IT_SIMILARWORDS_ALL', SearchIt::SIMILARWORDS_ALL);
 }
 
 $curDir = __DIR__;
 require_once $curDir . '/functions/functions_search_it.php';
 
 if (rex_request('search_highlighter', 'string', '') != '' && rex_addon::get('search_it')->getConfig('highlighterclass') != '') {
-    rex_extension::register('OUTPUT_FILTER', 'search_it_search_highlighter_output');
+    rex_extension::register('OUTPUT_FILTER', [Highlighter::class, 'outputFilter']);
 }
 
 if (rex_addon::get('search_it')->getConfig('reindex_cols_onforms') == true) {
-    rex_extension::register('REX_FORM_SAVED', 'search_it_reindex_cols');
-    rex_extension::register('REX_YFORM_SAVED', 'search_it_reindex_cols');
-    rex_extension::register('YFORM_SAVED', 'search_it_reindex_cols');
-    rex_extension::register('YFORM_DATA_DELETED', 'search_it_reindex_cols');
-    rex_extension::register('REX_FORM_DELETED', 'search_it_reindex_cols');
+    rex_extension::register('REX_FORM_SAVED', [EventHandler::class, 'reindexColumns']);
+    rex_extension::register('REX_YFORM_SAVED', [EventHandler::class, 'reindexColumns']);
+    rex_extension::register('YFORM_SAVED', [EventHandler::class, 'reindexColumns']);
+    rex_extension::register('YFORM_DATA_DELETED', [EventHandler::class, 'reindexColumns']);
+    rex_extension::register('REX_FORM_DELETED', [EventHandler::class, 'reindexColumns']);
 }
 if (rex_addon::get('cronjob')->isAvailable() && !rex::isSafeMode()) {
-    rex_cronjob_manager::registerType(rex_cronjob_reindex::class);
-    rex_cronjob_manager::registerType(rex_cronjob_clearcache::class);
+    rex_cronjob_manager::registerType(Reindex::class);
+    rex_cronjob_manager::registerType(ClearCache::class);
 }
 
 if (rex_request('search_it_build_index', 'string', '') != '') {
@@ -74,7 +98,7 @@ if (rex_addon::get('search_it')->getConfig('index_url_addon') == true) {
         // automatic indexing of url addon urls: set trigger
         rex_extension::register('RESPONSE_SHUTDOWN', function () {
             if (rex_config::has('search_it', 'update_urls') && rex::isBackend()) {
-                $search_it = new search_it();
+                $search_it = new SearchIt();
                 $search_it->unindexDeletedURLs();
                 $search_it->indexNewURLs();
                 $search_it->indexUpdatedURLs();
@@ -105,7 +129,7 @@ if (rex::isBackend() && rex::getUser()) {
             'SLICE_DELETED',
             'SLICE_UPDATED',
         );
-        rex_extension::register($extensionPoints, 'search_it_handle_extensionpoint');
+        rex_extension::register($extensionPoints, [EventHandler::class, 'handleExtensionPoint']);
     }
 
     if (strpos(rex_request('page', 'string', ''), 'search_it') !== false) {
@@ -174,7 +198,7 @@ if ($this->getConfig('plaintext') == 1) {
     require_once __DIR__ . '/functions/functions_plaintext.php';
 
     if (rex::isBackend()) {
-        rex_extension::register('SEARCH_IT_PLAINTEXT', 'search_it_doPlaintext');
+        rex_extension::register('SEARCH_IT_PLAINTEXT', [PlaintextConverter::class, 'extensionPointHandler']);
     }
 }
 

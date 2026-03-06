@@ -40,7 +40,7 @@ sein, da aktuell keine Extension Points existieren.
 
 ### Reindexierung von URLs aus dem URL-Addon
 
-Die Klasse `search_it` bietet die Methode `indexURL` an. Über diese Methode
+Die Klasse `SearchIt` bietet die Methode `indexURL` an. Über diese Methode
 können URLs neu oder wieder indexiert werden. Außerdem bietet sie die
 Methode `unindexURL` an. Über diese Methode können URLs aus dem Index entfernt
 werden.
@@ -48,8 +48,12 @@ werden.
 Nachfolgend ein Beispiel, um den kompletten URL-Index neu aufzubauen:
 
 ```php
+use FriendsOfRedaxo\SearchIt\SearchIt;
+use FriendsOfRedaxo\SearchIt\Helper\UrlAddon;
+
+$search_it = new SearchIt();
 $url_sql = rex_sql::factory();
-$url_sql->setTable(search_it_getUrlAddOnTableName());
+$url_sql->setTable(UrlAddon::getTableName());
 if ($url_sql->select('id, article_id, clang_id, profile_id, data_id')) {
 	// index und cache zuerst löschen, damit keine alten Einträge überleben
 	$search_it->deleteIndexForType("url");
@@ -62,7 +66,7 @@ if ($url_sql->select('id, article_id, clang_id, profile_id, data_id')) {
 
 ### Reindexierung von Datenbank-Feldern
 
-Die Klasse `search_it` bietet allerdings die Methode `indexColumn` an. Über
+Die Klasse `SearchIt` bietet die Methode `indexColumn` an. Über
 diese Methode können Datenbankspalten neu oder wieder indexiert werden. Müssen
 die Datenbankspalten nur zu einem bestimmten Datensatz indexiert werden, kann
 außerdem die ID dieses Datensatzes angegeben werden. Search it wird dann auch
@@ -71,14 +75,16 @@ nur den betroffenen Datensatz reindexieren.
 ### Alles reindexieren
 
 ```php
-    $search_it = new search_it;
-    $includeColumns = is_array(rex_addon::get('search_it')->getConfig('include')) ? rex_addon::get('search_it')->getConfig('include') : array();
+use FriendsOfRedaxo\SearchIt\SearchIt;
 
-    foreach( $includeColumns as $table => $columnArray ){
-        foreach( $columnArray as $column ){
-            $search_it->indexColumn($table, $column);
-        }
+$search_it = new SearchIt();
+$includeColumns = is_array(rex_addon::get('search_it')->getConfig('include')) ? rex_addon::get('search_it')->getConfig('include') : [];
+
+foreach ($includeColumns as $table => $columnArray) {
+    foreach ($columnArray as $column) {
+        $search_it->indexColumn($table, $column);
     }
+}
 ```
 
 ### Für AddOns
@@ -89,7 +95,9 @@ weiß, wann die Beispieldatenbank-Feld `field` reindexiert werden soll, kann die
 Methode `indexColumn` von diesem AddOn aufgerufen werden:
 
 ```php
-$search_it = new search_it;
+use FriendsOfRedaxo\SearchIt\SearchIt;
+
+$search_it = new SearchIt();
 $search_it->indexColumn('table', 'field'[, 'id'[, $datensatz_id]]);
 ```
 
@@ -148,10 +156,12 @@ Dazu werden in der Suchmodul-Ausgabe zusätzliche Parameter vor dem Aufruf
 von `search()` übergeben. Beispiele:
 
 ```php
-$search_it = new search_it(REX_CLANG_ID); // Nur in einer bestimmten Kategorie suchen
+use FriendsOfRedaxo\SearchIt\SearchIt;
+
+$search_it = new SearchIt(REX_CLANG_ID); // Nur in einer bestimmten Sprache suchen
 
 # Artikel- / Struktur-Suche
-$search_it->searchInCategories(array(5,6,13)); // durchsucht nur die Kategorien 5, 6 und 13, oder
+$search_it->searchInCategories([5, 6, 13]); // durchsucht nur die Kategorien 5, 6 und 13, oder
 $search_it->setSearchAllArticlesAnyway(false) // Keine Artikel durchsuchen
 ```
 

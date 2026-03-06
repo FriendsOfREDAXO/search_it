@@ -10,7 +10,7 @@ if ($this->getConfig('searchtermselect') == 'all') {
 }
 
 
-$stats = new search_it_stats();
+$stats = new \FriendsOfRedaxo\SearchIt\Stats\Statistics();
 
 $curDir = __DIR__;
 require_once $curDir . '/phplot/phplot.php';
@@ -65,6 +65,6 @@ $plot->SetPlotType('bars');
 $plot->SetDataType('text-data');
 $plot->SetDataValues($bardata);
 $plot->SetDataColors(array('#14568a', '#2c8ce0', '#dfe9e9'));
-$plot->SetShading(ceil(48 / $this->getConfig('searchtermselectmonthcount')));
+$plot->SetShading(ceil(48 / max(1, (int) $this->getConfig('searchtermselectmonthcount'))));
 $plot->DrawGraph();
 

@@ -1,4 +1,30 @@
 # Changelog
+## Version 7.0.0 (2026-03-06)
+
+### ⚠️ Breaking Changes
+- PHP 8.1+ erforderlich (Union Types, Typed Properties)
+- Alle Klassen haben jetzt Namespaces unter `FriendsOfRedaxo\SearchIt\*`
+- Alte Klassennamen (`search_it`, `pdf2txt`, `search_it_stats`, etc.) funktionieren weiterhin als deprecated Aliase
+- Globale Konstanten (`SEARCH_IT_ART_*`, `SEARCH_IT_FILE_*`, etc.) sind deprecated, stattdessen Klassen-Konstanten nutzen (`SearchIt::ART_EXCLUDED`, etc.)
+- Globale Funktionen in `functions/` sind deprecated, stattdessen die entsprechenden Klassen-Methoden nutzen
+
+### Neu
+- **Namespaces**: Vollständige Namespace-Struktur `FriendsOfRedaxo\SearchIt\*`
+- **Automatischer Keyword-Reindex**: Beim Neuaufbau des Index wird automatisch erkannt, ob der Keyword-Index zur aktuellen Ähnlichkeitssuche-Einstellung passt, und ggf. neu aufgebaut
+- **CLAUDE.md**: KI-Kontext-Datei für AI-Coding-Assistenten (Claude Code, Cursor, etc.)
+- Verbesserte Warnmeldung beim Ändern der Ähnlichkeitssuche-Einstellungen
+
+### Architektur
+- Monolith-Klasse aufgeteilt in spezialisierte Klassen
+- `simple_html_dom.php` (1268 Zeilen) durch nativen PHP-Code ersetzt (`DOMDocument`/`DOMXPath`)
+- `serialize()`/`unserialize()` durch `json_encode()`/`json_decode()` ersetzt (mit Fallback für Altdaten)
+
+### Bugfixes
+- **Kölner Phonetik wurde nie gespeichert**: `is_numeric()`-Prüfung schlug immer fehl, da Cologne Phonetic rein numerische Strings zurückgibt (Pre-existing Bug)
+- **Ähnlichkeitssuche Bitmask**: `&&` (logisch) statt `&` (bitwise) — alle Phonetik-Modi waren immer aktiv wenn einer eingeschaltet war (Pre-existing Bug)
+- Division-by-Zero in Stats-Chart bei `monthcount=0`
+- Null-Safety für alle Config-Werte im Konstruktor
+
 ## Version 6.14.5 (2026-01-04)
 - Fix searchInIds logic thx @thorol
 - Delete all plugIns

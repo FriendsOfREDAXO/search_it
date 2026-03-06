@@ -36,7 +36,7 @@ EOT;
 $sampleoutput = '<div id="search_it_sample_wrapper">
         <h5 class="rex-form-text">' . $this->i18n('search_it_settings_highlight_sample') . ':<strong>"velit esse" accusam</strong></h5>
         <div id="search_it_sample">';
-$search_it = new search_it();
+$search_it = new \FriendsOfRedaxo\SearchIt\SearchIt();
 $search_it->setSearchString('"velit esse" accusam');
 $search_it->parseSearchString('"velit esse" accusam');
 $samplehighlighttext = $search_it->getHighlightedText($sample);

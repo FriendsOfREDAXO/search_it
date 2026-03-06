@@ -1,5 +1,5 @@
 package: search_it
-version: '6.14.5'
+version: '7.0.0'
 author: Friends Of REDAXO
 supportpage: https://github.com/FriendsOfREDAXO/search_it
 
@@ -35,12 +35,12 @@ page:
 
 
 console_commands:
-    search_it:reindex: rex_search_it_command_reindex
-    search_it:clearCache: rex_search_it_command_clearcache
+    search_it:reindex: FriendsOfRedaxo\SearchIt\Console\ReindexCommand
+    search_it:clearCache: FriendsOfRedaxo\SearchIt\Console\ClearCacheCommand
 
 requires:
     redaxo: '^5.6.0'
-    php: '>=7'
+    php: '>=8.1'
     php_extensions:
         - gd
 

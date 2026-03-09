@@ -1,4 +1,12 @@
 # Changelog
+
+## Version 7.1.0 (2026-03-10)
+- searchNotInCategories() und searchNotInCategoryTree() zum Ausschließen von Kategorien pro Suche thx @simonsinus @marcohanke (#299, #315)
+- Konfigurierbares Logging für Artikel- und URL-Addon-Indexierung in den Einstellungen thx @bitshiftersgmbh @DanielWeitenauer (#415)
+- Fix Deadlock bei gleichzeitiger Keyword-Indexierung thx @TobiasKrais (#328)
+- Fix Auto-Increment Overflow in Keywords-Tabelle thx @bitshiftersgmbh (#441)
+- Fix leerer highlightedtext wenn Regex-Highlighting nicht matcht thx @tbaddade (#292)
+
 ## Version 7.0.1 (2026-03-06)
 
 ### UI-Modernisierung

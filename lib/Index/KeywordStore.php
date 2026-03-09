@@ -6,6 +6,7 @@ use FriendsOfRedaxo\SearchIt\Helper\ColognePhonetic;
 use FriendsOfRedaxo\SearchIt\SearchIt;
 use rex;
 use rex_sql;
+use rex_sql_exception;
 
 class KeywordStore
 {
@@ -60,18 +61,29 @@ class KeywordStore
         if (!empty($simWords)) {
             $simWordsTeile = array_chunk($simWords, $this->mysqlInsertChunkSize);
             foreach ($simWordsTeile as $simWordsTeil) {
-                $simWordsSQL->setQuery(
-                    sprintf(
-                        "INSERT INTO `%s`
-                        (keyword, soundex, metaphone, colognephone, clang)
-                        VALUES
-                        %s
-                        ON DUPLICATE KEY UPDATE count = count + %d",
-                        self::getTempTablePrefix() . 'search_it_keywords',
-                        implode(',', $simWordsTeil),
-                        $doCount ? 1 : 0
-                    )
+                $query = sprintf(
+                    "INSERT INTO `%s`
+                    (keyword, soundex, metaphone, colognephone, clang)
+                    VALUES
+                    %s
+                    ON DUPLICATE KEY UPDATE count = count + %d",
+                    self::getTempTablePrefix() . 'search_it_keywords',
+                    implode(',', $simWordsTeil),
+                    $doCount ? 1 : 0
                 );
+
+                for ($attempt = 1; $attempt <= 3; ++$attempt) {
+                    try {
+                        $simWordsSQL->setQuery($query);
+                        break;
+                    } catch (rex_sql_exception $e) {
+                        if ($attempt < 3 && str_contains($e->getMessage(), 'Deadlock')) {
+                            usleep(50_000 * $attempt);
+                            continue;
+                        }
+                        throw $e;
+                    }
+                }
             }
         }
     }

@@ -32,6 +32,8 @@ Der alte Klassenname `search_it` funktioniert weiterhin (deprecated).
  `searchInArticles(array $ids): void`                           | Setzt die IDs der Artikel, in denen gesucht werden soll.
  `searchInCategories(array $ids): void`                         | Setzt die IDs der Kategorien, in denen gesucht werden soll.
  `searchInCategoryTree(int $id): void`                          | Setzt eine Kategorie als Wurzel — alle Artikel müssen darin enthalten sein.
+ `searchNotInCategories(array $ids): void`                      | Schließt die angegebenen Kategorien von den Suchergebnissen aus.
+ `searchNotInCategoryTree(int $id): void`                       | Schließt eine Kategorie inkl. aller Unterkategorien von den Suchergebnissen aus.
  `searchInFileCategories(array\|bool $ids): void`               | Setzt die IDs der Medienpool-Kategorien, in denen gesucht werden soll.
  `searchInDbColumn(string $table, string $column): void`        | Beschränkt die Suche auf bestimmte Datenbankspalten.
  `setSearchAllArticlesAnyway(bool $bool = false): void`         | Legt fest, ob Artikel durchsucht werden sollen.

@@ -60,6 +60,17 @@ Suchindex.
 Das kann hilfreich sein bei lokaler Entwicklung und der Nutzung von
 selbst-zertifizierten Zertifikaten )
 
+##### Logging
+
+Search it kann Warnungen und Fehler während der Indexierung im REDAXO System-Log protokollieren. Über zwei getrennte Checkboxen lässt sich das Logging für Artikel und URL-Addon-URLs einzeln aktivieren oder deaktivieren.
+
+ Option                                          | Erläuterung
+-------------------------------------------------|---------------------------------------------------------------
+ Indexierungsmeldungen für Artikel loggen         | Protokolliert HTTP-Fehler, Redirects und Socket-Fehler bei der Artikel-Indexierung.
+ Indexierungsmeldungen für URL-Addon-URLs loggen  | Protokolliert HTTP-Fehler, Redirects und Socket-Fehler bei der URL-Addon-Indexierung.
+
+Beide Optionen sind standardmäßig aktiviert.
+
 ##### Host[:Port]
 
 Falls die Hosting-Umgebung die Nutzung eines speziellen Hosts und/oder Ports

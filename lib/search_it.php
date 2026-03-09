@@ -2051,6 +2051,9 @@ class SearchIt
                         $return .= ' ' . $this->ellipsis;
                     }
                 }
+                if ($return === '') {
+                    return $this->getTeaserText($_text);
+                }
                 return $return;
                 break;
 
@@ -2116,6 +2119,10 @@ class SearchIt
 
                 if ($this->highlightType == 'array') {
                     return $Ahighlighted;
+                }
+
+                if (empty($Ahighlighted)) {
+                    return $this->getTeaserText($_text);
                 }
 
                 $return = implode(' ' . $this->ellipsis . ' ', $Ahighlighted);

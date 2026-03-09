@@ -31,6 +31,8 @@ search_it_settings_automaticindex_label = Artikel (ADD, EDIT, DELETE) automatisc
 search_it_settings_reindex_cols_onforms_label = Reindexieren aller Spalten, wenn Tabellen mit YForm oder form bearbeitet werden
 search_it_settings_index_url_addon_label = URLs aus dem URL Addon (Version >=2) indexieren
 search_it_settings_index_without_ssl_verification_label = SSL Zertifikat nicht überprüfen (hilfreich bei lokaler Entwicklung und der Nutzung von selbst-zertifizierten Zertifikaten)
+search_it_settings_logging_articles_label = Indexierungsmeldungen für Artikel loggen (Warnungen, Fehler)
+search_it_settings_logging_urls_label = Indexierungsmeldungen für URL-Addon-URLs loggen (Warnungen, Fehler)
 search_it_settings_index_special_title = Spezial
 search_it_settings_dont_use_socket_active = Die Einstellung <code>dont_use_socket</code> ist aktiv. Die Indexierung erfolgt ohne HTTP-Verbindung, daher haben HTTP Auth und Index-URL keine Wirkung.
 search_it_settings_index_url_title = Index-URL

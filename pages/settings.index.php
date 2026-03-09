@@ -15,6 +15,8 @@ if (rex_post('config-submit', 'boolean')) {
 
         ['index_without_ssl_verification', 'bool'],
         ['index_host', 'string'],
+        ['logging_articles', 'bool'],
+        ['logging_urls', 'bool'],
 
     ]);
 
@@ -99,6 +101,22 @@ $content3[] = search_it_getSettingsFormSection(
         ,
         $ssl_verify
         ,
+        [
+            'type' => 'checkbox',
+            'id' => 'search_it_logging_articles',
+            'name' => 'search_config[logging_articles]',
+            'label' => $this->i18n('search_it_settings_logging_articles_label'),
+            'value' => '1',
+            'checked' => $this->getConfig('logging_articles') ?? true
+        ],
+        [
+            'type' => 'checkbox',
+            'id' => 'search_it_logging_urls',
+            'name' => 'search_config[logging_urls]',
+            'label' => $this->i18n('search_it_settings_logging_urls_label'),
+            'value' => '1',
+            'checked' => $this->getConfig('logging_urls') ?? true
+        ],
     ], 'edit'
 );
 

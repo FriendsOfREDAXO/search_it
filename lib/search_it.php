@@ -2,6 +2,7 @@
 
 namespace FriendsOfRedaxo\SearchIt;
 
+use FriendsOfRedaxo\SearchIt\Helper\Logger;
 use FriendsOfRedaxo\SearchIt\Pdf\PdfConverter;
 use rex;
 use rex_addon;
@@ -16,7 +17,6 @@ use rex_extension;
 use rex_extension_point;
 use rex_file;
 use rex_i18n;
-use rex_logger;
 use rex_path;
 use rex_request;
 use rex_socket;
@@ -381,7 +381,7 @@ class SearchIt
 
                         // Check if URL uses a valid HTTP/HTTPS scheme before attempting socket connection
                         if (!$this->isValidHttpScheme($scanurl)) {
-                            rex_logger::factory()->info('Search_it: Skipping indexing of article ' . $_id . ' with non-HTTP scheme URL: ' . $scanurl);
+                            Logger::logArticle('info', 'Search_it: Skipping indexing of article ' . $_id . ' with non-HTTP scheme URL: ' . $scanurl);
                             $return[$langID] = self::ART_EXCLUDED;
                             continue;
                         }
@@ -416,7 +416,7 @@ class SearchIt
 
                             // Check if redirect URL uses a valid HTTP/HTTPS scheme
                             if (!$this->isValidHttpScheme($scanurl)) {
-                                rex_logger::factory()->info('Search_it: Stopping redirect follow for article ' . $_id . ' - redirect to non-HTTP scheme URL: ' . $scanurl);
+                                Logger::logArticle('info', 'Search_it: Stopping redirect follow for article ' . $_id . ' - redirect to non-HTTP scheme URL: ' . $scanurl);
                                 break; // Stop following redirects if we hit a non-HTTP scheme
                             }
 
@@ -433,12 +433,12 @@ class SearchIt
                             if ($response->isRedirection()) {
                                 $return[$langID] = self::ART_REDIRECT;
                                 $response_text = rex_i18n::msg('search_it_generate_article_redirect');
-                                rex_logger::factory()->log('Warning', rex_i18n::msg('search_it_generate_article_http_error') . ' ' . $scanurl . PHP_EOL . $response_text);
+                                Logger::logArticle('Warning', rex_i18n::msg('search_it_generate_article_http_error') . ' ' . $scanurl . PHP_EOL . $response_text);
                             } else if ($response->getStatusCode() == '404') {
                                 $return[$langID] = self::ART_404;
-                                rex_logger::factory()->log('Warning', rex_i18n::msg('search_it_generate_article_404_error') . ' ' . $scanurl . PHP_EOL . $response_text);
+                                Logger::logArticle('Warning', rex_i18n::msg('search_it_generate_article_404_error') . ' ' . $scanurl . PHP_EOL . $response_text);
                             } else {
-                                rex_logger::factory()->log('Warning', rex_i18n::msg('search_it_generate_article_http_error') . ' ' . $scanurl . PHP_EOL . $response_text);
+                                Logger::logArticle('Warning', rex_i18n::msg('search_it_generate_article_http_error') . ' ' . $scanurl . PHP_EOL . $response_text);
                                 $return[$langID] = self::ART_NOTOK;
                             }
                             continue;
@@ -446,7 +446,7 @@ class SearchIt
 
                     } catch (rex_socket_exception $e) {
                         $articleText = '';
-                        rex_logger::factory()->error(rex_i18n::msg('search_it_generate_article_socket_error') . ': ' . $scanurl . PHP_EOL . $e->getMessage());
+                        Logger::logArticle('error', rex_i18n::msg('search_it_generate_article_socket_error') . ': ' . $scanurl . PHP_EOL . $e->getMessage());
                         $return[$langID] = self::ART_ERROR;
                         continue;
 
@@ -607,7 +607,7 @@ class SearchIt
 
                 // Check if URL uses a valid HTTP/HTTPS scheme before attempting socket connection
                 if (!$this->isValidHttpScheme($scanurl)) {
-                    rex_logger::factory()->info('Search_it: Skipping indexing of URL with non-HTTP scheme: ' . $scanurl);
+                    Logger::logUrl('info', 'Search_it: Skipping indexing of URL with non-HTTP scheme: ' . $scanurl);
                     $return[$clang_id] = self::URL_EXCLUDED;
                     return $return;
                 }
@@ -643,7 +643,7 @@ class SearchIt
 
                     // Check if redirect URL uses a valid HTTP/HTTPS scheme
                     if (!$this->isValidHttpScheme($scanurl)) {
-                        rex_logger::factory()->info('Search_it: Stopping redirect follow for URL - redirect to non-HTTP scheme URL: ' . $scanurl);
+                        Logger::logUrl('info', 'Search_it: Stopping redirect follow for URL - redirect to non-HTTP scheme URL: ' . $scanurl);
                         break; // Stop following redirects if we hit a non-HTTP scheme
                     }
 
@@ -658,12 +658,12 @@ class SearchIt
                     if ($response->isRedirection()) {
                         $return[$clang_id] = self::URL_REDIRECT;
                         $response_text = rex_i18n::msg('search_it_generate_article_redirect');
-                        rex_logger::factory()->log('Warning', rex_i18n::msg('search_it_generate_article_http_error') . ' ' . $scanurl . PHP_EOL . $response_text);
+                        Logger::logUrl('Warning', rex_i18n::msg('search_it_generate_article_http_error') . ' ' . $scanurl . PHP_EOL . $response_text);
                     } else if ($response->getStatusCode() == '404') {
                         $return[$clang_id] = self::URL_404;
-                        rex_logger::factory()->log('Warning', rex_i18n::msg('search_it_generate_article_404_error') . ' ' . $scanurl . PHP_EOL . $response_text);
+                        Logger::logUrl('Warning', rex_i18n::msg('search_it_generate_article_404_error') . ' ' . $scanurl . PHP_EOL . $response_text);
                     } else {
-                        rex_logger::factory()->log('Warning', rex_i18n::msg('search_it_generate_article_http_error') . ' ' . $scanurl . PHP_EOL . $response_text);
+                        Logger::logUrl('Warning', rex_i18n::msg('search_it_generate_article_http_error') . ' ' . $scanurl . PHP_EOL . $response_text);
                         $return[$clang_id] = self::URL_NOTOK;
                     }
                     return $return;
@@ -671,7 +671,7 @@ class SearchIt
 
             } catch (rex_socket_exception $e) {
                 $articleText = '';
-                rex_logger::factory()->error(rex_i18n::msg('search_it_generate_article_socket_error') . ' ' . $scanurl . PHP_EOL . $e->getMessage());
+                Logger::logUrl('error', rex_i18n::msg('search_it_generate_article_socket_error') . ' ' . $scanurl . PHP_EOL . $e->getMessage());
                 $return[$clang_id] = self::URL_ERROR;
             }
 
@@ -902,11 +902,11 @@ class SearchIt
     {
         $sqltest = rex_sql_table::get($_table);
         if (!$sqltest->exists()) {
-            rex_logger::factory()->log('Warning', rex_i18n::rawMsg('search_it_generate_table_not_exists', $_table));
+            Logger::logArticle('Warning', rex_i18n::rawMsg('search_it_generate_table_not_exists', $_table));
             return false;
         } else {
             if (!$sqltest->hasColumn($_column)) {
-                rex_logger::factory()->log('Warning', rex_i18n::rawMsg('search_it_generate_col_not_exists', $_column, $_table));
+                Logger::logArticle('Warning', rex_i18n::rawMsg('search_it_generate_col_not_exists', $_column, $_table));
                 return false;
             }
         }

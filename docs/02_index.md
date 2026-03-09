@@ -162,6 +162,8 @@ $search_it = new SearchIt(REX_CLANG_ID); // Nur in einer bestimmten Sprache such
 
 # Artikel- / Struktur-Suche
 $search_it->searchInCategories([5, 6, 13]); // durchsucht nur die Kategorien 5, 6 und 13, oder
+$search_it->searchNotInCategories([8, 9]); // schließt die Kategorien 8 und 9 von den Ergebnissen aus, oder
+$search_it->searchNotInCategoryTree(8); // schließt Kategorie 8 inkl. Unterkategorien aus, oder
 $search_it->setSearchAllArticlesAnyway(false) // Keine Artikel durchsuchen
 ```
 

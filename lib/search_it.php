@@ -88,6 +88,7 @@ class SearchIt
     private bool $cache = true;
     private array $cachedArray = [];
     private array $searchInIDs = [];
+    private array $excludeCategoryIDs = [];
     private bool $searchAllArticlesAnyway = false;
     private array $whitelist = [];
 
@@ -1612,6 +1613,32 @@ class SearchIt
     }
 
     /**
+     * Excludes the given categories from the search results.
+     *
+     * Expects an array with category IDs as parameter.
+     */
+    public function searchNotInCategories(array $_ids): void
+    {
+        foreach ($_ids as $id) {
+            if ($id = intval($id)) {
+                $this->excludeCategoryIDs[] = $id;
+                $this->hashMe .= 'nc' . $id;
+            }
+        }
+    }
+
+    /**
+     * Excludes a category and all its subcategories from the search results.
+     *
+     * Expects a category ID as parameter.
+     */
+    public function searchNotInCategoryTree(int $_id): void
+    {
+        $subcats = self::getChildList($_id);
+        $this->searchNotInCategories($subcats);
+    }
+
+    /**
      * Retrieves a list of IDs of all categories which are subcategories to the given one.
      *
      * Expects a category ID as parameter.
@@ -2441,6 +2468,10 @@ class SearchIt
             } else {
                 $where .= ' AND (' . implode(' AND ', $AwhereToSearch) . ')';
             }
+        }
+
+        if (!empty($this->excludeCategoryIDs)) {
+            $where .= ' AND (catid IS NULL OR catid NOT IN (' . implode(',', $this->excludeCategoryIDs) . '))';
         }
 
         if (!empty($this->where)) {

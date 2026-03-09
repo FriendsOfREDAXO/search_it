@@ -52,6 +52,30 @@ $search_it->searchInCategoryTree(5); // 5 = ID der Kategorie, sucht rekursiv
 $result = $search_it->search(rex_request('search', 'string'));
 ```
 
+### Bestimmte Kategorien von der Suche ausschließen
+
+Manchmal sollen bestimmte Kategorien nicht in den Suchergebnissen auftauchen, ohne sie komplett vom Index auszuschließen. Die Artikel bleiben indexiert, werden aber bei dieser Suche nicht geliefert.
+
+**Bestimmte Kategorien ausschließen**
+
+```php
+use FriendsOfRedaxo\SearchIt\SearchIt;
+
+$search_it = new SearchIt();
+$search_it->searchNotInCategories([5, 12]); // schließt die Kategorien 5 und 12 aus
+$result = $search_it->search(rex_request('search', 'string'));
+```
+
+**Kategorie inkl. Unterkategorien ausschließen**
+
+```php
+use FriendsOfRedaxo\SearchIt\SearchIt;
+
+$search_it = new SearchIt();
+$search_it->searchNotInCategoryTree(5); // schließt Kategorie 5 und alle Unterkategorien aus
+$result = $search_it->search(rex_request('search', 'string'));
+```
+
 ### Multidomains mit YRewrite, Suche auf Domain eingrenzen
 
 > Wie funktioniert Search it in Kombination mit YRewrite mit verschiedenen

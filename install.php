@@ -39,15 +39,14 @@ rex_sql_table::get(rex::getTable(rex::getTempPrefix() . 'search_it_cacheindex_id
     ->ensure();
 
 rex_sql_table::get(rex::getTable(rex::getTempPrefix() . 'search_it_keywords'))
-    ->ensureColumn(new rex_sql_column('id', 'int(11)', false, null, 'auto_increment'))
     ->ensureColumn(new rex_sql_column('keyword', 'varchar(191)'))
     ->ensureColumn(new rex_sql_column('soundex', 'varchar(255)'))
     ->ensureColumn(new rex_sql_column('metaphone', 'varchar(255)'))
     ->ensureColumn(new rex_sql_column('colognephone', 'varchar(255)'))
     ->ensureColumn(new rex_sql_column('clang', 'int(11)', false, '-1'))
     ->ensureColumn(new rex_sql_column('count', 'int(11)', false, '1'))
-    ->setPrimaryKey('id')
-    ->ensureIndex(new rex_sql_index('keyword', ['keyword', 'clang'], rex_sql_index::UNIQUE))
+    ->removeColumn('id')
+    ->setPrimaryKey(['keyword', 'clang'])
     ->ensure();
 
 rex_sql_table::get(rex::getTablePrefix() . 'search_it_stats_searchterms')

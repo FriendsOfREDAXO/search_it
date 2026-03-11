@@ -59,15 +59,15 @@ $curDir = __DIR__;
 require_once $curDir . '/functions/functions_search_it.php';
 
 if (rex_request('search_highlighter', 'string', '') != '' && rex_addon::get('search_it')->getConfig('highlighterclass') != '') {
-    rex_extension::register('OUTPUT_FILTER', [Highlighter::class, 'outputFilter']);
+    rex_extension::register('OUTPUT_FILTER', Highlighter::outputFilter(...));
 }
 
 if (rex_addon::get('search_it')->getConfig('reindex_cols_onforms') == true) {
-    rex_extension::register('REX_FORM_SAVED', [EventHandler::class, 'reindexColumns']);
-    rex_extension::register('REX_YFORM_SAVED', [EventHandler::class, 'reindexColumns']);
-    rex_extension::register('YFORM_SAVED', [EventHandler::class, 'reindexColumns']);
-    rex_extension::register('YFORM_DATA_DELETED', [EventHandler::class, 'reindexColumns']);
-    rex_extension::register('REX_FORM_DELETED', [EventHandler::class, 'reindexColumns']);
+    rex_extension::register('REX_FORM_SAVED', EventHandler::reindexColumns(...));
+    rex_extension::register('REX_YFORM_SAVED', EventHandler::reindexColumns(...));
+    rex_extension::register('YFORM_SAVED', EventHandler::reindexColumns(...));
+    rex_extension::register('YFORM_DATA_DELETED', EventHandler::reindexColumns(...));
+    rex_extension::register('REX_FORM_DELETED', EventHandler::reindexColumns(...));
 }
 if (rex_addon::get('cronjob')->isAvailable() && !rex::isSafeMode()) {
     rex_cronjob_manager::registerType(Reindex::class);
@@ -129,7 +129,7 @@ if (rex::isBackend() && rex::getUser()) {
             'SLICE_DELETED',
             'SLICE_UPDATED',
         );
-        rex_extension::register($extensionPoints, [EventHandler::class, 'handleExtensionPoint']);
+        rex_extension::register($extensionPoints, EventHandler::handleExtensionPoint(...));
     }
 
     if (strpos(rex_request('page', 'string', ''), 'search_it') !== false) {
@@ -198,7 +198,7 @@ if ($this->getConfig('plaintext') == 1) {
     require_once __DIR__ . '/functions/functions_plaintext.php';
 
     if (rex::isBackend()) {
-        rex_extension::register('SEARCH_IT_PLAINTEXT', [PlaintextConverter::class, 'extensionPointHandler']);
+        rex_extension::register('SEARCH_IT_PLAINTEXT', PlaintextConverter::extensionPointHandler(...));
     }
 }
 
@@ -208,10 +208,10 @@ if (!rex_plugin::get('search_it', 'stats')->isAvailable()) {
 }
 if ($this->getConfig('stats') == 1) {
     if (rex_request('search_it_test', 'string', '') == '') {
-        rex_extension::register('SEARCH_IT_SEARCH_EXECUTED', 'search_it_stats_storekeywords');
+        rex_extension::register('SEARCH_IT_SEARCH_EXECUTED', search_it_stats_storekeywords(...));
     }
     if (rex::isBackend()) {
-        rex_extension::register('SEARCH_IT_PAGE_MAINTENANCE', 'search_it_stats_addtruncate');
+        rex_extension::register('SEARCH_IT_PAGE_MAINTENANCE', search_it_stats_addtruncate(...));
 
         rex_view::addCssFile($this->getAssetsUrl('stats.css'));
     }

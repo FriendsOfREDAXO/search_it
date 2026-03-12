@@ -1,5 +1,10 @@
 # Changelog
 
+## Version 7.1.1 (2026-03-12)
+- Fix TypeError in PHP 8.4: `$urlAddOnTableName` nullable machen, da `UrlAddon::getTableName()` null zurückgibt wenn URL-Addon nicht installiert thx @godsdog (#466)
+- Umstellung auf First Class Callable Syntax für Extension Points thx @christophboecker (#464)
+- Dateinamen an Klassennamen angepasst thx @christophboecker (#462)
+
 ## Version 7.1.0 (2026-03-10)
 - searchNotInCategories() und searchNotInCategoryTree() zum Ausschließen von Kategorien pro Suche thx @simonsinus @marcohanke (#299, #315)
 - Konfigurierbares Logging für Artikel- und URL-Addon-Indexierung in den Einstellungen thx @bitshiftersgmbh @DanielWeitenauer (#415)

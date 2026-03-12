@@ -73,7 +73,7 @@ class SearchIt
     private string $hashMe = '';
     private int|false $clang = false;
     private string $ellipsis;
-    private string $urlAddOnTableName;
+    private ?string $urlAddOnTableName = null;
     private int $significantCharacterCount = 3;
     private array $stopwords = [];
     private string $errormessages = '';

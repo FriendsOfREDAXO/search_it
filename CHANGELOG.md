@@ -1,5 +1,8 @@
 # Changelog
 
+## Version 7.1.2 (2026-03-14)
+- Fix "Class rex_cronjob not found" wenn Cronjob-Addon nicht installiert ist — class_alias für Cronjob-Klassen wird jetzt nur noch registriert wenn das Cronjob-Addon verfügbar ist
+
 ## Version 7.1.1 (2026-03-12)
 - Fix TypeError in PHP 8.4: `$urlAddOnTableName` nullable machen, da `UrlAddon::getTableName()` null zurückgibt wenn URL-Addon nicht installiert thx @godsdog (#466)
 - Umstellung auf First Class Callable Syntax für Extension Points thx @christophboecker (#464)

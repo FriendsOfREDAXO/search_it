@@ -3,13 +3,14 @@
     border: 1px solid #008979;
     display: none;
     list-style: outside none none;
-    margin: -1px 0 0;
+    margin: 0;
     overflow: hidden;
     padding: 0;
     position: absolute;
+    top: 100%;
+    left: 0;
     z-index: 200;
     width: 100%;
-    max-width: 1150px;
 }
 
 .ac_results li {
@@ -18,16 +19,6 @@
     padding: 2px 5px 2px 12px;
     text-align: left;
     white-space: nowrap;
-}
-
-body > .ac_results:first-child {
-    background: red;
-}
-
-body > .ac_results:last-child {
-    max-width: 210px !important;
-    z-index: 5000;
-    left: calc(100% - 227px) !important;
 }
 
 .ac_over {

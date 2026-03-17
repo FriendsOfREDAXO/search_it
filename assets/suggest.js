@@ -7,21 +7,18 @@ document.addEventListener('DOMContentLoaded', function () {
             prevLength = 0;
 
         results.className = options.resultsClass;
-        document.body.appendChild(results);
 
-        function getPosition(el) {
-            var rect = el.getBoundingClientRect();
-            return {
-                top: rect.top + window.scrollY,
-                left: rect.left + window.scrollX
-            };
-        }
+        // Native Browser-Autocomplete deaktivieren
+        input.setAttribute('autocomplete', 'off');
 
-        function updatePosition() {
-            var pos = getPosition(input);
-            results.style.top = pos.top + input.offsetHeight + 'px';
-            results.style.left = pos.left + 'px';
-        }
+        // Wrapper um Input + Results für relative Positionierung
+        var wrapper = document.createElement('div');
+        wrapper.style.position = 'relative';
+        wrapper.style.display = 'inline-block';
+        wrapper.style.width = '100%';
+        input.parentNode.insertBefore(wrapper, input);
+        wrapper.appendChild(input);
+        wrapper.appendChild(results);
 
         function handleKeyup(e) {
             if (/27$|38$|40$/.test(e.keyCode) && results.style.display !== 'none' || /^13$|^9$/.test(e.keyCode) && getCurrentResult()) {
@@ -176,10 +173,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 results.style.display = 'none';
             }, 200);
         });
-        window.addEventListener('resize', updatePosition);
-        window.addEventListener('load', updatePosition);
-
-        updatePosition();
     }
 
     function initSuggest() {

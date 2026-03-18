@@ -58,9 +58,8 @@ anschließend der Index vollständig generiert werden.
 [Norbert Micheel](https://github.com/tyrant88)
 
 Search it basiert
-auf: [RexSearch (Xong) für REDAXO 4](https://github.com/xong/rexsearch)
-[Norbert Micheel](https://github.com/tyrant88/) Portierung für R5 und aktive
-Entwicklung
-[Alexander Walther](https://github.com/skerbis) Dokumentation und Hilfe
-[Tobias Krais](https://github.com/tobiaskrais) URL Addon (>= 2.0) Support
-[und weitere Entwickler...](https://github.com/FriendsOfREDAXO/search_it/graphs/contributors)
+auf: [RexSearch (Xong) für REDAXO 4](https://github.com/xong/rexsearch)  
+[Norbert Micheel](https://github.com/tyrant88/) Portierung für R5 und aktive Entwicklung  
+[Alexander Walther](https://github.com/skerbis) Dokumentation und Hilfe  
+[Tobias Krais](https://github.com/tobiaskrais) URL Addon (>= 2.0) Support  
+[und weitere Entwickler...](https://github.com/FriendsOfREDAXO/search_it/graphs/contributors)  

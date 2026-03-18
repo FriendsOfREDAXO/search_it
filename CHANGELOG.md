@@ -1,5 +1,11 @@
 # Changelog
 
+## Version 7.1.3 (2026-03-18)
+- Fix: Cronjob-Migration in install.php prüft jetzt ob die Cronjob-Tabelle existiert und verwendet die korrekten Klassennamen 
+- Fix: Autocomplete-Dropdown wird direkt am Eingabefeld positioniert (relative statt absolute Positionierung am Body) thx @rotzek (#470)
+- Fix: replace class_alias() with deprecated Classes for rex_stan and other tools thx @christophboecker (#463)
+- Fix: Native Browser-Autocomplete wird bei aktivem Suggest deaktiviert
+
 ## Version 7.1.2 (2026-03-14)
 - Fix "Class rex_cronjob not found" wenn Cronjob-Addon nicht installiert ist — class_alias für Cronjob-Klassen wird jetzt nur noch registriert wenn das Cronjob-Addon verfügbar ist
 
@@ -28,7 +34,7 @@
 - Fehlende `use`-Statements in search_it.php: `rex_content_service`, `rex_dir`, `rex_socket_exception`, `rex_sql_exception` — Exceptions wurden im Namespace nicht korrekt gefangen
 - `parse_url()`-Probleme mit Index-URL behoben (PHP 8.1+ gibt `false` bei leerem String zurück)
 - `tempnam()`-Notice behoben: Cache-Verzeichnis wird jetzt vor Nutzung erstellt
-- Cronjob-Migration: DB-Einträge mit alten Klassennamen (`rex_cronjob_Reindex`, `rex_cronjob_ClearCache`) werden bei Installation auf Namespace-Klassen aktualisiert
+- Cronjob-Migration: DB-Einträge mit alten Klassennamen (`rex_cronjob_reindex`, `rex_cronjob_clearcache`) werden bei Installation auf Namespace-Klassen aktualisiert
 - "Spezial"-Box in Indexierung wird ausgeblendet wenn `dont_use_socket` aktiv ist
 
 ### Dokumentation

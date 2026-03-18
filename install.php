@@ -58,12 +58,14 @@ rex_sql_table::get(rex::getTablePrefix() . 'search_it_stats_searchterms')
     ->ensure();
 
 // v7 Migration: Cronjob-Typen auf Namespace-Klassen umstellen
-$sql = rex_sql::factory();
-$sql->setQuery('UPDATE ' . rex::getTable('cronjob') . ' SET type = :new WHERE type = :old', [
-    'old' => 'rex_cronjob_Reindex',
-    'new' => FriendsOfRedaxo\SearchIt\Cronjob\Reindex::class,
-]);
-$sql->setQuery('UPDATE ' . rex::getTable('cronjob') . ' SET type = :new WHERE type = :old', [
-    'old' => 'rex_cronjob_ClearCache',
-    'new' => FriendsOfRedaxo\SearchIt\Cronjob\ClearCache::class,
-]);
+if (rex::getTable('cronjob') && rex_sql::factory()->setQuery('SHOW TABLES LIKE :table', ['table' => rex::getTable('cronjob')])->getRows() > 0) {
+    $sql = rex_sql::factory();
+    $sql->setQuery('UPDATE ' . rex::getTable('cronjob') . ' SET type = :new WHERE type = :old', [
+        'old' => 'rex_cronjob_reindex',
+        'new' => FriendsOfRedaxo\SearchIt\Cronjob\Reindex::class,
+    ]);
+    $sql->setQuery('UPDATE ' . rex::getTable('cronjob') . ' SET type = :new WHERE type = :old', [
+        'old' => 'rex_cronjob_clearcache',
+        'new' => FriendsOfRedaxo\SearchIt\Cronjob\ClearCache::class,
+    ]);
+}

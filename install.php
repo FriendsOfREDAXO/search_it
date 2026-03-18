@@ -58,7 +58,7 @@ rex_sql_table::get(rex::getTablePrefix() . 'search_it_stats_searchterms')
     ->ensure();
 
 // v7 Migration: Cronjob-Typen auf Namespace-Klassen umstellen
-if (rex::getTable('cronjob') && rex_sql::factory()->setQuery('SHOW TABLES LIKE :table', ['table' => rex::getTable('cronjob')])->getRows() > 0) {
+if (rex_sql::factory()->setQuery('SHOW TABLES LIKE :table', ['table' => rex::getTable('cronjob')])->getRows() > 0) {
     $sql = rex_sql::factory();
     $sql->setQuery('UPDATE ' . rex::getTable('cronjob') . ' SET type = :new WHERE type = :old', [
         'old' => 'rex_cronjob_reindex',

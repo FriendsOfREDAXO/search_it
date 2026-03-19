@@ -46,7 +46,7 @@ anschließend der Index vollständig generiert werden.
 
 ## Lizenz
 
-[MIT Lizenz](https://github.com/FriendsOfREDAXO/search_it/blob/master/LICENSE)
+[MIT Lizenz](https://github.com/FriendsOfREDAXO/search_it/blob/main/LICENSE)
 
 ## Autor
 **Friends Of REDAXO**

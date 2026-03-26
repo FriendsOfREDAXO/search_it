@@ -7,20 +7,7 @@ use FriendsOfRedaxo\SearchIt\EventHandler;
 use FriendsOfRedaxo\SearchIt\Plaintext\PlaintextConverter;
 use FriendsOfRedaxo\SearchIt\Search\Highlighter;
 
-/**
- * Backward compatibility class aliases.
- * @deprecated Use the namespaced classes instead.
- */
-class_alias(SearchIt::class, 'search_it');
 rex_api_function::register('search_it_autocomplete', FriendsOfRedaxo\SearchIt\Api\Autocomplete::class);
-class_alias(FriendsOfRedaxo\SearchIt\Stats\Statistics::class, 'search_it_stats');
-class_alias(FriendsOfRedaxo\SearchIt\Pdf\PdfConverter::class, 'pdf2txt');
-if (rex_addon::get('cronjob')->isAvailable()) {
-    class_alias(Reindex::class, 'rex_cronjob_Reindex');
-    class_alias(ClearCache::class, 'rex_cronjob_ClearCache');
-}
-class_alias(FriendsOfRedaxo\SearchIt\Console\ReindexCommand::class, 'rex_search_it_command_reindex');
-class_alias(FriendsOfRedaxo\SearchIt\Console\ClearCacheCommand::class, 'rex_search_it_command_clearcache');
 
 /**
  * @deprecated Use SearchIt::ART_*, SearchIt::URL_*, SearchIt::FILE_*, SearchIt::SIMILARWORDS_* instead.

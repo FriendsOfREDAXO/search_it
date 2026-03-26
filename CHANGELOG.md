@@ -1,9 +1,11 @@
 # Changelog
 
+## Version 7.1.4 (2026-03-26)
+- Replace class_alias() with deprecated class stubs thx @christophboecker (#463)
+
 ## Version 7.1.3 (2026-03-18)
-- Fix: Cronjob-Migration in install.php prüft jetzt ob die Cronjob-Tabelle existiert und verwendet die korrekten Klassennamen 
+- Fix: Cronjob-Migration in install.php prüft jetzt ob die Cronjob-Tabelle existiert und verwendet die korrekten Klassennamen
 - Fix: Autocomplete-Dropdown wird direkt am Eingabefeld positioniert (relative statt absolute Positionierung am Body) thx @rotzek (#470)
-- Fix: replace class_alias() with deprecated Classes for rex_stan and other tools thx @christophboecker (#463)
 - Fix: Native Browser-Autocomplete wird bei aktivem Suggest deaktiviert
 
 ## Version 7.1.2 (2026-03-14)

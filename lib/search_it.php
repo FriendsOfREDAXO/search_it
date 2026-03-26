@@ -2451,7 +2451,14 @@ class SearchIt
         }
 
         if (array_key_exists('categories', $this->searchInIDs) and count($this->searchInIDs['categories'])) {
-            $AwhereToSearch[] = "(ISNULL(catid) OR (catid IN (" . implode(',', $this->searchInIDs['categories']) . ") AND ftable = '" . self::getTablePrefix() . "article'))";
+            $inCatIds = implode(',', $this->searchInIDs['categories']);
+            $catCondition = "(ISNULL(catid) OR (catid IN (" . $inCatIds . ") AND ftable = '" . self::getTablePrefix() . "article')";
+
+            if (rex_addon::get('search_it')->getConfig('index_url_addon') && UrlAddon::isAvailable() && $this->urlAddOnTableName) {
+                $catCondition .= " OR (catid IN (" . $inCatIds . ") AND ftable = '" . $this->urlAddOnTableName . "')";
+            }
+
+            $AwhereToSearch[] = $catCondition . ")";
         }
 
         if (array_key_exists('filecategories', $this->searchInIDs) and count($this->searchInIDs['filecategories'])) {

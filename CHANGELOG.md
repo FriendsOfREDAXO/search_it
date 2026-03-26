@@ -1,5 +1,9 @@
 # Changelog
 
+## Version 7.1.5 (2026-03-26)
+- Fix: URL-Addon-Treffer werden bei Category-Tree-Suche nicht mehr ausgefiltert thx @iriswerner (#478)
+- Fix: "Class rex_cronjob not found" wenn Cronjob-Addon nicht installiert und deprecated Klassenname referenziert wird thx @V-Simos (#476)
+
 ## Version 7.1.4 (2026-03-26)
 - Replace class_alias() with deprecated class stubs thx @christophboecker (#463)
 

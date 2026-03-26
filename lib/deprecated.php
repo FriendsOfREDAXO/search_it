@@ -20,10 +20,12 @@ class rex_search_it_command_clearcache extends \FriendsOfRedaxo\SearchIt\Console
 {
 }
 
-class rex_cronjob_reindex extends \FriendsOfRedaxo\SearchIt\Cronjob\Reindex
-{
-}
+if (class_exists('rex_cronjob')) {
+    class rex_cronjob_reindex extends \FriendsOfRedaxo\SearchIt\Cronjob\Reindex
+    {
+    }
 
-class rex_cronjob_clearcache extends \FriendsOfRedaxo\SearchIt\Cronjob\ClearCache
-{
+    class rex_cronjob_clearcache extends \FriendsOfRedaxo\SearchIt\Cronjob\ClearCache
+    {
+    }
 }

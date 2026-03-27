@@ -52,7 +52,10 @@ class PlaintextConverter
 
                 case 'striptags':
                     if (!empty($pt->getConfig('striptags'))) {
+                        $text = preg_replace('~</?(address|blockquote|br|center|del|dir|div|dl|fieldset|form|h1|h2|h3|h4|h5|h6|hr|ins|isindex|li|menu|noframes|noscript|ol|p|pre|table|td|th|tr|ul)[^>]*>~siu', ' ', $text);
                         $text = strip_tags($text);
+                        $text = html_entity_decode($text, ENT_QUOTES, 'UTF-8');
+                        $text = preg_replace('~\s+~', ' ', $text);
                     }
                     break;
             }

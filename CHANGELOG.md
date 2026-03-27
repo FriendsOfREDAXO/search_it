@@ -1,5 +1,8 @@
 # Changelog
 
+## Version 7.1.6 (2026-03-27)
+- Fix: PlaintextConverter gibt HTML-Entities im Plaintext aus und fehlende Leerzeichen zwischen Block-Elementen thx @iriswerner (#480)
+
 ## Version 7.1.5 (2026-03-26)
 - Fix: URL-Addon-Treffer werden bei Category-Tree-Suche nicht mehr ausgefiltert thx @iriswerner (#478)
 - Fix: "Class rex_cronjob not found" wenn Cronjob-Addon nicht installiert und deprecated Klassenname referenziert wird thx @V-Simos (#476)

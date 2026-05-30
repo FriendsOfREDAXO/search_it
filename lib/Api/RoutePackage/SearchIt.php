@@ -174,21 +174,21 @@ class SearchIt extends RoutePackage
             ],
         ];
 
-        return new Response(json_encode($payload, JSON_PRETTY_PRINT));
+        return self::jsonResponse($payload);
     }
 
     /** @api */
     public static function handleSearch($parameter, array $route = []): Response
     {
         try {
-            $query = RouteCollection::getQuerySet($_REQUEST, $parameter['query']);
+            $query = RouteCollection::getQuerySet((array) rex::getRequest()->query->all(), $parameter['query']);
         } catch (Exception $e) {
-            return new Response(json_encode(['error' => 'query field: ' . $e->getMessage() . ' is required']), 400);
+            return self::jsonResponse(['error' => 'query field: ' . $e->getMessage() . ' is required'], 400);
         }
 
         $searchTerm = trim((string) ($query['q'] ?? ''));
         if ('' === $searchTerm) {
-            return new Response(json_encode(['error' => 'q must not be empty']), 400);
+            return self::jsonResponse(['error' => 'q must not be empty'], 400);
         }
 
         $clang = (int) ($query['clang'] ?? 0);
@@ -210,21 +210,21 @@ class SearchIt extends RoutePackage
             'result' => $result,
         ];
 
-        return new Response(json_encode($payload, JSON_PRETTY_PRINT));
+        return self::jsonResponse($payload);
     }
 
     /** @api */
     public static function handlePublicSearch($parameter, array $route = []): Response
     {
         try {
-            $query = RouteCollection::getQuerySet($_REQUEST, $parameter['query']);
+            $query = RouteCollection::getQuerySet((array) rex::getRequest()->query->all(), $parameter['query']);
         } catch (Exception $e) {
-            return new Response(json_encode(['error' => 'query field: ' . $e->getMessage() . ' is required']), 400);
+            return self::jsonResponse(['error' => 'query field: ' . $e->getMessage() . ' is required'], 400);
         }
 
         $searchTerm = trim((string) ($query['q'] ?? ''));
         if (mb_strlen($searchTerm, 'UTF-8') < 2) {
-            return new Response(json_encode(['error' => 'q must be at least 2 characters']), 400);
+            return self::jsonResponse(['error' => 'q must be at least 2 characters'], 400);
         }
 
         $clang = (int) ($query['clang'] ?? 0);
@@ -248,7 +248,7 @@ class SearchIt extends RoutePackage
             'result' => $publicResult,
         ];
 
-        return new Response(json_encode($payload, JSON_PRETTY_PRINT));
+        return self::jsonResponse($payload);
     }
 
     /** @api */
@@ -262,7 +262,7 @@ class SearchIt extends RoutePackage
         try {
             $body = RouteCollection::getQuerySet($data, $parameter['Body']);
         } catch (Exception $e) {
-            return new Response(json_encode(['error' => 'Body field: `' . $e->getMessage() . '` is required']), 400);
+            return self::jsonResponse(['error' => 'Body field: `' . $e->getMessage() . '` is required'], 400);
         }
 
         $search = new SearchService();
@@ -271,7 +271,11 @@ class SearchIt extends RoutePackage
         $clearCache = (bool) ($body['clear_cache'] ?? true);
 
         if ($clang >= 0 && !rex_clang::exists($clang)) {
-            return new Response(json_encode(['error' => 'Invalid clang id']), 400);
+            return self::jsonResponse(['error' => 'Invalid clang id'], 400);
+        }
+
+        if ($articleId <= 0 && false === $clearCache) {
+            return self::jsonResponse(['error' => 'clear_cache=false is only supported for article reindex'], 400);
         }
 
         if ($articleId > 0) {
@@ -280,20 +284,20 @@ class SearchIt extends RoutePackage
                 $search->deleteCache();
             }
 
-            return new Response(json_encode([
+            return self::jsonResponse([
                 'mode' => 'article',
                 'article_id' => $articleId,
                 'clang' => $clang,
                 'result' => $indexResult,
-            ], JSON_PRETTY_PRINT));
+            ]);
         }
 
         $warnings = $search->generateIndex();
 
-        return new Response(json_encode([
+        return self::jsonResponse([
             'mode' => 'full',
             'warnings' => $warnings,
-        ], JSON_PRETTY_PRINT));
+        ]);
     }
 
     /**
@@ -320,15 +324,28 @@ class SearchIt extends RoutePackage
             'RELEVANCE_SEARCH_IT',
             'COUNT_SEARCH_IT',
         ];
+        $allowedHitKeyMap = array_flip($allowedHitKeys);
 
         foreach ($result['hits'] as $index => $hit) {
             if (!is_array($hit)) {
                 continue;
             }
 
-            $result['hits'][$index] = array_intersect_key($hit, array_flip($allowedHitKeys));
+            $result['hits'][$index] = array_intersect_key($hit, $allowedHitKeyMap);
         }
 
         return $result;
+    }
+
+    /**
+     * @param array<string, mixed> $payload
+     */
+    private static function jsonResponse(array $payload, int $status = 200): Response
+    {
+        return new Response(
+            json_encode($payload, JSON_PRETTY_PRINT),
+            $status,
+            ['Content-Type' => 'application/json']
+        );
     }
 }

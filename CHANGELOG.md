@@ -1,5 +1,11 @@
 # Changelog
 
+## Version 7.2.0 (2026-05-30)
+- Neu: API-Endpunkte für das Addon api (`search_it/capabilities`, `search_it/search`, `search_it/reindex`)
+- Neu: Öffentlicher Endpunkt `search_it/public/search` ohne Bearer-Token
+- API-Auth: geschützte Routen via Bearer-Auth, Backend-Spiegelrouten via BackendUser
+- Öffentliche Suche mit Schutzgrenzen (mindestens 2 Zeichen Suchbegriff, `limit_count` max. 20)
+
 ## Version 7.1.6 (2026-03-27)
 - Fix: PlaintextConverter gibt HTML-Entities im Plaintext aus und fehlende Leerzeichen zwischen Block-Elementen thx @iriswerner (#480)
 

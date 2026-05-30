@@ -1,5 +1,6 @@
 <?php
 
+use FriendsOfRedaxo\Api\RouteCollection;
 use FriendsOfRedaxo\SearchIt\SearchIt;
 use FriendsOfRedaxo\SearchIt\Cronjob\Reindex;
 use FriendsOfRedaxo\SearchIt\Cronjob\ClearCache;
@@ -46,6 +47,18 @@ if (!defined('SEARCH_IT_ART_EXCLUDED')) {
 
 $curDir = __DIR__;
 require_once $curDir . '/functions/functions_search_it.php';
+
+if (rex_addon::get('api')->isAvailable() && class_exists(RouteCollection::class)) {
+    $apiRoutePackageClass = 'FriendsOfRedaxo\\SearchIt\\Api\\RoutePackage\\SearchIt';
+    if (class_exists($apiRoutePackageClass)) {
+        RouteCollection::registerRoutePackage(new $apiRoutePackageClass());
+    }
+
+    $apiBackendRoutePackageClass = 'FriendsOfRedaxo\\SearchIt\\Api\\RoutePackage\\Backend\\SearchIt';
+    if (class_exists($apiBackendRoutePackageClass)) {
+        RouteCollection::registerRoutePackage(new $apiBackendRoutePackageClass());
+    }
+}
 
 if (rex_request('search_highlighter', 'string', '') != '' && rex_addon::get('search_it')->getConfig('highlighterclass') != '') {
     rex_extension::register('OUTPUT_FILTER', Highlighter::outputFilter(...));

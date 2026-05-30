@@ -1,4 +1,9 @@
 <?php
+
+use FriendsOfRedaxo\Api\RouteCollection;
+use FriendsOfRedaxo\SearchIt\Api\RoutePackage\Backend\SearchIt as ApiBackendSearchItRoutePackage;
+use FriendsOfRedaxo\SearchIt\Api\RoutePackage\SearchIt as ApiSearchItRoutePackage;
+
 if (!defined('SEARCH_IT_ART_EXCLUDED')) {
     define('SEARCH_IT_ART_EXCLUDED', 0);
     define('SEARCH_IT_ART_IDNOTFOUND', 1);
@@ -33,6 +38,11 @@ if (!defined('SEARCH_IT_ART_EXCLUDED')) {
 
 $curDir = __DIR__;
 require_once $curDir . '/functions/functions_search_it.php';
+
+if (rex_addon::get('api')->isAvailable() && class_exists(RouteCollection::class)) {
+    RouteCollection::registerRoutePackage(new ApiSearchItRoutePackage());
+    RouteCollection::registerRoutePackage(new ApiBackendSearchItRoutePackage());
+}
 
 if (rex_request('search_highlighter', 'string', '') != '' && rex_addon::get('search_it')->getConfig('highlighterclass') != '') {
     rex_extension::register('OUTPUT_FILTER', 'search_it_search_highlighter_output');

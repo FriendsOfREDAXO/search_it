@@ -54,6 +54,48 @@ miteinbezogen.
 Nach der Installation sollten zunächst die Einstellungen vorgenommen werden und
 anschließend der Index vollständig generiert werden.
 
+## API-Endpunkte (Addon api)
+
+Wenn das Addon `api` installiert und aktiv ist, registriert search_it eigene
+Endpunkte.
+
+### Geschuetzte Endpunkte (Bearer)
+
+Diese Endpunkte erfordern einen gueltigen Bearer-Token:
+
+* `GET /api/search_it/capabilities`
+* `GET /api/search_it/search?q=<suchbegriff>&clang=1&limit_start=0&limit_count=10`
+* `POST /api/search_it/reindex`
+
+Beispiel:
+
+```bash
+curl -H "Authorization: Bearer <token>" \
+  "https://example.org/api/search_it/search?q=test"
+```
+
+### Oeffentlicher Endpunkt (ohne Bearer)
+
+Der folgende Endpunkt ist oeffentlich erreichbar:
+
+* `GET /api/search_it/public/search?q=<suchbegriff>&clang=1&limit_start=0&limit_count=10`
+
+Schutzgrenzen fuer den oeffentlichen Zugriff:
+
+* Suchbegriff muss mindestens 2 Zeichen lang sein
+* `limit_count` wird auf maximal 20 begrenzt
+
+Beispiel:
+
+```bash
+curl "https://example.org/api/search_it/public/search?q=test"
+```
+
+### Backend-Spiegelrouten
+
+Die search_it-Scopes werden zusaetzlich als `backend/...`-Routen registriert
+und dort ueber `BackendUser` abgesichert.
+
 ## Lizenz
 
 [MIT Lizenz](https://github.com/FriendsOfREDAXO/search_it/blob/master/LICENSE.md)

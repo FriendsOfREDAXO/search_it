@@ -1,4 +1,10 @@
 # Changelog
+## Version 6.10.0 (2026-05-30)
+- NEU: API-Endpunkte fuer das Addon `api` hinzugefuegt (`search_it/capabilities`, `search_it/search`, `search_it/reindex`)
+- NEU: Oeffentlicher Endpunkt `search_it/public/search` ohne Bearer-Token
+- API-Auth-Konzept: geschuetzte Routen via Bearer-Auth, Backend-Spiegelrouten via BackendUser-Auth
+- Public-Search mit Schutzgrenzen (mindestens 2 Zeichen Suchbegriff, `limit_count` auf max. 20 gekappt)
+
 ## Version 6.9.10 (2023-10-21)
 - Security Fix: escape Suchbegriffe
 

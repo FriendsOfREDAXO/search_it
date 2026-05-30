@@ -59,9 +59,9 @@ anschließend der Index vollständig generiert werden.
 Wenn das Addon `api` installiert und aktiv ist, registriert search_it eigene
 Endpunkte.
 
-### Geschuetzte Endpunkte (Bearer)
+### Geschützte Endpunkte (Bearer)
 
-Diese Endpunkte erfordern einen gueltigen Bearer-Token:
+Diese Endpunkte erfordern einen gültigen Bearer-Token:
 
 * `GET /api/search_it/capabilities`
 * `GET /api/search_it/search?q=<suchbegriff>&clang=1&limit_start=0&limit_count=10`
@@ -74,13 +74,13 @@ curl -H "Authorization: Bearer <token>" \
   "https://example.org/api/search_it/search?q=test"
 ```
 
-### Oeffentlicher Endpunkt (ohne Bearer)
+### Öffentlicher Endpunkt (ohne Bearer)
 
-Der folgende Endpunkt ist oeffentlich erreichbar:
+Der folgende Endpunkt ist öffentlich erreichbar:
 
 * `GET /api/search_it/public/search?q=<suchbegriff>&clang=1&limit_start=0&limit_count=10`
 
-Schutzgrenzen fuer den oeffentlichen Zugriff:
+Schutzgrenzen für den öffentlichen Zugriff:
 
 * Suchbegriff muss mindestens 2 Zeichen lang sein
 * `limit_count` wird auf maximal 20 begrenzt
@@ -93,8 +93,8 @@ curl "https://example.org/api/search_it/public/search?q=test"
 
 ### Backend-Spiegelrouten
 
-Die search_it-Scopes werden zusaetzlich als `backend/...`-Routen registriert
-und dort ueber `BackendUser` abgesichert.
+Die search_it-Scopes werden zusätzlich als `backend/...`-Routen registriert
+und dort über `BackendUser` abgesichert.
 
 ## Lizenz
 

@@ -1,0 +1,351 @@
+<?php
+
+namespace FriendsOfRedaxo\SearchIt\Api\RoutePackage;
+
+use Exception;
+use FriendsOfRedaxo\Api\Auth\BearerAuth;
+use FriendsOfRedaxo\Api\RouteCollection;
+use FriendsOfRedaxo\Api\RoutePackage;
+use FriendsOfRedaxo\SearchIt\SearchIt as SearchService;
+use rex;
+use rex_addon;
+use rex_clang;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Route;
+
+use const JSON_PRETTY_PRINT;
+
+class SearchIt extends RoutePackage
+{
+    public function loadRoutes()
+    {
+        RouteCollection::registerRoute(
+            'search_it/public/search',
+            new Route(
+                'search_it/public/search',
+                [
+                    '_controller' => 'FriendsOfRedaxo\\SearchIt\\Api\\RoutePackage\\SearchIt::handlePublicSearch',
+                    'query' => [
+                        'q' => [
+                            'type' => 'string',
+                            'required' => true,
+                        ],
+                        'clang' => [
+                            'type' => 'int',
+                            'required' => false,
+                            'default' => 0,
+                        ],
+                        'limit_start' => [
+                            'type' => 'int',
+                            'required' => false,
+                            'default' => 0,
+                        ],
+                        'limit_count' => [
+                            'type' => 'int',
+                            'required' => false,
+                            'default' => 10,
+                        ],
+                    ],
+                ],
+                [],
+                [],
+                '',
+                [],
+                ['GET'],
+            ),
+            'Execute a public search_it query without bearer token',
+            null,
+            null,
+            ['search_it'],
+        );
+
+        RouteCollection::registerRoute(
+            'search_it/capabilities',
+            new Route(
+                'search_it/capabilities',
+                [
+                    '_controller' => 'FriendsOfRedaxo\\SearchIt\\Api\\RoutePackage\\SearchIt::handleCapabilities',
+                ],
+                [],
+                [],
+                '',
+                [],
+                ['GET'],
+            ),
+            'Get search_it capabilities and addon configuration snapshot',
+            null,
+            new BearerAuth(),
+            ['search_it'],
+        );
+
+        RouteCollection::registerRoute(
+            'search_it/search',
+            new Route(
+                'search_it/search',
+                [
+                    '_controller' => 'FriendsOfRedaxo\\SearchIt\\Api\\RoutePackage\\SearchIt::handleSearch',
+                    'query' => [
+                        'q' => [
+                            'type' => 'string',
+                            'required' => true,
+                        ],
+                        'clang' => [
+                            'type' => 'int',
+                            'required' => false,
+                            'default' => 0,
+                        ],
+                        'limit_start' => [
+                            'type' => 'int',
+                            'required' => false,
+                            'default' => 0,
+                        ],
+                        'limit_count' => [
+                            'type' => 'int',
+                            'required' => false,
+                            'default' => 10,
+                        ],
+                    ],
+                ],
+                [],
+                [],
+                '',
+                [],
+                ['GET'],
+            ),
+            'Execute a search_it fulltext query',
+            null,
+            new BearerAuth(),
+            ['search_it'],
+        );
+
+        RouteCollection::registerRoute(
+            'search_it/reindex',
+            new Route(
+                'search_it/reindex',
+                [
+                    '_controller' => 'FriendsOfRedaxo\\SearchIt\\Api\\RoutePackage\\SearchIt::handleReindex',
+                    'Body' => [
+                        'article_id' => [
+                            'type' => 'int',
+                            'required' => false,
+                            'default' => 0,
+                        ],
+                        'clang' => [
+                            'type' => 'int',
+                            'required' => false,
+                            'default' => -1,
+                        ],
+                        'clear_cache' => [
+                            'type' => 'bool',
+                            'required' => false,
+                            'default' => true,
+                        ],
+                    ],
+                ],
+                [],
+                [],
+                '',
+                [],
+                ['POST'],
+            ),
+            'Reindex search_it data (full or per article)',
+            null,
+            new BearerAuth(),
+            ['search_it'],
+        );
+    }
+
+    /** @api */
+    public static function handleCapabilities($parameter, array $route = []): Response
+    {
+        $addon = rex_addon::get('search_it');
+
+        $payload = [
+            'addon' => 'search_it',
+            'version' => $addon->getVersion(),
+            'config' => [
+                'searchmode' => $addon->getConfig('searchmode'),
+                'logicalmode' => $addon->getConfig('logicalmode'),
+                'highlight' => $addon->getConfig('highlight'),
+                'limit' => $addon->getConfig('limit'),
+                'indexoffline' => (bool) $addon->getConfig('indexoffline'),
+                'index_url_addon' => (bool) $addon->getConfig('index_url_addon'),
+                'indexmediapool' => (bool) $addon->getConfig('indexmediapool'),
+            ],
+        ];
+
+        return self::jsonResponse($payload);
+    }
+
+    /** @api */
+    public static function handleSearch($parameter, array $route = []): Response
+    {
+        try {
+            $query = RouteCollection::getQuerySet((array) rex::getRequest()->query->all(), $parameter['query']);
+        } catch (Exception $e) {
+            return self::jsonResponse(['error' => 'query field: ' . $e->getMessage() . ' is required'], 400);
+        }
+
+        $searchTerm = trim((string) ($query['q'] ?? ''));
+        if ('' === $searchTerm) {
+            return self::jsonResponse(['error' => 'q must not be empty'], 400);
+        }
+
+        $clang = (int) ($query['clang'] ?? 0);
+        if ($clang <= 0) {
+            $clang = rex_clang::getCurrentId();
+        }
+
+        $limitStart = max(0, (int) ($query['limit_start'] ?? 0));
+        $limitCount = max(1, (int) ($query['limit_count'] ?? 10));
+
+        $search = new SearchService($clang);
+        $search->setLimit([$limitStart, $limitCount]);
+        $result = $search->search($searchTerm);
+
+        $payload = [
+            'query' => $searchTerm,
+            'clang' => $clang,
+            'limit' => [$limitStart, $limitCount],
+            'result' => $result,
+        ];
+
+        return self::jsonResponse($payload);
+    }
+
+    /** @api */
+    public static function handlePublicSearch($parameter, array $route = []): Response
+    {
+        try {
+            $query = RouteCollection::getQuerySet((array) rex::getRequest()->query->all(), $parameter['query']);
+        } catch (Exception $e) {
+            return self::jsonResponse(['error' => 'query field: ' . $e->getMessage() . ' is required'], 400);
+        }
+
+        $searchTerm = trim((string) ($query['q'] ?? ''));
+        if (mb_strlen($searchTerm, 'UTF-8') < 2) {
+            return self::jsonResponse(['error' => 'q must be at least 2 characters'], 400);
+        }
+
+        $clang = (int) ($query['clang'] ?? 0);
+        if ($clang <= 0) {
+            $clang = rex_clang::getCurrentId();
+        }
+
+        $limitStart = max(0, (int) ($query['limit_start'] ?? 0));
+        $limitCount = max(1, min(20, (int) ($query['limit_count'] ?? 10)));
+
+        $search = new SearchService($clang);
+        $search->setLimit([$limitStart, $limitCount]);
+        $result = $search->search($searchTerm);
+        $publicResult = self::sanitizePublicResult($result);
+
+        $payload = [
+            'query' => $searchTerm,
+            'clang' => $clang,
+            'limit' => [$limitStart, $limitCount],
+            'public' => true,
+            'result' => $publicResult,
+        ];
+
+        return self::jsonResponse($payload);
+    }
+
+    /** @api */
+    public static function handleReindex($parameter, array $route = []): Response
+    {
+        $data = json_decode((string) rex::getRequest()->getContent(), true);
+        if (!is_array($data)) {
+            $data = [];
+        }
+
+        try {
+            $body = RouteCollection::getQuerySet($data, $parameter['Body']);
+        } catch (Exception $e) {
+            return self::jsonResponse(['error' => 'Body field: `' . $e->getMessage() . '` is required'], 400);
+        }
+
+        $search = new SearchService();
+        $articleId = (int) ($body['article_id'] ?? 0);
+        $clang = (int) ($body['clang'] ?? -1);
+        $clearCache = (bool) ($body['clear_cache'] ?? true);
+
+        if ($clang >= 0 && !rex_clang::exists($clang)) {
+            return self::jsonResponse(['error' => 'Invalid clang id'], 400);
+        }
+
+        if ($articleId <= 0 && false === $clearCache) {
+            return self::jsonResponse(['error' => 'clear_cache=false is only supported for article reindex'], 400);
+        }
+
+        if ($articleId > 0) {
+            $indexResult = $clang >= 0 ? $search->indexArticle($articleId, $clang) : $search->indexArticle($articleId);
+            if ($clearCache) {
+                $search->deleteCache();
+            }
+
+            return self::jsonResponse([
+                'mode' => 'article',
+                'article_id' => $articleId,
+                'clang' => $clang,
+                'result' => $indexResult,
+            ]);
+        }
+
+        $warnings = $search->generateIndex();
+
+        return self::jsonResponse([
+            'mode' => 'full',
+            'warnings' => $warnings,
+        ]);
+    }
+
+    /**
+     * @param array<string, mixed> $result
+     * @return array<string, mixed>
+     */
+    private static function sanitizePublicResult(array $result): array
+    {
+        unset($result['sql'], $result['hash']);
+
+        if (!isset($result['hits']) || !is_array($result['hits'])) {
+            return $result;
+        }
+
+        $allowedHitKeys = [
+            'id',
+            'fid',
+            'catid',
+            'texttype',
+            'clang',
+            'teaser',
+            'filename',
+            'fileext',
+            'RELEVANCE_SEARCH_IT',
+            'COUNT_SEARCH_IT',
+        ];
+        $allowedHitKeyMap = array_flip($allowedHitKeys);
+
+        foreach ($result['hits'] as $index => $hit) {
+            if (!is_array($hit)) {
+                continue;
+            }
+
+            $result['hits'][$index] = array_intersect_key($hit, $allowedHitKeyMap);
+        }
+
+        return $result;
+    }
+
+    /**
+     * @param array<string, mixed> $payload
+     */
+    private static function jsonResponse(array $payload, int $status = 200): Response
+    {
+        return new Response(
+            json_encode($payload, JSON_PRETTY_PRINT),
+            $status,
+            ['Content-Type' => 'application/json']
+        );
+    }
+}

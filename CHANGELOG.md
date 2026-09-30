@@ -1,5 +1,14 @@
 # Changelog
 
+## Version 7.2.0 (2026-09-30)
+- Kompletter Neuaufbau des Index läuft in einer Schattentabelle: Die Suche bleibt währenddessen mit dem alten Index verfügbar, die FULLTEXT-Indizes werden erst nach dem Befüllen am Stück angelegt (deutlich schneller als zeilenweise). Bei einem Fehler bleibt der bisherige Index unverändert.
+- Performance: Beim Löschen alter Index-Einträge wird der Index auf `fid` genutzt (Vergleich als String statt als Zahl)
+- Performance: Keywords werden pro Artikel ohne Dubletten gespeichert, Stoppwort-/Blacklist-Prüfung und Phonetik-Berechnung beschleunigt
+- Fix: Such-Cache wird nach Slice-Änderungen und Statuswechseln wieder geleert (`$clearCache` wurde in `indexArticle()` überschrieben)
+- Fix: `unindexArticle()` und `unindexURL()` entfernen die betroffenen Einträge wieder aus dem Such-Cache
+- Fix: Inkrementelle Indexierung von DB-Spalten blättert stabil nach Primärschlüssel
+- Fix: Inkrementelle Indexierung startet erst, nachdem der alte Index gelöscht wurde
+
 ## Version 7.1.6 (2026-03-27)
 - Fix: PlaintextConverter gibt HTML-Entities im Plaintext aus und fehlende Leerzeichen zwischen Block-Elementen thx @iriswerner (#480)
 

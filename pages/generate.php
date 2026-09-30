@@ -188,10 +188,9 @@ if (!empty(rex_get('do')) and rex_get('do') == 'incremental') {
 
             <?php if($globalcount > 0) { ?>
             if (confirm('<?php echo $this->i18n('search_it_generate_incremental_confirm'); ?>')) {
-                var del = new Image();
-                del.src = 'index.php?page=search_it&ajax=deleteindex';
-
-                index(indexArray[0][0], indexArray[0][1]);
+                jQuery.get('index.php?page=search_it&ajax=deleteindex', {}, function () {
+                    index(indexArray[0][0], indexArray[0][1]);
+                });
             } else {
                 jQuery('#search_it_generate_inprogress').hide();
                 jQuery('#search_it_generate_cancel').show();

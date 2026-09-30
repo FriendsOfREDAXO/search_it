@@ -42,21 +42,38 @@ class KeywordStore
     {
         $simWordsSQL = rex_sql::factory();
         $simWords = [];
+        $excluded = array_flip(array_merge($this->blacklist, $this->stopwords));
         foreach ($keywords as $keyword) {
-            if (!in_array(mb_strtolower($keyword['search'], 'UTF-8'), $this->blacklist) &&
-                !in_array(mb_strtolower($keyword['search'], 'UTF-8'), $this->stopwords) &&
-                !is_numeric($keyword['search'])
-            ) {
-                $simWords[] = sprintf(
+            $clang = (isset($keyword['clang']) && $keyword['clang'] !== false) ? (int) $keyword['clang'] : -1;
+            $lowerKeyword = mb_strtolower($keyword['search'], 'UTF-8');
+
+            // without counting, repeated keywords would only produce the same row again
+            $key = $clang . '|' . $lowerKeyword;
+            if (!$doCount && isset($simWords[$key])) {
+                continue;
+            }
+
+            if (!isset($excluded[$lowerKeyword]) && !is_numeric($keyword['search'])) {
+                $soundex = ($this->similarwordsMode & SearchIt::SIMILARWORDS_SOUNDEX) ? soundex($keyword['search']) : '';
+                $metaphone = ($this->similarwordsMode & SearchIt::SIMILARWORDS_METAPHONE) ? metaphone($keyword['search']) : '';
+                $colognephone = ($this->similarwordsMode & SearchIt::SIMILARWORDS_COLOGNEPHONE) ? ColognePhonetic::encode($keyword['search']) : '';
+
+                $row = sprintf(
                     "(%s, %s, %s, %s, %s)",
                     $simWordsSQL->escape($keyword['search']),
-                    $simWordsSQL->escape((($this->similarwordsMode & SearchIt::SIMILARWORDS_SOUNDEX) && soundex($keyword['search']) !== '0000') ? soundex($keyword['search']) : ''),
-                    $simWordsSQL->escape((($this->similarwordsMode & SearchIt::SIMILARWORDS_METAPHONE) && metaphone($keyword['search']) !== '') ? metaphone($keyword['search']) : ''),
-                    $simWordsSQL->escape((($this->similarwordsMode & SearchIt::SIMILARWORDS_COLOGNEPHONE) && ColognePhonetic::encode($keyword['search']) !== '') ? ColognePhonetic::encode($keyword['search']) : ''),
-                    (isset($keyword['clang']) && $keyword['clang'] !== false) ? (int) $keyword['clang'] : '-1'
+                    $simWordsSQL->escape($soundex !== '0000' ? $soundex : ''),
+                    $simWordsSQL->escape($metaphone),
+                    $simWordsSQL->escape($colognephone),
+                    $clang
                 );
+                if ($doCount) {
+                    $simWords[] = $row;
+                } else {
+                    $simWords[$key] = $row;
+                }
             }
         }
+        $simWords = array_values($simWords);
 
         if (!empty($simWords)) {
             $simWordsTeile = array_chunk($simWords, $this->mysqlInsertChunkSize);

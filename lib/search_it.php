@@ -308,7 +308,6 @@ class SearchIt
         }
         $return = [];
         $keywords = [];
-        $clearCache = false;
 
         foreach ($langs as $lang) {
             $langID = $lang->getId();
@@ -320,7 +319,7 @@ class SearchIt
 
             //rex_clang::setCurrentId($langID);
             $delete = rex_sql::factory();
-            $where = sprintf("ftable = '%s' AND fid = %d AND clang = %d", self::getTablePrefix() . 'article', $_id, $langID);
+            $where = sprintf("ftable = '%s' AND fid = '%d' AND clang = %d", self::getTablePrefix() . 'article', $_id, $langID);
 
             // delete old
             $delete->setTable(self::getTempTablePrefix() . 'search_it_index');
@@ -804,15 +803,12 @@ class SearchIt
         $art_sql = rex_sql::factory();
         $art_sql->setTable(self::getTempTablePrefix() . 'search_it_index');
 
-        $where = "fid = " . intval($_id) . " AND texttype='article'";
+        $where = "fid = '" . intval($_id) . "' AND texttype='article'";
         if ($_clang !== false) {
             $where .= " AND clang='" . intval($_clang) . "'";
         }
 
-        $art_sql->setWhere($where);
-        $art_sql->delete();
-
-        // delete from cache
+        // collect index ids for the cache before deleting
         $select = rex_sql::factory();
         $select->setTable(self::getTempTablePrefix() . 'search_it_index');
         $select->setWhere($where);
@@ -822,6 +818,11 @@ class SearchIt
         foreach ($select->getArray() as $result) {
             $indexIds[] = $result['id'];
         }
+
+        $art_sql->setWhere($where);
+        $art_sql->delete();
+
+        // delete from cache
         $this->deleteCache($indexIds);
     }
 
@@ -868,10 +869,7 @@ class SearchIt
         $art_sql->setTable(self::getTempTablePrefix() . 'search_it_index');
 
         $where = ['fid' => $url_hash, 'texttype' => 'url'];
-        $art_sql->setWhere($where);
-        $art_sql->delete();
-
-        // delete from cache
+        // collect index ids for the cache before deleting
         $select = rex_sql::factory();
         $select->setTable(self::getTempTablePrefix() . 'search_it_index');
         $select->setWhere($where);
@@ -881,6 +879,11 @@ class SearchIt
         foreach ($select->getArray() as $result) {
             $indexIds[] = $result['id'];
         }
+
+        $art_sql->setWhere($where);
+        $art_sql->delete();
+
+        // delete from cache
         $this->deleteCache($indexIds);
     }
 
@@ -915,7 +918,7 @@ class SearchIt
 
         $where = sprintf(" `ftable` = '%s' AND `fcolumn` = '%s' AND `texttype` = 'db_column'", $_table, $_column);
         if (is_string($_idcol) and ($_id !== false)) {
-            $where .= sprintf(' AND fid = %d', $_id);
+            $where .= sprintf(" AND fid = '%d'", $_id);
         }
         $delete->setWhere($where);
 
@@ -941,6 +944,9 @@ class SearchIt
         if (is_string($_idcol) and $_id) {
             $where .= sprintf(' AND (%s = %d)', $_idcol, $_id);
         } elseif (is_numeric($_start) and is_numeric($_count)) {
+            if (count($primaryKeys) > 0) {
+                $where .= ' ORDER BY `' . implode('`,`', $primaryKeys) . '`';
+            }
             $where .= ' LIMIT ' . $_start . ',' . $_count;
         }
         $sql->setWhere($where);
@@ -1088,7 +1094,7 @@ class SearchIt
             $where .= sprintf(' AND clang = %d', $_clang);
         }
         if (is_int($_fid)) {
-            $where .= sprintf(' AND fid = %d', $_fid);
+            $where .= sprintf(" AND fid = '%d'", $_fid);
         } elseif (is_array($_fid)) {
             $where .= sprintf(" AND fid = %s", $delete->escape(json_encode($_fid)));
         }

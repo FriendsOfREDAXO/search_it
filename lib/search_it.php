@@ -116,6 +116,7 @@ class SearchIt
     private array $excludeIDs = [];
 
     private int $mysqlInsertChunkSize = 100;
+    private ?string $indexTable = null;
     private int $maxSearchTerms = 10;
 
     private SearchCache $searchCache;
@@ -204,6 +205,14 @@ class SearchIt
         return $tempTablePrefix;
     }
 
+    /**
+     * Table the indexing methods write to: the shadow table during generateIndex(), otherwise the live index.
+     */
+    private function getIndexTable(): string
+    {
+        return $this->indexTable ?? self::getTempTablePrefix() . 'search_it_index';
+    }
+
     /* indexing */
 
     /**
@@ -216,9 +225,90 @@ class SearchIt
             $this->deleteKeywords();
         }
 
-        // delete old index
-        $this->deleteIndex();
+        // build the new index in a shadow table, the live index stays searchable until the swap
+        $liveTable = self::getTempTablePrefix() . 'search_it_index';
+        $shadowTable = $liveTable . '_shadow';
+        $fulltextIndexes = $this->createShadowIndexTable($liveTable, $shadowTable);
+        $this->indexTable = $shadowTable;
 
+        try {
+            $global_return = $this->fillIndex();
+        } catch (\Throwable $e) {
+            $this->indexTable = null;
+            rex_sql::factory()->setQuery('DROP TABLE IF EXISTS `' . $shadowTable . '`');
+            throw $e;
+        }
+        $this->indexTable = null;
+
+        $this->swapShadowIndexTable($liveTable, $shadowTable, $fulltextIndexes);
+
+        // delete old cache
+        $this->deleteCache();
+
+        return $global_return;
+    }
+
+    /**
+     * Creates the shadow table without its FULLTEXT indexes, building them once after filling the table
+     * is much faster than updating them row by row.
+     *
+     * @return array<string, list<string>> FULLTEXT index name => columns
+     */
+    private function createShadowIndexTable(string $liveTable, string $shadowTable): array
+    {
+        $sql = rex_sql::factory();
+        $sql->setQuery('DROP TABLE IF EXISTS `' . $shadowTable . '`');
+        $sql->setQuery('CREATE TABLE `' . $shadowTable . '` LIKE `' . $liveTable . '`');
+
+        $fulltextIndexes = [];
+        foreach ($sql->getArray('SHOW INDEX FROM `' . $shadowTable . '` WHERE Index_type = \'FULLTEXT\'') as $row) {
+            $fulltextIndexes[$row['Key_name']][(int) $row['Seq_in_index']] = $row['Column_name'];
+        }
+
+        if (count($fulltextIndexes) > 0) {
+            $drop = [];
+            foreach (array_keys($fulltextIndexes) as $name) {
+                $drop[] = 'DROP INDEX `' . $name . '`';
+            }
+            $sql->setQuery('ALTER TABLE `' . $shadowTable . '` ' . implode(', ', $drop));
+        }
+
+        foreach ($fulltextIndexes as $name => $columns) {
+            ksort($columns);
+            $fulltextIndexes[$name] = array_values($columns);
+        }
+
+        return $fulltextIndexes;
+    }
+
+    /**
+     * Adds the FULLTEXT indexes to the shadow table and replaces the live table with it.
+     *
+     * @param array<string, list<string>> $fulltextIndexes
+     */
+    private function swapShadowIndexTable(string $liveTable, string $shadowTable, array $fulltextIndexes): void
+    {
+        $sql = rex_sql::factory();
+        if (count($fulltextIndexes) > 0) {
+            // one statement: adding the indexes one by one rebuilds the table each time
+            $add = [];
+            foreach ($fulltextIndexes as $name => $columns) {
+                $add[] = 'ADD FULLTEXT `' . $name . '` (`' . implode('`,`', $columns) . '`)';
+            }
+            $sql->setQuery('ALTER TABLE `' . $shadowTable . '` ' . implode(', ', $add));
+        }
+
+        $oldTable = $liveTable . '_old';
+        $sql->setQuery('DROP TABLE IF EXISTS `' . $oldTable . '`');
+        $sql->setQuery('RENAME TABLE `' . $liveTable . '` TO `' . $oldTable . '`, `' . $shadowTable . '` TO `' . $liveTable . '`');
+        $sql->setQuery('DROP TABLE `' . $oldTable . '`');
+    }
+
+    /**
+     * Indexes all articles, URLs, columns and files into the current index table.
+     */
+    private function fillIndex(): int
+    {
         // index articles
         $global_return = 0;
         $art_sql = rex_sql::factory();
@@ -279,9 +369,6 @@ class SearchIt
             }
         }
 
-        // delete old cache
-        $this->deleteCache();
-
         return $global_return;
     }
 
@@ -308,7 +395,6 @@ class SearchIt
         }
         $return = [];
         $keywords = [];
-        $clearCache = false;
 
         foreach ($langs as $lang) {
             $langID = $lang->getId();
@@ -320,10 +406,10 @@ class SearchIt
 
             //rex_clang::setCurrentId($langID);
             $delete = rex_sql::factory();
-            $where = sprintf("ftable = '%s' AND fid = %d AND clang = %d", self::getTablePrefix() . 'article', $_id, $langID);
+            $where = sprintf("ftable = '%s' AND fid = '%d' AND clang = %d", self::getTablePrefix() . 'article', $_id, $langID);
 
             // delete old
-            $delete->setTable(self::getTempTablePrefix() . 'search_it_index');
+            $delete->setTable($this->getIndexTable());
             $delete->setWhere($where);
             $delete->delete();
 
@@ -524,7 +610,7 @@ class SearchIt
 
                 $articleData['teaser'] = $this->getTeaserText($plaintext);
 
-                $insert->setTable(self::getTempTablePrefix() . 'search_it_index');
+                $insert->setTable($this->getIndexTable());
                 $insert->setValues($articleData);
                 $insert->insert();
 
@@ -566,7 +652,7 @@ class SearchIt
         $where = ['ftable' => $this->urlAddOnTableName, 'fid' => $url_hash];
 
         // delete old
-        $delete->setTable(self::getTempTablePrefix() . 'search_it_index');
+        $delete->setTable($this->getIndexTable());
         $delete->setWhere($where);
         $delete->delete();
 
@@ -721,7 +807,7 @@ class SearchIt
             }
 
             $articleData['teaser'] = $this->getTeaserText($plaintext);
-            $insert->setTable(self::getTempTablePrefix() . 'search_it_index');
+            $insert->setTable($this->getIndexTable());
             $insert->setValues($articleData);
             $insert->insert();
 
@@ -804,15 +890,12 @@ class SearchIt
         $art_sql = rex_sql::factory();
         $art_sql->setTable(self::getTempTablePrefix() . 'search_it_index');
 
-        $where = "fid = " . intval($_id) . " AND texttype='article'";
+        $where = "fid = '" . intval($_id) . "' AND texttype='article'";
         if ($_clang !== false) {
             $where .= " AND clang='" . intval($_clang) . "'";
         }
 
-        $art_sql->setWhere($where);
-        $art_sql->delete();
-
-        // delete from cache
+        // collect index ids for the cache before deleting
         $select = rex_sql::factory();
         $select->setTable(self::getTempTablePrefix() . 'search_it_index');
         $select->setWhere($where);
@@ -822,6 +905,11 @@ class SearchIt
         foreach ($select->getArray() as $result) {
             $indexIds[] = $result['id'];
         }
+
+        $art_sql->setWhere($where);
+        $art_sql->delete();
+
+        // delete from cache
         $this->deleteCache($indexIds);
     }
 
@@ -868,10 +956,7 @@ class SearchIt
         $art_sql->setTable(self::getTempTablePrefix() . 'search_it_index');
 
         $where = ['fid' => $url_hash, 'texttype' => 'url'];
-        $art_sql->setWhere($where);
-        $art_sql->delete();
-
-        // delete from cache
+        // collect index ids for the cache before deleting
         $select = rex_sql::factory();
         $select->setTable(self::getTempTablePrefix() . 'search_it_index');
         $select->setWhere($where);
@@ -881,6 +966,11 @@ class SearchIt
         foreach ($select->getArray() as $result) {
             $indexIds[] = $result['id'];
         }
+
+        $art_sql->setWhere($where);
+        $art_sql->delete();
+
+        // delete from cache
         $this->deleteCache($indexIds);
     }
 
@@ -911,11 +1001,11 @@ class SearchIt
             }
         }
         $delete = rex_sql::factory();
-        $delete->setTable(self::getTempTablePrefix() . 'search_it_index');
+        $delete->setTable($this->getIndexTable());
 
         $where = sprintf(" `ftable` = '%s' AND `fcolumn` = '%s' AND `texttype` = 'db_column'", $_table, $_column);
         if (is_string($_idcol) and ($_id !== false)) {
-            $where .= sprintf(' AND fid = %d', $_id);
+            $where .= sprintf(" AND fid = '%d'", $_id);
         }
         $delete->setWhere($where);
 
@@ -941,6 +1031,9 @@ class SearchIt
         if (is_string($_idcol) and $_id) {
             $where .= sprintf(' AND (%s = %d)', $_idcol, $_id);
         } elseif (is_numeric($_start) and is_numeric($_count)) {
+            if (count($primaryKeys) > 0) {
+                $where .= ' ORDER BY `' . implode('`,`', $primaryKeys) . '`';
+            }
             $where .= ' LIMIT ' . $_start . ',' . $_count;
         }
         $sql->setWhere($where);
@@ -1037,7 +1130,7 @@ class SearchIt
                         $indexData['teaser'] = $teaser ? $this->getTeaserText($this->getPlaintext($rex_article->getArticle())) : '';
                     }
 
-                    $insert->setTable(self::getTempTablePrefix() . 'search_it_index');
+                    $insert->setTable($this->getIndexTable());
                     $insert->setValues($indexData);
                     $insert->insert();
 
@@ -1088,7 +1181,7 @@ class SearchIt
             $where .= sprintf(' AND clang = %d', $_clang);
         }
         if (is_int($_fid)) {
-            $where .= sprintf(' AND fid = %d', $_fid);
+            $where .= sprintf(" AND fid = '%d'", $_fid);
         } elseif (is_array($_fid)) {
             $where .= sprintf(" AND fid = %s", $delete->escape(json_encode($_fid)));
         }
@@ -1097,7 +1190,7 @@ class SearchIt
         }
 
         // delete old data
-        $delete->setTable(self::getTempTablePrefix() . 'search_it_index');
+        $delete->setTable($this->getIndexTable());
         $delete->setWhere($where);
         $delete->delete();
 
@@ -1234,7 +1327,7 @@ class SearchIt
 
         $fileData['teaser'] = $this->getTeaserText($plaintext);
 
-        $insert->setTable(self::getTempTablePrefix() . 'search_it_index');
+        $insert->setTable($this->getIndexTable());
         $insert->setValues($fileData);
         $insert->insert();
 
@@ -1307,19 +1400,19 @@ class SearchIt
      * In some cases there is no id for the field fid in the index table (like media files). Therefore Search it counts into the negative.
      *
      */
-    private static function getMinFID(): int
+    private function getMinFID(): int
     {
         $minfid_sql = rex_sql::factory();
-        $minfid_result = $minfid_sql->getArray('SELECT MIN(CONVERT(fid, SIGNED)) as minfid FROM `' . self::getTempTablePrefix() . 'search_it_index' . '`');
+        $minfid_result = $minfid_sql->getArray('SELECT MIN(CONVERT(fid, SIGNED)) as minfid FROM `' . $this->getIndexTable() . '`');
         $minfid = intval($minfid_result[0]['minfid']);
 
         return ($minfid < 0) ? --$minfid : -1;
     }
 
-    private static function getMaxFID(string $_table): int
+    private function getMaxFID(string $_table): int
     {
         $maxfid_sql = rex_sql::factory();
-        $maxfid_result = $maxfid_sql->getArray('SELECT MAX(CONVERT(fid, SIGNED)) as maxfid FROM `' . self::getTempTablePrefix() . 'search_it_index' . '` WHERE ftable = "' . $_table . '" ');
+        $maxfid_result = $maxfid_sql->getArray('SELECT MAX(CONVERT(fid, SIGNED)) as maxfid FROM `' . $this->getIndexTable() . '` WHERE ftable = "' . $_table . '" ');
         $maxfid = intval($maxfid_result[0]['maxfid']);
 
         return ($maxfid > 0) ? ++$maxfid : 1;

@@ -34,8 +34,10 @@ rex_sql_table::get(rex::getTable(rex::getTempPrefix() . 'search_it_cache'))
 rex_sql_table::get(rex::getTable(rex::getTempPrefix() . 'search_it_cacheindex_ids'))
     ->ensureColumn(new rex_sql_column('id', 'int(11)', false, null, 'auto_increment'))
     ->ensureColumn(new rex_sql_column('index_id', 'int(11)', true))
-    ->ensureColumn(new rex_sql_column('cache_id', 'varchar(255)', true))
+    ->ensureColumn(new rex_sql_column('cache_id', 'int(11)', true))
     ->setPrimaryKey('id')
+    ->ensureIndex(new rex_sql_index('index_id', ['index_id']))
+    ->ensureIndex(new rex_sql_index('cache_id', ['cache_id']))
     ->ensure();
 
 rex_sql_table::get(rex::getTable(rex::getTempPrefix() . 'search_it_keywords'))

@@ -1,7 +1,10 @@
 # Changelog
 
+## Version 7.2.1 (2026-10-01)
+- Fix: Kompletter Neuaufbau des Index schlug bei InnoDB-Tabellen fehl ("InnoDB presently supports one FULLTEXT index creation at a time"). Die FULLTEXT-Indizes der Schattentabelle werden jetzt einzeln angelegt.
+
 ## Version 7.2.0 (2026-09-30)
-- Kompletter Neuaufbau des Index läuft in einer Schattentabelle: Die Suche bleibt währenddessen mit dem alten Index verfügbar, die FULLTEXT-Indizes werden erst nach dem Befüllen am Stück angelegt (deutlich schneller als zeilenweise). Bei einem Fehler bleibt der bisherige Index unverändert.
+- Kompletter Neuaufbau des Index läuft in einer Schattentabelle: Die Suche bleibt währenddessen mit dem alten Index verfügbar, die FULLTEXT-Indizes werden erst nach dem Befüllen angelegt statt zeilenweise gepflegt (bei MyISAM deutlich schneller, bei InnoDB etwa 10 %). Bei einem Fehler bleibt der bisherige Index unverändert.
 - Performance: Beim Löschen alter Index-Einträge wird der Index auf `fid` genutzt (Vergleich als String statt als Zahl)
 - Performance: Keywords werden pro Artikel ohne Dubletten gespeichert, Stoppwort-/Blacklist-Prüfung und Phonetik-Berechnung beschleunigt
 - Fix: Such-Cache wird nach Slice-Änderungen und Statuswechseln wieder geleert (`$clearCache` wurde in `indexArticle()` überschrieben)

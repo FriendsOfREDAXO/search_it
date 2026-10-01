@@ -289,13 +289,9 @@ class SearchIt
     private function swapShadowIndexTable(string $liveTable, string $shadowTable, array $fulltextIndexes): void
     {
         $sql = rex_sql::factory();
-        if (count($fulltextIndexes) > 0) {
-            // one statement: adding the indexes one by one rebuilds the table each time
-            $add = [];
-            foreach ($fulltextIndexes as $name => $columns) {
-                $add[] = 'ADD FULLTEXT `' . $name . '` (`' . implode('`,`', $columns) . '`)';
-            }
-            $sql->setQuery('ALTER TABLE `' . $shadowTable . '` ' . implode(', ', $add));
+        // one statement per index: InnoDB can only create one FULLTEXT index at a time
+        foreach ($fulltextIndexes as $name => $columns) {
+            $sql->setQuery('ALTER TABLE `' . $shadowTable . '` ADD FULLTEXT `' . $name . '` (`' . implode('`,`', $columns) . '`)');
         }
 
         $oldTable = $liveTable . '_old';

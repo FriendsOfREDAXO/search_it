@@ -880,7 +880,7 @@ class SearchIt
      * @param int $_id
      * @param mixed $_clang
      */
-    public function unindexArticle(int $_id, int|false $_clang = false): void
+    public function unindexArticle(int $_id, int|false $_clang = false, bool $clearCache = false): void
     {
         // exclude article
         $art_sql = rex_sql::factory();
@@ -891,22 +891,12 @@ class SearchIt
             $where .= " AND clang='" . intval($_clang) . "'";
         }
 
-        // collect index ids for the cache before deleting
-        $select = rex_sql::factory();
-        $select->setTable(self::getTempTablePrefix() . 'search_it_index');
-        $select->setWhere($where);
-        $select->select('id');
-
-        $indexIds = [];
-        foreach ($select->getArray() as $result) {
-            $indexIds[] = $result['id'];
-        }
-
         $art_sql->setWhere($where);
         $art_sql->delete();
 
-        // delete from cache
-        $this->deleteCache($indexIds);
+        if ($clearCache) {
+            $this->deleteCache();
+        }
     }
 
     /**
@@ -945,29 +935,19 @@ class SearchIt
      *
      * @param string $url_hash
      */
-    public function unindexURL(string $url_hash): void
+    public function unindexURL(string $url_hash, bool $clearCache = false): void
     {
         // exclude url
         $art_sql = rex_sql::factory();
         $art_sql->setTable(self::getTempTablePrefix() . 'search_it_index');
 
         $where = ['fid' => $url_hash, 'texttype' => 'url'];
-        // collect index ids for the cache before deleting
-        $select = rex_sql::factory();
-        $select->setTable(self::getTempTablePrefix() . 'search_it_index');
-        $select->setWhere($where);
-        $select->select('id');
-
-        $indexIds = [];
-        foreach ($select->getArray() as $result) {
-            $indexIds[] = $result['id'];
-        }
-
         $art_sql->setWhere($where);
         $art_sql->delete();
 
-        // delete from cache
-        $this->deleteCache($indexIds);
+        if ($clearCache) {
+            $this->deleteCache();
+        }
     }
 
     /**

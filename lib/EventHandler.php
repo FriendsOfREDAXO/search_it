@@ -20,7 +20,7 @@ class EventHandler
 
         switch ($ep->getName()) {
             case 'ART_DELETED':
-                $search_it->unindexArticle($params['id']);
+                $search_it->unindexArticle($params['id'], false, true);
                 break;
 
             case 'ART_META_UPDATED':
@@ -40,7 +40,7 @@ class EventHandler
                 if ($params['status'] || $si->getConfig('indexoffline')) {
                     $search_it->indexArticle($params['id'], $params['clang'], true);
                 } else {
-                    $search_it->unindexArticle($params['id'], $params['clang']);
+                    $search_it->unindexArticle($params['id'], $params['clang'], true);
                 }
 
                 foreach ($includeColumns as $table => $columnArray) {
@@ -69,6 +69,7 @@ class EventHandler
                     foreach (ArticleHelper::getArticles([$params['id']]) as $art_id => $art_name) {
                         $search_it->unindexArticle($art_id, $params['clang']);
                     }
+                    $search_it->deleteCache();
                 }
 
                 foreach ($includeColumns as $table => $columnArray) {

@@ -1,5 +1,9 @@
 # Changelog
 
+## Version 7.2.2 (2026-10-01)
+- Fix: Speichern einer YRewrite-Domain (und jede andere Änderung, nach der das URL-Addon alle URLs neu schreibt) dauerte seit 7.2.0 extrem lange: `unindexURL()` und `unindexArticle()` löschten den Such-Cache pro Eintrag selektiv. Beide haben jetzt wie `indexArticle()` den Parameter `$clearCache`, die Aufrufer leeren den Cache einmal komplett.
+- Performance: Cache-Tabelle `search_it_cacheindex_ids` – `cache_id` ist jetzt `int`, dazu Indizes auf `index_id` und `cache_id`. Die selektive Cache-Löschung dauerte bei großem Such-Cache mehrere Minuten pro Aufruf.
+
 ## Version 7.2.1 (2026-10-01)
 - Fix: Kompletter Neuaufbau des Index schlug bei InnoDB-Tabellen fehl ("InnoDB presently supports one FULLTEXT index creation at a time"). Die FULLTEXT-Indizes der Schattentabelle werden jetzt einzeln angelegt.
 

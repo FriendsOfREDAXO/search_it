@@ -7,6 +7,7 @@ use rex;
 use rex_addon;
 use rex_extension_point;
 use rex_logger;
+use rex_media;
 
 class EventHandler
 {
@@ -99,15 +100,26 @@ class EventHandler
                 break;
 
             case 'MEDIA_ADDED':
-            case 'MEDIA_DELETED':
+                // the EP only passes the filename, which is unique in rex_media
+                $media = rex_media::get((string) $params['filename']);
                 foreach ($includeColumns as $table => $columnArray) {
-                    if ($table == rex::getTable('media')) {
+                    if ($table == rex::getTable('media') && $media !== null) {
                         foreach ($columnArray as $column) {
-                            $search_it->indexColumn($table, $column);
+                            $search_it->indexColumn($table, $column, 'id', $media->getId());
                         }
                         if (count($columnArray) > 0) {
                             $search_it->deleteCache();
                         }
+                    }
+                }
+                break;
+
+            case 'MEDIA_DELETED':
+                // the media row is already gone, remove its orphaned index entries
+                foreach ($includeColumns as $table => $columnArray) {
+                    if ($table == rex::getTable('media') && count($columnArray) > 0) {
+                        $search_it->unindexDeletedColumnRows($table);
+                        $search_it->deleteCache();
                     }
                 }
                 break;

@@ -900,6 +900,30 @@ class SearchIt
     }
 
     /**
+     * Removes indexed column values of rows that no longer exist in the given table.
+     * Only works for tables with a single-column primary key.
+     *
+     * @return int|false Number of removed index entries, false if the table has no single-column primary key
+     */
+    public function unindexDeletedColumnRows(string $_table): int|false
+    {
+        $primaryKey = rex_sql_table::get($_table)->getPrimaryKey();
+        if (!is_array($primaryKey) || count($primaryKey) !== 1) {
+            return false;
+        }
+
+        $sql = rex_sql::factory();
+        $sql->setQuery(sprintf(
+            'DELETE i FROM `%s` i LEFT JOIN `%s` t ON t.`%s` = i.fid WHERE i.ftable = ? AND i.texttype = ? AND t.`%3$s` IS NULL',
+            self::getTempTablePrefix() . 'search_it_index',
+            $_table,
+            $primaryKey[0]
+        ), [$_table, 'db_column']);
+
+        return $sql->getRows();
+    }
+
+    /**
      * Compares index table with url table and excludes all deleted urls from the index.
      */
     public function unindexDeletedURLs(): void
@@ -1020,100 +1044,125 @@ class SearchIt
             $count = 0;
             $keywords = [];
 
-            foreach ($sql->getArray() as $row) {
-                if (!empty($row[$_column]) and (rex_addon::get('search_it')->getConfig('indexoffline') or self::getTablePrefix() . 'article' != $_table or $row['status'] == '1')
-                    and (self::getTablePrefix() . 'article' != $_table or !in_array($row['id'], $this->excludeIDs))
-                ) {
-                    $insert = rex_sql::factory();
-                    $indexData = [];
+            // write the rows in transactions, unless the caller already runs one
+            $transaction = rex_sql::factory();
+            $ownTransaction = !$transaction->inTransaction();
+            if ($ownTransaction) {
+                $transaction->beginTransaction();
+            }
 
-                    $indexData['texttype'] = 'db_column';
-                    $indexData['ftable'] = $_table;
-                    $indexData['fcolumn'] = $_column;
+            try {
+                foreach ($sql->getArray() as $row) {
+                    if (!empty($row[$_column]) and (rex_addon::get('search_it')->getConfig('indexoffline') or self::getTablePrefix() . 'article' != $_table or $row['status'] == '1')
+                        and (self::getTablePrefix() . 'article' != $_table or !in_array($row['id'], $this->excludeIDs))
+                    ) {
+                        $insert = rex_sql::factory();
+                        $indexData = [];
 
-                    if (array_key_exists('clang', $row)) {
-                        $indexData['clang'] = $row['clang'];
-                    } elseif (array_key_exists('clang_id', $row)) {
-                        $indexData['clang'] = $row['clang_id'];
-                    } else {
-                        $indexData['clang'] = NULL;
-                    }
-                    $indexData['fid'] = NULL;
-                    if (is_string($_idcol) and array_key_exists($_idcol, $row)) {
-                        $indexData['fid'] = $row[$_idcol];
-                    } elseif ($_table == self::getTablePrefix() . 'article') {
-                        $indexData['fid'] = $row['id'];
-                    } elseif (count($primaryKeys) == 1) {
-                        $indexData['fid'] = $row[$primaryKeys[0]];
-                    } elseif (count($primaryKeys)) {
-                        $fids = [];
-                        foreach ($primaryKeys as $pk) {
-                            $fids[$pk] = $row[$pk];
+                        $indexData['texttype'] = 'db_column';
+                        $indexData['ftable'] = $_table;
+                        $indexData['fcolumn'] = $_column;
+
+                        if (array_key_exists('clang', $row)) {
+                            $indexData['clang'] = $row['clang'];
+                        } elseif (array_key_exists('clang_id', $row)) {
+                            $indexData['clang'] = $row['clang_id'];
+                        } else {
+                            $indexData['clang'] = NULL;
                         }
-                        $indexData['fid'] = json_encode($fids);
-                    }
-
-                    if (is_null($indexData['fid'])) {
-                        // keine id Spalte und keine primär schlüssel auch die views landen hier
-                        $indexData['fid'] = $this->getMaxFID($_table);
-                    }
-                    if (array_key_exists('parent_id', $row)) {
-                        $indexData['catid'] = $row['parent_id'];
-                        if ($_table == self::getTablePrefix() . 'article') {
-                            $indexData['catid'] = intval($row['startarticle']) ? $row['id'] : $row['parent_id'];
+                        $indexData['fid'] = NULL;
+                        if (is_string($_idcol) and array_key_exists($_idcol, $row)) {
+                            $indexData['fid'] = $row[$_idcol];
+                        } elseif ($_table == self::getTablePrefix() . 'article') {
+                            $indexData['fid'] = $row['id'];
+                        } elseif (count($primaryKeys) == 1) {
+                            $indexData['fid'] = $row[$primaryKeys[0]];
+                        } elseif (count($primaryKeys)) {
+                            $fids = [];
+                            foreach ($primaryKeys as $pk) {
+                                $fids[$pk] = $row[$pk];
+                            }
+                            $indexData['fid'] = json_encode($fids);
                         }
-                    } elseif (array_key_exists('category_id', $row)) {
-                        $indexData['catid'] = $row['category_id'];
-                    } else {
-                        $indexData['catid'] = NULL;
-                    }
-                    $additionalValues = [];
-                    foreach ($this->includeColumns[$_table] as $col) {
-                        if (isset($row[$col])) {
-                            $additionalValues[$col] = $row[$col];
+
+                        if (is_null($indexData['fid'])) {
+                            // keine id Spalte und keine primär schlüssel auch die views landen hier
+                            $indexData['fid'] = $this->getMaxFID($_table);
                         }
-                    }
-                    $indexData['values'] = json_encode($additionalValues);
-
-                    $indexData['unchangedtext'] = (string)$row[$_column];
-                    $plaintext = $this->getPlaintext($row[$_column]);
-                    $indexData['plaintext'] = $plaintext;
-                    $indexData['lastindexed'] = date(DATE_W3C, time());
-
-                    foreach (preg_split('~[[:punct:][:space:]]+~ismu', $plaintext) as $keyword) {
-                        if ($this->significantCharacterCount <= mb_strlen($keyword, 'UTF-8')) {
-                            $keywords[] = array('search' => $keyword, 'clang' => is_null($indexData['clang']) ? false : $indexData['clang']);
+                        if (array_key_exists('parent_id', $row)) {
+                            $indexData['catid'] = $row['parent_id'];
+                            if ($_table == self::getTablePrefix() . 'article') {
+                                $indexData['catid'] = intval($row['startarticle']) ? $row['id'] : $row['parent_id'];
+                            }
+                        } elseif (array_key_exists('category_id', $row)) {
+                            $indexData['catid'] = $row['category_id'];
+                        } else {
+                            $indexData['catid'] = NULL;
                         }
-                    }
+                        $additionalValues = [];
+                        foreach ($this->includeColumns[$_table] as $col) {
+                            if (isset($row[$col])) {
+                                $additionalValues[$col] = $row[$col];
+                            }
+                        }
+                        $indexData['values'] = json_encode($additionalValues);
 
-                    $indexData['teaser'] = '';
-                    if (self::getTablePrefix() . 'article' == $_table) {
-                        $rex_article = new rex_article_content(intval($row['id']), intval($row['clang_id']));
-                        $teaser = true;
-                        $article_content_file = rex_path::addonCache('structure', intval($row['id']) . '.' . intval($row['clang_id']) . '.content');
-                        if (!file_exists($article_content_file)) {
-                            $generated = rex_content_service::generateArticleContent(intval($row['id']), intval($row['clang_id']));
-                            if ($generated !== true) {
-                                $teaser = false;
-                                continue;
+                        $indexData['unchangedtext'] = (string)$row[$_column];
+                        $plaintext = $this->getPlaintext($row[$_column]);
+                        $indexData['plaintext'] = $plaintext;
+                        $indexData['lastindexed'] = date(DATE_W3C, time());
+
+                        foreach (preg_split('~[[:punct:][:space:]]+~ismu', $plaintext) as $keyword) {
+                            if ($this->significantCharacterCount <= mb_strlen($keyword, 'UTF-8')) {
+                                $keywords[] = array('search' => $keyword, 'clang' => is_null($indexData['clang']) ? false : $indexData['clang']);
                             }
                         }
 
-                        if (file_exists($article_content_file) and preg_match('~(header\s*\(\s*["\']\s*Location\s*:)|(rex_redirect\s*\()~isu', rex_file::get($article_content_file))) {
-                            $teaser = false;
+                        $indexData['teaser'] = '';
+                        if (self::getTablePrefix() . 'article' == $_table) {
+                            $rex_article = new rex_article_content(intval($row['id']), intval($row['clang_id']));
+                            $teaser = true;
+                            $article_content_file = rex_path::addonCache('structure', intval($row['id']) . '.' . intval($row['clang_id']) . '.content');
+                            if (!file_exists($article_content_file)) {
+                                $generated = rex_content_service::generateArticleContent(intval($row['id']), intval($row['clang_id']));
+                                if ($generated !== true) {
+                                    $teaser = false;
+                                    continue;
+                                }
+                            }
+
+                            if (file_exists($article_content_file) and preg_match('~(header\s*\(\s*["\']\s*Location\s*:)|(rex_redirect\s*\()~isu', rex_file::get($article_content_file))) {
+                                $teaser = false;
+                            }
+
+                            $indexData['teaser'] = $teaser ? $this->getTeaserText($this->getPlaintext($rex_article->getArticle())) : '';
                         }
 
-                        $indexData['teaser'] = $teaser ? $this->getTeaserText($this->getPlaintext($rex_article->getArticle())) : '';
+                        $insert->setTable($this->getIndexTable());
+                        $insert->setValues($indexData);
+                        $insert->insert();
+
+                        $count++;
+
+                        // commit in blocks: one commit per row is very slow (every commit waits for the disk)
+                        if ($ownTransaction && $count % 100 === 0) {
+                            $transaction->commit();
+                            $transaction->beginTransaction();
+                        }
                     }
-
-                    $insert->setTable($this->getIndexTable());
-                    $insert->setValues($indexData);
-                    $insert->insert();
-
-                    $count++;
                 }
+
+                if ($ownTransaction) {
+                    $transaction->commit();
+                }
+            } catch (\Throwable $e) {
+                if ($ownTransaction && $transaction->inTransaction()) {
+                    $transaction->rollBack();
+                }
+                throw $e;
             }
 
+            // keywords outside the transaction: on a deadlock InnoDB rolls back the whole transaction
             $this->storeKeywords($keywords, false);
 
         }

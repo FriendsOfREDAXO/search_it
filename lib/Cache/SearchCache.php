@@ -100,6 +100,14 @@ class SearchCache
     {
         if ($indexIds === false) {
             $delete = rex_sql::factory();
+            // TRUNCATE recreates the tables (expensive on InnoDB), skip it when there is nothing cached
+            $filled = $delete->getArray(sprintf(
+                'SELECT EXISTS(SELECT 1 FROM %1$ssearch_it_cache) OR EXISTS(SELECT 1 FROM %1$ssearch_it_cacheindex_ids) AS filled',
+                self::getTempTablePrefix()
+            ));
+            if (!(int) $filled[0]['filled']) {
+                return;
+            }
             if ($delete->inTransaction()) {
                 $delete->setQuery('DELETE FROM ' . self::getTempTablePrefix() . 'search_it_cacheindex_ids');
                 $delete->setQuery('DELETE FROM ' . self::getTempTablePrefix() . 'search_it_cache');

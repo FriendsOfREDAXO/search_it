@@ -1,14 +1,20 @@
 # Changelog
 
+## Version 7.3.0 (2026-10-04)
+- Performance: DB-Spalten werden in Transaktionen indexiert (Commit nach je 100 Zeilen) statt mit einem Commit pro Zeile.
+- Performance: Der Such-Cache wird nur noch geleert, wenn er Einträge enthält. Das `TRUNCATE` der beiden Cache-Tabellen kostete bei InnoDB bei jedem Speichern eines Slices spürbar Zeit, auch bei leerem Cache.
+- Performance: Beim Hochladen einer Datei in den Medienpool wird nur noch diese Datei als DB-Spalte indexiert, beim Löschen werden nur ihre Einträge entfernt. Bisher wurde in beiden Fällen die komplette Medientabelle neu indexiert.
+- Neu: `SearchIt::unindexDeletedColumnRows($table)` entfernt Index-Einträge von Datensätzen, die es in der Tabelle nicht mehr gibt.
+
 ## Version 7.2.2 (2026-10-01)
-- Fix: Speichern einer YRewrite-Domain (und jede andere Änderung, nach der das URL-Addon alle URLs neu schreibt) dauerte seit 7.2.0 extrem lange: `unindexURL()` und `unindexArticle()` löschten den Such-Cache pro Eintrag selektiv. Beide haben jetzt wie `indexArticle()` den Parameter `$clearCache`, die Aufrufer leeren den Cache einmal komplett.
+- Fix: Bei aktivierter Indexierung der URL-Addon-URLs und großem Such-Cache dauerte seit 7.2.0 jede Änderung, nach der das URL-Addon URLs neu schreibt (z. B. Speichern einer YRewrite-Domain), extrem lange: `unindexURL()` und `unindexArticle()` löschten den Such-Cache pro Eintrag selektiv. Beide haben jetzt wie `indexArticle()` den Parameter `$clearCache`, die Aufrufer leeren den Cache einmal komplett.
 - Performance: Cache-Tabelle `search_it_cacheindex_ids` – `cache_id` ist jetzt `int`, dazu Indizes auf `index_id` und `cache_id`. Die selektive Cache-Löschung dauerte bei großem Such-Cache mehrere Minuten pro Aufruf.
 
 ## Version 7.2.1 (2026-10-01)
 - Fix: Kompletter Neuaufbau des Index schlug bei InnoDB-Tabellen fehl ("InnoDB presently supports one FULLTEXT index creation at a time"). Die FULLTEXT-Indizes der Schattentabelle werden jetzt einzeln angelegt.
 
 ## Version 7.2.0 (2026-09-30)
-- Kompletter Neuaufbau des Index läuft in einer Schattentabelle: Die Suche bleibt währenddessen mit dem alten Index verfügbar, die FULLTEXT-Indizes werden erst nach dem Befüllen angelegt statt zeilenweise gepflegt (bei MyISAM deutlich schneller, bei InnoDB etwa 10 %). Bei einem Fehler bleibt der bisherige Index unverändert.
+- Kompletter Neuaufbau des Index läuft in einer Schattentabelle: Die Suche bleibt währenddessen mit dem alten Index verfügbar, die FULLTEXT-Indizes werden erst nach dem Befüllen angelegt statt zeilenweise gepflegt. Bei einem Fehler bleibt der bisherige Index unverändert.
 - Performance: Beim Löschen alter Index-Einträge wird der Index auf `fid` genutzt (Vergleich als String statt als Zahl)
 - Performance: Keywords werden pro Artikel ohne Dubletten gespeichert, Stoppwort-/Blacklist-Prüfung und Phonetik-Berechnung beschleunigt
 - Fix: Such-Cache wird nach Slice-Änderungen und Statuswechseln wieder geleert (`$clearCache` wurde in `indexArticle()` überschrieben)

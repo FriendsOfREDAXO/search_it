@@ -28,7 +28,7 @@ class ReindexCommand extends rex_console_command
             return 0;
         }
 
-        $io->error(rex_i18n::rawMsg('search_it_generate_error'));
+        $io->error(rex_i18n::rawMsg('search_it_generate_incomplete'));
         return 1;
     }
 }

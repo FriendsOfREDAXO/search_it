@@ -225,7 +225,7 @@ if (!empty(rex_get('do')) and rex_get('do') == 'incremental') {
                 if ($global_return < 4) {
                     echo rex_view::success($this->i18n('search_it_generate_done'));
                 } else {
-                    echo rex_view::warning(rex_i18n::rawMsg('search_it_generate_error'));
+                    echo rex_view::warning(rex_i18n::rawMsg('search_it_generate_incomplete'));
                 }
                 break;
 

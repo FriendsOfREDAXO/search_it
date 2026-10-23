@@ -105,6 +105,7 @@ search_it_generate_keywords_deleted = Keywords deleted
 search_it_generate_inprogress = Generating index. There will be a message when the process is complete.
 search_it_generate_done = Index generated
 search_it_generate_error = Error while indexing <br> Details in <a href="/redaxo/index.php?page=system/log">REDAXO SystemLog</a>
+search_it_generate_incomplete = Indexing finished. Some pages were not indexed (e.g. HTTP 404). <br> Details in <a href="/redaxo/index.php?page=system/log">REDAXO SystemLog</a>
 search_it_generate_cancel = Indexing aborted
 search_it_generate_duration = Time:
 search_it_generate_timeleft = Remaining:

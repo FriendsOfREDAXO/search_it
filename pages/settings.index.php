@@ -15,6 +15,7 @@ if (rex_post('config-submit', 'boolean')) {
 
         ['index_without_ssl_verification', 'bool'],
         ['index_host', 'string'],
+        ['proxy_ignore', 'string'],
         ['logging_articles', 'bool'],
         ['logging_urls', 'bool'],
 
@@ -40,6 +41,8 @@ if (rex_post('config-submit', 'boolean')) {
 
 }
 
+
+$proxy_ignore_value = (string) $this->getConfig('proxy_ignore', 'localhost,127.0.0.1,::1');
 
 $content3 = [];
 
@@ -99,8 +102,6 @@ $content3[] = search_it_getSettingsFormSection(
         ],
         $url_checkbox
         ,
-        $ssl_verify
-        ,
         [
             'type' => 'checkbox',
             'id' => 'search_it_logging_articles',
@@ -116,6 +117,16 @@ $content3[] = search_it_getSettingsFormSection(
             'label' => $this->i18n('search_it_settings_logging_urls_label'),
             'value' => '1',
             'checked' => $this->getConfig('logging_urls') ?? true
+        ],
+        [
+            'type' => 'directoutput',
+            'output' => '<h3>' . $this->i18n('search_it_settings_connection_options_title') . '</h3>',
+        ],
+        $ssl_verify,
+        [
+            'type' => 'directoutput',
+            'output' => '<label for="search_it_proxy_ignore">' . $this->i18n('search_it_settings_proxy_ignore_label') . ':</label>' .
+                '<input type="text" name="search_config[proxy_ignore]" class="form-control" id="search_it_proxy_ignore" value="' . rex_escape($proxy_ignore_value) . '" style="margin-top: 4px;" />',
         ],
     ], 'edit'
 );
@@ -168,7 +179,6 @@ if (true == rex_config::get('search_it', 'dont_use_socket')) {
 $fragment = new rex_fragment();
 $fragment->setVar('content', $content3, false);
 $content = $fragment->parse('core/page/grid.php');
-
 
 $formElements = [];
 $n = [];

@@ -160,6 +160,11 @@ if (rex::isBackend() && rex::getUser()) {
             'maxSuggestion' => '10'
         ));
     }
+    if (!$this->hasConfig('proxy_ignore')) {
+        $this->setConfig(array(
+            'proxy_ignore' => 'localhost,127.0.0.1,::1'
+        ));
+    }
 }
 
 // former plugins
